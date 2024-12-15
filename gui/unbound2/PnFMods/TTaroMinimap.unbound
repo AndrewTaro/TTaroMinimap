@@ -1,0 +1,3382 @@
+############################
+#
+#	IF YOU ARE READING THIS, UNDER ANY CIRCUMSTANCES,
+#	- DO NOT MODIFY THIS MODIFICATION FURTHER.
+#	- DO NOT USE OR IMPORT A SUBSET OF THIS MODIFICATION INTO ANOTHER MODIFICATION.
+#	- DO NOT EDIT OR CREATE ANOTHER MODIFICATION TO ACCOMMODATE THE FUNCTIONALITIES THIS MODIFICATION PROVIDES.
+#
+#	THIS MODIFICATION MUST BE DISTRIBUTED AND USED AS IT IS.
+#
+#	!!!!! A VIOLATION WILL RESULT IN YOUR AND USER'S ACCOUNT SANCTIONS !!!!!
+#
+#	THESE ARE MANDATORY CONDITIONS THAT MUST BE MET IN ORDER TO FOLLOW THE REQUESTS FROM WG
+#
+#	YOU HAVE BEEN WARNED.
+#
+
+# Index 16: None means no RPF is visible.
+# It could happen when the submarine is at maximum depth and he is the only remaining enemy
+
+(def constant TT_TTAROMINIMAP_INSTALLED "true")
+
+(def constant TMap_RPF_INVALID_DIRECTION "-1")
+(def constant TMap_RPF_DIRECTION_MESSAGES [
+	'RPF: N~NNE',
+	'RPF: NNE~NE',
+	'RPF: NE~ENE',
+	'RPF: ENE~E',
+	'RPF: E~ESE',
+	'RPF: ESE~SE',
+	'RPF: SE~SSE',
+	'RPF: SSE~S',
+	'RPF: S~SSW',
+	'RPF: SSW~SW',
+	'RPF: SW~WSW',
+	'RPF: WSW~W',
+	'RPF: W~WNW',
+	'RPF: WNW~NW',
+	'RPF: NW~NNW',
+	'RPF: NNW~N',
+	'RPF: None',
+])
+
+(def constant TMap_RPF_SECTOR_WIDTH_DEG "360 / 16")
+(def constant TMap_RPF_SECTOR_WIDTH_RAD "gradToRad(TMap_RPF_SECTOR_WIDTH_DEG)")
+
+(def constant TMap_RPF_SECTOR_HALF_WIDTH_DEG "TMap_RPF_SECTOR_WIDTH_DEG / 2")
+(def constant TMap_RPF_SECTOR_HALF_WIDTH_RAD "gradToRad(TMap_RPF_SECTOR_HALF_WIDTH_DEG)")
+
+(def constant TMap_RPF_MESSAGE_COOLDOWN_DURATION "45")
+(def constant TMap_RPF_MESSAGE_COOLDOWN_MAX_COUNT "3")
+
+(def constant TMap_COMPONENT_KEY_CONSUMABLE_RANGES "'modTTaroMinimapConsumableRanges'")
+
+(def constant TMap_PREFS {
+	# General
+	PLAYER_NAME_DISPLAY_MODE: {KEY: 'ttMinimapPlayerNameDisplayMode',			DEFAULT: 0,		MODIFIER: 1,	OFFSET: 0}, # Dropdown
+	LAST_SPOTTED_ON_ALT		: {KEY: 'ttMinimapLastSpottedTimerVisibleOnAlt',	DEFAULT: true},
+	SQUADRON_OWNER_DISPLAY_MODE	: {KEY: 'ttMinimapSquadronOwnerDisplayMode',	DEFAULT: 0,		MODIFIER: 1,	OFFSET: 0}, # Dropdown
+	CONTESTED_CAPS			: {KEY: 'ttMinimapContestedCapsVisible',			DEFAULT: true},
+	NEARBY_AA_RANGE			: {KEY: 'ttMinimapNearbyAARangeVisible',			DEFAULT: false},
+	NEARBY_RADAR_RANGE		: {KEY: 'ttMinimapNearbyRadarRangeVisible',			DEFAULT: false},
+	DETECTION				: {KEY: 'ttMinimapAllyDetectionVisible',			DEFAULT: false},
+
+	# Health
+	HEALTH_ALLY				: {KEY: 'ttMinimapHealthAllyDisplayMode',			DEFAULT: 0,		MODIFIER: 1,	OFFSET: 0}, # Dropdown
+	HEALTH_ENEMY			: {KEY: 'ttMinimapHealthEnemyDisplayMode',			DEFAULT: 0,		MODIFIER: 1,	OFFSET: 0}, # Dropdown
+	HEALTH_MAX_HIDE			: {KEY: 'ttMinimapHealthMaxHide',					DEFAULT: false},
+
+	# Directional Line
+	DIRECTION_SHIPS			: {KEY: 'ttMinimapDirEnemyShipDisplayMode',			DEFAULT: 0,		MODIFIER: 1,	OFFSET: 0}, # Dropdown
+	DIRECTION_SQUADRONS		: {KEY: 'ttMinimapDirEnemySquadronDisplayMode',		DEFAULT: 0,		MODIFIER: 1,	OFFSET: 0}, # Dropdown
+
+	# Own RPF
+	RPF_KEYBIND				: {KEY: 'ttMinimapRPFKeybind',						DEFAULT: 0,		MODIFIER: 1,	OFFSET: 0}, # Dropdown
+	RPF_SELF_ALPHA			: {KEY: 'ttMinimapRPFSelfOpacity',					DEFAULT: 0.1,	MODIFIER: 0.1,	OFFSET: 0.0},
+	RPF_SELF_RED			: {KEY: 'ttMinimapRPFSelfRed',						DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
+	RPF_SELF_GREEN			: {KEY: 'ttMinimapRPFSelfGreen',					DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
+	RPF_SELF_BLUE			: {KEY: 'ttMinimapRPFSelfBlue',						DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
+
+	# Ally RPF
+	RPF_ALLY_DISPLAY_MODE	: {KEY: 'ttMinimapRPFAllyDisplayMode',				DEFAULT: 1,		MODIFIER: 1,	OFFSET: 0}, # Dropdown
+	RPF_ALLY_ALPHA			: {KEY: 'ttMinimapRPFAllyOpacity',					DEFAULT: 0.1,	MODIFIER: 0.1,	OFFSET: 0.0},
+	RPF_ALLY_RED			: {KEY: 'ttMinimapRPFAllyRed',						DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
+	RPF_ALLY_GREEN			: {KEY: 'ttMinimapRPFAllyGreen',					DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
+	RPF_ALLY_BLUE			: {KEY: 'ttMinimapRPFAllyBlue',						DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
+
+	# Psedo Pref to Stop the macro from freaking out
+	# DO NOT TOUCH OR ADD TO MODCONFIG ################
+	FAKE_SOLID_LINE				: {KEY: '',		DEFAULT: false},
+	FAKE_FILL_CIRCLE			: {KEY: '',		DEFAULT: false},
+	FAKE_ALPHA					: {KEY: '',		DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
+	FAKE_COLOR_INDEX			: {KEY: '',		DEFAULT: "indexOf('IDS_TT_TITLE_SEA_DETECTION_RANGE', TMap_RANGE_COLORS.ALL)",		MODIFIER: 1,	OFFSET: 0}, # Dropdown
+	###################################################
+
+	# Visibility by Sea Range
+	VISIBILITY_SEA_SOLID_LINE	: {KEY: 'ttMinimapVisibilitySeaSolidLine',		DEFAULT: false},
+	VISIBILITY_SEA_FILL_CIRCLE	: {KEY: 'ttMinimapVisibilitySeaFillCircle',		DEFAULT: false},
+	VISIBILITY_SEA_ALPHA		: {KEY: 'ttMinimapVisibilitySeaOpacity',		DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
+	VISIBILITY_SEA_COLOR_INDEX	: {KEY: 'ttMinimapVisibilitySeaColorIndex',		DEFAULT: "indexOf('IDS_TT_TITLE_SEA_DETECTION_RANGE', TMap_RANGE_COLORS.ALL)",		MODIFIER: 1,	OFFSET: 0}, # Dropdown
+
+	# Visibility by Air Range
+	VISIBILITY_AIR_SOLID_LINE	: {KEY: 'ttMinimapVisibilityAirSolidLine',		DEFAULT: false},
+	VISIBILITY_AIR_FILL_CIRCLE	: {KEY: 'ttMinimapVisibilityAirFillCircle',		DEFAULT: false},
+	VISIBILITY_AIR_ALPHA		: {KEY: 'ttMinimapVisibilityAirOpacity',		DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
+	VISIBILITY_AIR_COLOR_INDEX	: {KEY: 'ttMinimapVisibilityAirColorIndex',		DEFAULT: "indexOf('IDS_TT_TITLE_AIR_DETECTION_RANGE', TMap_RANGE_COLORS.ALL)",		MODIFIER: 1,	OFFSET: 0}, # Dropdown
+
+	# Main Armament Range
+	MAIN_ARMAMENT_SOLID_LINE	: {KEY: 'ttMinimapMainArmamentSolidLine',		DEFAULT: true},
+	MAIN_ARMAMENT_FILL_CIRCLE	: {KEY: 'ttMinimapMainArmamentFillCircle',		DEFAULT: false},
+	MAIN_ARMAMENT_ALPHA			: {KEY: 'ttMinimapMainArmamentOpacity',			DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
+	MAIN_ARMAMENT_COLOR_INDEX	: {KEY: 'ttMinimapMainArmamentColorIndex',		DEFAULT: "indexOf('IDS_TT_TITLE_MAIN_ARMAMENT_RANGE', TMap_RANGE_COLORS.ALL)",		MODIFIER: 1,	OFFSET: 0}, # Dropdown
+
+	# Secondary Range
+	SECONDARY_SOLID_LINE		: {KEY: 'ttMinimapSecondarySolidLine',			DEFAULT: true},
+	SECONDARY_FILL_CIRCLE		: {KEY: 'ttMinimapSecondaryFillCircle',			DEFAULT: false},
+	SECONDARY_ALPHA				: {KEY: 'ttMinimapSecondaryOpacity',			DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
+	SECONDARY_COLOR_INDEX		: {KEY: 'ttMinimapSecondaryColorIndex',			DEFAULT: "indexOf('IDS_TT_TITLE_SECONDARY_RANGE', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
+
+	# Torpedo Range
+	TORPEDO_SOLID_LINE			: {KEY: 'ttMinimapTorpedoSolidLine',			DEFAULT: true},
+	TORPEDO_FILL_CIRCLE			: {KEY: 'ttMinimapTorpedoFillCircle',			DEFAULT: false},
+	TORPEDO_ALPHA				: {KEY: 'ttMinimapTorpedoOpacity',				DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
+	TORPEDO_COLOR_INDEX			: {KEY: 'ttMinimapTorpedoColorIndex',			DEFAULT: "indexOf('IDS_TT_TITLE_MAIN_ARMAMENT_RANGE', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
+
+	# Air Support Range
+	AIRSUPPORT_SOLID_LINE		: {KEY: 'ttMinimapAirSupportSolidLine',			DEFAULT: true},
+	AIRSUPPORT_FILL_CIRCLE		: {KEY: 'ttMinimapAirSupportFillCircle',		DEFAULT: false},
+	AIRSUPPORT_ALPHA			: {KEY: 'ttMinimapAirSupportOpacity',			DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
+	AIRSUPPORT_COLOR_INDEX		: {KEY: 'ttMinimapAirSupportColorIndex',		DEFAULT: "indexOf('IDS_TT_TITLE_MAIN_ARMAMENT_RANGE', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
+
+	# Pinger Range
+	PINGER_SOLID_LINE			: {KEY: 'ttMinimapPingerSolidLine',				DEFAULT: true},
+	PINGER_FILL_CIRCLE			: {KEY: 'ttMinimapPingerFillCircle',			DEFAULT: false},
+	PINGER_ALPHA				: {KEY: 'ttMinimapPingerOpacity',				DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
+	PINGER_COLOR_INDEX			: {KEY: 'ttMinimapPingerColorIndex',			DEFAULT: "indexOf('IDS_TT_TITLE_MAIN_ARMAMENT_RANGE', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
+
+	# Anti Air Range
+	ANTIAIR_SOLID_LINE			: {KEY: 'ttMinimapAntiAirSolidLine',			DEFAULT: true},
+	ANTIAIR_FILL_CIRCLE			: {KEY: 'ttMinimapAntiAirFillCircle',			DEFAULT: false},
+	ANTIAIR_ALPHA				: {KEY: 'ttMinimapAntiAirOpacity',				DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
+	ANTIAIR_COLOR_INDEX			: {KEY: 'ttMinimapAntiAirColorIndex',			DEFAULT: "indexOf('IDS_TT_TITLE_AA_RANGE', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
+
+	# Own Hydrophone Range
+	HYDROPHONE_SOLID_LINE		: {KEY: 'ttMinimapHydrophoneSolidLine',			DEFAULT: false},
+	HYDROPHONE_FILL_CIRCLE		: {KEY: 'ttMinimapHydrophoneFillCircle',		DEFAULT: false},
+	HYDROPHONE_ALPHA			: {KEY: 'ttMinimapHydrophoneOpacity',			DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
+	HYDROPHONE_COLOR_INDEX		: {KEY: 'ttMinimapHydrophoneColorIndex',		DEFAULT: "indexOf('IDS_TT_TITLE_SURFACE_CONSUMABLE_RANGE', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
+
+	# Own Radar Range
+	RADAR_SELF_SOLID_LINE		: {KEY: 'ttMinimapRadarSelfSolidLine',			DEFAULT: false},
+	RADAR_SELF_FILL_CIRCLE		: {KEY: 'ttMinimapRadarSelfFillCircle',			DEFAULT: false},
+	RADAR_SELF_ALPHA			: {KEY: 'ttMinimapRadarSelfOpacity',			DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
+	RADAR_SELF_COLOR_INDEX		: {KEY: 'ttMinimapRadarSelfColorIndex',			DEFAULT: "indexOf('IDS_TT_TITLE_SURFACE_CONSUMABLE_RANGE', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
+
+	# Ally Radar Range
+	RADAR_ALLY_FILL_CIRCLE		: {KEY: 'ttMinimapRadarAllyFillCircle',			DEFAULT: true},
+	RADAR_ALLY_ALPHA			: {KEY: 'ttMinimapRadarAllyOpacity',			DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
+	RADAR_ALLY_COLOR_INDEX		: {KEY: 'ttMinimapRadarAllyColorIndex',			DEFAULT: "indexOf('IDS_TT_LIGHT_BLUE', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
+	RADAR_ALLY_VISIBLE_ON_ALT	: {KEY: 'ttMinimapRadarAllyVisibleOnAlt',		DEFAULT: false},
+	RADAR_ALLY_VISIBLE_ON_ACTIVATION: {KEY: 'ttMinimapRadarAllyVisibleOnActivation',DEFAULT: false},
+
+	# Own Hydro Range
+	HYDRO_SELF_SOLID_LINE		: {KEY: 'ttMinimapHydroSelfSolidLine',			DEFAULT: false},
+	HYDRO_SELF_FILL_CIRCLE		: {KEY: 'ttMinimapHydroSelfFillCircle',			DEFAULT: false},
+	HYDRO_SELF_ALPHA			: {KEY: 'ttMinimapHydroSelfOpacity',			DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
+	HYDRO_SELF_COLOR_INDEX		: {KEY: 'ttMinimapHydroSelfColorIndex',			DEFAULT: "indexOf('IDS_TT_TITLE_SURFACE_CONSUMABLE_RANGE', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
+
+	# Ally Hydro Range
+	HYDRO_ALLY_FILL_CIRCLE		: {KEY: 'ttMinimapHydroAllyFillCircle',			DEFAULT: true},
+	HYDRO_ALLY_ALPHA			: {KEY: 'ttMinimapHydroAllyOpacity',			DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
+	HYDRO_ALLY_COLOR_INDEX		: {KEY: 'ttMinimapHydroAllyColorIndex',			DEFAULT: "indexOf('IDS_TT_LIGHT_BLUE', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
+	HYDRO_ALLY_VISIBLE_ON_ALT	: {KEY: 'ttMinimapHydroAllyVisibleOnAlt',		DEFAULT: false},
+	HYDRO_ALLY_VISIBLE_ON_ACTIVATION: {KEY: 'ttMinimapHydroAllyVisibleOnActivation',DEFAULT: false},
+
+	# Own SubRadar Range
+	SUBRADAR_SELF_SOLID_LINE	: {KEY: 'ttMinimapSubRadarSelfSolidLine',		DEFAULT: false},
+	SUBRADAR_SELF_FILL_CIRCLE	: {KEY: 'ttMinimapSubRadarSelfFillCircle',		DEFAULT: false},
+	SUBRADAR_SELF_ALPHA			: {KEY: 'ttMinimapSubRadarSelfOpacity',			DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
+	SUBRADAR_SELF_COLOR_INDEX	: {KEY: 'ttMinimapSubRadarSelfColorIndex',		DEFAULT: "indexOf('IDS_TT_TITLE_SURFACE_CONSUMABLE_RANGE', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
+
+	# Ally SubRadar Range
+	SUBRADAR_ALLY_FILL_CIRCLE	: {KEY: 'ttMinimapSubRadarAllyFillCircle',		DEFAULT: true},
+	SUBRADAR_ALLY_ALPHA			: {KEY: 'ttMinimapSubRadarAllyOpacity',			DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
+	SUBRADAR_ALLY_COLOR_INDEX	: {KEY: 'ttMinimapSubRadarAllyColorIndex',		DEFAULT: "indexOf('IDS_TT_LIGHT_GREEN', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
+	SUBRADAR_ALLY_VISIBLE_ON_ALT: {KEY: 'ttMinimapSubRadarAllyVisibleOnAlt',	DEFAULT: false},
+	SUBRADAR_ALLY_VISIBLE_ON_ACTIVATION: {KEY: 'ttMinimapSubRadarAllyVisibleOnActivation',DEFAULT: false},
+})
+
+# battle\minimap\markers\base_marker.unbound
+(def constant TMap_RANGE_COLORS {
+	IDS_TT_TITLE_MAIN_ARMAMENT_RANGE		: "0xBBBBBB", # Default Armament Range
+	IDS_TT_TITLE_SEA_DETECTION_RANGE		: "0x6EE1F7", # Default Sea Visibility Range
+	IDS_TT_TITLE_AIR_DETECTION_RANGE		: "0x6EE1D8", # Default Plane Visibility Range
+	IDS_TT_TITLE_AA_RANGE					: "0xF0A522", # Default AA Range
+	IDS_TT_TITLE_SECONDARY_RANGE			: "0xA9C272", # Default ATBA Range
+	IDS_TT_TITLE_SURFACE_CONSUMABLE_RANGE	: "0x00CCFF", # Default Consumables Range
+	IDS_TT_DARK_BLUE						: "0x051523", # Dark Blue
+	IDS_TT_BLUE								: "0x001A6E", # Blue
+	IDS_TT_LIGHT_BLUE						: "0x80C4E9", # LightBlue
+	IDS_TT_PERSIAN_GREEN					: "0x009990", # Asagi
+	IDS_TT_GREEN							: "0x4CE8AA", # Green
+	IDS_TT_LIGHT_GREEN						: "0xCCFF99", # LightGreen
+	IDS_TT_KHAKI							: "0xF0BB78", # Kahki
+	IDS_TT_BROWN							: "0x61380B", # Brown
+	IDS_TT_LIGHT_PINK						: "0xFF96CA", # LightPink
+	IDS_TT_RED								: "0xFF0040", # Red
+	IDS_TT_DARK_RED							: "0x8A084B", # DarkRed
+	IDS_TT_DARK_PURPLE						: "0x8000FF", # DarkPurple
+	IDS_TT_LIGHT_PURPLE						: "0xFF00FF", # LightPurple
+
+	ALL: [
+		'IDS_TT_TITLE_MAIN_ARMAMENT_RANGE', 'IDS_TT_TITLE_SEA_DETECTION_RANGE', 'IDS_TT_TITLE_AIR_DETECTION_RANGE', 'IDS_TT_TITLE_AA_RANGE',
+		'IDS_TT_TITLE_SECONDARY_RANGE', 'IDS_TT_TITLE_SURFACE_CONSUMABLE_RANGE', 'IDS_TT_DARK_BLUE', 'IDS_TT_BLUE', 'IDS_TT_LIGHT_BLUE',
+		'IDS_TT_PERSIAN_GREEN', 'IDS_TT_GREEN', 'IDS_TT_LIGHT_GREEN', 'IDS_TT_KHAKI', 'IDS_TT_BROWN', 'IDS_TT_LIGHT_PINK',
+		'IDS_TT_RED', 'IDS_TT_DARK_RED', 'IDS_TT_DARK_PURPLE', 'IDS_TT_LIGHT_PURPLE'
+	],
+})
+
+(def css $TMap_NearbyRadarBoldText ()
+	(extends $TextDefaultBoldNM)
+	(extends $FontColorDefault)
+)
+
+(def css $TMap_NearbyRadarSmallText ()
+	(extends $TextDefault13NM)
+	(extends $FontColorDefault)
+)
+
+# battle\minimap\markers\capture_point_marker.unbound
+(def constant TMap_CAPTURE_POINTS_SETTINGS
+	{
+		NEUTRAL: {
+			STROKE_COLOR: 0xFFFFFF,
+			STROKE_WIDTH: 1,
+			COLORS: [0xFFFFFF, 0xFFFFFF, 0xFFFFFF],
+			ALPHAS: [0.18, 0.13, 0.08],
+			RATIOS: [0, 128, 255]
+		},
+		ALLY: {
+			STROKE_COLOR: 0x4CE8AA,
+			STROKE_WIDTH: 1,
+			COLORS: [0x4CE8AA, 0x4CE8AA, 0x4CE8AA],
+			ALPHAS: [0.39, 0.26, 0.21],
+			RATIOS: [0, 128, 255]
+		},
+		ENEMY: {
+			STROKE_COLOR: 0xFF9933,
+			STROKE_WIDTH: 1,
+			COLORS: [0xFF3300, 0xFF3300, 0xFF3300],
+			ALPHAS: [0.39, 0.26, 0.21],
+			RATIOS: [0, 128, 255]
+		},
+		CONTESTED: {
+			STROKE_COLOR: 0xFFCC66,
+			STROKE_WIDTH: 2,
+		},
+	}
+)
+
+(def constant TMap_RPF_KEYS {
+	IDS_QUICK_COMMANDS	: 'CMD_QUICK_COMMANDS_WINDOW',
+	IDS_HELP			: 'CMD_HELP',
+	IDS_FOGHORN			: 'CMD_FOGHORN',
+
+	ALL					: ['IDS_QUICK_COMMANDS', 'IDS_HELP', 'IDS_FOGHORN', 'IDS_IS_TURNED_OFF'],
+})
+
+# battle\minimap\markers\base_marker.unbound
+(def constant TMap_MINIMAP_MARKERS_SETTINGS [
+	{markerRenderer: 'TMap_MapShipMarker',				disableUpdatePos: false, rotateBack: false,	hideOnDeath: false}, # CC.avatar
+	{markerRenderer: 'TMap_MapBuildingMarker',			disableUpdatePos: false, rotateBack: true,	hideOnDeath: false}, # CC.Building
+	{markerRenderer: 'TMap_MapCapturePointMarker',		disableUpdatePos: false, rotateBack: true,	hideOnDeath: false}, # CC.capturePoint
+	{markerRenderer: 'TMap_MapEpicenterMarker',			disableUpdatePos: false, rotateBack: true,	hideOnDeath: false}, # CC.epicenter
+	{markerRenderer: 'MapStubMarker',					disableUpdatePos: false, rotateBack: false,	hideOnDeath: false}, # CC.navpoint
+	{markerRenderer: 'TMap_MapScenarioObjectMarker',	disableUpdatePos: false, rotateBack: true,	hideOnDeath: false}, # CC.scenarioObject	
+	{markerRenderer: 'TMap_MapSquadronMarker',			disableUpdatePos: false, rotateBack: false,	hideOnDeath: false}, # CC.squadron
+	{markerRenderer: 'TMap_MapTorpedoMarker',			disableUpdatePos: false, rotateBack: false,	hideOnDeath: false}, # CC.torpedo
+	{markerRenderer: 'TMap_MapCameraMarker',			disableUpdatePos: false, rotateBack: false,	hideOnDeath: false}, # CC.camera
+	{markerRenderer: 'MapStubMarker',					disableUpdatePos: false, rotateBack: false,	hideOnDeath: false}, # CC.popupDamageGroup
+	{markerRenderer: 'MapStubMarker',					disableUpdatePos: false, rotateBack: false,	hideOnDeath: false}, # CC.payload
+	{markerRenderer: 'MapStubMarker',					disableUpdatePos: false, rotateBack: false,	hideOnDeath: false}, # CC.resource
+	{markerRenderer: 'MapStubMarker',					disableUpdatePos: false, rotateBack: false,	hideOnDeath: false}, # CC.keyObject
+	{markerRenderer: 'TMap_MapAimPositionMarker',		disableUpdatePos: true , rotateBack: false,	hideOnDeath: false}, # CC.aimPosition
+	{markerRenderer: 'MapStubMarker',					disableUpdatePos: false, rotateBack: false,	hideOnDeath: false}, # CC.scenarioTag
+	{markerRenderer: 'TMap_MapInteractiveZoneMarker',	disableUpdatePos: false, rotateBack: true,	hideOnDeath: false}, # CC.interactiveZone
+	{markerRenderer: 'TMap_MapWardFightersMarker',		disableUpdatePos: false, rotateBack: false,	hideOnDeath: false}, # CC.ward
+	{markerRenderer: 'TMap_MapNavpointMarker',			disableUpdatePos: true , rotateBack: false,	hideOnDeath: false}, # CC.minimapPath
+	{markerRenderer: 'TMap_MapPathMarker',				disableUpdatePos: true , rotateBack: false,	hideOnDeath: false}, # CC.minimapBezierPath
+	{markerRenderer: 'MapStubMarker',					disableUpdatePos: false, rotateBack: false,	hideOnDeath: false}, # CC.mine
+	{markerRenderer: 'MapStubMarker',					disableUpdatePos: false, rotateBack: false,	hideOnDeath: false}, # CC.submarineSearchPoint
+	{markerRenderer: 'TMap_MapHydrophoneZoneMarker',	disableUpdatePos: false, rotateBack: false,	hideOnDeath: false}, # CC.submarineHydrophoneZone
+	{markerRenderer: 'MapStubMarker',					disableUpdatePos: false, rotateBack: false,	hideOnDeath: false}, # CC.waveHit
+	{markerRenderer: 'MapStubMarker',					disableUpdatePos: false, rotateBack: false,	hideOnDeath: false}, # CC.depthCharge
+	{markerRenderer: 'MapStubMarker',					disableUpdatePos: false, rotateBack: false,	hideOnDeath: false}, # CC.airSupportCharge
+	{markerRenderer: 'TMap_MapAttentionMarker',			disableUpdatePos: false, rotateBack: false,	hideOnDeath: false}, # CC.minimapAttentionPoint
+	{markerRenderer: 'TMap_MapMinefieldMarker',			disableUpdatePos: false, rotateBack: false,	hideOnDeath: false}, # CC.minefield
+])
+
+# battle\minimap\markers\base_marker.unbound
+(def constant TMap_MINIMAP_RANGES_SETTINGS "{
+	artilleryMaxDist:				{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 ,	prefName: 'MAIN_ARMAMENT',	optionName: 'shootMGRangeEnabled' },
+	phaser_laserMaxDist:			{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 ,	prefName: 'MAIN_ARMAMENT',	optionName: 'shootPhaserLaserRangeEnabled' },
+	torpedoMaxDist:					{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 ,	prefName: 'TORPEDO',		optionName: 'shootTARangeEnabled' },
+	pulsePhaserMaxDist:				{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 ,	prefName: 'MAIN_ARMAMENT',	optionName: 'shootPulsePhaserRangeEnabled' },
+	ionicPhaserMaxDist:				{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 ,	prefName: 'MAIN_ARMAMENT',	optionName: 'shootIonicPhaserRangeEnabled' },
+	torpedoPhotonMaxDist:			{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 ,	prefName: 'TORPEDO',		optionName: 'shootTorpedoPhotonRangeEnabled' },
+	pingerMaxDist:					{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 ,	prefName: 'PINGER',			optionName: 'shootPingerRangeEnabled' },
+	visibilityRange:				{ color: 0x6EE1F7, boldText: false, dashLength: 11, drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 11 ,	prefName: 'VISIBILITY_SEA',	optionName: 'visibilityRangeEnabled' },
+	visibilityRangeAlt:				{ color: 0x6EE1F7, boldText: false, dashLength: 11, drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 11 ,	prefName: 'VISIBILITY_SEA',	optionName: 'visibilityRangeEnabled' },
+	visibilityPlaneRange:			{ color: 0x6EE1D8, boldText: false, dashLength: 13, drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 27 ,	prefName: 'VISIBILITY_AIR',	optionName: 'visibilityPlaneRangeEnabled' },
+	visibilityPlaneRangeAlt:		{ color: 0x6EE1D8, boldText: false, dashLength: 13, drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 27 , 	prefName: 'VISIBILITY_AIR',	optionName: 'visibilityPlaneRangeEnabled' },
+	aaRangeMax:						{ color: 0xF0A522, boldText: false, dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 , 	prefName: 'ANTIAIR',		optionName: 'aaRangeMaxEnabled' },
+	atbaMaxDist:					{ color: 0xA9C272, boldText: false, dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 , 	prefName: 'SECONDARY',		optionName: 'atbaRangeEnabled' },
+	rlsShipRange:					{ color: 0x00CCFF, boldText: false, dashLength: 0 , drawDotted: true , forceEnabled: false, lineThickness: 1.5, spacing: 15.5 , prefName: 'RADAR_SELF',		optionName: 'rlsRangeEnabled' },
+	sonarShipRange:					{ color: 0x00CCFF, boldText: false, dashLength: 0 , drawDotted: true , forceEnabled: false, lineThickness: 2  , spacing: 21 , 	prefName: 'HYDRO_SELF',		optionName: 'sonarRangeEnabled' },
+	hydrophoneRange:				{ color: 0x00CCFF, boldText: false, dashLength: 0 , drawDotted: true , forceEnabled: false, lineThickness: 2.5, spacing: 17.5 , prefName: 'HYDROPHONE',		optionName: 'hydrophoneRangeEnabled' },
+	submarineLocatorRange:			{ color: 0x00CCFF, boldText: false, dashLength: 0 , drawDotted: true , forceEnabled: false, lineThickness: 2.5, spacing: 17.5 , prefName: 'SUBRADAR_SELF',	optionName: 'submarineLocatorRangeEnabled' },
+	visDistance:					{ color: 0x00CCFF, boldText: false, dashLength: 0 , drawDotted: false, forceEnabled: true , lineThickness: 1  , spacing: 0 , 	prefName: '',				optionName: '' },
+	visibilityAfterPingByShipRange:	{ color: 0x00BBFF, boldText: false, dashLength: 16, drawDotted: false, forceEnabled: true , lineThickness: 1  , spacing: 40 , 	prefName: '',				optionName: 'visibilityAfterPingByShipRangeEnabled' },
+	charge_laserMaxDist:			{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 , 	prefName: 'MAIN_ARMAMENT',	optionName: 'shootChargeLaserRangeEnabled' },
+	impulse_laserMaxDist:			{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 , 	prefName: 'MAIN_ARMAMENT',	optionName: 'shootImpulseLaserRangeEnabled' },
+	axis_laserMaxDist:				{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 , 	prefName: 'MAIN_ARMAMENT',	optionName: 'shootAxisLaserRangeEnabled' },
+	wavesMaxDist:					{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 , 	prefName: 'MAIN_ARMAMENT',	optionName: 'shootWaveGunRangeEnabled' },
+	air_supportMaxDist: 			{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 , 	prefName: 'AIRSUPPORT',		optionName: 'shootAirSupportRangeEnabled' }
+}")
+
+(def macro TMap_GET_USERPREF()
+	(var userPrefsComponent:gfx = "$datahub.getSingleComponent(CC.userPrefs)")
+	(var _userPrefsNum:gfx = "userPrefsComponent.userPrefs.chatBoxWidth" watch=false (event "userPrefsComponent.evUserPrefsChanged"))
+)
+
+(def macro TMap_GET_PREF_NUMBER (_varName:expression, _pref:expression)
+	(var name="_varName" type=number value="_userPrefsNum && isNumber(_userPrefsNum[_pref.KEY]) ? _pref.OFFSET + (round(_userPrefsNum[_pref.KEY]) * _pref.MODIFIER) : _pref.DEFAULT")
+)
+
+(def macro TMap_GET_PREF_BOOL (_varName:expression, _pref:expression)
+	(var name="_varName" type=bool value="_userPrefsNum && isNumber(_userPrefsNum[_pref.KEY]) ? round(_userPrefsNum[_pref.KEY]) : _pref.DEFAULT")
+)
+
+# `altVision:bool` must exist!
+# Loads `isVarNameVisible:bool` into scope
+(def macro TMap_GET_DISPLAY_MODE (_varName:expression, _prefValue:expression)
+	(var name="_varName" type=bool value="_prefValue == 2 ? altVision : _prefValue")
+)
+
+(def macro TMap_GET_ALT_VISION ()
+	(var cameraComponent:gfx = "$datahub.getSingleComponent(CC.camera)")
+	(var altVision:bool = "cameraComponent ? cameraComponent.altVision : false" (event "cameraComponent.evAltVisionChanged"))
+)
+
+(def macro TMap_GET_SCALE_RATIO()
+	(var _isLoading:bool = false)
+	(var minimapSizeIndexComponent:gfx = "$datahub.getPrimaryEntity(CC.minimapOption, SC.Battle.MINIMAP_OPTION.minimapSizeIndex).minimapOption")
+	(var scaleIndex:number = "minimapSizeIndexComponent.value" (event "minimapSizeIndexComponent.evValueChanged"))
+	(var mapScale:number = "scaleIndex < LIST_MAP_SCALES.length ? LIST_MAP_SCALES[scaleIndex] : LIST_MAP_SCALES[LIST_MAP_SCALES.length - 1] + SCALE_STEP * (scaleIndex - LIST_MAP_SCALES.length + 1)")
+	(var loadingMinimapScale:number = "1.84") 
+	(var scaleRatio:number = "MINIMAP_ASSETS_SIZE * (_isLoading ? loadingMinimapScale : mapScale)")
+)
+
+(def macro TMap_RANGE_CIRCLE ()
+	(block
+		(macro BIND_FAIR_SCALE "rangeRadius")
+		(block
+			(controller $Sector
+				(bind arc "360")
+				(bind radius "MINIMAP_ASSETS_SIZE")
+				(bind innerRadius "innerRadius")
+				(bind lineThickness "lineThickness")
+				(bind lineAlpha "1")
+				(bind lineColor "color")
+				(bind colors "[color]")
+				(bind alphas "[alphaMultiplier * 0.5]")
+				(bind ratios "[1.0]")
+				(bind dashLength "dashLength")
+				(bind spacing "spacing")
+				(bind drawDotted "drawDotted")
+			)
+		)
+	)
+)
+
+(def element TMap_RadioLocationChat (_userPrefsNum:gfx=null) layout=false
+	(scope
+		# Event
+		(event evSendMessage)
+		(event evStartCoolDown)
+		(event evEndCoolDown)
+
+		# RPF
+		(var rpfComponent:gfx = "$datahub.getSingleComponent(CC.nearestEnemyIndication)")
+		(var isRPFVisible:bool = "rpfComponent ? rpfComponent.showNearestEnemy : false" (event "rpfComponent.evShowNearestEnemyChanged"))
+		(var yawToNearestEnemy:number = "rpfComponent ? rpfComponent.yawToNearestEnemy : 0" (event "rpfComponent.evYawToNearestEnemyChanged"))
+
+		# Chat
+		(var chatComponent:gfx = "$datahub.getSingleComponent(CC.battleChatAndLog)")
+		(var currentChannelId:number = "chatComponent.currentChannelId" (event "chatComponent.evChannelChanged"))
+		(var isDivisionChat:bool = "currentChannelId == SC.Channel.BATTLE_CHAT_CHANNEL_TYPE.DIVISION")
+		(var isTeamChat:bool = "currentChannelId == SC.Channel.BATTLE_CHAT_CHANNEL_TYPE.TEAM")
+		(var isAllyChat:bool = "isTeamChat || isDivisionChat")
+
+		# RPF Message
+		(var rpfMessageIndex:number = "isRPFVisible ? round((yawToNearestEnemy - TMap_RPF_SECTOR_HALF_WIDTH_RAD) / TMap_RPF_SECTOR_WIDTH_RAD)
+													: 16"
+		)
+		(var rpfMessage:str = "rpfMessageIndex < TMap_RPF_DIRECTION_MESSAGES.length ? TMap_RPF_DIRECTION_MESSAGES[rpfMessageIndex] : ''")
+		(var prevRpfMessage:str = '' watch=false)
+		(bind prevRpfMessage "rpfMessage" watch=false init=false (event "evSendMessage"))
+		(var isRPFChanged:bool = "rpfMessage != prevRpfMessage")
+
+		# Cooldown
+		(var battleInfoComponent:gfx = "$datahub.getSingleComponent(CC.battleInfo)")
+		(var battleType:str = "battleInfoComponent.battleType")
+		(var isClanBattle:bool = "battleType == SC.Common.BATTLE_TYPES.CLAN_BATTLE")
+		(var isTrainingBattle:bool = "battleType == SC.Common.BATTLE_TYPES.TRAINING_BATTLE")
+		(var isAntiSpamEnabled:bool = "!(isClanBattle || isTrainingBattle || isDivisionChat)")
+
+		(var coolDownCount:number = "0" watch=false)
+		(bind coolDownCount "coolDownCount + 1" watch=false init=false (event "evStartCoolDown")) # evStartCoolDown will trigger only when (isTeamChat == true)
+		(bind coolDownCount "coolDownCount - 1" watch=false init=false (event "evEndCoolDown"))
+		(var isOnCoolDown:bool = "isAntiSpamEnabled ? coolDownCount + 1 > TMap_RPF_MESSAGE_COOLDOWN_MAX_COUNT : false")
+
+		# Key Bind
+		(macro TMap_GET_PREF_NUMBER _varName="'rpfKeyIndex'" _pref="TMap_PREFS.RPF_KEYBIND")
+
+		(var keyDesc:str = "rpfKeyIndex < TMap_RPF_KEYS.ALL.length ? TMap_RPF_KEYS.ALL[rpfKeyIndex] : TMap_RPF_KEYS.ALL[0]")
+		(var keyName:str = "keyDesc in TMap_RPF_KEYS ? TMap_RPF_KEYS[keyDesc] : ''")
+
+		(var commandWatcher:gfx = "$datahub.getPrimWatcher(CC.commandMappingCommandName, keyName)")
+		(var commandEntity:gfx = "commandWatcher.entity" (event "commandWatcher.event"))
+		(var commandComponent:gfx = "commandEntity && commandEntity.commandMappingCommand ? commandEntity.commandMappingCommand : null")
+
+		# Availability
+		(var canSendChat:bool = "isAllyChat && !isOnCoolDown && isRPFChanged")
+	)
+	(visible = false)
+
+	(dispatch evSendMessage args={} watch=false init=false (bind enabled "canSendChat") (event "commandComponent.evCall"))
+	(dispatch evStartCoolDown args="{}" watch=false init=false (bind enabled "isTeamChat") (event "evSendMessage"))
+	(dispatch evEndCoolDown	args="{}" delay="TMap_RPF_MESSAGE_COOLDOWN_DURATION" watch=false init=false (event "evStartCoolDown"))
+
+	(bindcall externalCall 'inputMapping.onAction' "['battleChat.outgoingMessage', {'message': rpfMessage}]" watch=false init=false (event "evSendMessage"))
+)
+
+# battle\minimap\minimap.unbound
+(def element BattleMinimapUb2() layout=true dispatch_size_change=true
+	# TODO: make the height adjustable with prefs
+	(scope
+		(macro TMap_GET_SCALE_RATIO)
+	)
+	(style
+		(bind height "scaleRatio")
+		(bind width "scaleRatio")
+	)
+	(controller $Instance
+		(renderer = 'TMap_BattleMinimap')
+		(bind enabled "_isLoading")
+		(exprs
+			(scope
+				(bind _isLoading "_isLoading")
+			)
+		)
+	)
+)
+
+# battle\death_log.unbound
+(def element DeathLogContainer() layout=true dispatch_size_change=true
+	(style
+		(align = "right|bottom")
+		(height = "22*3")
+		(width = "400")
+	)
+)
+
+(def element TMap_DeathLogContainer(_userPrefsNum:gfx=null) layout=true dispatch_size_change=true
+	(scope
+		(var feedbackCollection:gfx = "$datahub.getCollection(CC.feedbackComponent)")
+		(var feedbackEntity:gfx = "feedbackCollection.items[0]")
+	)
+
+	(name = 'DeathLogContainer')
+
+	(style
+		(align = "right|bottom")
+		(height = "22*3")
+		(width = "400")
+		(marginBottom = "MS")
+		(marginRight = "MS")
+	)
+
+	(block
+		(style
+			(align = "right")
+		)
+		(controller $FxInstance renderer='DeathLogMessage' lifetime="DEATH_LOG_MESSAGE_LIFETIME"
+			(args _eventData = "$event[1]")
+			(bindcall create (event "feedbackEntity.feedbackComponent.evDeathLog"))
+		)
+	)
+)
+
+(def element TTaroMinimap () layout=true dispatch_size_change=true
+	(scope
+        (macro STAGE_SIZE)
+        (var defaultPos:dict = "{'positionX': stageWidth - XS, 'positionY': stageHeight - XS}")
+        (macro DRAGGABLE_GET_DROP_POSITION _wndName="'TTaroMinimap'" _defaults="defaultPos")
+
+		(macro TMap_GET_USERPREF)
+		
+		(macro TMap_GET_SCALE_RATIO)
+        
+		(var mouseComponent:gfx = "$datahub.getSingleComponent(CC.mouse)")
+		(var isMouseActive:bool = "mouseComponent.active" (event "mouseComponent.evActiveChanged"))
+
+		(macro TMap_GET_PREF_BOOL _varName="'isNerbyRadarVisible'" _pref="TMap_PREFS.NEARBY_RADAR_RANGE")
+	)
+
+    (style
+        (bind width "stageWidth")
+        (bind height "stageHeight")
+    )
+    
+    (block
+        # Mod
+        (block
+			(style
+				(position = "absolute")
+				(bind bottom "scaleRatio - 2")
+				(bind right "scaleRatio - 2")
+				(flow = "Flow.HORIZONTAL")
+			)
+			(controller $Instance renderer='ModDraggableElement'
+				(bind enabled "true")
+				(args
+					_wndName="'TTaroMinimap'"
+					_defaults="defaultPos"
+					_elmSize="{width: XS, height: XS}"
+				)
+			)
+			(block
+				(style
+					(hitTest = false)
+					(height = "32px - 5px") # There is 5px margin in the image
+					(width = "32px - 5px")
+					(alpha = 0.3)
+					(margin = 1px)
+					(backgroundImage = 'url:../cursors/move_hand.dds')
+				)
+				(controller $Animation
+					(bindcall play
+						to	="{alpha: 0.3}"
+						duration=0.15
+						killAll=true
+						(bind enabled "!isMouseActive")
+						(bind trigger "isMouseActive")
+					)
+					(bindcall play
+						to	="{alpha: 1.0}"
+						duration=0.15
+						killAll=true
+						(bind enabled "isMouseActive")
+						(bind trigger "isMouseActive")
+					)
+				)
+			)
+			(element TT_ConfigButtonElement _modIndex = "15"
+				(style
+					(bind left "true ? -30px : 0") # TODO: must be 0 if draggable is disabled
+				)
+			)
+			(block
+				(style
+					(position = "absolute")
+					(top = 37px) # TODO: Improve if possible. This defines the horizontal alignment of Nearby Radar Warning and Main Map
+					(left = -110px)
+					(hitTest = false)
+				)
+				(controller $Instance renderer='TMap_NearbyRadarsWarning'
+					(bind enabled "isNerbyRadarVisible")
+					(args _userPrefsNum="_userPrefsNum")
+				)
+			)
+		)
+        (style
+            (position = "absolute")
+            (bind top "dragPosY")
+            (bind left "dragPosX")
+			# Set the transform origin to the right bottom
+			(pivotX = 100%)
+			(pivotY = 100%)
+
+			(align = "right")
+        )
+        #
+		(element TMap_DeathLogContainer _userPrefsNum="_userPrefsNum")
+		(element TMap_BattleMinimap _userPrefsNum="_userPrefsNum")
+		
+		(element TMap_RadioLocationChat _userPrefsNum="_userPrefsNum")
+    )
+)
+
+(def element TMap_NearbyRadarsWarning (_userPrefsNum:gfx=null) layout=true
+	(scope
+		(var collection:gfx = "$datahub.getCollection(CC.avatar)")
+		(var enemyCollection:gfx = "collection ? collection.getChildByPath('team.enemy.sortedAlive') : null" (event "collection.evChildAdded") (event "collection.evChildRemoved"))
+		(var enemyItems:array = "enemyCollection ? enemyCollection.items : null" (event "enemyCollection.evAdded") (event "enemyCollection.evRemoved"))
+		(var itemsLength:number = "enemyItems ? enemyItems.length : 0")
+
+		# Events for tracking element count
+		(event evEnterRadarRange)
+		(event evLeaveRadarRange)
+		(var elementsCount:number = 0 watch=false)
+		(bind elementsCount "elementsCount + 1" watch=false init=false (event "evEnterRadarRange"))
+		(bind elementsCount "elementsCount - 1" watch=false init=false (event "evLeaveRadarRange"))
+	)
+
+	(style
+		(align = "middle|center")
+		(vgap = 10px)
+		(width = 100px)
+	)
+
+	# BG
+	(block
+		(class $FullsizeAbsolute)
+		(style
+			(alpha = 0.6)
+			(padding = -10px)
+		)
+		(block
+			(class $FullsizeAbsolute)
+			(style (backgroundImage = "'url:../service_kit/panel_backgrounds/hint_panel_high_contrast.png'") (scale9grid = 3))
+		)
+		(block
+			(class $FullsizeAbsolute)
+			(style (backgroundImage = 'url:../service_kit/frames/one_pixel_frame.png') (scale9grid = 2) (alpha = 0.1))
+		)
+	)
+
+	# Title
+	(tf
+		(class $TextDefaultBold17NM)
+		(class $TextColorHUDWarningPC)
+		(text = 'Nearby Radars')
+	)
+
+	(element HorizontalDividerTwoPx)
+
+	# Content
+	(block
+		(style
+			(width = 100%)
+		)
+		(controller $Repeat renderer='TMap_NearbyRadarItem' count = "itemsLength"
+			(args _markerEntity="enemyItems[$index]" _userPrefsNum="_userPrefsNum")
+			(bindcall removeChildAt "$event[1]" (event "enemyCollection.evRemoved"))
+			(bindcall addChildAt "$event[1]" (event "enemyCollection.evAdded"))
+		)
+		(bind visible "elementsCount > 0")
+	)
+	(block
+		(tf
+			(class $TMap_NearbyRadarBoldText)
+			(text = 'No Radar Nearby')
+		)
+		(bind visible "elementsCount == 0")
+	)
+)
+
+(def element TMap_NearbyRadarItem (_markerEntity:gfx, _userPrefsNum:gfx=null) layout=true
+	(scope
+		# Map Size
+		(var cameraComponent:gfx = "$datahub.getSingleComponent(CC.camera)")
+		(var mapSize:number = "cameraComponent.visibilityRange / cameraComponent.visibilityRangePerc" watch=false)
+
+		# Radar Range
+		(var avatarId:str = "_markerEntity.avatar ? toString(_markerEntity.avatar.id) : ''")
+		(var entityWatcher:gfx = "$datahub.getPrimWatcher(CC.mods_DataComponent, TMap_COMPONENT_KEY_CONSUMABLE_RANGES)")
+		(var dataEntity:gfx = "entityWatcher.entity" (event "entityWatcher.event"))
+		(var dataComponent:gfx = "dataEntity ? dataEntity.mods_DataComponent : null")
+		(var consumableData:dict = "dataComponent ? dataComponent.data : {}" (event "dataComponent.evDataChanged"))
+		(var consumableRanges:dict = "avatarId in consumableData ? consumableData[avatarId] : {}")
+		(var radarRangeScale:number = "'RADAR' in consumableRanges ? consumableRanges.RADAR : 0")
+		(var radarRange:number = "radarRangeScale * mapSize")
+
+		(var isRadarShip:bool = "radarRange > 0")
+	)
+
+	(bind visible "isRadarShip")
+
+	(style
+		(hitTest = false)
+		(width = 100%)
+	)
+
+	(controller $Instance renderer='TMap_NearbyRadar'
+		(bind enabled "isRadarShip")
+		(args _markerEntity="_markerEntity" _radarRange="radarRange" _userPrefsNum="_userPrefsNum")
+	)
+
+)
+
+(def element TMap_NearbyRadar(_markerEntity:gfx, _radarRange:number, _userPrefsNum:gfx=null)
+	(scope
+		# Events for parent
+		(event evEnterRadarRange)
+		(event evLeaveRadarRange)
+
+		# Timer
+		(var timer:gfx = "$datahub.getSingleComponent(CC.timer)")
+
+		# Map Size
+		(var cameraComponent:gfx = "$datahub.getSingleComponent(CC.camera)")
+		(var mapSize:number = "cameraComponent.visibilityRange / cameraComponent.visibilityRangePerc" watch=false)
+
+		# Own Ship
+		# Existence of mapPosition component is NOT guaranteed
+		(var playerEntity:gfx = "$datahub.getSingleEntity(CC.playerAvatar)")
+		(var ownShipMapPosComponent:gfx = "playerEntity.hasComponent(CC.mapPosition) ? playerEntity.mapPosition : null" (event "playerEntity.evAdded"))
+		(var ownPosX:number = "ownShipMapPosComponent ? ownShipMapPosComponent.position.x : -1" watch=false (event "timer.evInfrequent"))
+		(var ownPosY:number = "ownShipMapPosComponent ? ownShipMapPosComponent.position.y : -1" watch=false (event "timer.evInfrequent"))
+
+		# Radar Range
+		(var warnRange:number = "_radarRange + 2")
+
+		# Ship Position
+		# Existence of mapPosition component is NOT guaranteed because I'm iterating over CC.avatar
+		(var shipPosComponent:gfx = "_markerEntity.hasComponent(CC.mapPosition) ? _markerEntity.mapPosition : null" (event "_markerEntity.evAdded"))
+		(var shipPosX:number = "shipPosComponent ? shipPosComponent.position.x : -1" watch=false (event "timer.evInfrequent"))
+		(var shipPosY:number = "shipPosComponent ? shipPosComponent.position.y : -1" watch=false (event "timer.evInfrequent"))
+
+		# Calc
+		(var isValidPos:bool = "ownShipMapPosComponent && shipPosComponent")
+		(var posDiffX:number = "(ownPosX - shipPosX) * mapSize")
+		(var posDiffY:number = "(ownPosY - shipPosY) * mapSize")
+
+		(var distanceToShip:number = " sqrt( pow(posDiffX, 2) + pow(posDiffY, 2) ) " watch=false (event "timer.evInfrequent"))
+		# Use this instead of Distance Component
+		# in order to avoid the situation where distance to ship becomes "incorrect" while using planes.
+
+		(var isNearby:bool = "isValidPos && (distanceToShip < warnRange)")
+		(var isInRange:bool = "isValidPos && (_radarRange >= distanceToShip)")
+
+		# Shipdata
+		(var shipEntity:gfx = "_markerEntity.avatar ? _markerEntity.avatar.ship.ref.ship : null")
+		(var shipName:gfx = "shipEntity ? shipEntity.nameUpper : ''")
+		(var subType:str = "shipEntity ? shipEntity.subtype : ''")
+		(var shipType:str = "toLower(subType)")
+		(var iconPath:str = "'icon_white_' + shipType")
+
+		# Warning Color
+		(var textRed:number = "isInRange ? 1 : 0.93" watch=false)
+		(var textGreen:number = "isInRange ? 0.3 : 0.93" watch=false)
+		(var textBlue:number = "isInRange ? 0.16 : 0.93" watch=false)
+		(controller $Animation
+			(bindcall play duration=0.25 to="{textRed:1,textGreen:0.3, textBlue:0.16}" watch=false init=false (bind enabled "isInRange"))
+			(bindcall play duration=0.25 to="{textRed:0.93,textGreen:0.93,textBlue:0.93}" watch=false init=false (bind enabled "!isInRange"))
+		)
+
+		# Alpha Animation
+		(var animatedAlpha:number = "isNearby ? 1.0 : 0" watch=false)
+		(controller $Animation
+			(bindcall play
+				keyframes="[{
+								percent:50,
+								to:{ animatedAlpha: 2 }
+							},{
+								percent:100,
+								to:{ animatedAlpha: 1 }
+							}]"
+				easing	 = "Easing.line"
+				duration = "0.4"
+				action	 = "killAll"
+				watch	 = false
+				(bind enabled "isNearby")
+				(bind trigger "isNearby")
+			)
+			(bindcall play
+				to		 = "{animatedAlpha: 0}"
+				easing	 = "Easing.quad_in"
+				duration = "0.25"
+				action	 = "killAll"
+				watch	 = false
+				(bind enabled "!isNearby")
+				(bind trigger "isNearby")
+			)
+		)
+	)
+
+	(dispatch evEnterRadarRange args="{}" dir="EventDirection.UP" watch=false init=false (bind enabled "isNearby")  (bind trigger "isNearby"))
+	(dispatch evLeaveRadarRange args="{}" dir="EventDirection.UP" watch=false init=false (bind enabled "!isNearby") (bind trigger "isNearby"))
+
+	# Only For Specific Cases: Init after reloading, etc.
+	(dispatch evEnterRadarRange args="{}" dir="EventDirection.UP" watch=false init=false on="isNearby ? 'addedToStage' : ''")
+
+	(style
+		(hitTest = false)
+		(bind alpha "animatedAlpha")
+		(width = 100%)
+	)
+
+	(bind visible "isNearby")
+
+	(block
+		(style
+			(align = "middle|center")
+			(marginBottom = 10px)
+			(width = 100%)
+			(vgap = 5px)
+		)
+		
+		# Ship Name
+		(hblock
+			(block
+				(style
+					(bind backgroundImage "'url:../battle_hud/markers/ship/' + iconPath + '.png'")
+					(width = "SHIP_ICON_SIZE.WIDTH")
+					(height = "SHIP_ICON_SIZE.HEIGHT")
+					(marginTop = "-S")
+					(marginBottom = "-S")
+					(scaleX = -1)
+					(pivotX = 50%)
+				)
+			)
+			(tf
+				(class $TMap_NearbyRadarBoldText)
+				(bind text "shipName")
+			)
+			(bind colorTransform "{redMultiplier:textRed,greenMultiplier:textGreen,blueMultiplier:textBlue}")
+		)
+
+		# Icon/Range
+		(hblock
+			(style
+				(hgap = 5px)
+				(align = "bottom|center")
+			)
+			
+			(tf
+				(class $TMap_NearbyRadarBoldText)
+				(style
+					(width = 30px)
+					(textAlign = "right")
+				)
+				(bind text "formatFloatingPoint(_radarRange, 1)")
+			)
+			(tf
+				(class $TMap_NearbyRadarSmallText)
+				(text = "tr('IDS_KILOMETER')")
+			)
+
+			(tf
+				(class $TMap_NearbyRadarSmallText)
+				(style
+					(width = 30px)
+					(textAlign = "right")
+				)
+				(bind text "'(' + formatFloatingPoint(distanceToShip, 1)")
+			)
+			(tf
+				(class $TMap_NearbyRadarSmallText)
+				(text = "tr('IDS_KILOMETER') + ')'")
+			)
+		)
+	)
+	(element HorizontalDividerTwoPx)
+)
+
+# battle\minimap\minimap.unbound BattleMinimapUb2
+(def element TMap_BattleMinimap(_userPrefsNum:gfx=null)
+	(scope
+		(var minimapEntity:gfx = "$datahub.getSingleEntity(CC.minimap)")
+		
+		(var followVehicle:bool = "minimapEntity.minimap.followVehicle" (event "minimapEntity.minimap.evFollowVehicleChanged"))
+
+		(var mouseComponent:gfx = "$datahub.getSingleComponent(CC.mouse)")
+		(var isMouseActive:bool = "mouseComponent.active" (event "mouseComponent.evActiveChanged"))
+
+		(var minimapSizeIndexComponent:gfx = "$datahub.getPrimaryEntity(CC.minimapOption, SC.Battle.MINIMAP_OPTION.minimapSizeIndex).minimapOption")
+		(var scaleIndex:number = "minimapSizeIndexComponent.value" (event "minimapSizeIndexComponent.evValueChanged"))
+		(var mapScale:number = "scaleIndex < LIST_MAP_SCALES.length ? LIST_MAP_SCALES[scaleIndex] : LIST_MAP_SCALES[LIST_MAP_SCALES.length - 1] + SCALE_STEP * (scaleIndex - LIST_MAP_SCALES.length + 1)")
+
+		(event evMouseOverMap)
+		(event evMouseOutMap)
+		(event evMouseMoveMap)
+		(event evMouseDownMap)
+
+		(var mouseOverMap:bool = "$event.isOver" watch=false init=false (event "evMouseOverMap") (event "evMouseOutMap"))
+		(var worldX:number = "$event.localX / $event.scaleRatio" watch=false init=false (event "evMouseMoveMap") (event "evMouseOverMap"))
+		(var worldY:number = "$event.localY / $event.scaleRatio" watch=false init=false (event "evMouseMoveMap") (event "evMouseOverMap"))
+
+		(var _isLoading:bool = false)
+	)
+	
+	(bindcall externalCall 'direct.action' "['minimap.setMouseOver', [false]]" watch=false init=false (bind enabled "!isMouseActive"))
+	(bindcall externalCall 'direct.action' "['minimap.setMouseOver', [mouseOverMap ? mouseOverMap && isMouseActive : false]]" watch=false init=false (bind trigger "mouseOverMap"))
+	(bindcall externalCall 'direct.action' "['minimap.moveOnMinimap', [worldX, worldY]]" (event "evMouseMoveMap"))
+	(bindcall externalCall 'direct.action' "['minimap.moveOnMinimap', [worldX, worldY]]" (event "evMouseOverMap"))
+	(bindcall externalCall 'direct.action' "['minimap.moveOnMinimap', [-1, -1]]" (event "evMouseOutMap"))
+
+	(controller $Instance
+		# Mod
+		(bind renderer "followVehicle	? 'MaskedMinimap'
+										: 'TMap_FullMinimap'")
+		(args
+			_isLoading="_isLoading"
+			_userPrefsNum="_userPrefsNum"
+		)
+		#
+	)
+	
+	(dispatch evSwitchOptionsPanel args="{isVisible: false}" dir="EventDirection.DOWN" (event "evMouseDownMap") (bind trigger "mapScale"))
+
+	# TODO: remove
+	(element MinimapOptionsButton
+		(bind visible "!_isLoading")
+		(style (position = "absolute") (right = "20px") (top = "-22px"))
+	)
+)
+
+# battle/minimap/minimap.unbound
+(def element TMap_FullMinimap (_isLoading:bool = false, _userPrefsNum:gfx = null) layout=true dispatch_size_change=true
+	(scope
+		(macro MINIMAP_SCOPE)
+		(var angleToRotate:number = "minimapEntity.minimap.rotationAngleDeg" (event "minimapEntity.minimap.evRotationAngleDegChanged"))
+		(var rotationAngle:number = "minimapEntity.minimap.rotationAngleDeg" watch=false)
+		(controller $Animation
+			(bindcall play  duration=0.3
+							easing="Easing.line"
+							from="{ rotationAngle: minimapEntity.minimap.rotationStartDeg }"
+							to="{ rotationAngle: minimapEntity.minimap.rotationAngleDeg }"
+							watch=false
+							(event "minimapEntity.minimap.evRotationAngleDegChanged")
+			)
+		)
+		(var coordsVisible:bool = "rotationAngle == angleToRotate")
+	)
+
+	(style
+		(bind width "scaleRatio")
+		(bind height "scaleRatio")
+		(bind hitTest "!_isLoading")
+	)
+
+	(block
+		(class $FullsizeAbsolute)
+		(style
+			(bind top "scaleRatio / 2") 
+			(bind left "scaleRatio / 2")
+			(bind rotation "rotationAngle")
+		)
+		
+		(block
+			(class $FullsizeAbsolute)
+			(style
+				(bind top "-scaleRatio / 2")
+				(bind left "-scaleRatio / 2")
+			)
+			
+			(element TMap_MinimapBG _scaleRatio="scaleRatio" _mapScale="mapScale" _mapBorderScale="mapBorderScale" _mapBorderMarginX="mapBorderMarginX" _mapBorderMarginY="mapBorderMarginY" _isLoading="_isLoading" _userPrefsNum="_userPrefsNum"
+				(scope
+					(bind scaleRatio "scaleRatio")
+					(bind mapScale "mapScale")
+					(bind mapBorderScale "mapBorderScale")
+					(bind mapBorderMarginX "mapBorderMarginX")
+					(bind mapBorderMarginY "mapBorderMarginY")
+				)
+				(macro MASK)
+			)
+
+			(block
+				(class $FullsizeAbsolute)
+				(macro MASK)
+				(style (hitTest = false))
+				(element TMap_MinimapMarkersContainer
+					_mapScale="mapScale"
+					_itemScale="itemScale"
+					_scaleRatio="scaleRatio"
+					_markerSettingsMap="TMap_MINIMAP_MARKERS_SETTINGS"
+					_isLoading="_isLoading"
+					_userPrefsNum="_userPrefsNum"
+				)
+			)
+
+			(block
+				(class $FullsizeAbsolute)
+				(style (backgroundColor = 0x01000000))
+
+				(macro MINIMAP_CLICK_MASK_EVENTS "scaleRatio")
+			)
+		)
+	)
+
+	(element TMap_MinimapCoordLabels _scaleRatio="scaleRatio" _angleToRotate="angleToRotate" _mapScale="mapScale" _userPrefsNum="_userPrefsNum"
+		(bind visible "coordsVisible")
+	)
+)
+
+# battle/minimap/minimap.unbound
+(def element TMap_MinimapCoordLabels (_scaleRatio:number, _angleToRotate:number, _mapScale:number, _userPrefsNum:gfx=null) layout=true
+	(scope
+		(var coordMargin:number = "-4 - (_mapScale < 2 ? _mapScale : 2) * 3")
+
+		(var letters:array = "[ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J' ]")
+		(var digits:array = "[ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]")
+
+		(var currentVertical:array = "  _angleToRotate == 0 || _angleToRotate == 360	? letters :
+										_angleToRotate == 90							? digits :
+										abs(_angleToRotate) == 180						? letters.reversed
+																						: digits.reversed")
+
+		(var currentHorizontal:array = "_angleToRotate == 0 || _angleToRotate == 360	? digits :
+										_angleToRotate == 90							? letters.reversed :
+										abs(_angleToRotate) == 180						? digits.reversed
+																						: letters")
+	)
+
+	(class $FullsizeAbsolute)
+
+	(block
+		(style (position = "absolute") (bind left "coordMargin"))
+		(controller $Repeat renderer='TMap_MinimapCoordsLabel'
+			(bind count "currentVertical.length")
+			(args _height="_scaleRatio / 10" _value="currentVertical[$index]" _userPrefsNum="_userPrefsNum")
+		)
+	)
+
+	(hblock
+		(style (position = "absolute") (bind top "coordMargin"))
+		(controller $Repeat renderer='TMap_MinimapCoordsLabel'
+			(bind count "currentHorizontal.length")
+			(args _width="_scaleRatio / 10" _value="currentHorizontal[$index]" _userPrefsNum="_userPrefsNum")
+		)
+	)
+)
+
+# battle/minimap/minimap.unbound
+(def element TMap_MinimapCoordsLabel (_width:number=0, _height:number=0, _value:str='', _userPrefsNum:gfx=null) layout=true
+	(style
+		(bind width "_width")
+		(bind height "_height")
+		(align = "center|middle")
+	)
+	(tf
+		(class $TextMinimapCoordsLabel)
+		(bind text "_value")
+	)
+)
+
+# battle/minimap/minimap.unbound
+(def element TMap_MinimapBG (_scaleRatio:number, _mapScale:number, _mapBorderScale:number, _mapBorderMarginX:number, _mapBorderMarginY:number, _showGrid:bool = true, _isLoading:bool = false, _userPrefsNum:gfx = null) layout=true
+	# TODO: add gradient fill
+	(scope
+		(var scaleRatio:number = "_scaleRatio")
+		(var mapScale:number = "_mapScale")
+		(var mapBorderScale:number = "_mapBorderScale")
+		(var mapBorderMarginX:number = "_mapBorderMarginX")
+		(var mapBorderMarginY:number = "_mapBorderMarginY")
+
+		(var battleDataEntityCollection:gfx = "$datahub.getCollection(CC.battleData)")
+		(var battleDataEntity:gfx = "battleDataEntityCollection.items[0]")
+		(var mapEntity:gfx = "$datahub.getPrimaryEntity(CC.mapInfo, battleDataEntity.battleInfo.mapId)")
+
+		(var waterAlphaComponent:gfx = "$datahub.getPrimaryEntity(CC.minimapOption, SC.Battle.MINIMAP_OPTION.waterAlpha).minimapOption")
+		(var waterAlpha:number = "_isLoading ? 1 : waterAlphaComponent.value * 0.01" (event "waterAlphaComponent.evValueChanged"))
+
+		(var minimapComponent:gfx = "$datahub.getSingleComponent(CC.minimap)")
+	)
+
+	(class $FullsizeAbsolute)
+
+	
+	(block
+		(bind alpha "waterAlpha")
+		(style
+			(backgroundSize = "fill")
+			(bind backgroundImage "'url:' + mapEntity.mapInfo.minimapWaterPath")
+			(position = "absolute")
+			(bind width "scaleRatio") 
+			(bind height "scaleRatio") 
+		)
+	)
+
+	(block
+		(style
+			(position = "absolute")
+		)
+		(controller $Instance renderer='DrawBoundRect' 
+			(args x = "-2" y = "-2" width = "scaleRatio + 2" height = "scaleRatio + 2" color = "0x525869" filled="false" line="2" alpha="1")
+			(bindcall recreate (bind trigger "scaleRatio"))
+			(bind enabled "!_showGrid")
+		)
+	)
+
+	
+	(block
+		(class $FullsizeAbsolute)
+		(style
+			(backgroundSize = "cover")
+			(bind backgroundImage "'url:' + mapEntity.mapInfo.minimapPath")
+			(bind width "scaleRatio * mapBorderScale")
+			(bind height "scaleRatio * mapBorderScale")
+			(bind left "mapBorderMarginX * mapBorderScale")
+			(bind top "mapBorderMarginY * mapBorderScale")
+		)
+	)
+
+	# Mod
+	(controller $Repeat renderer='TMap_MinimapGridVertical' count=10
+		(args _scaleRatio = "scaleRatio" _userPrefsNum="_userPrefsNum")
+		(bind enabled "_showGrid")
+	)
+	(controller $Repeat renderer='TMap_MinimapGridHorizontal' count=10
+		(args _scaleRatio = "scaleRatio" _userPrefsNum="_userPrefsNum")
+		(bind enabled "_showGrid")
+	)
+	
+	(controller $FxInstance renderer='TMap_MinimapRectAttention' lifetime="LONG_ATTENTION_DURATION"
+		(bindcall create (event "minimapComponent.evRectAttention"))
+		(args _scaleRatio = "scaleRatio" row="$event[1]" column="$event[2]" idPlayer="$event[3]" _userPrefsNum="_userPrefsNum")
+	)
+
+	
+	(controller $FxInstance renderer='TMap_MinimapRectAttentionOld' lifetime="LONG_ATTENTION_DURATION"
+		(bindcall create (event "minimapComponent.evRectAttentionOld"))
+		(args _scaleRatio = "scaleRatio" row="$event[1]" column="$event[2]" idPlayer="$event[3]" _userPrefsNum="_userPrefsNum")
+		(exprs
+			(macro BIND_FAIR_SCALE "mapScale")
+		)
+	)
+
+	 
+	(controller $FxInstance renderer='TMap_MinimapPointAttention' lifetime="SHORT_ATTENTION_DURATION"
+		(bindcall create (event "minimapComponent.evPointAttention"))
+		(args _scaleRatio = "scaleRatio" worldX="$event[1]" worldY="$event[2]" type="$event[3]" anim="$event[4]" _userPrefsNum="_userPrefsNum")
+		(exprs
+			(macro BIND_FAIR_SCALE "mapScale")
+		)
+	)
+	#
+)
+
+# battle/minimap/minimap.unbound
+(def element TMap_MinimapMarkersContainer (_mapScale:number, _itemScale:number, _scaleRatio:number, _markerSettingsMap:array, _isLoading:bool = false, _userPrefsNum:gfx = null) layout=true
+	(scope
+		(var markersCollection:gfx = "$datahub.getCollection(CC.minimapMarker)")
+		(var availableMarkers:gfx = "markersCollection.getChildByPath('available')")
+	)
+
+	(class $FullsizeAbsolute)
+
+	# Mod
+	(element MapSmokeMarkersContainer "_mapScale" "_itemScale" "_scaleRatio")
+	#
+
+	(controller $Repeat renderer='TMap_MapMarkerItem'
+		(bind count "availableMarkers.items.length" watch=false (event "availableMarkers.evAdded"))
+		(bindcall removeChildAt "$event[1]" (event "availableMarkers.evRemoved"))
+		(args "availableMarkers" "_mapScale" "_itemScale" "_scaleRatio" "_markerSettingsMap" "_isLoading" _userPrefsNum="_userPrefsNum")
+	)
+)
+
+# battle/minimap/minimap.unbound
+(def element TMap_MinimapRectAttention (_scaleRatio:number, row:number, column: number, idPlayer:number, _userPrefsNum:gfx=null) layout=true
+	(controller $Animation
+		(play
+			duration = 0.9
+			keyframes="[
+				{percent:0, to:{alpha:0}},
+				{percent:50, to:{alpha:0.2}, easing:Easing.line},
+				{percent:100, to:{alpha:0}, easing:Easing.line}
+			]"
+			repeatCount = 4
+		)
+	)
+	
+	(style
+		(position = "absolute")
+		(bind top "(_scaleRatio * 0.1 * row) + 0.5")
+		(bind left "(_scaleRatio * 0.1 * column) + 0.5")
+		
+		(backgroundColor = 0xFF00fff6)
+		(bind width "1 * _scaleRatio * 0.1")
+		(bind height "1 * _scaleRatio * 0.1")
+	)
+)
+
+# battle/minimap/minimap.unbound
+(def element TMap_MinimapRectAttentionOld (_scaleRatio:number, row:number, column: number, idPlayer:number, _userPrefsNum:gfx = null) layout=true
+	(scope
+		(var scaleRatio:number = "_scaleRatio")
+	)
+	(style
+		(position = "absolute")
+		(bind top "scaleRatio * 0.1 * (row + 0.5)")
+		(bind left "scaleRatio * 0.1 * (column + 0.5)")
+		(bind backgroundImage "'symbol:minimap_rect_attention'")
+	)
+)
+
+# battle/minimap/minimap.unbound
+(def element TMap_MinimapGridVertical (_scaleRatio:number=0, _userPrefsNum:gfx=null) layout=true
+	(style 
+		(position = "absolute")
+		(width = "1px")
+		(height = "100%")
+		(backgroundColor = "0x10ffffff")
+		(bind left "_scaleRatio * 0.1 * ( $index )")
+	)
+)
+
+# battle/minimap/minimap.unbound
+(def element TMap_MinimapGridHorizontal (_scaleRatio:number=0, _userPrefsNum:gfx=null) layout=true
+	(style 
+		(position = "absolute")
+		(width = "100%")
+		(height = "1px")
+		(backgroundColor = "0x10ffffff")
+		(bind top "_scaleRatio * 0.1 * ( $index )")
+	)
+)
+
+# battle/minimap/minimap.unbound
+(def element TMap_MinimapPointAttention (_scaleRatio:number, worldX:number, worldY: number, type:number, anim:number, _userPrefsNum:gfx=null) layout=true
+	(scope
+		(var customRad:number = "14")
+		(var customAlpha:number = "0")
+		(var isReversed:bool = "anim == SC.Battle.MINIMAP_ATTENTION_APPEARANCE.SENDER")
+		(var pointColor:number = "	type == SC.Battle.MINIMAP_ATTENTION_VALUE.COMMON			? 0xFFFFFFFF :
+									type == SC.Battle.MINIMAP_ATTENTION_VALUE.COMMON_ALLY		? C_ALLY :
+									type == SC.Battle.MINIMAP_ATTENTION_VALUE.COMMON_ENEMY		? C_ENEMY :
+									type == SC.Battle.MINIMAP_ATTENTION_VALUE.SPOTTED			? C_ATTENTION
+																								: 0xFFFFFFFF")
+		(controller $Animation
+			(play
+				duration = "POINT_ATTENTION_ANIM_DURATION"
+				to = { customRad: 5, customAlpha: 1}
+				from = { customRad: 16, customAlpha: 0}
+				delay = 0
+				easing = "Easing.line"
+				repeatCount = 1
+				reverse = "isReversed"
+			)
+		)
+	)
+
+	(style
+		(position = "absolute")
+		(bind alpha "customAlpha")
+		(bind top "_scaleRatio * worldY")
+		(bind left "_scaleRatio * worldX")
+	)
+
+	(controller $Sector
+		(bind arc "360")
+		(bind radius "customRad")
+		(bind innerRadius "0")
+		(bind colors "[pointColor, pointColor, pointColor]")
+		(bind alphas "[0, 0.5, 0]")
+		(bind ratios "[175, 215, 255]")
+	)
+)
+
+# battle/minimap/markers/base_marker.unbound
+(def element TMap_MapMarkerItem (_collection:gfx, _mapScale:number, _itemScale:number, _scaleRatio:number, _markerSettingsMap:array = "TMap_MINIMAP_MARKERS_SETTINGS", _isLoading:bool = false, _userPrefsNum:gfx = null) layout=true
+	(scope
+		(event evMarkerUpdate)
+
+		(var markerScale:number = "_itemScale / _mapScale")
+		(var markerSettingsMap:array = "_markerSettingsMap")
+
+		(var _markerEntity:gfx = "_collection.items[$index]" watch=false)
+		
+		(macro GET_MARKER_ENTITY_COMPONENT 'minimapMarker')
+		(macro GET_MARKER_ENTITY_COMPONENT 'mapPosition')
+
+		(var posX:number = "mapPositionComponent ? _scaleRatio * mapPositionComponent.position.x : 0" init=false watch=false (event "evMarkerUpdate"))
+		(var posY:number = "mapPositionComponent ? _scaleRatio * mapPositionComponent.position.y : 0" init=false watch=false (event "evMarkerUpdate"))
+
+		(var posZ:number = "minimapMarkerComponent ? minimapMarkerComponent.zindex : 0" (event "minimapMarkerComponent.evZindexChanged"))
+
+		(var type:number = "_markerEntity && _markerEntity.entityType ? _markerEntity.entityType.value : -1" (event "_markerEntity.evAdded") (event "_markerEntity.evRemoved"))
+		(var markerSettings:dict = "type != -1 ? markerSettingsMap[type] : STUB_MINIMAP_MARKER_SETTINGS")
+		(var markerUpdatePos:bool = "!(markerSettings.disableUpdatePos)")
+		(var rotateBack:bool = "markerSettings.rotateBack")
+
+		(var target:gfx = "_markerEntity.target" (event "_markerEntity.evAdded") (event "_markerEntity.evRemoved"))
+		(var targetFlags:number = "target ? target.flags : 0" (event "target.evChanged") (event "target.evFlagsChanged"))
+		(var isTargetLocked:bool = "(targetFlags & LOCKABLE_WEAPONS) > 0")
+
+		(var mapVisible:bool = "_markerEntity.visibility ? _markerEntity.visibility.mapVisible : false" (event "_markerEntity.visibility.evChanged"))
+
+		(var minimapComponent:gfx = "$datahub.getSingleComponent(CC.minimap)")
+		(var angleToRotate:number = "minimapComponent.rotationAngleDeg" (event "minimapComponent.evRotationAngleDegChanged"))
+
+		(var scenarioTag:gfx = "_markerEntity.scenarioTag" (event "_markerEntity.evAdded") (event "_markerEntity.evRemoved"))
+
+		(var avatarEntity:gfx = "$datahub.getSingleEntity(CC.playerAvatar)")
+		(var isAlive:bool = "avatarEntity.health && avatarEntity.health.isAlive" (event "avatarEntity.health.evIsAliveChanged"))
+		(var hideOnDeath:bool = "markerSettings.hideOnDeath")
+	)
+
+	(dispatch evMarkerUpdate args={} (event "evEnterFrame") (bind enabled "markerUpdatePos"))
+
+	(style
+		(position = "absolute")
+		(bind left "posX")
+		(bind top "posY")
+		(bind zindex "posZ")
+		(bind rotation "-angleToRotate" (bind enabled "rotateBack"))
+	)
+
+	(macro BIND_FAIR_SCALE "markerUpdatePos ? _mapScale : 1")
+
+	# Mod
+	(block
+		(controller $Instance (renderer = 'TMap_MapMarkerScenarioTag')
+			(bind enabled "scenarioTag != null")
+			(args _markerEntity="_markerEntity" _userPrefsNum="_userPrefsNum")
+			(exprs
+				(macro BIND_FAIR_SCALE "markerScale")
+			)
+		)
+	)
+
+	
+	(block
+		(style (position = "absolute"))
+		(controller $FxInstance renderer='TMap_MapMarkerItemQCAnim' lifetime="QUICK_COMMAND_ANIM_LIFETIME"
+			(bindcall create (event "_markerEntity.quickCommand.evPlay"))
+			(args _type="$event[1]" _userPrefsNum="_userPrefsNum")
+		)
+	)
+	(bind visible "isAlive" (bind enabled "hideOnDeath"))
+	
+	(block
+		(controller $Instance (bind renderer "markerSettings.markerRenderer")
+			(args _markerEntity="_markerEntity" _mapScale="_mapScale" _itemScale="_itemScale" _scaleRatio="_scaleRatio" _userPrefsNum="_userPrefsNum")
+			(exprs
+				(scope
+					(bind _isLoading "_isLoading")
+				)
+			)
+		)
+	)
+
+	(block
+		(style (position = "absolute"))
+		(controller $Instance (renderer = 'TMap_MapMarkerItemAimTargetLock')
+			(args _userPrefsNum="_userPrefsNum")
+			(bind enabled "isTargetLocked && mapVisible")
+			(exprs
+				(macro BIND_FAIR_SCALE "markerScale")
+			)
+		)
+	)
+	#
+)
+
+# battle\minimap\markers\scenario_marker.unbound
+(def element TMap_MapMarkerScenarioTag (_markerEntity:gfx, _userPrefsNum:gfx=null) layout=true
+	(scope
+		(var ownerHealth:gfx = "_markerEntity.health")
+		
+		(var isAlive:bool = "ownerHealth ? _markerEntity.health.isAlive : true" (event "_markerEntity.health.evIsAliveChanged"))
+
+		(macro GET_SCENARIO_OBJECT_VIEW "_markerEntity.scenarioTag" "_markerEntity")
+		(var circleSettings:dict = "SCENARIO_TAGS_CIRCLE_COLORS[type]")
+
+		(event evShow)
+	)
+	(dispatch evShow on=addedToStage)
+
+	(bind visible "isAlive")
+	(bind alpha "circleSettings.alpha")
+	(style (position = "absolute"))
+
+	(block
+		(controller $Sector
+			(bind arc "360")
+			(bind color "circleSettings.color")
+			(bind radius "12")
+		)
+
+		(controller $Animation		
+			(bindcall  play
+				duration=0.3
+				from={alpha: 0, scaleX: 0, scaleY: 0}
+				to={alpha: 1, scaleX: 1, scaleY: 1}
+				easing="Easing.quint_in"
+				(event "evShow")
+			)
+		)	
+	)
+)
+
+# battle\minimap\markers\base_marker.unbound
+(def element TMap_MapMarkerItemQCAnim (_type:str, _userPrefsNum:gfx=null) layout=true
+	(scope
+		(var lifetime:number = "_type == 'Submarine_Ping_CMD' ? SUBMARINE_PING_ANIM_LIFETIME : QUICK_COMMAND_ANIM_LIFETIME")
+	)
+	(style 
+		(position = "absolute")
+		(bind backgroundImage "isIn(_type, ['Target_CMD', 'Submarine_Ping_CMD']) ? 'symbol:TargetMinimap' : 'symbol:SenderMinimap'")
+	)
+
+	(controller $Animation
+		(play
+			duration=0.15
+			from={alpha: 0}
+			to={alpha: 1}
+			easing="Easing.quint_in"
+		)
+
+		(play
+			duration=0.15
+			delay="lifetime-0.15"
+			from={alpha: 1}
+			to={alpha: 0}
+			easing="Easing.quint_out"
+		)
+	)
+)
+
+# battle\minimap\markers\base_marker.unbound
+(def element TMap_MapMarkerItemAimTargetLock (_userPrefsNum:gfx=null) layout=true
+	(style (position = "absolute"))
+	(bind alpha 0.5)
+
+	(block
+		(style
+			(position = "absolute")
+			(bind backgroundImage "'symbol:minimap_target_lock'")
+		)
+				
+		(controller $Animation
+			(play 
+				duration=0.2
+				from={scaleX:2, scaleY:2, alpha:0}
+				to={scaleX: 1, scaleY: 1, alpha:1}
+			)
+		)
+	)
+)
+
+# battle\minimap\markers\ship_marker.unbound
+(def element TMap_MapShipMarker (_markerEntity:gfx, _mapScale:number, _itemScale:number, _scaleRatio:number, _userPrefsNum:gfx=null) layout=true
+	(scope
+		(var isPlayerAvatar:bool = "_markerEntity.hasComponent(CC.playerAvatar)")
+		(var isAlive:bool = "_markerEntity.health ? _markerEntity.health.isAlive : false" (event "_markerEntity.health.evIsAliveChanged"))
+
+		(var target:gfx = "_markerEntity.target" (event "_markerEntity.evAdded") (event "_markerEntity.evRemoved"))
+		(var targetFlags:number = "target ? target.flags : 0" (event "target.evChanged"))
+		(var isTargetLocked:bool = "(targetFlags & LOCKABLE_WEAPONS) > 0")
+
+		(var mapVisible:bool = "_markerEntity.visibility ? _markerEntity.visibility.mapVisible : false" (event "_markerEntity.visibility.evChanged"))
+		(var worldVisible:bool = "_markerEntity.visibility ? _markerEntity.visibility.visible : false" (event "_markerEntity.visibility.evChanged"))
+
+		(var markerYaw:number = "radToGrad(_markerEntity.mapPosition.yaw)" (event "evEnterFrame"))
+		(var markerScale:number = "_itemScale / _mapScale")
+
+		(macro SCOPE_IS_BATTLE_IN_PROGRESS "'isBattleInProgress'")
+		(macro GET_BOT_CUSTOMIZATION_TAG_COMPONENT "_markerEntity") 
+
+		(var minimapEntity:gfx = "$datahub.getSingleEntity(CC.minimap)")
+		(var minimapComponent:gfx = "minimapEntity.minimap")
+		(var angleToRotate:number = "minimapComponent ? minimapComponent.rotationAngleDeg : 0" (event "minimapComponent.evRotationAngleDegChanged"))
+
+		(var rangesAlphaComponent:gfx = "$datahub.getPrimaryEntity(CC.minimapOption, SC.Battle.MINIMAP_OPTION.rangesAlpha).minimapOption")
+		(var rangesAlpha:number = "rangesAlphaComponent.value * 0.01" (event "rangesAlphaComponent.evValueChanged"))
+		
+		(var shipNamesDisplayEnabledComponent:gfx = "$datahub.getPrimaryEntity(CC.minimapOption, SC.Battle.MINIMAP_OPTION.shipNamesDisplayEnabled).minimapOption")
+		(var shipNamesDisplayEnabled:bool = "shipNamesDisplayEnabledComponent.value > 0" (event "shipNamesDisplayEnabledComponent.evValueChanged"))
+
+		(var cameraEntity:gfx = "$datahub.getSingleEntity(CC.camera)")
+		(var altVision:bool = "cameraEntity.camera ? cameraEntity.camera.altVision : false" (event "cameraEntity.camera.evAltVisionChanged"))
+		(macro SCOPE_HIGHLIGHT_MARKER_ON_MAP_MOUSE_OVER "_markerEntity")
+
+		(var relationComponent:gfx = "_markerEntity ? _markerEntity.relation : null")
+		(var isAlly:bool = "relationComponent && relationComponent.value == SC.Battle.PLAYER_RELATION.ALLY" (event "relationComponent.evChanged"))
+		(var isSelf:bool = "relationComponent && relationComponent.value == SC.Battle.PLAYER_RELATION.SELF" (event "relationComponent.evChanged"))
+
+		# Mod
+		(var isEnemy:bool = "relationComponent && relationComponent.value == SC.Battle.PLAYER_RELATION.ENEMY" (event "relationComponent.evChanged"))
+
+		# Player Name
+		(macro TMap_GET_PREF_NUMBER _varName="'playerNameDisplayMode'" _pref="TMap_PREFS.PLAYER_NAME_DISPLAY_MODE")
+		(macro TMap_GET_DISPLAY_MODE _varName="'isPlayerNameVisible'" _prefValue="playerNameDisplayMode")
+
+		# Directional Line
+		(macro TMap_GET_PREF_NUMBER _varName="'dirEnemyShipDisplayMode'" _pref="TMap_PREFS.DIRECTION_SHIPS")
+		(macro TMap_GET_DISPLAY_MODE _varName="'isDirEnemyShipVisible'" _prefValue="dirEnemyShipDisplayMode")
+		(var isEnemyDirVisible:bool = "isDirEnemyShipVisible && !(isAlly || isSelf) ")
+
+		# Detection Icon
+		(macro TMap_GET_PREF_BOOL _varName="'isDetectionVisible'" _pref="TMap_PREFS.DETECTION")
+
+		# Nearby AA
+		(macro TMap_GET_PREF_BOOL _varName="'isNearbyAAVisible'" _pref="TMap_PREFS.NEARBY_AA_RANGE")
+
+		(macro IS_ON_PLANE)
+		#
+	)
+
+	# Mod
+
+	# Consumables
+	(block
+		(style
+			(position = "absolute")
+		)
+		(block
+			(controller $Instance (renderer = 'TMap_MapMarkerConsumableRanges')
+				(bind enabled "!(isPlayerAvatar) && isAlive && isAlly")
+				(args _markerEntity="_markerEntity" _userPrefsNum="_userPrefsNum")
+			)
+		)
+	)
+
+	# Nearby AA
+	(block
+		(style
+			(position = "absolute")
+		)
+		(block
+			(controller $Instance (renderer = 'TMap_MapMarkerNearbyAntiAir')
+				(bind enabled "!(isPlayerAvatar) && isAlive && !isAlly && isOnPlane && isNearbyAAVisible")
+				(args _markerEntity="_markerEntity" _userPrefsNum="_userPrefsNum")
+			)
+		)
+	)
+
+	# RPF
+	(block
+		(style
+			(position = "absolute")
+		)
+		(block
+			(controller $Instance (renderer = 'TMap_MapMarkerRadioLocationSector')
+				(bind enabled "isAlive && (isAlly || isSelf)")
+				(args _markerEntity="_markerEntity" _userPrefsNum="_userPrefsNum")
+			)
+		)
+	)
+
+	# Detection
+	(block
+		(style
+			(position = "absolute")
+		)
+		(block
+			(controller $Instance (renderer = 'TMap_MapMarkerDetectionIcon')
+				(bind enabled "!(isPlayerAvatar) && isAlive && isDetectionVisible")
+				(args _markerEntity="_markerEntity" _userPrefsNum="_userPrefsNum")
+			)
+			
+		)
+	)
+	#
+
+	(block
+		(style
+			(position = "absolute")
+		)
+		(controller $Instance (renderer = 'TMap_MapMarkerDirectionalLine')
+			# Mod
+			(bind enabled "(isPlayerAvatar || isTargetLocked || isEnemyDirVisible) && isAlive && mapVisible && isBattleInProgress")
+			#
+			(args _isTargetLocked="isTargetLocked" _userPrefsNum="_userPrefsNum")
+			(exprs
+				(style
+					(bind rotation "markerYaw")
+					(bind alpha "rangesAlpha")
+				)
+			)
+		)
+	)
+
+	(block
+		(style
+			(position = "absolute")
+		)
+		(controller $Instance (renderer = 'TMap_MapMarkerRanges')
+			(bind enabled "isPlayerAvatar && isAlive")
+			(args entity="_markerEntity" mapScale="_mapScale" _userPrefsNum="_userPrefsNum")
+		)
+	)
+
+	(block
+		(style
+			(position = "absolute")
+		)
+
+		(macro EFFECT_HIGHLIGHT_MARKER_ON_MOUSE_OVER)
+		(element TMap_MapMarkerShipIcon
+			_markerEntity="_markerEntity" _userPrefsNum="_userPrefsNum"
+			(style (bind rotation "tagPrefix ? 0 : markerYaw"))
+			(macro BIND_FAIR_SCALE "markerScale")
+		)
+	)
+
+	# Player Name
+	(block
+		(style
+			(position = "absolute")
+			(pivotY = 16)
+			(bind rotation "-(angleToRotate)")
+		)
+		(block
+			(controller $Instance (renderer = 'TMap_MapMarkerPlayerName')
+				(bind enabled "!(isPlayerAvatar) && isAlive && isPlayerNameVisible")
+				(args _markerEntity="_markerEntity" _userPrefsNum="_userPrefsNum")
+			)
+		)
+		(macro BIND_FAIR_SCALE "markerScale")
+	)
+	#
+
+	# Health
+	(block
+		(style
+			(position = "absolute")
+			(pivotY = -16)
+			(bind rotation "-(angleToRotate)")
+		)
+		(block
+			(controller $Instance (renderer = 'TMap_MapMarkerHealthBar')
+				(bind enabled "!(isPlayerAvatar) && isAlive && (isAlly || isEnemy)")
+				(args _markerEntity="_markerEntity" _isAlly="isAlly" _userPrefsNum="_userPrefsNum")
+			)
+		)
+		(macro BIND_FAIR_SCALE "markerScale")
+	)
+	#
+
+	(block
+		(style
+			(position = "absolute")
+			(pivotY = -8)
+			(bind rotation "-(angleToRotate)")
+		)
+		(block
+			(controller $Instance (renderer = 'TMap_MapMarkerShipName')
+				(bind enabled "!(isPlayerAvatar) && isAlive && (shipNamesDisplayEnabled || altVision)")
+				(args _markerEntity="_markerEntity" _userPrefsNum="_userPrefsNum")
+			)
+		)
+		(macro BIND_FAIR_SCALE "markerScale")
+	)
+	#
+)
+
+# battle\minimap\markers\ship_marker.unbound
+(def element TMap_MapMarkerDirectionalLine (_isTargetLocked:bool=false, _userPrefsNum:gfx=null) layout=true
+	(block
+		(style
+			(position = "absolute")
+			(backgroundImage = "'symbol:minimap_direction_line'")
+			(bind scaleY "_isTargetLocked ? 1.0 : 0.3")
+		)
+	)
+)
+
+# battle\minimap\markers\base_marker.unbound
+(def element TMap_MapMarkerRanges (entity:gfx, mapScale:number, _userPrefsNum:gfx=null) layout=true
+	(scope
+		(var minimapRangesCollection:gfx = "$datahub.getCollection(CC.minimapRange)")
+		(var minimapRanges:gfx = "minimapRangesCollection.getChildByPath('byEntity.' + entity.id + '.active.sorted')")
+		(var itemCount:number = "minimapRanges ? minimapRanges.items.length : 0"  watch=false (event "minimapRanges.evAdded"))
+	)
+	# Mod
+	(controller $Repeat renderer='TMap_MapMarkerItemRange'
+		(bind count "itemCount")
+		(bindcall removeChildAt "$event[1]" (event "minimapRanges.evRemoved"))
+		(bindcall addChildAt "$event[1]" (event "minimapRanges.evAdded"))
+		(args "entity" "mapScale" "minimapRanges" _userPrefsNum="_userPrefsNum")
+	)
+	#
+)
+
+# battle\minimap\markers\base_marker.unbound
+(def element TMap_MapMarkerItemRange (ownerEntity:gfx, _mapScale:number, _minimapRanges:gfx, _userPrefsNum:gfx=null) layout = true
+	(scope
+		(var rangesTextScale:number = "_mapScale > 1 ? 1 / _mapScale : 1")
+
+		(var rangeEntity:gfx = "_minimapRanges.items[$index]" (event "_minimapRanges.evUpdated"))
+		(var parameterKey:str = "rangeEntity.minimapRange.parameterKey")
+		(var isConsumable:bool = "rangeEntity.minimapRange.isConsumable")
+		(var isActive:bool = "rangeEntity.minimapRange.isActive || isConsumable" (event "rangeEntity.minimapRange.evIsActiveChanged"))
+		(var rangeSettings:dict = "TMap_MINIMAP_RANGES_SETTINGS[parameterKey]")
+
+		(var minimapEntity:gfx = "$datahub.getSingleEntity(CC.minimap)")
+		(var angleToRotate:number = "minimapEntity.minimap.rotationAngleDeg" (event "minimapEntity.minimap.evRotationAngleDegChanged"))
+		
+		(var rangesAlphaComponent:gfx = "$datahub.getPrimaryEntity(CC.minimapOption, SC.Battle.MINIMAP_OPTION.rangesAlpha).minimapOption")
+		(var rangesAlpha:number = "rangesAlphaComponent.value * 0.01" (event "rangesAlphaComponent.evValueChanged"))
+
+		(var distanceDisplayEnabledComponent:gfx = "$datahub.getPrimaryEntity(CC.minimapOption, SC.Battle.MINIMAP_OPTION.distanceDisplayEnabled).minimapOption")
+		(var distanceDisplayEnabled:bool = "distanceDisplayEnabledComponent.value > 0" (event "distanceDisplayEnabledComponent.evValueChanged"))
+
+		(var rangeOptionsEnabledComponent:gfx = "rangeSettings.optionName	? $datahub.getPrimaryEntity(CC.minimapOption, rangeSettings.optionName).minimapOption
+																			: null")
+		(var rangeOptionsEnabled:bool = "rangeOptionsEnabledComponent ? rangeOptionsEnabledComponent.value > 0 : rangeSettings.forceEnabled" (event "rangeOptionsEnabledComponent.evValueChanged"))
+
+		(var rangeEnabled:bool = "rangeOptionsEnabled || rangeSettings.forceEnabled")
+
+		(var range:number = "rangeEntity.circle.radius" (event "rangeEntity.circle.evRadiusChanged"))
+		(var rangeRadius:number = "range" watch=false)
+		(controller $Animation
+			(bindcall play  duration=0.3
+							easing="Easing.line"
+							to="{ rangeRadius: range }"
+							watch=false
+							(bind trigger "range")
+							(bind enabled "rangeEnabled")
+			)
+		)
+
+		
+		(var rangeCurrentValue:number = "rangeEntity.parameter.currentValue" (event "rangeEntity.parameter.evChanged"))
+		(var rangeValue:str = "formatFloatingPoint(round(rangeCurrentValue * 10) / 10, 1)")
+		(var position:gfx = "ownerEntity.mapPosition.position")
+
+		(var timer:gfx = "$datahub.getSingleComponent(CC.timer)")
+		(var posX:number = "position.x" (event "timer.evInfrequent"))
+		(var posY:number = "position.y" (event "timer.evInfrequent"))
+
+		(var cameraEntity:gfx = "$datahub.getSingleEntity(CC.camera)")
+		(var altVision:bool = "cameraEntity.camera.altVision" (event "cameraEntity.camera.evAltVisionChanged"))
+
+		(var offsetAngle:number = "RANGES_TEXT_ANGLE / _minimapRanges.items.length" watch=false)
+		(var rangeRotation:number = "(distanceDisplayEnabled || altVision) 	? (offsetAngle * (0 - _minimapRanges.items.length / 2 + $index)) + atan2(0.5 - posY, 0.5 - posX) 
+																			: 0")
+
+		# Mod
+		(var prefName:str = "'prefName' in rangeSettings ? rangeSettings.prefName : 'FAKE'")
+		(var solidLineKey:str = "prefName + '_SOLID_LINE'")
+		(var fillCircleKey:str = "prefName + '_FILL_CIRCLE'")
+		(var alphaKey:str = "prefName + '_ALPHA'")
+		(var colorIndexKey:str = "prefName + '_COLOR_INDEX'")
+
+		(macro TMap_GET_PREF_BOOL	_varName="'isSolidLine'"		_pref="TMap_PREFS[solidLineKey]")
+		(macro TMap_GET_PREF_BOOL	_varName="'isCircleFill'"		_pref="TMap_PREFS[fillCircleKey]")
+		(macro TMap_GET_PREF_NUMBER _varName="'alphaMultiplier'"	_pref="TMap_PREFS[alphaKey]")
+		(macro TMap_GET_PREF_NUMBER _varName="'colorIndex'"			_pref="TMap_PREFS[colorIndexKey]")
+
+		(var colorName:str = "colorIndex < TMap_RANGE_COLORS.ALL.length ? TMap_RANGE_COLORS.ALL[colorIndex] : TMap_RANGE_COLORS.ALL[0]")
+		(var color:number = "colorName in TMap_RANGE_COLORS ? TMap_RANGE_COLORS[colorName] : 0xBBBBBB")
+
+		(var innerRadius:number = "isCircleFill ? 0 : MINIMAP_ASSETS_SIZE")
+		(var spacing:number = "isSolidLine	? 0 
+											: rangeSettings.spacing == 0	? 13
+																			: rangeSettings.spacing"
+		) # TODO: make it modifiable?
+		(var dashLength:number = "isSolidLine	? 0 
+												: rangeSettings.dashLength == 0	? 13
+																				: rangeSettings.dashLength"
+		) # TODO: make it modifiable?
+
+		(var drawDotted:bool = "rangeSettings.drawDotted")
+		(var lineThickness:number = "rangeSettings.lineThickness")
+		#
+	)
+	(bind name "parameterKey")
+	(bind visible "rangeEnabled && rangeRadius > 0")
+
+	(block
+		# Mod
+		(style (bind alpha "rangesAlpha")) 
+		#
+		(block
+			(style (bind alpha "isActive ? 1 : 0.65")) 
+			# Mod
+			(macro TMap_RANGE_CIRCLE)
+			#
+
+			
+			(block
+				(style
+					(alpha = "0")
+					(filters
+						(dropShadow
+							(distance = 0)
+							(angle = 90)
+							(color = 0xFFFFFF)
+							(alpha = 1.0)
+							(blurX = 3.5)
+							(blurY = 3.5)
+							(strength = 1.2)
+							(quality = 2)
+						)
+					)
+				)
+				# Mod
+				(macro TMap_RANGE_CIRCLE)
+				#
+
+				(controller $Animation
+					(bindcall play 	duration=0.4
+									easing="Easing.line"
+									keyframes="[{
+										percent:50,
+										from:{ alpha: 0 },
+										to:{ alpha: 1 }
+									},{
+										percent:100,
+										to:{ alpha: 0 }
+									}]"
+									(bind enabled "isActive")
+									(event "rangeEntity.minimapRange.evIsActiveChanged")
+					)
+				)
+			)
+
+			(controller $Animation
+				(bindcall play 	duration=0.6
+								easing="Easing.line"
+								from="{ alpha: 0.65 }"
+								to="{ alpha: 1 }"
+								reverse="!(isActive)"
+								(event "rangeEntity.minimapRange.evIsActiveChanged")
+				)
+			)
+		)
+	)
+
+	
+	(block
+		(style (bind rotation "radToGrad(rangeRotation)"))
+		(bind visible "distanceDisplayEnabled || altVision")
+		(block
+			(style
+				(position = "absolute")
+				(bind left "rangeRadius * MINIMAP_ASSETS_SIZE")
+			)
+			(block
+				(style (bind rotation "-radToGrad(rangeRotation) - angleToRotate"))
+				(macro BIND_FAIR_SCALE "rangesTextScale")
+				(tf
+					(style
+						(position = "absolute")
+						(width = "38px") (height = "20px")
+						(left = "-19px") (top = "-10px")
+						(textAlign = "center")
+						(textColor = "rangeSettings.color")
+					)
+					(bind class "rangeSettings.boldText ? '$TextMinimapRangeBold' : '$TextMinimapRange'")
+					(bind text "rangeValue")
+				)
+			)
+		)
+	)
+)
+
+# battle\minimap\markers\ship_marker.unbound
+(def element TMap_MapMarkerShipIcon (_markerEntity:gfx, _userPrefsNum:gfx=null) layout=true
+	(scope
+		(macro SHIP_MARKER_ICON_DATA "_markerEntity.id")
+		(macro GET_BOT_CUSTOMIZATION_TAG_COMPONENT "_markerEntity") 
+
+		(var aircarrier:gfx = "$datahub.getSingleComponent(CC.aircarrier)")
+		(var activeSquadron:number = "aircarrier ? aircarrier.activeSquadron : ActiveSquadron.NONE" (event "aircarrier.evStateChanged"))
+		(var squadronCameraMode:bool = "activeSquadron != ActiveSquadron.NONE")
+
+		(macro SCOPE_IS_BATTLE_IN_PROGRESS "'isBattleInProgress'")
+
+		(var visibilityPostfix:str = "mapVisible && !(worldVisible) && isBattleInProgress ? '_invisible' : ''")
+
+		(var markerColorTransform:dict =
+			"	!isAlive						? TWO_TEAMS_COLOR_TRANSFORMS['white'] :
+				!mapVisible && !worldVisible	? TWO_TEAMS_COLOR_TRANSFORMS['white'] :
+				isSelf							? TWO_TEAMS_COLOR_TRANSFORMS['white'] :
+				isInSameDivision				? TWO_TEAMS_COLOR_TRANSFORMS['division'] :
+				tkStatus && isAlly				? TWO_TEAMS_COLOR_TRANSFORMS['teamkiller'] :
+				isAlly							? TWO_TEAMS_COLOR_TRANSFORMS['ally'] :
+				isMultyTeamEnabled				? MULTI_TEAMS_COLOR_TRANSFORMS[teamId]
+												: TWO_TEAMS_COLOR_TRANSFORMS['enemy']
+		"
+		# Mod
+		)
+		# prevent vsc from freaking out
+		#
+
+		(var markerIcon:str = 
+			"isAlive	? !mapVisible && !worldVisible	? shipType + '_last_visible'
+														: isSelf	? squadronCameraMode	? 'self_alive_' + shipType
+																							: 'self_alive'
+																	: shipType + visibilityPostfix
+						: isSelf	? squadronCameraMode	? 'self_dead_' + shipType
+															: 'self_dead'
+									: shipType + '_dead'")
+	)
+	(bind colorTransform "markerColorTransform")
+	(bind name "worldVisible ? 'map_marker_ship_' + (_markerEntity.avatar ? _markerEntity.avatar.id : 0) : ''")
+	
+	(block
+		(bind visible "!tagPrefix")
+		(style (bind backgroundImage " shipType ? 'swf:../fla/minimap/minimap.swf:minimap_' + toLower(markerIcon) : ''"))
+		
+	)
+	(block
+		(style
+			(marginLeft = "-(SHIP_ICON_SIZE.WIDTH*0.5)")
+			(marginTop = "-(SHIP_ICON_SIZE.HEIGHT*0.5)")
+		)
+		(bind visible "tagPrefix")
+		(style (bind backgroundImage " tagPrefix ? 'url:../battle_hud/markers/ship/map/icon_' + tagPrefix + '.png' : ''"))
+		
+	)
+)
+
+# battle\minimap\markers\ship_marker.unbound
+(def element TMap_MapMarkerShipName (_markerEntity:gfx, _userPrefsNum:gfx=null) layout=true
+	(scope
+		(macro SHIP_MARKER_ICON_DATA "_markerEntity.id")
+		(var shipName:str = "avatarComponent ? avatarComponent.ship.ref.ship.nameUpper : ''")
+
+		(var colorPresetName:str = "isInSameDivision	?	'division'	
+														:	tkStatus && isAlly	?	'teamkiller' 
+																				: toLower(SC.Battle.PLAYER_RELATION.VALUE_TO_NAME[relationComponent.value])")
+
+		# Mod
+		(event evShipBecomeInvisible)
+		(event evPosChanged)
+		(var timer:gfx = "$datahub.getSingleComponent(CC.timer)")
+		(var camera:gfx = "$datahub.getSingleComponent(CC.camera)")
+		(var altVision:bool = "camera.altVision" (event "camera.evAltVisionChanged"))
+		
+		(var timeStamp:number = "timer.currentTime" (event "evShipBecomeInvisible"))
+		(var invisibleTime:number = "timer.currentTime - timeStamp" (event "timer.evInfrequent"))
+		(macro HUMAN_READABLE_COUNTDOWN_SCOPE "invisibleTime")
+
+		(var mapPos:gfx = "entity.mapPosition.position")
+		(var lastKnownPosX:number = "mapPos.x" init=false watch=false (event "evShipBecomeInvisible"))
+		(var lastKnownPosY:number = "mapPos.y" init=false watch=false (event "evShipBecomeInvisible"))
+		(var currentPosX:number = "mapPos.x" init=false watch=false (event "timer.evInfrequent"))
+		(var currentPosY:number = "mapPos.y" init=false watch=false (event "timer.evInfrequent"))
+
+		(macro TMap_GET_PREF_BOOL _varName="'isLastSpottedTimerEnabled'" _pref="TMap_PREFS.LAST_SPOTTED_ON_ALT")
+
+		(var isTimerVisible:bool = "!mapVisible && altVision && isLastSpottedTimerEnabled")
+		#
+	)
+
+	# Mod
+	(dispatch evPosChanged (bind enabled "!mapVisible && (lastKnownPosX != currentPosX)") (bind trigger "currentPosX"))
+	(dispatch evPosChanged (bind enabled "!mapVisible && (lastKnownPosY != currentPosY)") (bind trigger "currentPosY"))
+	(dispatch evShipBecomeInvisible (bind trigger "mapVisible") (event "evPosChanged"))
+	#
+
+	(style (width = 100%) (align = "center"))
+	(tf
+		(class $TextDefaultBold9NM)
+		# Mod
+		(bind class "isTimerVisible ? '$FontColorDefault' :
+					 				isMultyTeamEnabled && !isAlly	? MULTI_TEAMS_COLOR_CLASSES[teamId]
+																	: TWO_TEAMS_FONT_COLOR_CLASSES[colorPresetName]")
+		#
+		(class $FontEnableReadability)
+		# Mod
+		(style
+			(bind fontSize "isTimerVisible	? 11
+											: 9")
+		)
+		(bind text "isTimerVisible ? countdownText : shipName")
+		#
+	)
+)
+
+# Custom
+(def element TMap_MapMarkerPlayerName (_markerEntity:gfx, _userPrefsNum:gfx=null) layout=true
+	(scope
+		(macro SHIP_MARKER_ICON_DATA "_markerEntity.id")
+		(var playerName:str = "avatarComponent ? avatarComponent.name : ''")
+
+		(var colorPresetName:str = "isInSameDivision	?	'division'	
+														:	tkStatus && isAlly	?	'teamkiller' 
+																				: toLower(SC.Battle.PLAYER_RELATION.VALUE_TO_NAME[relationComponent.value])")
+	)
+
+	(style (width = 100%) (align = "center"))
+	(tf
+		(class $TextDefaultBold9NM)
+		(bind class "isMultyTeamEnabled && !isAlly	? MULTI_TEAMS_COLOR_CLASSES[teamId]
+													: TWO_TEAMS_FONT_COLOR_CLASSES[colorPresetName]")
+		(class $FontEnableReadability)
+		(bind text "playerName")
+	)
+)
+
+(def element TMap_MapMarkerRadioLocationSector (_markerEntity:gfx, _userPrefsNum:gfx=null) layout=true
+	(scope
+		(macro TMap_GET_ALT_VISION)
+
+		(var relationComponent:gfx = "_markerEntity ? _markerEntity.relation : null")
+		(var isAlly:bool = "relationComponent && relationComponent.value == SC.Battle.PLAYER_RELATION.ALLY" (event "relationComponent.evChanged"))
+		(var isSelf:bool = "relationComponent && relationComponent.value == SC.Battle.PLAYER_RELATION.SELF" (event "relationComponent.evChanged"))
+
+		# RPF
+		(var prefAlpha:dict = "isSelf ? TMap_PREFS.RPF_SELF_ALPHA : TMap_PREFS.RPF_ALLY_ALPHA")
+		(var prefRed:dict = "isSelf ? TMap_PREFS.RPF_SELF_RED : TMap_PREFS.RPF_ALLY_RED")
+		(var prefGreen:dict = "isSelf ? TMap_PREFS.RPF_SELF_GREEN : TMap_PREFS.RPF_ALLY_GREEN")
+		(var prefBlue:dict = "isSelf ? TMap_PREFS.RPF_SELF_BLUE : TMap_PREFS.RPF_ALLY_BLUE")
+
+		(macro TMap_GET_PREF_NUMBER _varName="'alphaScale'"	_pref="prefAlpha")
+		(macro TMap_GET_PREF_NUMBER _varName="'redScale'"	_pref="prefRed")
+		(macro TMap_GET_PREF_NUMBER _varName="'greenScale'"	_pref="prefGreen")
+		(macro TMap_GET_PREF_NUMBER _varName="'blueScale'"	_pref="prefBlue")
+
+		(macro TMap_GET_PREF_NUMBER _varName="'rpfAllyDisplayMode'" _pref="TMap_PREFS.RPF_ALLY_DISPLAY_MODE")
+		(macro TMap_GET_DISPLAY_MODE _varName="'isAllyRPFEnabeld'" _prefValue="rpfAllyDisplayMode")
+
+		# Chat
+		(var messageCollection:gfx = "$datahub.getCollection(CC.battleChatAndLogMessage)")
+		(var messagesCount:number = "messageCollection.items.length" (event "messageCollection.evAdded"))
+		(var latestChatComponent:gfx = "messagesCount > 0
+										? messageCollection.items[messagesCount - 1].battleChatAndLogMessage
+										: null"
+		)
+		(var message:str = "latestChatComponent ? latestChatComponent.htmlText : ''")
+		(var playerId:number = "latestChatComponent ? latestChatComponent.playerId : 0")
+		(var isMessageSender:bool = "playerId == _markerEntity.avatar.id")
+
+		# rpfDirectionIndex starts with 1 because the variable is initialized as 0. We cant tell if its just inited or received value when we use 0 as index.
+		# self-assignment will fail in unbound (var rpfDirectionIndex "cond ? val1 : rpfDirectionIndex") so I have to use another variable to keep it
+		# rewrite this if possible
+
+		# RPF Direction
+		(var _rpfDirectionIndex:number = "TMap_RPF_INVALID_DIRECTION" watch=false)
+		(bind _rpfDirectionIndex "rpfDirectionIndex" init=false watch=false (event "messageCollection.evAdded"))
+		(var rpfDirectionIndex:number = "
+								isMessageSender ?
+									TMap_RPF_DIRECTION_MESSAGES[0]  in message ? 1 :
+									TMap_RPF_DIRECTION_MESSAGES[1]  in message ? 2 :
+									TMap_RPF_DIRECTION_MESSAGES[2]  in message ? 3 :
+									TMap_RPF_DIRECTION_MESSAGES[3]  in message ? 4 :
+									TMap_RPF_DIRECTION_MESSAGES[4]  in message ? 5 :
+									TMap_RPF_DIRECTION_MESSAGES[5]  in message ? 6 :
+									TMap_RPF_DIRECTION_MESSAGES[6]  in message ? 7 :
+									TMap_RPF_DIRECTION_MESSAGES[7]  in message ? 8 :
+									TMap_RPF_DIRECTION_MESSAGES[8]  in message ? 9 :
+									TMap_RPF_DIRECTION_MESSAGES[9]  in message ? 10 :
+									TMap_RPF_DIRECTION_MESSAGES[10] in message ? 11 :
+									TMap_RPF_DIRECTION_MESSAGES[11] in message ? 12 :
+									TMap_RPF_DIRECTION_MESSAGES[12] in message ? 13 :
+									TMap_RPF_DIRECTION_MESSAGES[13] in message ? 14 :
+									TMap_RPF_DIRECTION_MESSAGES[14] in message ? 15 :
+									TMap_RPF_DIRECTION_MESSAGES[15] in message ? 16 :
+									TMap_RPF_DIRECTION_MESSAGES[16] in message ? TMap_RPF_INVALID_DIRECTION :
+									_rpfDirectionIndex
+								: _rpfDirectionIndex"
+		)
+
+		# Self RPF
+		(var rpfComponent:gfx = "$datahub.getSingleComponent(CC.nearestEnemyIndication)")
+		(var selfRPFVisible:bool = "rpfComponent ? rpfComponent.showNearestEnemy : false" (event "rpfComponent.evShowNearestEnemyChanged"))
+		(var selfRPFDirection:number = "rpfComponent ? (rpfComponent.yawToNearestEnemy - TMap_RPF_SECTOR_HALF_WIDTH_RAD) : 0" (event "rpfComponent.evYawToNearestEnemyChanged"))
+
+		# RPF Info
+		(var showNearestEnemy:bool = "	 isSelf ? selfRPFVisible
+												: rpfDirectionIndex > 0"
+		)
+		(var yawToNearestEnemy:number = "isSelf ? selfRPFDirection
+												: (rpfDirectionIndex - 1) * TMap_RPF_SECTOR_WIDTH_RAD"
+		)
+		(var degToNearestEnemy:number = "radToGrad(yawToNearestEnemy)")
+
+		# RPF Visibility
+		(var isRPFVisible:bool = "showNearestEnemy && ( (isAlly && isAllyRPFEnabeld) || isSelf)")
+	)
+
+	(bind visible "isRPFVisible")
+
+	(style
+		(bind rotation "degToNearestEnemy")
+	)
+	(controller $Sector
+		(bind color "0xFFFFFF")
+		(bind arc "TMap_RPF_SECTOR_WIDTH_DEG")
+		(bind offset "-90")
+		(bind radius "300")
+	)
+	(bind colorTransform "{ redMultiplier: redScale, greenMultiplier: greenScale, blueMultiplier: blueScale, alphaMultiplier: alphaScale}")
+)
+
+# todo: fix margin?
+(def element TMap_MapMarkerHealthBar(_markerEntity:gfx, _isAlly:bool, _userPrefsNum:gfx=null) layout=true
+	(scope
+		(var prefKey:str = "_isAlly ? 'HEALTH_ALLY' : 'HEALTH_ENEMY'")
+		(macro TMap_GET_ALT_VISION)
+
+		(macro TMap_GET_PREF_NUMBER _varName="'healthDisplayMode'" _pref="TMap_PREFS[prefKey]")
+		(macro TMap_GET_DISPLAY_MODE _varName="'isHealthVisible'" _prefValue="healthDisplayMode")
+
+		(macro TMap_GET_PREF_BOOL _varName="'isMaxHealthHidden'"	_pref="TMap_PREFS.HEALTH_MAX_HIDE")
+
+		(var healthComponent:gfx = "_markerEntity.health ? _markerEntity.health : null")
+		(var healthValue:number = "healthComponent ? healthComponent.value : 0" (event "healthComponent.evValueChanged"))
+		(var healthMax:number = "healthComponent ? healthComponent.max : 0" (event "healthComponent.evMaxChanged"))
+		(var healthRatio:number = "healthMax ? healthValue / healthMax : 1")
+		(var isAlive:bool = "healthComponent ? healthComponent.isAlive : false" (event "healthComponent.evIsAliveChanged"))
+
+		(var isMaxHPVisible:bool = "isMaxHealthHidden && (healthMax == healthValue) ? false : true")
+
+		# (var dataComponent:gfx = "_markerEntity.dataComponent ? _markerEntity.dataComponent : null")
+		# (var regenMaxValue:number = "dataComponent ? dataComponent.data.maxValue : 0" (event "dataComponent.evDataChanged"))
+		# (var regenRatio:number = "healthMax ? regenMaxValue / healthMax : 0")
+
+		(var relationStr:str = "_isAlly ? 'ally' : 'enemy'")
+
+		(var markerColorTransform:dict = "TWO_TEAMS_COLOR_TRANSFORMS[relationStr]")
+		(var regenBarColorTransform:dict = "{redMultiplier:0,greenMultiplier:0,blueMultiplier:0,alphaMultiplier:1.0,redOffset:230,greenOffset:230,blueOffset:230,alphaOffset:0 }")
+	)
+
+	(bind visible "isHealthVisible && isMaxHPVisible")
+
+	(style
+		(width = "20px")
+		(height = "3px")
+		(marginLeft = -50%)
+		(hitTest = false)
+	)
+	# BG
+	(block
+		(class $FullsizeAbsolute)
+		(style
+			(backgroundColor = 0xFF999999)
+			(backgroundSize = "fill")
+		)
+	)
+	# # Regen
+	# (block
+	# 	(class $FullsizeAbsolute)
+	# 	(bind scaleX "regenRatio")
+
+	# 	(style
+	# 		(backgroundColor = "0xFFFFFFFF")
+	# 		(backgroundSize = "fill")
+	# 	)
+
+	# 	(bind colorTransform "regenBarColorTransform")
+	# )
+	# HP
+	(block
+		(class $FullsizeAbsolute)
+		(bind scaleX "healthRatio")
+
+		(style
+			(backgroundColor = "0xFFFFFFFF")
+			(backgroundSize = "fill")
+		)
+
+		(bind colorTransform "markerColorTransform")
+	)
+)
+
+(def element TMap_MapMarkerNearbyAntiAir (_markerEntity:gfx, _userPrefsNum:gfx=null) layout=true
+	(scope
+		# Timer
+		(var timer:gfx = "$datahub.getSingleComponent(CC.timer)")
+
+		# Own Squadron
+		(macro IS_ON_PLANE)
+		(var ownSquadronEntity:gfx = "$datahub.getPrimaryEntity(CC.ownSquadron, activeSquadron)")
+		(var ownSqdMapPosComponent:gfx = "ownSquadronEntity ? ownSquadronEntity.mapPosition : null")
+		(var sqdPosX:number = "ownSqdMapPosComponent ? ownSqdMapPosComponent.position.x : 0" (event "timer.evInfrequent"))
+		(var sqdPosY:number = "ownSqdMapPosComponent ? ownSqdMapPosComponent.position.y : 0" (event "timer.evInfrequent"))
+
+		# TTX
+		(var avatarId:number = "_markerEntity ? _markerEntity.avatar.id : 0")
+		(var entityWatcher:gfx = "$datahub.getPrimWatcher(CC.mods_ShipParamsInBattle, avatarId)")
+		(var paramEntity:gfx = "entityWatcher.entity" (event "entityWatcher.event"))
+		(var shipTTX:gfx = "paramEntity ? paramEntity.mods_ShipParamsInBattle.shipTTX : null")
+		
+		# AA
+		(var airDefenseTTX:gfx = "shipTTX ? shipTTX.airDefense : null")
+		(var aaRange:number = "airDefenseTTX ? airDefenseTTX.averageAura.maxDist.value : 0")
+		(var warnRange:number = "aaRange + 2.5")
+
+		# Ship Position
+		(var shipPosComponent:gfx = "_markerEntity.mapPosition ? _markerEntity.mapPosition : null")
+		(var shipPosX:number = "shipPosComponent ? shipPosComponent.position.x : 0" (event "timer.evInfrequent"))
+		(var shipPosY:number = "shipPosComponent ? shipPosComponent.position.y : 0" (event "timer.evInfrequent"))
+
+		# Map Size
+		(var cameraComponent:gfx = "$datahub.getSingleComponent(CC.camera)")
+		(var mapSize:number = "cameraComponent.visibilityRange / cameraComponent.visibilityRangePerc" watch=false)
+
+		# Calc
+		(var posDiffX:number = "(sqdPosX - shipPosX) * mapSize")
+		(var posDiffY:number = "(sqdPosY - shipPosY) * mapSize")
+
+		(var isNearby:bool = "aaRange > 0 && ( pow(posDiffX, 2) + pow(posDiffY, 2) ) < pow(warnRange, 2)")
+
+		(var rangeRadius:number = "aaRange / mapSize")
+		(var innerRadius:number = "0")
+		(var lineThickness:number = 1.0)
+		(var color:number = 0xFFCC66)
+		(var alphaMultiplier:number = 0.15)
+		(var dashLength:number = 0)
+		(var spacing:number = 0)
+		(var drawDotted:bool = false)
+	)
+
+	(style
+		(hitTest = false)
+	)
+
+	#(bind visible "isNearby")
+	(alpha = "isNearby ? 1.0 : 0")
+
+	(controller $Animation
+		(bindcall play
+			keyframes="[{
+							percent:50,
+							to:{ alpha: 2 }
+						},{
+							percent:100,
+							to:{ alpha: 1 }
+						}]"
+			easing =	"Easing.line"
+			duration =	"0.4"
+			action =	"killAll"
+			(bind enabled "isNearby")
+			(bind trigger "isNearby")
+		)
+		(bindcall play
+			to =		"{alpha: 0}"
+			easing =	"Easing.quad_in"
+			duration =	"0.25"
+			action =	"killAll"
+			(bind enabled "!isNearby")
+			(bind trigger "isNearby")
+		)
+	)
+
+	(macro TMap_RANGE_CIRCLE)
+)
+
+(def element TMap_MapMarkerDetectionIcon(_markerEntity:gfx, _userPrefsNum:gfx=null) layout=true
+	(scope
+		(macro SHIP_MARKER_ICON_DATA "_markerEntity.id")
+		(var vehicleComponent:gfx = "_markerEntity.hasComponent(CC.vehicle) ? _markerEntity.vehicle : null")
+		(var isSpotted:bool = "vehicleComponent ? vehicleComponent.visibilityFlags : false" (event "vehicleComponent.evVisibilityFlagsChanged"))
+
+		(var isIconVisible:bool = "isSpotted && isAlly && !isSelf && isAlive")
+	)
+
+	(bind visible "isIconVisible")
+	(style
+		(hitTest = false)
+		(alpha = 0.25)
+	)
+	
+	(controller $Sector
+		(bind color "0xFF9933")
+		(bind arc "360")
+		(bind radius "5")
+	)
+)
+
+(def element TMap_MapMarkerConsumableRanges (_markerEntity:gfx, _userPrefsNum:gfx=null) layout=true
+	(scope
+		(macro GET_MARKER_ENTITY_COMPONENT 'data')
+		(var consData:array = "dataComponent ? dataComponent.data['consMonitor']: []" (event "dataComponent.evChanged"))
+	)
+	(style
+		(hitTest = false)
+	)
+	# Mod
+	(controller $Repeat renderer='TMap_MapMarkerConsumableItem'
+		(bind enabled "consData.length > 0")
+		(bind count "consData.length")
+		(args _markerEntity="_markerEntity" _consData="consData[$index]" _userPrefsNum="_userPrefsNum")
+	)
+	#
+)
+
+(def element TMap_MapMarkerConsumableItem(_markerEntity:gfx, _consData:dict, _userPrefsNum:gfx=null) layout=true
+	(scope
+		(var consName:str = "'icon' in _consData ? _consData.icon : ''")
+		(var consType:str = "	'RLSSearch' in consName			? 'RADAR' :
+								'SonarSearch' in consName		? 'HYDRO' :
+								'SubmarineLocator' in consName	? 'SUBRADAR' :
+								''"
+		)
+		(var isValidConsumable:bool = "consType != ''")
+
+		(var state:number = "'currentState' in _consData ? _consData.currentState : -1")
+
+		(macro SHIP_MARKER_ICON_DATA "_markerEntity.id")
+	)
+	(style
+		(hitTest = false)
+	)
+	(block
+		(controller $Instance (renderer = 'TMap_MapMarkerConsumableItemRange')
+			(bind enabled "isAlive && !isSelf && isAlly && isValidConsumable")
+			(args
+				_markerEntity	= "_markerEntity"
+				_type			= "consType" 
+				_state			= "state"
+				_userPrefsNum	= "_userPrefsNum"
+			)
+		)
+	)
+)
+
+(def element TMap_MapMarkerConsumableItemRange (_markerEntity:gfx, _type:str, _state:number, _userPrefsNum:gfx=null) layout=true
+	(scope
+		(var isReady:bool = "_state == SC.Battle.CONSUMABLE_STATES.READY")
+		(var isActive:bool = "_state == SC.Battle.CONSUMABLE_STATES.AT_WORK")
+		(var isReload:bool = "_state == SC.Battle.CONSUMABLE_STATES.RELOAD")
+		(var isEmpty:bool = "_state == SC.Battle.CONSUMABLE_STATES.NO_AMMO")
+		(var isPreparation:bool = "_state == SC.Battle.CONSUMABLE_STATES.PREPARATION")
+
+		(var fillCircleKey:str = "_type + '_ALLY_FILL_CIRCLE'")
+		(var alphaKey:str = "_type + '_ALLY_ALPHA'")
+		(var colorIndexKey:str = "_type + '_ALLY_COLOR_INDEX'")
+		(var visibleOnAltKey:str = "_type + '_ALLY_VISIBLE_ON_ALT'")
+		(var visibleOnActivation:str = "_type + '_ALLY_VISIBLE_ON_ACTIVATION'")
+
+		(macro TMap_GET_PREF_BOOL	_varName="'isVisibleOnAlt'" _pref="TMap_PREFS[visibleOnAltKey]")
+		(macro TMap_GET_PREF_BOOL	_varName="'isVisibleOnActivation'" _pref="TMap_PREFS[visibleOnActivation]")
+		(macro TMap_GET_PREF_BOOL	_varName="'isCircleFill'" _pref="TMap_PREFS[fillCircleKey]")
+		(macro TMap_GET_PREF_NUMBER _varName="'alphaMultiplier'" _pref="TMap_PREFS[alphaKey]")
+		(macro TMap_GET_PREF_NUMBER _varName="'colorIndex'" _pref="TMap_PREFS[colorIndexKey]")
+
+		(var colorName:str = "colorIndex < TMap_RANGE_COLORS.ALL.length ? TMap_RANGE_COLORS.ALL[colorIndex] : TMap_RANGE_COLORS.ALL[0]")
+		(var color:number = "colorName in TMap_RANGE_COLORS ? TMap_RANGE_COLORS[colorName] : 0xBBBBBB")
+
+		(var innerRadius:number = "isCircleFill ? 0 : MINIMAP_ASSETS_SIZE")
+		(var lineThickness:number = "isActive ? 1.5 : 1.0")
+		(var drawDotted:bool = false)
+		(var dashLength:number = 0)
+		(var spacing:number = 0)
+
+		(var avatarId:str = "_markerEntity.avatar ? toString(_markerEntity.avatar.id) : ''")
+		(var entityWatcher:gfx = "$datahub.getPrimWatcher(CC.mods_DataComponent, TMap_COMPONENT_KEY_CONSUMABLE_RANGES)")
+		(var dataEntity:gfx = "entityWatcher.entity" (event "entityWatcher.event"))
+		(var dataComponent:gfx = "dataEntity ? dataEntity.mods_DataComponent : null")
+		(var consumableData:dict = "dataComponent ? dataComponent.data : {}" (event "dataComponent.evDataChanged"))
+		(var consumableRanges:dict = "avatarId in consumableData ? consumableData[avatarId] : {}")
+		(var rangeRadius:number = "_type in consumableRanges ? consumableRanges[_type] : 0")
+
+		(macro TMap_GET_ALT_VISION)
+
+		(var isVisible:bool = "(isVisibleOnAlt && altVision) || (isVisibleOnActivation && isActive)")
+		(var isValid:bool = "rangeRadius > 0")
+	)
+
+	(bind visible "isValid && isVisible")
+
+	(style
+		(hitTest = false)
+	)
+
+	(block
+		(block
+			(style
+				(bind alpha "isActive ? 1 : 0.65")
+			)
+			(macro TMap_RANGE_CIRCLE)
+			
+			(block
+				(style
+					(alpha = "0")
+					(filters
+						(dropShadow
+							(distance = 0)
+							(angle = 90)
+							(color = 0xFFFFFF)
+							(alpha = 1.0)
+							(blurX = 3.5)
+							(blurY = 3.5)
+							(strength = 1.2)
+							(quality = 2)
+						)
+					)
+				)
+				# Mod
+				(macro TMap_RANGE_CIRCLE)
+				#
+
+				(controller $Animation
+					(bindcall play 	duration=0.4
+									easing="Easing.line"
+									keyframes="[{
+										percent:50,
+										from:{ alpha: 0 },
+										to:{ alpha: 1 }
+									},{
+										percent:100,
+										to:{ alpha: 0 }
+									}]"
+									(bind enabled "isActive")
+									(bind trigger "isActive")
+					)
+				)
+			)
+
+			(controller $Animation
+				(bindcall play 	duration=0.6
+								easing="Easing.line"
+								from="{ alpha: 0.65 }"
+								to="{ alpha: 1 }"
+								reverse="!(isActive)"
+								(bind trigger "isActive")
+				)
+			)
+		)
+	)
+)
+
+# battle\minimap\markers\building_marker.unbound
+(def element TMap_MapBuildingMarker (_markerEntity:gfx, _mapScale:number, _itemScale:number, _scaleRatio:number, _userPrefsNum:gfx=null) layout=true
+	(scope
+		(var markerScale:number = "_itemScale / _mapScale")
+
+		(var buildingComponent:gfx = "_markerEntity.building")
+		(var isSuppressed:bool = "buildingComponent.isSuppressed" (event "buildingComponent.evSuppressionChanged"))
+
+		(var healthComponent:gfx = "_markerEntity.health" (event "_markerEntity.evAdded"))
+		(var isAlive:bool = "healthComponent.isAlive" (event "healthComponent.evIsAliveChanged"))
+
+		(var mapVisible:bool = "_markerEntity.visibility.mapVisible" (event "_markerEntity.visibility.evChanged"))
+
+		(macro VAR_RELATION "_markerEntity")
+
+		(var symbolName:str = "BUILDING_TYPE_SYMBOL_NAME[buildingComponent.type]")
+		(var suppressedStr:str = "isSuppressed ? '_suppressed' : ''")
+		(var relationStr:str = "'_' + (relation == RELATION_NAMES.OWN ? RELATION_NAMES.NEUTRAL : relation)")
+		(var markerIcon:str =
+			"!(mapVisible) 
+				? 'symbol:minimap_' + symbolName + '_last_visible'
+				: isAlive
+					? 'symbol:minimap_' + symbolName + suppressedStr + relationStr
+					: 'symbol:minimap_' + symbolName + '_dead'")
+
+		
+		(macro SCOPE_HIGHLIGHT_MARKER_ON_MAP_MOUSE_OVER "_markerEntity")
+	)
+
+	(macro BIND_FAIR_SCALE "markerScale")
+	
+	(block
+		(macro EFFECT_HIGHLIGHT_MARKER_ON_MOUSE_OVER)
+		(style
+			(bind backgroundImage "markerIcon")
+		)
+	)
+)
+
+# battle\minimap\markers\capture_point_marker.unbound
+(def element TMap_MapCapturePointMarker (_markerEntity:gfx, _mapScale:number, _itemScale:number, _scaleRatio:number, _userPrefsNum:gfx=null) layout=true
+	(scope
+		(var circleRadius:number = "_markerEntity.circle.radius" (event "_markerEntity.circle.evRadiusChanged"))
+		(var circleInnerRadius:number = "_markerEntity.circle.innerRadius" (event "_markerEntity.circle.evInnerRadiusChanged"))
+		(macro VAR_RELATION "_markerEntity")
+		(macro SCOPE_HIGHLIGHT_MARKER_ON_MAP_MOUSE_OVER "_markerEntity")
+
+		# Mod
+		(macro TMap_GET_PREF_BOOL _varName="'isContestedCapHighlighted'" _pref="TMap_PREFS.CONTESTED_CAPS")
+		(var isBothInside:bool = "_markerEntity.capturePoint.bothInside" (event "_markerEntity.capturePoint.evBothInsideChanged"))
+		(var capSettingKey:str = "toUpper(relation)")
+		(var strokeSettingKey:str = "isBothInside && isContestedCapHighlighted ? 'CONTESTED' : capSettingKey")
+
+		(var circleSetting:dict = "TMap_CAPTURE_POINTS_SETTINGS[capSettingKey]")
+		(var strokeSetting:dict = "TMap_CAPTURE_POINTS_SETTINGS[strokeSettingKey]")
+		#
+	)
+
+	(macro BIND_FAIR_SCALE "_itemScale / _mapScale")
+
+	
+	
+	(block
+		(style (position = "absolute"))
+		(controller $Sector
+			(bind arc "360")
+			# Mod
+			(bind colors "circleSetting.COLORS")
+			(bind alphas "circleSetting.ALPHAS")
+			(bind ratios "circleSetting.RATIOS")
+			(bind radius "circleRadius * _scaleRatio")
+			(bind innerRadius "circleInnerRadius * _scaleRatio")
+
+			(bind lineThickness "strokeSetting.STROKE_WIDTH")
+			(bind lineAlpha "0.6")
+			(bind lineColor "strokeSetting.STROKE_COLOR")
+			#
+		)
+	) 
+	
+	# TODO: fix the travel time mod
+	(element CapturePointIndicator "_markerEntity"
+		(style
+			(hitTest = false)
+			(marginLeft = "-50%") (marginTop = "-50%")
+			(pivotX = "50%") (pivotY = "50%")
+			(scaleX = "0.6") (scaleY = "0.6")
+		)
+		(macro EFFECT_HIGHLIGHT_MARKER_ON_MOUSE_OVER)
+	)
+)
+
+# battle\minimap\markers\epicenter_marker.unbound
+(def element TMap_MapEpicenterMarker (_markerEntity:gfx, _mapScale:number, _itemScale:number, _scaleRatio:number, _isLoading:bool = false, _userPrefsNum:gfx=null) layout=true
+	(scope
+		(var points:gfx = "$datahub.getCollection(CC.capturePoint).child('epicenter').child(_markerEntity.epicenter.id)")
+	)
+	(controller $Repeat renderer='TMap_MapEpicenterCircle' 
+		(bind count "points.items.length")
+		(args _scaleRatio="_scaleRatio" _userPrefsNum="_userPrefsNum")
+	)
+
+	(macro BIND_FAIR_SCALE "_itemScale / _mapScale")
+)
+
+# battle\minimap\markers\scenario_marker.unbound
+(def element TMap_MapScenarioObjectMarker (_markerEntity:gfx, _mapScale:number, _itemScale:number, _scaleRatio:number, _userPrefsNum:gfx=null) layout=true
+	(scope
+		(macro GET_SCENARIO_OBJECT_VIEW "_markerEntity.scenarioObject" "_markerEntity")
+
+		(event evShow)
+		(event evHide)
+	)
+
+	(dispatch evShow on=addedToStage)
+	(dispatch evHide (event "_markerEntity.scenarioObject.evHide"))
+
+	(macro BIND_FAIR_SCALE "_itemScale / _mapScale")
+
+	(style 
+		(position = "absolute")
+		(width = "0px")
+		(height = "0px")
+		(align = "center|middle")
+	)
+
+	(block
+		(style
+			(position = "absolute") (top = "-13px") (left = "-13px") (width = 25px) (height = 25px)
+			(bind backgroundImage "'url:../battle_hud/markers/scenario_markers/map/scenario_minimap_marker_' + toLower(SC.Battle.SCENARIO_MARKER_VALUE.VALUE_TO_NAME[type]) + '.png'")
+		)
+
+		(controller $Animation
+			(bindcall  play
+				duration=0.3
+				from={alpha: 0, scaleX: 0, scaleY: 0}
+				to={alpha: 1, scaleX: 1, scaleY: 1}
+				easing="Easing.quint_in"
+				(event "evShow")
+			)
+			(bindcall  play
+				duration=0.3
+				from={alpha: 1, scaleX: 1, scaleY: 1}
+				to={alpha: 0, scaleX: 0, scaleY: 0}
+				easing="Easing.quint_in"
+				(event "evHide")
+			)
+		)
+	)
+)
+
+# battle\minimap\markers\epicenter_marker.unbound
+(def element TMap_MapEpicenterCircle (_scaleRatio:number, _userPrefsNum:gfx=null) layout=true
+	(scope
+
+		(var collection:gfx = "$datahub.getCollection(CC.capturePoint)")
+		(var entity:gfx = "collection.items[$index]")
+
+		(var circleRadius:number = "entity.circle.radius * _scaleRatio" (event "entity.circle.evRadiusChanged"))
+		(var circleInnerRadius:number = "entity.circle.innerRadius * _scaleRatio" (event "entity.circle.evInnerRadiusChanged"))
+
+		(var captureProgress:number = "entity.progress.value" (event "entity.progress.evChanged"))
+		(var invaderRelation:str = "entity.capturePoint.invaderRelation == 1 ? 'ally' : 'enemy'" (event "entity.capturePoint.evInvaderChanged"))
+		(var isCaptureInProgress:bool = "entity.capturePoint.bothInside || (captureProgress != 0)" (event "entity.capturePoint.evBothInsideChanged"))
+
+		(macro VAR_RELATION "entity")
+	)
+
+	(style (position = "absolute"))
+
+	
+	
+	
+	(block
+		(style (position = "absolute"))		
+		(controller $Sector
+			(offset = "-90")
+			(bind colors "EPICENTER_POINTS_SETTINGS[toUpper(relation)].COLORS")
+			(bind alphas "EPICENTER_POINTS_SETTINGS[toUpper(relation)].ALPHAS")
+			(bind ratios "EPICENTER_POINTS_SETTINGS[toUpper(relation)].RATIOS")
+			(bind arc "360 * (1 - captureProgress) * (invaderRelation == 'ally' ? -1 : 1)")
+			(bind radius "circleRadius")
+			(bind innerRadius "circleInnerRadius")
+		)
+	)
+
+	
+	
+	
+	(block
+		(style (position = "absolute"))
+		(controller $Sector
+			(arc = "360")
+			(offset = "0")
+
+			(bind radius "circleRadius")
+			(bind colors "[0xFFFFFF]")
+			(bind alphas "[0]")
+			(bind ratios "[0]")
+
+			(bind lineThickness "2")
+			(bind lineAlpha "0.4")
+			(bind lineColor "EPICENTER_POINTS_SETTINGS[toUpper(relation)].STROKE_COLOR")
+		)
+	)
+
+	
+	
+	
+	(block
+		(style (position = "absolute"))
+		(alpha = 0.3)
+		
+		(controller $Sector
+			(offset = "-90")
+			(bind color "EPICENTER_POINTS_SETTINGS[toUpper(invaderRelation)].STROKE_COLOR")
+			(bind arc "360 * captureProgress * (invaderRelation == 'ally' ? 1 : -1)")
+			(bind radius "circleRadius + 1")
+			(bind innerRadius "circleInnerRadius + 1")
+		)
+	)
+)
+
+# battle\minimap\markers\plane_marker.unbound
+(def element TMap_MapSquadronMarker (_markerEntity:gfx, _mapScale:number, _itemScale:number, _scaleRatio:number, _userPrefsNum:gfx=null) layout=true
+	(scope
+		(var markerYaw:number = "radToGrad(_markerEntity.mapPosition.yaw)" (event "evEnterFrame"))
+		(var markerScale:number = "_itemScale / _mapScale")
+
+		(var aircarrier:gfx = "$datahub.getSingleComponent(CC.aircarrier)")
+		(var activeSquadron:number = "aircarrier.activeSquadron" (event "aircarrier.evStateChanged"))
+		(var isControlledByPlayer:bool = "_markerEntity.ownSquadron && _markerEntity.ownSquadron.id == activeSquadron")
+
+		(var planeTypeInt:number = "_markerEntity.plane.planeType")
+		(var markerElement:gfx = "planeTypeInt == SC.Battle.PLANES_TYPES.AIRSHIP ? 'TMap_MapMarkerAirshipicon' : 'TMap_MapMarkerSquadronIcon'")
+		(macro SCOPE_HIGHLIGHT_MARKER_ON_MAP_MOUSE_OVER "_markerEntity")
+
+		(var minimapEntity:gfx = "$datahub.getSingleEntity(CC.minimap)")
+		(var minimapComponent:gfx = "minimapEntity.minimap")
+		(var angleToRotate:number = "minimapComponent && !isControlledByPlayer ? minimapComponent.rotationAngleDeg : 0" (event "minimapComponent.evRotationAngleDegChanged"))
+
+		# Mod
+		(var ownerEntity:gfx = "_markerEntity.squadron.owner.ref")
+
+		(macro TMap_GET_ALT_VISION)
+		(macro TMap_GET_PREF_NUMBER _varName="'playerNameDisplayMode'" _pref="TMap_PREFS.SQUADRON_OWNER_DISPLAY_MODE")
+		(macro TMap_GET_DISPLAY_MODE _varName="'isPlayerNameVisible'" _prefValue="playerNameDisplayMode")
+		#
+	)
+
+	(style
+		(bind rotation "-(angleToRotate)")
+	)
+
+	(controller $Instance (renderer = 'TMap_MapMarkerRanges') 
+		(bind enabled "isControlledByPlayer")
+		(args entity="_markerEntity" mapScale="_mapScale" _userPrefsNum="_userPrefsNum")
+	)
+
+	(block
+		(macro BIND_FAIR_SCALE "markerScale")
+		(macro EFFECT_HIGHLIGHT_MARKER_ON_MOUSE_OVER)
+		(controller $Instance
+			(bind renderer "markerElement")
+			(args "_markerEntity" "markerYaw" _markerScale="markerScale" _userPrefsNum="_userPrefsNum")
+			(bind enabled "_markerEntity != null")
+		)
+	)
+
+	# Custom Element
+	(block
+		(style
+			(position = "absolute")
+			(pivotY = -8)
+			(bind rotation "-(angleToRotate)")
+		)
+		(block
+			(controller $Instance (renderer = 'TMap_MapMarkerPlayerName')
+				(bind enabled "!(isControlledByPlayer) && ownerEntity && isPlayerNameVisible")
+				(args _markerEntity="ownerEntity" _userPrefsNum="_userPrefsNum")
+			)
+		)
+		(macro BIND_FAIR_SCALE "markerScale")
+	)
+	#
+)
+
+# battle\minimap\markers\plane_marker.unbound
+(def element TMap_MapMarkerAirshipicon (_markerEntity:gfx, _rotation:number, _markerScale:number=1.0, _userPrefsNum:gfx=null) layout=true
+	(scope
+		(macro GET_MARKER_ENTITY_COMPONENT 'relation')
+		(var relationStr:str = "toLower(SC.Battle.PLAYER_RELATION.VALUE_TO_NAME[relationComponent.value])")
+		(var markerIcon:str = "'svg:../battle_hud/markers/convoy_airships/marker_' + relationStr + '.svg'")
+	)
+	(style
+		(width = "24")
+		(height = "24")
+	)
+	(block
+		(style
+			(width = 0) (height = 0)
+			(align = "center|middle")
+			(bind rotation "_rotation")
+		)
+
+		(block
+			(style
+				(bind backgroundImage "markerIcon")
+				(backgroundSize = "autosize")
+			)
+		)
+	)
+)
+
+# battle\minimap\markers\plane_marker.unbound
+(def element TMap_MapMarkerSquadronIcon (_markerEntity:gfx, _rotation:number, _markerScale:number=1.0, _userPrefsNum:gfx=null) layout=true
+	(scope
+		(var rotation:number = "_rotation")
+
+		(var planeTypeInt:number = "_markerEntity.plane.planeType")
+		(var ammoType:number = "_markerEntity.plane.ammoType")
+		(var ammoTypeName:str = "SC.Common.PLANE_AMMO_TYPES.VALUE_TO_NAME[ammoType]")
+		(var customUIPostfix:str = "_markerEntity.plane.customUIPostfix")
+		(var isModified:bool = "_markerEntity.plane.isModified")
+		(var isConsumable:bool = "_markerEntity.plane.isConsumable && !_markerEntity.plane.isAirSupport")
+
+		(var ammoPostfix:str = "ammoTypeName in SC.Common.PLANE_AMMO_TYPES.SHORT_NAMES && !isConsumable	? SC.Common.PLANE_AMMO_TYPES.SHORT_NAMES[ammoTypeName]
+																										: ''"
+		)
+		(var planeCathegoryFolder:str = "	_markerEntity.plane.isAirSupport		? 'airsupport/' :
+											_markerEntity.plane.isConsumable		? 'consumables/'
+																				: 'controllable/'"
+		)
+		(var postfix:str = "isModified ? '_upgrade' : ''")
+		(var planeIconPath:str = "planeCathegoryFolder + PLANE_TYPE_TO_STR[planeTypeInt] + ammoPostfix + customUIPostfix + postfix")
+		
+		(var ownerEntity:gfx = "_markerEntity.squadron.owner.ref")
+		(var ownerAvatar:gfx = "ownerEntity.avatar")
+		(var ownerDivision:gfx = "ownerEntity.divisionMember")
+
+		(var healthComponent:gfx = "_markerEntity.health" (event "_markerEntity.evAdded"))
+		(var isInSameDivision:bool = "ownerDivision && ownerDivision.isInSameDivision" (event "ownerDivision.evDivisionChanged"))
+
+		(var relationComponent:gfx = "ownerEntity.relation ? ownerEntity.relation : _markerEntity.relation")
+		(var isSelf:bool = "relationComponent ? relationComponent.value == SC.Battle.DIPLOMACY_RELATIONS.SELF : false")
+		(var isAlly:bool = "relationComponent ? relationComponent.value == SC.Battle.DIPLOMACY_RELATIONS.ALLY : false")
+		(var tkStatus:bool = "ownerAvatar.tkStatus && isAlly" (event "ownerAvatar.evTeamkillStatusChanged"))
+
+		(var aircarrier:gfx = "$datahub.getSingleComponent(CC.aircarrier)")
+		(var activeSquadron:number = "aircarrier.activeSquadron" (event "aircarrier.evStateChanged"))
+		(var isControlledByPlayer:bool = "_markerEntity.ownSquadron && _markerEntity.ownSquadron.id == activeSquadron")
+		(var isCameraAttachedToPlane:bool = "isSelf && isControlledByPlayer")
+
+		(var markerPlaneIconPath:str = 
+			"isSelf
+				? isControlledByPlayer
+					? 'swf:../fla/minimap/minimap.swf:minimap_self_alive'
+					: planeIconPath + '_own'
+				: isAlly
+					? isInSameDivision
+						? planeIconPath + '_division'
+						: tkStatus 
+							? planeIconPath + '_teamkiller'
+							: planeIconPath + '_ally'
+					: planeIconPath + '_enemy'"
+		)
+		(var markerIcon:str = "'url:../battle_hud/markers_minimap/plane/' + markerPlaneIconPath + '.png'")
+
+		# Mod
+		(var rangesAlphaComponent:gfx = "$datahub.getPrimaryEntity(CC.minimapOption, SC.Battle.MINIMAP_OPTION.rangesAlpha).minimapOption")
+		(var rangesAlpha:number = "rangesAlphaComponent.value * 0.01" (event "rangesAlphaComponent.evValueChanged"))
+		(macro TMap_GET_ALT_VISION)
+		(macro TMap_GET_PREF_NUMBER _varName="'isDirectionLineEnabled'" _pref="TMap_PREFS.DIRECTION_SQUADRONS")
+		(macro TMap_GET_DISPLAY_MODE _varName="'isDirectionLineVisible'" _prefValue="isDirectionLineEnabled")
+		#
+	)
+	(style 
+		(width = 0) (height = 0)
+		(align = "center|middle")
+		(bind rotation "isCameraAttachedToPlane ? rotation : 0")
+	)
+
+	# Mod
+	(block
+		(style
+			(position = "absolute")
+		)
+		(controller $Instance (renderer = 'TMap_MapMarkerDirectionalLine')
+			(bind enabled "isDirectionLineVisible && !(isSelf  || isAlly || isConsumable)")
+			(args _isTargetLocked="false" _userPrefsNum="_userPrefsNum")
+			(exprs
+				(style
+					(bind rotation "rotation")
+					(bind alpha "rangesAlpha")
+				)
+			)
+		)
+		(macro BIND_FAIR_SCALE "1 / _markerScale")
+	)
+	#
+
+	(block
+		(style
+			(bind backgroundImage "isCameraAttachedToPlane ? markerPlaneIconPath : markerIcon")
+			
+			(bind backgroundSize "isCameraAttachedToPlane ? repeat : autosize")
+		)
+	)
+)
+
+# battle\minimap\markers\torpedo_marker.unbound
+(def element TMap_MapTorpedoMarker (_markerEntity:gfx, _mapScale:number, _itemScale:number, _scaleRatio:number, _userPrefsNum:gfx=null) layout=true
+	# TODO: bake in the map torp fix.
+	# Fix the position alingment and yaw
+	(scope
+		(var markerYaw:number = "radToGrad(_markerEntity.mapPosition.yaw)" (event "evEnterFrame"))
+		(var markerScale:number = "_itemScale / _mapScale")
+
+		(macro GET_MARKER_ENTITY_COMPONENT 'torpedo')
+		(macro GET_MARKER_ENTITY_COMPONENT 'distance')
+		(macro VAR_RELATION "_markerEntity")
+
+		(var type:str = "torpedoComponent.type" (event "torpedoComponent.evTypeChanged"))
+		
+		(var visibleAsNormal:bool = "isIn(type, SC.Battle.TORPEDO_MARKER_TYPE.GUIDED_TYPES)")
+
+		(var markerIcon:str = "visibleAsNormal	?	'icon_torpedo_' + SC.Battle.TORPEDO_MARKER_TYPE.NORMAL + '_' + relation
+												:	'icon_torpedo_' + type + '_' + relation")
+	)
+
+	(macro BIND_FAIR_SCALE "markerScale * 0.75")
+
+	(block
+		(style
+			(bind backgroundImage "'url:../battle_hud/markers/torpedoes/' + markerIcon + '.png'")
+			(backgroundSize = "autosize")
+		)
+	)
+)
+
+# battle\minimap\markers\camera_marker.unbound
+(def element TMap_MapCameraMarker (_markerEntity:gfx, _mapScale:number, _itemScale:number, _scaleRatio:number, _isLoading:bool = false, _userPrefsNum:gfx=null) layout = true
+	(scope
+		(var cameraYaw:number = "radToGrad(_markerEntity.camera.yaw)" (event "evEnterFrame"))
+		(var isTacticalCam:bool = "_markerEntity.camera.isTactical" (event "_markerEntity.camera.evTacticalStateChanged"))
+
+		(var visibilityRangeRadius:number = "_markerEntity.camera.visibilityRangePerc" (event "_markerEntity.camera.evVisibilityRangeChanged"))
+		(var visibilityVectorRadius:number = "max(visibilityRangeRadius, 0.5)" (event "_markerEntity.camera.evVisibilityRangeChanged"))
+		(var cameraFrustumAngle:number = "radToGrad(_markerEntity.camera.frustumAngle)" (event "_markerEntity.camera.evFrustumAngleChanged"))
+	)
+
+	(bind visible "!_isLoading")
+	(controller $Animation
+		(bindcall play  duration=0.15 
+						delay=0 
+						to={alpha: 0} 
+						easing="Easing.cubic_in" 
+						(bind enabled "isTacticalCam")
+		)
+		(bindcall play  duration=0.15
+						delay=0 
+						to={alpha: 1}
+						easing="Easing.cubic_out" 
+						(bind enabled "!(isTacticalCam)")
+		)
+	)
+
+	(block 
+		(block
+			(isMask = true)
+			(macro BIND_FAIR_SCALE "visibilityVectorRadius * 2")
+			(style
+				(position = "absolute")
+				(backgroundImage = "'symbol:minimap_observe_mask'")
+			)
+		)
+		(style 
+			(position = "absolute")
+			(width = "1px")
+			(height = "1px")
+			(backgroundImage = "'symbol:minimap_frustum_edge_vector'")
+			(bind rotation "cameraYaw")
+		)
+		(alpha = "0.7")
+	)
+
+
+	(block
+		(block
+			(isMask = true)
+			(macro BIND_FAIR_SCALE "visibilityRangeRadius * 2")
+			(style
+				(position = "absolute")
+				(backgroundImage = "'symbol:minimap_observe_mask'")
+			)
+		)
+		(bind alpha "0.08")
+		(style
+			(bind rotation "(cameraYaw - cameraFrustumAngle / 2)")
+		)
+		(controller $Sector
+			(bind color "0x7dffff")
+			(bind arc "cameraFrustumAngle")
+			(bind offset "-90")
+			(bind radius "300")
+		)
+	)
+)
+
+# battle\minimap\markers\aim_position_marker.unbound
+(def element TMap_MapAimPositionMarker (_markerEntity:gfx, _mapScale:number, _itemScale:number, _scaleRatio:number, _isLoading:number=false, _userPrefsNum:gfx=null) layout=true
+	(scope
+		(var isVisible:bool = "_isLoading ? false : _markerEntity.aimPosition.visible" (event "_markerEntity.aimPosition.evChanged"))
+		(var position:gfx = "_markerEntity.mapPosition.position")
+		(var posX:number = "position.x" (event "evEnterFrame"))
+		(var posY:number = "position.y" (event "evEnterFrame"))
+		(var yaw:number = "radToGrad(_markerEntity.mapPosition.yaw)" (event "evEnterFrame"))
+
+		(var offset:number = "_markerEntity.aimPosition.offset" (event "evEnterFrame"))
+
+		(var rangesAlphaComponent:gfx = "$datahub.getPrimaryEntity(CC.minimapOption, SC.Battle.MINIMAP_OPTION.rangesAlpha).minimapOption")
+		(var rangesAlpha:number = "rangesAlphaComponent.value * 0.01" (event "rangesAlphaComponent.evValueChanged"))
+
+		(var positionX:number = "posX * _scaleRatio" watch=false)
+		(bind positionX "posX * _scaleRatio" watch=false init=false (bind trigger "_scaleRatio"))
+		(controller $Animation
+			(bindcall play  duration=0.07
+							easing="Easing.line"
+							to="{ positionX:position.x * _scaleRatio }"
+							watch=false
+							(bind trigger "posX")
+							(bind enabled "isVisible")
+			)
+		)
+
+		(var positionY:number = "posY * _scaleRatio" watch=false)
+		(bind positionY "posY * _scaleRatio" watch=false init=false (bind trigger "_scaleRatio"))
+		(controller $Animation
+			(bindcall play  duration=0.07
+							easing="Easing.line"
+							to="{ positionY:position.y * _scaleRatio }"
+							watch=false
+							(bind trigger "posY")
+							(bind enabled "isVisible")
+			)
+		)
+	)
+	(style
+		(position = "absolute")
+		(bind left "positionX")
+		(bind top "positionY")
+		(bind rotation "yaw")
+		(bind alpha "rangesAlpha")
+	)
+
+	(macro BIND_FAIR_SCALE "_mapScale")
+
+	(bind visible "isVisible")
+	(block
+		(style
+			(position = "absolute")
+			(bind top "-offset")
+		)
+		(block
+			(style
+				(backgroundImage = "'symbol:minimap_aim_position'")	
+			)
+		)
+	)
+)
+
+# battle\minimap\markers\interactive_zone_marker.unbound
+(def element TMap_MapInteractiveZoneMarker (_markerEntity:gfx, _mapScale:number, _itemScale:number, _scaleRatio:number, _userPrefsNum:gfx=null) layout=true
+	(scope
+		(var markerScale:number = "_itemScale / _mapScale")
+
+		(var type:number = "_markerEntity.interactiveZone.type")
+		(var visualType:number = "_markerEntity.interactiveZone.visualType")
+		(var isInversed:bool = "visualType == SC.Battle.INTERACTIVE_ZONE_VISUAL_TYPE.INVERSED")
+		(var relation:number = "_markerEntity.relation.value" (event "_markerEntity.relation.evChanged"))
+		(var circleSettings:dict = "type == INTERACTIVE_ZONE_TYPES.COLORED_BY_RELATION ? COLORED_BY_RELATION_INTERACTIVE_ZONES_SETTINGS[relation] : INTERACTIVE_ZONES_SETTINGS[type]")
+		(var circleRadius:number = "_markerEntity.circle.radius" (event "_markerEntity.circle.evRadiusChanged"))
+
+		(event evShow)
+		(event evHide)
+	)
+
+	(dispatch evShow on=addedToStage)
+	(dispatch evHide (event "_markerEntity.interactiveZone.evHide"))
+
+	
+	
+	(block
+		(macro BIND_FAIR_SCALE "circleRadius")
+		(bind alpha "circleSettings.alpha")
+		(style (position = "absolute"))
+		(block
+			(controller $Sector
+				(bind arc "360")
+				(bind color "isInversed ? C_ENEMY : circleSettings.color")
+				(bind radius "MINIMAP_ASSETS_SIZE")
+				(bind innerRadius "isInversed ? 3000 : 0")
+			)
+
+			(controller $Animation
+				(bindcall  play
+					duration=0.3
+					from={alpha: 0}
+					to={alpha: 1}
+					easing="Easing.quint_in"
+					(event "evShow")
+				)
+				(bindcall  play
+					duration=0.3
+					to={alpha: 0}
+					easing="Easing.quint_in"
+					(event "evHide")
+				)
+			)
+		)
+	) 
+	
+
+	
+	
+	(block
+		(style (position = "absolute"))
+		# TODO: Override these renderers too
+		(controller $Instance (renderer = 'MapInteractiveZoneIndicator') 
+			(bind enabled "type == INTERACTIVE_ZONE_TYPES.RESOURCE_ZONE")
+			(args entity="_markerEntity")
+			(exprs
+				(macro BIND_FAIR_SCALE "markerScale")
+			)
+		)
+
+		(controller $Instance (renderer = 'MapDropZoneIndicator') 
+			(bind enabled "type == INTERACTIVE_ZONE_TYPES.DROP_ZONE")
+			(args entity="_markerEntity")
+			(exprs
+				(macro BIND_FAIR_SCALE "markerScale")
+			)
+		)
+
+		(controller $Instance (renderer = 'MapRescueZoneIndicator') 
+			(bind enabled "type == INTERACTIVE_ZONE_TYPES.RESCUE_ZONE")
+			(args entity="_markerEntity")
+			(exprs
+				(macro BIND_FAIR_SCALE "markerScale")
+			)
+		)
+
+		(controller $Instance (renderer = 'MapOrbitalStrikeZoneIndicator') 
+			(bind enabled "type == INTERACTIVE_ZONE_TYPES.ORBITAL_STRIKE_ZONE")
+			(args entity="_markerEntity")
+			(exprs
+				(macro BIND_FAIR_SCALE "markerScale")
+			)
+		)
+
+		(controller $Animation
+			(bindcall  play
+				duration=0.3
+				from={alpha: 0, scaleX: 0, scaleY: 0}
+				to={alpha: 1, scaleX: 1, scaleY: 1}
+				easing="Easing.quint_in"
+				(event "evShow")
+			)
+			(bindcall  play
+				duration=0.3
+				from={alpha: 1, scaleX: 1, scaleY: 1}
+				to={alpha: 0, scaleX: 0, scaleY: 0}
+				easing="Easing.quint_in"
+				(event "evHide")
+			)
+		)
+	)
+	
+)
+
+# battle\minimap\markers\ward_fighters_marker.unbound
+(def element TMap_MapWardFightersMarker (_markerEntity:gfx, _mapScale:number, _itemScale:number, _scaleRatio:number, _userPrefsNum:gfx=null) layout=true
+	(scope
+		(var circleRadius:number = "_markerEntity.circle.radius" (event "_markerEntity.circle.evRadiusChanged"))
+
+		(event evShow)
+		(event evHide)
+	)
+	(dispatch evShow on=addedToStage)
+	(dispatch evHide (event "_markerEntity.interactiveZone.evHide"))
+
+	(macro BIND_FAIR_SCALE "circleRadius")
+
+	(alpha = 0.18)
+
+	
+	
+	(block
+		(style (position = "absolute"))
+
+		(block
+			(controller $Sector
+				(bind arc "360")
+				(bind color "WARD_ZONES_RELATION_COLORS[_markerEntity.relation.value]")
+				(bind radius "MINIMAP_ASSETS_SIZE")
+			)
+
+			(controller $Animation		
+				(bindcall  play
+					duration=0.3
+					from={alpha: 0}
+					to={alpha: 1}
+					easing="Easing.quint_in"
+					(event "evShow")
+				)
+				(bindcall  play
+					duration=0.3
+					to={alpha: 0}
+					easing="Easing.quint_in"
+					(event "evHide")
+				)
+			)
+		)
+	) 
+	
+)
+
+# battle\minimap\markers\navpoint_marker.unbound
+(def element TMap_MapNavpointMarker (_markerEntity:gfx, _mapScale:number, _itemScale:number, _scaleRatio:number, _userPrefsNum:gfx=null) layout=true
+	# TODO: Add drag?
+	# This doesnt work: use CC.navpoint
+	(scope		
+		(var minimapPathComponent:gfx = "_markerEntity.minimapPath")
+		(var minimapPath:array = "minimapPathComponent.minimapPath" (event "minimapPathComponent.evMinimapPathChanged"))
+		
+		(var vehicleEntity:gfx = "$datahub.getSingleEntity(CC.selfVehicle)")
+		(var mapPositionComponent:gfx = "vehicleEntity.mapPosition")
+		(var timer:gfx = "$datahub.getSingleComponent(CC.timer)")
+	)
+
+	(mc 'lesta.libs.unbound2.AutopilotPathDrawer'
+		(bindcall setSettings "_scaleRatio" "minimapPathComponent.color" init=true)
+		(bindcall drawPathByCoords "minimapPath" init=true)
+		(bindcall drawBowPoint "mapPositionComponent.position" watch=false (event "timer.evFrequent"))
+	)
+)
+
+# battle\minimap\markers\minimap_bezier_path_marker.unbound
+(def element TMap_MapPathMarker (_markerEntity:gfx, _mapScale:number, _itemScale:number, _scaleRatio:number, _userPrefsNum:gfx=null) layout=true
+	# TODO: override the renderers
+	(scope
+		(var minimapComponent:gfx = "$datahub.getSingleComponent(CC.minimap)")
+		(var angleToRotate:number = "minimapComponent ? minimapComponent.rotationAngleDeg : 0" (event "minimapComponent.evRotationAngleDegChanged"))
+
+		(var minimapPathComponent:gfx = "_markerEntity.minimapBezierPath")
+		(var minimapPath:array = "minimapPathComponent.path" (event "minimapPathComponent.evPathChanged"))
+		(var relation:number = "_markerEntity.relation.value" (event "_markerEntity.relation.evChanged"))
+		(var missionIndex:number = "_markerEntity.scenarioMissionParticipant.index")
+		(var missionProgress:number = "_markerEntity.progress.value" (event "_markerEntity.progress.evChanged"))
+		(var posX:number = "_scaleRatio * minimapPath[0].x")
+		(var posY:number = "_scaleRatio * minimapPath[0].y")
+
+		(var isOvered:bool = "false")
+		(bind isOvered "!isOvered" watch=false (event "minimapPathComponent.evBlink"))
+
+		(var allyNumberPointsCollection:gfx = "$datahub.getCollection(CC.minimapBezierPath).child('byTeam').child(SC.Battle.PLAYER_RELATION.ALLY)")
+		(var allyNumberPointsList:array = "allyNumberPointsCollection.items" (event "allyNumberPointsCollection.evAdded") (event "allyNumberPointsCollection.evRemoved"))	
+		(var enemyNumberPointsCollection:gfx = "$datahub.getCollection(CC.minimapBezierPath).child('byTeam').child(SC.Battle.PLAYER_RELATION.ENEMY)")
+		(var enemyNumberPointsList:array = "enemyNumberPointsCollection.items" (event "enemyNumberPointsCollection.evAdded") (event "enemyNumberPointsCollection.evRemoved"))	
+		(var isNumberPointVisible:bool = "allyNumberPointsList.length > 1 || enemyNumberPointsList.length > 1")
+	)
+
+	(block
+		(style (position = "absolute") (height = "1") (width = "1") (backgroundColor ="0x01000000")) 
+		(controller $Instance renderer='MapPathLine'
+			(bind enabled "missionProgress != 1")
+			(args
+				_entity = "_markerEntity"
+				_isOvered = "isOvered"
+				_scaleRatio = "_scaleRatio"
+			)
+		)
+	)
+	(block
+		(bind visible "isNumberPointVisible")
+		(style
+			(position = "absolute")
+			(bind left "posX")
+			(bind top "posY")
+			(width = "1px")
+			(height = "1px")
+			(align = "center|middle")
+			(bind rotation "-angleToRotate")
+		)
+		(controller $Instance renderer='MapPathStartMarker'
+			(bind enabled "missionProgress != 1")
+			(args
+				_missionIndex = "missionIndex"
+				_relation = "relation"
+				_isOvered = "isOvered"
+				_isMinimap = "true"
+			)
+		)
+	)
+)
+
+# battle\minimap\markers\hydrophone_zone_marker.unbound
+(def element TMap_MapHydrophoneZoneMarker (_markerEntity:gfx, _mapScale:number, _itemScale:number, _scaleRatio:number, _userPrefsNum:gfx=null) layout=true
+	(scope
+		(macro GET_MARKER_ENTITY_COMPONENT 'submarineHydrophoneZone')
+		
+		(var endRadius:number = "HYDROPHONE_ZONE_MINIMAP_RADIUS_END" watch=false)
+		(var duration:number = "HYDROPHONE_ZONE_MINIMAP_ANIM_DURATION" watch=false)
+
+		(var customRad:number = "endRadius" watch=false)
+		(var customAlpha:number = "0")
+
+		(var customRad_second:number = "endRadius" watch=false)
+		(var customAlpha_second:number = "0")
+
+		(controller $Animation
+			(play
+				duration = "duration"
+				repeatCount=6
+				from = "{ customRad: 0}"
+				to = "{ customRad: endRadius}"
+				easing = "Easing.line"
+				watch=false
+			)
+			(play
+				duration = "duration"
+				repeatCount=6
+				from = "{ customAlpha: 1}"
+				to = "{ customAlpha: 0}"
+				easing = "Easing.line"
+				watch=false
+			)
+		)
+		
+		(controller $Animation
+			(play
+				duration = "duration"
+				delay = "duration/2"
+				repeatCount=5
+				from = "{ customRad_second: 0}"
+				to = "{ customRad_second: endRadius}"
+				easing = "Easing.line"
+				watch=false
+			)
+			(play
+				duration = "duration"
+				delay = "duration/2"
+				repeatCount=5
+				from = "{ customAlpha_second: 1}"
+				to = "{ customAlpha_second: 0}"
+				easing = "Easing.line"
+				watch=false
+			)
+		)
+	)
+	(macro BIND_FAIR_SCALE "_itemScale / _mapScale")
+
+	(controller $Animation
+		(bindcall play	duration="0.15"
+						from="{alpha: 1}"
+						to="{alpha: 0}"
+						action="kill"
+						(event "submarineHydrophoneZoneComponent.evHide")
+		)
+	)
+
+	(block
+		(style (position = "absolute"))
+		(alpha = 0)
+		(bind alpha "customAlpha") 
+		(controller $Sector
+			(arc="360")
+			(radius = 0)
+			(bind radius "customRad")
+			(bind colors "[0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF]")
+			(alphas="[0, 0.5, 0]")
+			(ratios="[175, 215, 255]")
+		)
+	)
+	(block
+		(style (position = "absolute"))
+		(alpha = 0)
+		(bind alpha "customAlpha_second") 
+		(controller $Sector
+			(arc="360")
+			(radius = 0)
+			(bind radius "customRad_second")
+			(bind colors "[0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF]")
+			(alphas="[0, 0.75, 0]")
+			(ratios="[175, 215, 255]")
+		)
+	)	
+)
+
+# battle\minimap\markers\attention_marker.unbound
+(def element TMap_MapAttentionMarker (_markerEntity:gfx, _mapScale:number, _itemScale:number, _scaleRatio:number, _userPrefsNum:gfx=null) layout=true
+	
+	(macro BIND_FAIR_SCALE "_itemScale / _mapScale")
+
+	(macro AttentionMarker _markerEntity="_markerEntity" _markerType='minimap')
+)
+
+# battle\minimap\markers\minefield_marker.unbound
+(def element TMap_MapMinefieldMarker (_markerEntity:gfx, _mapScale:number, _itemScale:number, _scaleRatio:number, _userPrefsNum:gfx=null) layout=true
+	(scope
+		(macro GET_MARKER_ENTITY_COMPONENT 'circle')
+		(var circleRadius:number = "circleComponent.radius" (event "circleComponent.evRadiusChanged"))
+
+		(macro GET_MARKER_ENTITY_COMPONENT 'minefield')
+
+		(event evShow)
+		(event evHide)
+	)
+	(dispatch evShow on=addedToStage)
+	(dispatch evHide (event "_markerEntity.interactiveZone.evHide"))
+
+	(macro BIND_FAIR_SCALE "circleRadius")
+
+
+	
+	
+	(block
+		(style (position = "absolute"))
+		(controller $Animation
+			(bindcall  play
+				duration=0.3
+				from={alpha: 0}
+				to={alpha: 1}
+				easing="Easing.quint_in"
+				(event "evShow")
+			)
+			(bindcall  play
+				duration=0.3
+				to={alpha: 0}
+				easing="Easing.quint_in"
+				(event "evHide")
+			)
+		)
+
+		(block
+			(controller $Sector
+				(bind arc "360")
+				(bind radius "MINIMAP_ASSETS_SIZE")
+				(bind innerRadius "MINIMAP_ASSETS_SIZE")
+				(bind lineThickness "8")
+				(bind lineAlpha "0.75")
+				(bind lineColor "MINEFIELD_RELATION_COLORS[_markerEntity.relation.value]")
+				(bind dashLength "16")
+				(bind spacing "58")
+				(bind drawDotted "true")
+			)
+		)
+
+		(block
+			(style (alpha = 0.18))
+			(controller $Sector
+				(bind arc "360")
+				(bind color "MINEFIELD_RELATION_COLORS[_markerEntity.relation.value]")
+				(bind radius "MINIMAP_ASSETS_SIZE")
+			)
+		)
+	)
+	
+)
