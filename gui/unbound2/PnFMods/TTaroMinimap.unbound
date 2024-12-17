@@ -97,71 +97,71 @@
 	###################################################
 
 	# Visibility by Sea Range
-	VISIBILITY_SEA_DISPLAY_MODE	: {KEY: 'ttMinimapVisibilitySeaDisplayMode',	DEFAULT: 0,		MODIFIER: 1,	OFFSET: 0}, # Dropdown/Global Visibility Config
+	VISIBILITY_SEA_DISPLAY_MODE	: {KEY: 'ttMinimapVisibilitySeaDisplayMode',	DEFAULT: 2,		MODIFIER: 1,	OFFSET: 0}, # Dropdown/Global Visibility Config
 	VISIBILITY_SEA_SOLID_LINE	: {KEY: 'ttMinimapVisibilitySeaSolidLine',		DEFAULT: false},
 	VISIBILITY_SEA_FILL_CIRCLE	: {KEY: 'ttMinimapVisibilitySeaFillCircle',		DEFAULT: false},
 	VISIBILITY_SEA_ALPHA		: {KEY: 'ttMinimapVisibilitySeaOpacity',		DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
 	VISIBILITY_SEA_COLOR_INDEX	: {KEY: 'ttMinimapVisibilitySeaColorIndex',		DEFAULT: "indexOf('IDS_TT_TITLE_SEA_DETECTION_RANGE', TMap_RANGE_COLORS.ALL)",		MODIFIER: 1,	OFFSET: 0}, # Dropdown
 
 	# Visibility by Air Range
-	VISIBILITY_AIR_DISPLAY_MODE	: {KEY: 'ttMinimapVisibilityAirDisplayMode',	DEFAULT: 0,		MODIFIER: 1,	OFFSET: 0}, # Dropdown/Global Visibility Config
+	VISIBILITY_AIR_DISPLAY_MODE	: {KEY: 'ttMinimapVisibilityAirDisplayMode',	DEFAULT: 2,		MODIFIER: 1,	OFFSET: 0}, # Dropdown/Global Visibility Config
 	VISIBILITY_AIR_SOLID_LINE	: {KEY: 'ttMinimapVisibilityAirSolidLine',		DEFAULT: false},
 	VISIBILITY_AIR_FILL_CIRCLE	: {KEY: 'ttMinimapVisibilityAirFillCircle',		DEFAULT: false},
 	VISIBILITY_AIR_ALPHA		: {KEY: 'ttMinimapVisibilityAirOpacity',		DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
 	VISIBILITY_AIR_COLOR_INDEX	: {KEY: 'ttMinimapVisibilityAirColorIndex',		DEFAULT: "indexOf('IDS_TT_TITLE_AIR_DETECTION_RANGE', TMap_RANGE_COLORS.ALL)",		MODIFIER: 1,	OFFSET: 0}, # Dropdown
 
 	# Main Armament Range
-	MAIN_ARMAMENT_DISPLAY_MODE	: {KEY: 'ttMinimapMainArmamentDisplayMode',		DEFAULT: 0,		MODIFIER: 1,	OFFSET: 0}, # Dropdown/Global Visibility Config
+	MAIN_ARMAMENT_DISPLAY_MODE	: {KEY: 'ttMinimapMainArmamentDisplayMode',		DEFAULT: 2,		MODIFIER: 1,	OFFSET: 0}, # Dropdown/Global Visibility Config
 	MAIN_ARMAMENT_SOLID_LINE	: {KEY: 'ttMinimapMainArmamentSolidLine',		DEFAULT: true},
 	MAIN_ARMAMENT_FILL_CIRCLE	: {KEY: 'ttMinimapMainArmamentFillCircle',		DEFAULT: false},
 	MAIN_ARMAMENT_ALPHA			: {KEY: 'ttMinimapMainArmamentOpacity',			DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
 	MAIN_ARMAMENT_COLOR_INDEX	: {KEY: 'ttMinimapMainArmamentColorIndex',		DEFAULT: "indexOf('IDS_TT_TITLE_MAIN_ARMAMENT_RANGE', TMap_RANGE_COLORS.ALL)",		MODIFIER: 1,	OFFSET: 0}, # Dropdown
 
 	# Secondary Range
-	SECONDARY_DISPLAY_MODE		: {KEY: 'ttMinimapSecondaryDisplayMode',		DEFAULT: 0,		MODIFIER: 1,	OFFSET: 0}, # Dropdown/Global Visibility Config
+	SECONDARY_DISPLAY_MODE		: {KEY: 'ttMinimapSecondaryDisplayMode',		DEFAULT: 2,		MODIFIER: 1,	OFFSET: 0}, # Dropdown/Global Visibility Config
 	SECONDARY_SOLID_LINE		: {KEY: 'ttMinimapSecondarySolidLine',			DEFAULT: true},
 	SECONDARY_FILL_CIRCLE		: {KEY: 'ttMinimapSecondaryFillCircle',			DEFAULT: false},
 	SECONDARY_ALPHA				: {KEY: 'ttMinimapSecondaryOpacity',			DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
 	SECONDARY_COLOR_INDEX		: {KEY: 'ttMinimapSecondaryColorIndex',			DEFAULT: "indexOf('IDS_TT_TITLE_SECONDARY_RANGE', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
 
 	# Torpedo Range
-	TORPEDO_DISPLAY_MODE		: {KEY: 'ttMinimapTorpedoDisplayMode',			DEFAULT: 0,		MODIFIER: 1,	OFFSET: 0}, # Dropdown/Global Visibility Config
+	TORPEDO_DISPLAY_MODE		: {KEY: 'ttMinimapTorpedoDisplayMode',			DEFAULT: 2,		MODIFIER: 1,	OFFSET: 0}, # Dropdown/Global Visibility Config
 	TORPEDO_SOLID_LINE			: {KEY: 'ttMinimapTorpedoSolidLine',			DEFAULT: true},
 	TORPEDO_FILL_CIRCLE			: {KEY: 'ttMinimapTorpedoFillCircle',			DEFAULT: false},
 	TORPEDO_ALPHA				: {KEY: 'ttMinimapTorpedoOpacity',				DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
 	TORPEDO_COLOR_INDEX			: {KEY: 'ttMinimapTorpedoColorIndex',			DEFAULT: "indexOf('IDS_TT_TITLE_MAIN_ARMAMENT_RANGE', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
 
 	# Air Support Range
-	AIRSUPPORT_DISPLAY_MODE		: {KEY: 'ttMinimapAirSupportDisplayMode',		DEFAULT: 0,		MODIFIER: 1,	OFFSET: 0}, # Dropdown/Global Visibility Config
+	AIRSUPPORT_DISPLAY_MODE		: {KEY: 'ttMinimapAirSupportDisplayMode',		DEFAULT: 2,		MODIFIER: 1,	OFFSET: 0}, # Dropdown/Global Visibility Config
 	AIRSUPPORT_SOLID_LINE		: {KEY: 'ttMinimapAirSupportSolidLine',			DEFAULT: true},
 	AIRSUPPORT_FILL_CIRCLE		: {KEY: 'ttMinimapAirSupportFillCircle',		DEFAULT: false},
 	AIRSUPPORT_ALPHA			: {KEY: 'ttMinimapAirSupportOpacity',			DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
 	AIRSUPPORT_COLOR_INDEX		: {KEY: 'ttMinimapAirSupportColorIndex',		DEFAULT: "indexOf('IDS_TT_TITLE_MAIN_ARMAMENT_RANGE', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
 
-	# Pinger Range
-	PINGER_DISPLAY_MODE			: {KEY: 'ttMinimapPingerDisplayMode',			DEFAULT: 0,		MODIFIER: 1,	OFFSET: 0}, # Dropdown/Global Visibility Config
+	# Pinger Range #################
+	PINGER_DISPLAY_MODE			: {KEY: 'ttMinimapPingerDisplayMode',			DEFAULT: 2,		MODIFIER: 1,	OFFSET: 0}, # Dropdown/Global Visibility Config
 	PINGER_SOLID_LINE			: {KEY: 'ttMinimapPingerSolidLine',				DEFAULT: true},
 	PINGER_FILL_CIRCLE			: {KEY: 'ttMinimapPingerFillCircle',			DEFAULT: false},
 	PINGER_ALPHA				: {KEY: 'ttMinimapPingerOpacity',				DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
 	PINGER_COLOR_INDEX			: {KEY: 'ttMinimapPingerColorIndex',			DEFAULT: "indexOf('IDS_TT_TITLE_MAIN_ARMAMENT_RANGE', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
-	# NOT IN USE
+	# NOT IN USE ###################
 
 	# Anti Air Range
-	ANTIAIR_DISPLAY_MODE		: {KEY: 'ttMinimapAntiAirDisplayMode',			DEFAULT: 0,		MODIFIER: 1,	OFFSET: 0}, # Dropdown/Global Visibility Config
+	ANTIAIR_DISPLAY_MODE		: {KEY: 'ttMinimapAntiAirDisplayMode',			DEFAULT: 2,		MODIFIER: 1,	OFFSET: 0}, # Dropdown/Global Visibility Config
 	ANTIAIR_SOLID_LINE			: {KEY: 'ttMinimapAntiAirSolidLine',			DEFAULT: true},
 	ANTIAIR_FILL_CIRCLE			: {KEY: 'ttMinimapAntiAirFillCircle',			DEFAULT: false},
 	ANTIAIR_ALPHA				: {KEY: 'ttMinimapAntiAirOpacity',				DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
 	ANTIAIR_COLOR_INDEX			: {KEY: 'ttMinimapAntiAirColorIndex',			DEFAULT: "indexOf('IDS_TT_TITLE_AA_RANGE', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
 
 	# Own Hydrophone Range
-	HYDROPHONE_SELF_DISPLAY_MODE: {KEY: 'ttMinimapHydrophoneSelfDisplayMode',	DEFAULT: 0,		MODIFIER: 1,	OFFSET: 0}, # Dropdown/Global Visibility Config
+	HYDROPHONE_SELF_DISPLAY_MODE: {KEY: 'ttMinimapHydrophoneSelfDisplayMode',	DEFAULT: 2,		MODIFIER: 1,	OFFSET: 0}, # Dropdown/Global Visibility Config
 	HYDROPHONE_SELF_SOLID_LINE	: {KEY: 'ttMinimapHydrophoneSelfSolidLine',		DEFAULT: false},
 	HYDROPHONE_SELF_FILL_CIRCLE	: {KEY: 'ttMinimapHydrophoneSelfFillCircle',	DEFAULT: false},
 	HYDROPHONE_SELF_ALPHA		: {KEY: 'ttMinimapHydrophoneSelfOpacity',		DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
 	HYDROPHONE_SELF_COLOR_INDEX	: {KEY: 'ttMinimapHydrophoneSelfColorIndex',	DEFAULT: "indexOf('IDS_TT_TITLE_SURFACE_CONSUMABLE_RANGE', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
 
 	# Own Radar Range
-	RADAR_SELF_DISPLAY_MODE		: {KEY: 'ttMinimapRadarSelfDisplayMode',		DEFAULT: 0,		MODIFIER: 1,	OFFSET: 0}, # Dropdown/Global Visibility Config
+	RADAR_SELF_DISPLAY_MODE		: {KEY: 'ttMinimapRadarSelfDisplayMode',		DEFAULT: 2,		MODIFIER: 1,	OFFSET: 0}, # Dropdown/Global Visibility Config
 	RADAR_SELF_SOLID_LINE		: {KEY: 'ttMinimapRadarSelfSolidLine',			DEFAULT: false},
 	RADAR_SELF_FILL_CIRCLE		: {KEY: 'ttMinimapRadarSelfFillCircle',			DEFAULT: false},
 	RADAR_SELF_ALPHA			: {KEY: 'ttMinimapRadarSelfOpacity',			DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
@@ -172,10 +172,10 @@
 	RADAR_ALLY_VISIBLE_ON_ACTIVATION: {KEY: 'ttMinimapRadarAllyVisibleOnActivation',DEFAULT: false},
 	RADAR_ALLY_FILL_CIRCLE		: {KEY: 'ttMinimapRadarAllyFillCircle',			DEFAULT: true},
 	RADAR_ALLY_ALPHA			: {KEY: 'ttMinimapRadarAllyOpacity',			DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
-	RADAR_ALLY_COLOR_INDEX		: {KEY: 'ttMinimapRadarAllyColorIndex',			DEFAULT: "indexOf('11', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
+	RADAR_ALLY_COLOR_INDEX		: {KEY: 'ttMinimapRadarAllyColorIndex',			DEFAULT: "indexOf('23', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
 
 	# Own Hydro Range
-	HYDRO_SELF_DISPLAY_MODE		: {KEY: 'ttMinimapHydroSelfDisplayMode',		DEFAULT: 0,		MODIFIER: 1,	OFFSET: 0}, # Dropdown/Global Visibility Config
+	HYDRO_SELF_DISPLAY_MODE		: {KEY: 'ttMinimapHydroSelfDisplayMode',		DEFAULT: 2,		MODIFIER: 1,	OFFSET: 0}, # Dropdown/Global Visibility Config
 	HYDRO_SELF_SOLID_LINE		: {KEY: 'ttMinimapHydroSelfSolidLine',			DEFAULT: false},
 	HYDRO_SELF_FILL_CIRCLE		: {KEY: 'ttMinimapHydroSelfFillCircle',			DEFAULT: false},
 	HYDRO_SELF_ALPHA			: {KEY: 'ttMinimapHydroSelfOpacity',			DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
@@ -186,10 +186,10 @@
 	HYDRO_ALLY_VISIBLE_ON_ACTIVATION: {KEY: 'ttMinimapHydroAllyVisibleOnActivation',DEFAULT: false},
 	HYDRO_ALLY_FILL_CIRCLE		: {KEY: 'ttMinimapHydroAllyFillCircle',			DEFAULT: true},
 	HYDRO_ALLY_ALPHA			: {KEY: 'ttMinimapHydroAllyOpacity',			DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
-	HYDRO_ALLY_COLOR_INDEX		: {KEY: 'ttMinimapHydroAllyColorIndex',			DEFAULT: "indexOf('11', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
+	HYDRO_ALLY_COLOR_INDEX		: {KEY: 'ttMinimapHydroAllyColorIndex',			DEFAULT: "indexOf('23', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
 
 	# Own SubRadar Range
-	SUBRADAR_SELF_DISPLAY_MODE	: {KEY: 'ttMinimapSubRadarSelfDisplayMode',		DEFAULT: 0,		MODIFIER: 1,	OFFSET: 0}, # Dropdown/Global Visibility Config
+	SUBRADAR_SELF_DISPLAY_MODE	: {KEY: 'ttMinimapSubRadarSelfDisplayMode',		DEFAULT: 2,		MODIFIER: 1,	OFFSET: 0}, # Dropdown/Global Visibility Config
 	SUBRADAR_SELF_SOLID_LINE	: {KEY: 'ttMinimapSubRadarSelfSolidLine',		DEFAULT: false},
 	SUBRADAR_SELF_FILL_CIRCLE	: {KEY: 'ttMinimapSubRadarSelfFillCircle',		DEFAULT: false},
 	SUBRADAR_SELF_ALPHA			: {KEY: 'ttMinimapSubRadarSelfOpacity',			DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
@@ -200,7 +200,7 @@
 	SUBRADAR_ALLY_VISIBLE_ON_ACTIVATION: {KEY: 'ttMinimapSubRadarAllyVisibleOnActivation',DEFAULT: false},
 	SUBRADAR_ALLY_FILL_CIRCLE	: {KEY: 'ttMinimapSubRadarAllyFillCircle',		DEFAULT: true},
 	SUBRADAR_ALLY_ALPHA			: {KEY: 'ttMinimapSubRadarAllyOpacity',			DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
-	SUBRADAR_ALLY_COLOR_INDEX	: {KEY: 'ttMinimapSubRadarAllyColorIndex',		DEFAULT: "indexOf('25', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
+	SUBRADAR_ALLY_COLOR_INDEX	: {KEY: 'ttMinimapSubRadarAllyColorIndex',		DEFAULT: "indexOf('26', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
 })
 
 # battle\minimap\markers\base_marker.unbound
@@ -286,6 +286,12 @@
 	IDS_FOGHORN			: 'CMD_FOGHORN',
 
 	ALL					: ['IDS_QUICK_COMMANDS', 'IDS_HELP', 'IDS_FOGHORN', 'IDS_IS_TURNED_OFF'],
+})
+
+(def constant TMap_DISPLAY_MODES {
+	DISABLE: 0,
+	ENABLE: 1,
+	ADAPTIVE: 2,
 })
 
 # battle\minimap\markers\base_marker.unbound
@@ -375,7 +381,7 @@
 # `altVision:bool` must exist!
 # Loads `_varName:bool` into scope
 (def macro TMap_GET_DISPLAY_MODE (_varName:expression, _prefValue:expression)
-	(var name="_varName" type=bool value="_prefValue == 2 ? altVision : _prefValue")
+	(var name="_varName" type=bool value="_prefValue == TMap_DISPLAY_MODES.ADAPTIVE ? altVision : _prefValue")
 )
 
 # Custom
@@ -1530,11 +1536,14 @@
 		(var rangesAlphaComponent:gfx = "$datahub.getPrimaryEntity(CC.minimapOption, SC.Battle.MINIMAP_OPTION.rangesAlpha).minimapOption")
 		(var rangesAlpha:number = "rangesAlphaComponent.value * 0.01" (event "rangesAlphaComponent.evValueChanged"))
 		
-		(var shipNamesDisplayEnabledComponent:gfx = "$datahub.getPrimaryEntity(CC.minimapOption, SC.Battle.MINIMAP_OPTION.shipNamesDisplayEnabled).minimapOption")
-		(var shipNamesDisplayEnabled:bool = "shipNamesDisplayEnabledComponent.value > 0" (event "shipNamesDisplayEnabledComponent.evValueChanged"))
+		# Mod
+		(macro TMap_GET_ALT_VISION)
 
-		(var cameraEntity:gfx = "$datahub.getSingleEntity(CC.camera)")
-		(var altVision:bool = "cameraEntity.camera ? cameraEntity.camera.altVision : false" (event "cameraEntity.camera.evAltVisionChanged"))
+		(var shipNamesDisplayModeComponent:gfx = "$datahub.getPrimaryEntity(CC.minimapOption, SC.Battle.MINIMAP_OPTION.shipNamesDisplayEnabled).minimapOption")
+		(var shipNamesDisplayMode:number = "shipNamesDisplayModeComponent.value" (event "shipNamesDisplayModeComponent.evValueChanged"))
+		(macro TMap_GET_DISPLAY_MODE _varName="'isShipNameVisible'" _prefValue="shipNamesDisplayMode")
+		#
+
 		(macro SCOPE_HIGHLIGHT_MARKER_ON_MAP_MOUSE_OVER "_markerEntity")
 
 		(var relationComponent:gfx = "_markerEntity ? _markerEntity.relation : null")
@@ -1677,23 +1686,6 @@
 	)
 	#
 
-	# Health
-	(block
-		(style
-			(position = "absolute")
-			(pivotY = -16)
-			(bind rotation "-(angleToRotate)")
-		)
-		(block
-			(controller $Instance (renderer = 'TMap_MapMarkerHealthBar')
-				(bind enabled "!(isPlayerAvatar) && isAlive && (isAlly || isEnemy)")
-				(args _markerEntity="_markerEntity" _isAlly="isAlly" _userPrefsNum="_userPrefsNum")
-			)
-		)
-		(macro BIND_FAIR_SCALE "markerScale")
-	)
-	#
-
 	(block
 		(style
 			(position = "absolute")
@@ -1702,10 +1694,22 @@
 		)
 		(block
 			(controller $Instance (renderer = 'TMap_MapMarkerShipName')
-				(bind enabled "!(isPlayerAvatar) && isAlive && (shipNamesDisplayEnabled || altVision)")
+				(bind enabled "!(isPlayerAvatar) && isAlive && isShipNameVisible")
 				(args _markerEntity="_markerEntity" _userPrefsNum="_userPrefsNum")
 			)
 		)
+		# Mod
+		# Health
+		(block
+			(style
+				(marginTop = 3px)
+			)
+			(controller $Instance (renderer = 'TMap_MapMarkerHealthBar')
+				(bind enabled "!(isPlayerAvatar) && isAlive && (isAlly || isEnemy)")
+				(args _markerEntity="_markerEntity" _isAlly="isAlly" _userPrefsNum="_userPrefsNum")
+			)
+		)
+		#
 		(macro BIND_FAIR_SCALE "markerScale")
 	)
 	#
@@ -1768,8 +1772,8 @@
 		(var globalDisplayModeKey:str = "prefName + '_DISPLAY_MODE'")
 
 		(macro TMap_GET_PREF_NUMBER	_varName="'globalDisplayMode'"		_pref="TMap_PREFS[globalDisplayModeKey]")
-		(var useIndividualShipPref:bool = "globalDisplayMode == 0")
-		(var globalVisiblity:bool = "globalDisplayMode == 1 ? true : false")
+		(var useIndividualShipPref:bool = "globalDisplayMode == TMap_DISPLAY_MODES.ADAPTIVE")
+		(var globalVisiblity:bool = "globalDisplayMode == TMap_DISPLAY_MODES.ENABLE ? true : false")
 		(var isRangeVisible:bool = "useIndividualShipPref ? rangeOptionsEnabled : globalVisiblity")
 
 		(var rangeEnabled:bool = "isRangeVisible || rangeSettings.forceEnabled")
@@ -1992,9 +1996,9 @@
 		# Mod
 		(event evShipBecomeInvisible)
 		(event evPosChanged)
+
 		(var timer:gfx = "$datahub.getSingleComponent(CC.timer)")
-		(var camera:gfx = "$datahub.getSingleComponent(CC.camera)")
-		(var altVision:bool = "camera.altVision" (event "camera.evAltVisionChanged"))
+		(macro TMap_GET_ALT_VISION)
 		
 		(var timeStamp:number = "timer.currentTime" (event "evShipBecomeInvisible"))
 		(var invisibleTime:number = "timer.currentTime - timeStamp" (event "timer.evInfrequent"))
@@ -2006,9 +2010,13 @@
 		(var currentPosX:number = "mapPos.x" init=false watch=false (event "timer.evInfrequent"))
 		(var currentPosY:number = "mapPos.y" init=false watch=false (event "timer.evInfrequent"))
 
+		(var shipNamesDisplayModeComponent:gfx = "$datahub.getPrimaryEntity(CC.minimapOption, SC.Battle.MINIMAP_OPTION.shipNamesDisplayEnabled).minimapOption")
+		(var shipNamesDisplayMode:number = "shipNamesDisplayModeComponent.value" (event "shipNamesDisplayModeComponent.evValueChanged"))
+		(var isTimerAvailable:bool = "shipNamesDisplayMode == TMap_DISPLAY_MODES.ENABLE") # Disable: never. Adaptive: need to display ship name instead
+
 		(macro TMap_GET_PREF_BOOL _varName="'isLastSpottedTimerEnabled'" _pref="TMap_PREFS.LAST_SPOTTED_ON_ALT")
 
-		(var isTimerVisible:bool = "!mapVisible && altVision && isLastSpottedTimerEnabled")
+		(var isTimerVisible:bool = "!mapVisible && altVision && isLastSpottedTimerEnabled && isTimerAvailable")
 
 		(macro TMap_GET_PREF_NUMBER _varName="'fontSizePref'" _pref="TMap_PREFS.MARKER_FONT_SIZE")
 		(var fontSize:number = "isTimerVisible ? max(11, fontSizePref) : fontSizePref")
@@ -2035,6 +2043,37 @@
 			(bind fontSize "fontSize")
 		)
 		(bind text "isTimerVisible ? countdownText : shipName")
+		#
+	)
+)
+
+# Custom: based on MapMarkerShipName but without timer
+(def element TMap_MapMarkerOwnerShipName (_markerEntity:gfx, _userPrefsNum:gfx=null) layout=true
+	(scope
+		(macro SHIP_MARKER_ICON_DATA "_markerEntity.id")
+		(var shipName:str = "avatarComponent ? avatarComponent.ship.ref.ship.nameUpper : ''")
+
+		(var colorPresetName:str = "isInSameDivision	?	'division'	
+														:	tkStatus && isAlly	?	'teamkiller' 
+																				: toLower(SC.Battle.PLAYER_RELATION.VALUE_TO_NAME[relationComponent.value])")
+
+		(macro TMap_GET_PREF_NUMBER _varName="'fontSizePref'" _pref="TMap_PREFS.MARKER_FONT_SIZE")
+		#
+	)
+
+	(style (width = 100%) (align = "center"))
+	(tf
+		(class $TextDefaultBold9NM)
+		# Mod
+		(bind class "isMultyTeamEnabled && !isAlly	? MULTI_TEAMS_COLOR_CLASSES[teamId]
+													: TWO_TEAMS_FONT_COLOR_CLASSES[colorPresetName]")
+		#
+		(class $FontEnableReadability)
+		# Mod
+		(style
+			(bind fontSize "fontSizePref")
+		)
+		(bind text "shipName")
 		#
 	)
 )
@@ -2935,41 +2974,6 @@
 			(bind enabled "_markerEntity != null")
 		)
 	)
-
-	# Mod
-
-	# Player Name
-	(block
-		(style
-			(position = "absolute")
-			(pivotY = 16)
-			(bind rotation "-(angleToRotate)")
-		)
-		(block
-			(controller $Instance (renderer = 'TMap_MapMarkerPlayerName')
-				(bind enabled "!(isControlledByPlayer) && ownerEntity && isPlayerNameVisible")
-				(args _markerEntity="ownerEntity" _userPrefsNum="_userPrefsNum")
-			)
-		)
-		(macro BIND_FAIR_SCALE "markerScale")
-	)
-
-	# Ship Name
-	(block
-		(style
-			(position = "absolute")
-			(pivotY = -8)
-			(bind rotation "-(angleToRotate)")
-		)
-		(block
-			(controller $Instance (renderer = 'TMap_MapMarkerShipName')
-				(bind enabled "!(isControlledByPlayer) && ownerEntity && isShipNameVisible")
-				(args _markerEntity="ownerEntity" _userPrefsNum="_userPrefsNum")
-			)
-		)
-		(macro BIND_FAIR_SCALE "markerScale")
-	)
-	#
 )
 
 # battle\minimap\markers\plane_marker.unbound
@@ -3054,11 +3058,21 @@
 		(var markerIcon:str = "'url:../battle_hud/markers_minimap/plane/' + markerPlaneIconPath + '.png'")
 
 		# Mod
+		(var minimapEntity:gfx = "$datahub.getSingleEntity(CC.minimap)")
+		(var minimapComponent:gfx = "minimapEntity.minimap")
+		(var angleToRotate:number = "minimapComponent ? minimapComponent.rotationAngleDeg : 0" (event "minimapComponent.evRotationAngleDegChanged"))
+
 		(var rangesAlphaComponent:gfx = "$datahub.getPrimaryEntity(CC.minimapOption, SC.Battle.MINIMAP_OPTION.rangesAlpha).minimapOption")
 		(var rangesAlpha:number = "rangesAlphaComponent.value * 0.01" (event "rangesAlphaComponent.evValueChanged"))
 		(macro TMap_GET_ALT_VISION)
 		(macro TMap_GET_PREF_NUMBER _varName="'isDirectionLineEnabled'" _pref="TMap_PREFS.DIRECTION_SQUADRONS")
 		(macro TMap_GET_DISPLAY_MODE _varName="'isDirectionLineVisible'" _prefValue="isDirectionLineEnabled")
+
+		(macro TMap_GET_PREF_NUMBER _varName="'playerNameDisplayMode'"	_pref="TMap_PREFS.PLANE_OWNER_NAME_DISPLAY_MODE")
+		(macro TMap_GET_DISPLAY_MODE _varName="'isPlayerNameVisible'"	_prefValue="playerNameDisplayMode")
+
+		(macro TMap_GET_PREF_NUMBER _varName="'shipNameDisplayMode'"	_pref="TMap_PREFS.PLANE_OWNER_SHIP_DISPLAY_MODE")
+		(macro TMap_GET_DISPLAY_MODE _varName="'isShipNameVisible'"		_prefValue="shipNameDisplayMode")
 		#
 	)
 	(style 
@@ -3068,6 +3082,8 @@
 	)
 
 	# Mod
+
+	# Direction Line
 	(block
 		(style
 			(position = "absolute")
@@ -3084,6 +3100,37 @@
 		)
 		(macro BIND_FAIR_SCALE "1 / _markerScale")
 	)
+
+	# Player Name
+	(block
+		(style
+			(position = "absolute")
+			(pivotY = 16)
+			(bind rotation "-(angleToRotate)")
+		)
+		(block
+			(controller $Instance (renderer = 'TMap_MapMarkerPlayerName')
+				(bind enabled "!(isControlledByPlayer) && ownerEntity && isPlayerNameVisible")
+				(args _markerEntity="ownerEntity" _userPrefsNum="_userPrefsNum")
+			)
+		)
+	)
+
+	# Ship Name
+	(block
+		(style
+			(position = "absolute")
+			(pivotY = -8)
+			(bind rotation "-(angleToRotate)")
+		)
+		(block
+			(controller $Instance (renderer = 'TMap_MapMarkerOwnerShipName')
+				(bind enabled "!(isControlledByPlayer) && ownerEntity && isShipNameVisible")
+				(args _markerEntity="ownerEntity" _userPrefsNum="_userPrefsNum")
+			)
+		)
+	)
+	#
 	#
 
 	(block
