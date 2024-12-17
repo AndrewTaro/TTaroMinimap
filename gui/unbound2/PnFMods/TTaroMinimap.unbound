@@ -55,8 +55,10 @@
 (def constant TMap_PREFS {
 	# General
 	PLAYER_NAME_DISPLAY_MODE: {KEY: 'ttMinimapPlayerNameDisplayMode',			DEFAULT: 0,		MODIFIER: 1,	OFFSET: 0}, # Dropdown
+	MARKER_FONT_SIZE		: {KEY: 'ttMinimapMarkerFontSize',					DEFAULT: 9,		MODIFIER: 1,	OFFSET: 9}, # Dropdown
 	LAST_SPOTTED_ON_ALT		: {KEY: 'ttMinimapLastSpottedTimerVisibleOnAlt',	DEFAULT: true},
-	SQUADRON_OWNER_DISPLAY_MODE	: {KEY: 'ttMinimapSquadronOwnerDisplayMode',	DEFAULT: 0,		MODIFIER: 1,	OFFSET: 0}, # Dropdown
+	PLANE_OWNER_NAME_DISPLAY_MODE	: {KEY: 'ttMinimapSquadronOwnerNameDisplayMode',	DEFAULT: 0,		MODIFIER: 1,	OFFSET: 0}, # Dropdown
+	PLANE_OWNER_SHIP_DISPLAY_MODE	: {KEY: 'ttMinimapSquadronOwnerShipDisplayMode',	DEFAULT: 0,		MODIFIER: 1,	OFFSET: 0}, # Dropdown
 	CONTESTED_CAPS			: {KEY: 'ttMinimapContestedCapsVisible',			DEFAULT: true},
 	NEARBY_AA_RANGE			: {KEY: 'ttMinimapNearbyAARangeVisible',			DEFAULT: false},
 	NEARBY_RADAR_RANGE		: {KEY: 'ttMinimapNearbyRadarRangeVisible',			DEFAULT: false},
@@ -170,7 +172,7 @@
 	RADAR_ALLY_VISIBLE_ON_ACTIVATION: {KEY: 'ttMinimapRadarAllyVisibleOnActivation',DEFAULT: false},
 	RADAR_ALLY_FILL_CIRCLE		: {KEY: 'ttMinimapRadarAllyFillCircle',			DEFAULT: true},
 	RADAR_ALLY_ALPHA			: {KEY: 'ttMinimapRadarAllyOpacity',			DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
-	RADAR_ALLY_COLOR_INDEX		: {KEY: 'ttMinimapRadarAllyColorIndex',			DEFAULT: "indexOf('IDS_TT_LIGHT_BLUE', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
+	RADAR_ALLY_COLOR_INDEX		: {KEY: 'ttMinimapRadarAllyColorIndex',			DEFAULT: "indexOf('11', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
 
 	# Own Hydro Range
 	HYDRO_SELF_DISPLAY_MODE		: {KEY: 'ttMinimapHydroSelfDisplayMode',		DEFAULT: 0,		MODIFIER: 1,	OFFSET: 0}, # Dropdown/Global Visibility Config
@@ -184,7 +186,7 @@
 	HYDRO_ALLY_VISIBLE_ON_ACTIVATION: {KEY: 'ttMinimapHydroAllyVisibleOnActivation',DEFAULT: false},
 	HYDRO_ALLY_FILL_CIRCLE		: {KEY: 'ttMinimapHydroAllyFillCircle',			DEFAULT: true},
 	HYDRO_ALLY_ALPHA			: {KEY: 'ttMinimapHydroAllyOpacity',			DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
-	HYDRO_ALLY_COLOR_INDEX		: {KEY: 'ttMinimapHydroAllyColorIndex',			DEFAULT: "indexOf('IDS_TT_LIGHT_BLUE', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
+	HYDRO_ALLY_COLOR_INDEX		: {KEY: 'ttMinimapHydroAllyColorIndex',			DEFAULT: "indexOf('11', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
 
 	# Own SubRadar Range
 	SUBRADAR_SELF_DISPLAY_MODE	: {KEY: 'ttMinimapSubRadarSelfDisplayMode',		DEFAULT: 0,		MODIFIER: 1,	OFFSET: 0}, # Dropdown/Global Visibility Config
@@ -198,49 +200,54 @@
 	SUBRADAR_ALLY_VISIBLE_ON_ACTIVATION: {KEY: 'ttMinimapSubRadarAllyVisibleOnActivation',DEFAULT: false},
 	SUBRADAR_ALLY_FILL_CIRCLE	: {KEY: 'ttMinimapSubRadarAllyFillCircle',		DEFAULT: true},
 	SUBRADAR_ALLY_ALPHA			: {KEY: 'ttMinimapSubRadarAllyOpacity',			DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
-	SUBRADAR_ALLY_COLOR_INDEX	: {KEY: 'ttMinimapSubRadarAllyColorIndex',		DEFAULT: "indexOf('IDS_TT_LIGHT_GREEN', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
+	SUBRADAR_ALLY_COLOR_INDEX	: {KEY: 'ttMinimapSubRadarAllyColorIndex',		DEFAULT: "indexOf('25', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
 })
 
 # battle\minimap\markers\base_marker.unbound
 (def constant TMap_RANGE_COLORS {
-	IDS_TT_TITLE_MAIN_ARMAMENT_RANGE		: "0xBBBBBB", # Default Armament Range
-	IDS_TT_TITLE_SEA_DETECTION_RANGE		: "0x6EE1F7", # Default Sea Visibility Range
-	IDS_TT_TITLE_AIR_DETECTION_RANGE		: "0x6EE1D8", # Default Plane Visibility Range
-	IDS_TT_TITLE_AA_RANGE					: "0xF0A522", # Default AA Range
-	IDS_TT_TITLE_SECONDARY_RANGE			: "0xA9C272", # Default ATBA Range
-	IDS_TT_TITLE_SURFACE_CONSUMABLE_RANGE	: "0x00CCFF", # Default Consumables Range
-	IDS_TT_DARK_BLUE						: "0x051523", # Dark Blue
-	IDS_TT_BLUE								: "0x001A6E", # Blue
-	IDS_TT_LIGHT_BLUE						: "0x80C4E9", # LightBlue
-	IDS_TT_PERSIAN_GREEN					: "0x009990", # Asagi
-	IDS_TT_GREEN							: "0x4CE8AA", # Green
-	IDS_TT_LIGHT_GREEN						: "0xCCFF99", # LightGreen
-	IDS_TT_KHAKI							: "0xF0BB78", # Kahki
-	IDS_TT_BROWN							: "0x61380B", # Brown
-	IDS_TT_LIGHT_PINK						: "0xFF96CA", # LightPink
-	IDS_TT_RED								: "0xFF0040", # Red
-	IDS_TT_DARK_RED							: "0x8A084B", # DarkRed
-	IDS_TT_DARK_PURPLE						: "0x8000FF", # DarkPurple
-	IDS_TT_LIGHT_PURPLE						: "0xFF00FF", # LightPurple
+    'IDS_TT_TITLE_MAIN_ARMAMENT_RANGE'      : "0xbbbbbb",
+    'IDS_TT_TITLE_SEA_DETECTION_RANGE'      : "0x6ee1f7",
+    'IDS_TT_TITLE_AIR_DETECTION_RANGE'      : "0x6ee1d8",
+    'IDS_TT_TITLE_AA_RANGE'                 : "0xf0a522",
+    'IDS_TT_TITLE_SECONDARY_RANGE'          : "0xa9c272",
+    'IDS_TT_TITLE_SURFACE_CONSUMABLE_RANGE' : "0xccff",
+    '0'                                     : "0xff0000",
+    '1'                                     : "0xff2e00",
+    '2'                                     : "0xff5c00",
+    '3'                                     : "0xff8b00",
+    '4'                                     : "0xffb900",
+    '5'                                     : "0xffe700",
+    '6'                                     : "0xe7ff00",
+    '7'                                     : "0xb9ff00",
+    '8'                                     : "0x8bff00",
+    '9'                                     : "0x5cff00",
+    '10'                                    : "0x2eff00",
+    '11'                                    : "0xff00",
+    '12'                                    : "0xff2e",
+    '13'                                    : "0xff5c",
+    '14'                                    : "0xff8b",
+    '15'                                    : "0xffb9",
+    '16'                                    : "0xffe7",
+    '17'                                    : "0xe7ff",
+    '18'                                    : "0xb9ff",
+    '19'                                    : "0x8bff",
+    '20'                                    : "0x5cff",
+    '21'                                    : "0x2eff",
+    '22'                                    : "0xff",
+    '23'                                    : "0x2e00ff",
+    '24'                                    : "0x5c00ff",
+    '25'                                    : "0x8b00ff",
+    '26'                                    : "0xb900ff",
+    '27'                                    : "0xe700ff",
+    '28'                                    : "0xff00e7",
+    '29'                                    : "0xff00b9",
+    '30'                                    : "0xff008b",
+    '31'                                    : "0xff005c",
+    '32'                                    : "0xff002e",
+    '33'                                    : "0xff0000",
 
-	ALL: [
-		'IDS_TT_TITLE_MAIN_ARMAMENT_RANGE', 'IDS_TT_TITLE_SEA_DETECTION_RANGE', 'IDS_TT_TITLE_AIR_DETECTION_RANGE', 'IDS_TT_TITLE_AA_RANGE',
-		'IDS_TT_TITLE_SECONDARY_RANGE', 'IDS_TT_TITLE_SURFACE_CONSUMABLE_RANGE', 'IDS_TT_DARK_BLUE', 'IDS_TT_BLUE', 'IDS_TT_LIGHT_BLUE',
-		'IDS_TT_PERSIAN_GREEN', 'IDS_TT_GREEN', 'IDS_TT_LIGHT_GREEN', 'IDS_TT_KHAKI', 'IDS_TT_BROWN', 'IDS_TT_LIGHT_PINK',
-		'IDS_TT_RED', 'IDS_TT_DARK_RED', 'IDS_TT_DARK_PURPLE', 'IDS_TT_LIGHT_PURPLE'
-	],
+    ALL: ['IDS_TT_TITLE_MAIN_ARMAMENT_RANGE', 'IDS_TT_TITLE_SEA_DETECTION_RANGE', 'IDS_TT_TITLE_AIR_DETECTION_RANGE', 'IDS_TT_TITLE_AA_RANGE', 'IDS_TT_TITLE_SECONDARY_RANGE', 'IDS_TT_TITLE_SURFACE_CONSUMABLE_RANGE', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33'],
 })
-
-(def css $TMap_NearbyRadarBoldText ()
-	(extends $TextDefaultBoldNM)
-	(extends $FontColorDefault)
-)
-
-(def css $TMap_NearbyRadarSmallText ()
-	(extends $TextDefault13NM)
-	(extends $FontColorDefault)
-	(extends $FontEnableReadability)
-)
 
 # battle\minimap\markers\capture_point_marker.unbound
 (def constant TMap_CAPTURE_POINTS_SETTINGS
@@ -339,6 +346,18 @@
 	wavesMaxDist:					{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 , 	prefName: 'MAIN_ARMAMENT',	optionName: 'shootWaveGunRangeEnabled' },
 	air_supportMaxDist: 			{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 , 	prefName: 'AIRSUPPORT',		optionName: 'shootAirSupportRangeEnabled' }
 }")
+
+
+(def css $TMap_NearbyRadarBoldText ()
+	(extends $TextDefaultBoldNM)
+	(extends $FontColorDefault)
+)
+
+(def css $TMap_NearbyRadarSmallText ()
+	(extends $TextDefault13NM)
+	(extends $FontColorDefault)
+	(extends $FontEnableReadability)
+)
 
 (def macro TMap_GET_USERPREF()
 	(var userPrefsComponent:gfx = "$datahub.getSingleComponent(CC.userPrefs)")
@@ -1990,6 +2009,9 @@
 		(macro TMap_GET_PREF_BOOL _varName="'isLastSpottedTimerEnabled'" _pref="TMap_PREFS.LAST_SPOTTED_ON_ALT")
 
 		(var isTimerVisible:bool = "!mapVisible && altVision && isLastSpottedTimerEnabled")
+
+		(macro TMap_GET_PREF_NUMBER _varName="'fontSizePref'" _pref="TMap_PREFS.MARKER_FONT_SIZE")
+		(var fontSize:number = "isTimerVisible ? max(11, fontSizePref) : fontSizePref")
 		#
 	)
 
@@ -2010,8 +2032,7 @@
 		(class $FontEnableReadability)
 		# Mod
 		(style
-			(bind fontSize "isTimerVisible	? 11
-											: 9")
+			(bind fontSize "fontSize")
 		)
 		(bind text "isTimerVisible ? countdownText : shipName")
 		#
@@ -2027,14 +2048,19 @@
 		(var colorPresetName:str = "isInSameDivision	?	'division'	
 														:	tkStatus && isAlly	?	'teamkiller' 
 																				: toLower(SC.Battle.PLAYER_RELATION.VALUE_TO_NAME[relationComponent.value])")
+
+		(macro TMap_GET_PREF_NUMBER _varName="'fontSize'" _pref="TMap_PREFS.MARKER_FONT_SIZE")
 	)
 
-	(style (width = 100%) (align = "center"))
+	(style (width = 100%) (align = "center|bottom")(height = 5px))
 	(tf
 		(class $TextDefaultBold9NM)
 		(bind class "isMultyTeamEnabled && !isAlly	? MULTI_TEAMS_COLOR_CLASSES[teamId]
 													: TWO_TEAMS_FONT_COLOR_CLASSES[colorPresetName]")
 		(class $FontEnableReadability)
+		(style
+			(bind fontSize "fontSize")
+		)
 		(bind text "playerName")
 	)
 )
@@ -2883,8 +2909,11 @@
 		(var ownerEntity:gfx = "_markerEntity.squadron.owner.ref")
 
 		(macro TMap_GET_ALT_VISION)
-		(macro TMap_GET_PREF_NUMBER _varName="'playerNameDisplayMode'" _pref="TMap_PREFS.SQUADRON_OWNER_DISPLAY_MODE")
-		(macro TMap_GET_DISPLAY_MODE _varName="'isPlayerNameVisible'" _prefValue="playerNameDisplayMode")
+		(macro TMap_GET_PREF_NUMBER _varName="'playerNameDisplayMode'"	_pref="TMap_PREFS.PLANE_OWNER_NAME_DISPLAY_MODE")
+		(macro TMap_GET_DISPLAY_MODE _varName="'isPlayerNameVisible'"	_prefValue="playerNameDisplayMode")
+
+		(macro TMap_GET_PREF_NUMBER _varName="'shipNameDisplayMode'"	_pref="TMap_PREFS.PLANE_OWNER_SHIP_DISPLAY_MODE")
+		(macro TMap_GET_DISPLAY_MODE _varName="'isShipNameVisible'"		_prefValue="shipNameDisplayMode")
 		#
 	)
 
@@ -2907,7 +2936,25 @@
 		)
 	)
 
-	# Custom Element
+	# Mod
+
+	# Player Name
+	(block
+		(style
+			(position = "absolute")
+			(pivotY = 16)
+			(bind rotation "-(angleToRotate)")
+		)
+		(block
+			(controller $Instance (renderer = 'TMap_MapMarkerPlayerName')
+				(bind enabled "!(isControlledByPlayer) && ownerEntity && isPlayerNameVisible")
+				(args _markerEntity="ownerEntity" _userPrefsNum="_userPrefsNum")
+			)
+		)
+		(macro BIND_FAIR_SCALE "markerScale")
+	)
+
+	# Ship Name
 	(block
 		(style
 			(position = "absolute")
@@ -2915,8 +2962,8 @@
 			(bind rotation "-(angleToRotate)")
 		)
 		(block
-			(controller $Instance (renderer = 'TMap_MapMarkerPlayerName')
-				(bind enabled "!(isControlledByPlayer) && ownerEntity && isPlayerNameVisible")
+			(controller $Instance (renderer = 'TMap_MapMarkerShipName')
+				(bind enabled "!(isControlledByPlayer) && ownerEntity && isShipNameVisible")
 				(args _markerEntity="ownerEntity" _userPrefsNum="_userPrefsNum")
 			)
 		)
