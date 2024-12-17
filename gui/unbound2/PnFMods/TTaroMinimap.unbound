@@ -64,6 +64,8 @@
 	NEARBY_RADAR_RANGE		: {KEY: 'ttMinimapNearbyRadarRangeVisible',			DEFAULT: false},
 	DETECTION				: {KEY: 'ttMinimapAllyDetectionVisible',			DEFAULT: false},
 	DISABLE_DRAG_DROP		: {KEY: 'ttMinimapDisableDragDrop',					DEFAULT: false},
+	USE_BLUR				: {KEY: 'ttMinimapUseBlur',							DEFAULT: false},
+	BLUR_INTENSITY			: {KEY: 'ttMinimapBlurIntensity',					DEFAULT: 0.3,	MODIFIER: 0.1,	OFFSET: 0.0},
 
 	# Health
 	HEALTH_ALLY				: {KEY: 'ttMinimapHealthAllyDisplayMode',			DEFAULT: 0,		MODIFIER: 1,	OFFSET: 0}, # Dropdown
@@ -560,12 +562,23 @@
 
 		(macro TMap_GET_PREF_BOOL _varName="'isNerbyRadarVisible'"	_pref="TMap_PREFS.NEARBY_RADAR_RANGE")
 		(macro TMap_GET_PREF_BOOL _varName="'isDragDropDisabled'"	_pref="TMap_PREFS.DISABLE_DRAG_DROP")
+		(macro TMap_GET_PREF_BOOL _varName="'isBlurEnabled'"		_pref="TMap_PREFS.USE_BLUR")
 	)
 
     (style
         (bind width "stageWidth")
         (bind height "stageHeight")
     )
+
+	(controller $Instance renderer='DeclareBlurLayer'
+		(bind enabled "isBlurEnabled")
+		(exprs
+			(style
+				(zindex = "ZIndex.BACKGROUND")
+				(hitTest = false)
+			)
+		)
+	)
     
     (block
         (block
@@ -629,7 +642,8 @@
 				(style
 					(position = "absolute")
 					(top = 37px) # TODO: Improve if possible? This defines the horizontal alignment of Nearby Radar Warning and Main Map
-					(left = -110px)
+					(left = -8px)
+					(pivotX = 100%)
 					(hitTest = false)
 				)
 				(controller $Instance renderer='TMap_NearbyRadarsWarning'
@@ -676,7 +690,7 @@
 	(style
 		(align = "middle|center")
 		(vgap = 10px)
-		(width = 100px)
+		(width = 120px)
 	)
 
 	# BG
@@ -885,6 +899,7 @@
 					(height = "SHIP_ICON_SIZE.HEIGHT")
 					(marginTop = "-S")
 					(marginBottom = "-S")
+					(marginLeft = "-XS")
 					(scaleX = -1)
 					(pivotX = 50%)
 				)
@@ -1132,9 +1147,27 @@
 		(var waterAlpha:number = "_isLoading ? 1 : waterAlphaComponent.value * 0.01" (event "waterAlphaComponent.evValueChanged"))
 
 		(var minimapComponent:gfx = "$datahub.getSingleComponent(CC.minimap)")
+
+		# Mod
+		(macro TMap_GET_PREF_BOOL	_varName="'isBlurEnabled'"		_pref="TMap_PREFS.USE_BLUR")
+		(macro TMap_GET_PREF_NUMBER _varName="'blurIntensity'"		_pref="TMap_PREFS.BLUR_INTENSITY")
+		#
 	)
 
 	(class $FullsizeAbsolute)
+
+	# Mod
+	(controller $Instance renderer='TMap_BackgroundBlur'
+		(bind enabled "isBlurEnabled")
+		(args _blurIntensity="blurIntensity")
+		(exprs
+			(style
+				(zindex = "ZIndex.BACKGROUND")
+				(hitTest = false)
+			)
+		)
+	)
+	#
 
 	
 	(block
@@ -1205,6 +1238,22 @@
 		)
 	)
 	#
+)
+
+(def element TMap_BackgroundBlur(_blurIntensity:number = 0.3)
+	(class $FullsizeAbsolute)
+	(mc mc_blurmap_medium
+		(class $FullsizeAbsolute)
+		(rendererString = blurMeBaby)
+		(controller $Animation
+			(bindcall play  duration="0.0001"
+							to	 = "{ blurIntensity: _blurIntensity }"
+							watch=false
+							init=true
+							(bind trigger "_blurIntensity")
+			)
+		)
+	)
 )
 
 # battle/minimap/minimap.unbound
