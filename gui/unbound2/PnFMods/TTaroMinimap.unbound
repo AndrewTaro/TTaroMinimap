@@ -17,7 +17,7 @@
 # Index 16: None means no RPF is visible.
 # It could happen when the submarine is at maximum depth and he is the only remaining enemy
 
-(def constant TT_TTAROMINIMAP_INSTALLED "true")
+(def constant TT_MINIMAP_INSTALLED "true")
 
 (def constant TMap_RPF_INVALID_DIRECTION "-1")
 (def constant TMap_RPF_DIRECTION_MESSAGES [
