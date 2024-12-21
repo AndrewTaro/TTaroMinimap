@@ -1569,6 +1569,7 @@
 	)
 	#
 
+	# Mod
 	(block
 		(style
 			(position = "absolute")
@@ -1578,13 +1579,13 @@
 			(align = "top|center")
 			#
 		)
+		# Ship Name
 		(block
 			(controller $Instance (renderer = 'TMap_MapMarkerShipName')
 				(bind enabled "!(isPlayerAvatar) && isAlive && isShipNameVisible")
 				(args _markerEntity="_markerEntity" _userPrefsNum="_userPrefsNum")
 			)
 		)
-		# Mod
 		# Last Spot
 		(block
 			(controller $Instance (renderer = 'TMap_MapMarkerShipLastSpottedTimer')
@@ -1892,12 +1893,15 @@
 
 		(macro TT_GET_PREF_BOOL _varName="'isLastSpottedTimerEnabled'" _pref="TMap_PREFS.LAST_SPOTTED_ON_ALT")
 
+		#
 		(var isShipNameVisible:bool = "isLastSpottedTimerEnabled && altVision && shipNamesDisplayMode == TMap_DISPLAY_MODES.ENABLE && !mapVisible
 										? false
 										: true"
 		)
-		# Hide ship name when the ship name is always visible && timer is visible
-		# otherwise we need to display both the ship name and timer
+		# Hide ship name when the ship name is always visible && timer is visible because I like this style. Do not complain.
+		# Too much info causes clutters.
+		#
+		# If the visibility of ship names is set to adaptive mode, we need to display both the ship name and timer
 
 		(macro TT_GET_PREF_NUMBER _varName="'fontSizePref'" _pref="TMap_PREFS.MARKER_FONT_SIZE")
 		#
