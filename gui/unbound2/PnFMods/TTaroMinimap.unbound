@@ -52,159 +52,6 @@
 (def constant TMap_COMPONENT_KEY_CONSUMABLE_RANGES "'modTTaroMinimapConsumableRanges'")
 (def constant TMap_COMPONENT_KEY_RADIO_LOCATION "'modTTaroMinimapRadioLocation'")
 
-(def constant TMap_PREFS {
-	# General
-	PLAYER_NAME_DISPLAY_MODE: {KEY: 'ttMinimapPlayerNameDisplayMode',			DEFAULT: 0,		MODIFIER: 1,	OFFSET: 0}, # Dropdown
-	MARKER_FONT_SIZE		: {KEY: 'ttMinimapMarkerFontSize',					DEFAULT: 9,		MODIFIER: 1,	OFFSET: 9}, # Dropdown
-	LAST_SPOTTED_ON_ALT		: {KEY: 'ttMinimapLastSpottedTimerVisibleOnAlt',	DEFAULT: true},
-	PLANE_OWNER_NAME_DISPLAY_MODE	: {KEY: 'ttMinimapSquadronOwnerNameDisplayMode',	DEFAULT: 0,		MODIFIER: 1,	OFFSET: 0}, # Dropdown
-	PLANE_OWNER_SHIP_DISPLAY_MODE	: {KEY: 'ttMinimapSquadronOwnerShipDisplayMode',	DEFAULT: 0,		MODIFIER: 1,	OFFSET: 0}, # Dropdown
-	CONTESTED_CAPS			: {KEY: 'ttMinimapContestedCapsVisible',			DEFAULT: true},
-	NEARBY_AA_RANGE			: {KEY: 'ttMinimapNearbyAARangeVisible',			DEFAULT: false},
-	NEARBY_RADAR_RANGE		: {KEY: 'ttMinimapNearbyRadarRangeVisible',			DEFAULT: false},
-	DETECTION				: {KEY: 'ttMinimapAllyDetectionVisible',			DEFAULT: false},
-	DISABLE_DRAG_DROP		: {KEY: 'ttMinimapDisableDragDrop',					DEFAULT: false},
-	USE_BLUR				: {KEY: 'ttMinimapUseBlur',							DEFAULT: false},
-	BLUR_INTENSITY			: {KEY: 'ttMinimapBlurIntensity',					DEFAULT: 0.3,	MODIFIER: 0.1,	OFFSET: 0.0},
-
-	# Health
-	HEALTH_ALLY				: {KEY: 'ttMinimapHealthAllyDisplayMode',			DEFAULT: 0,		MODIFIER: 1,	OFFSET: 0}, # Dropdown
-	HEALTH_ENEMY			: {KEY: 'ttMinimapHealthEnemyDisplayMode',			DEFAULT: 0,		MODIFIER: 1,	OFFSET: 0}, # Dropdown
-	HEALTH_MAX_HIDE			: {KEY: 'ttMinimapHealthMaxHide',					DEFAULT: false},
-
-	# Directional Line
-	DIRECTION_SHIPS			: {KEY: 'ttMinimapDirEnemyShipDisplayMode',			DEFAULT: 0,		MODIFIER: 1,	OFFSET: 0}, # Dropdown
-	DIRECTION_SQUADRONS		: {KEY: 'ttMinimapDirEnemySquadronDisplayMode',		DEFAULT: 0,		MODIFIER: 1,	OFFSET: 0}, # Dropdown
-
-	# Own RPF
-	RPF_KEYBIND				: {KEY: 'ttMinimapRPFKeybind',						DEFAULT: 0,		MODIFIER: 1,	OFFSET: 0}, # Dropdown
-	RPF_SELF_ALPHA			: {KEY: 'ttMinimapRPFSelfOpacity',					DEFAULT: 0.1,	MODIFIER: 0.1,	OFFSET: 0.0},
-	RPF_SELF_RED			: {KEY: 'ttMinimapRPFSelfRed',						DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
-	RPF_SELF_GREEN			: {KEY: 'ttMinimapRPFSelfGreen',					DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
-	RPF_SELF_BLUE			: {KEY: 'ttMinimapRPFSelfBlue',						DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
-
-	# Ally RPF
-	RPF_ALLY_DISPLAY_MODE	: {KEY: 'ttMinimapRPFAllyDisplayMode',				DEFAULT: 1,		MODIFIER: 1,	OFFSET: 0}, # Dropdown
-	RPF_ALLY_ALPHA			: {KEY: 'ttMinimapRPFAllyOpacity',					DEFAULT: 0.1,	MODIFIER: 0.1,	OFFSET: 0.0},
-	RPF_ALLY_RED			: {KEY: 'ttMinimapRPFAllyRed',						DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
-	RPF_ALLY_GREEN			: {KEY: 'ttMinimapRPFAllyGreen',					DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
-	RPF_ALLY_BLUE			: {KEY: 'ttMinimapRPFAllyBlue',						DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
-
-	# Psedo Pref to Stop the macro from freaking out
-	# DO NOT TOUCH OR ADD TO MODCONFIG ################
-	FAKE_SOLID_LINE				: {KEY: '',		DEFAULT: false},
-	FAKE_FILL_CIRCLE			: {KEY: '',		DEFAULT: false},
-	FAKE_ALPHA					: {KEY: '',		DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
-	FAKE_COLOR_INDEX			: {KEY: '',		DEFAULT: "indexOf('IDS_TT_TITLE_SEA_DETECTION_RANGE', TMap_RANGE_COLORS.ALL)",		MODIFIER: 1,	OFFSET: 0}, # Dropdown
-	###################################################
-
-	# Visibility by Sea Range
-	VISIBILITY_SEA_DISPLAY_MODE	: {KEY: 'ttMinimapVisibilitySeaDisplayMode',	DEFAULT: 2,		MODIFIER: 1,	OFFSET: 0}, # Dropdown/Global Visibility Config
-	VISIBILITY_SEA_SOLID_LINE	: {KEY: 'ttMinimapVisibilitySeaSolidLine',		DEFAULT: false},
-	VISIBILITY_SEA_FILL_CIRCLE	: {KEY: 'ttMinimapVisibilitySeaFillCircle',		DEFAULT: false},
-	VISIBILITY_SEA_ALPHA		: {KEY: 'ttMinimapVisibilitySeaOpacity',		DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
-	VISIBILITY_SEA_COLOR_INDEX	: {KEY: 'ttMinimapVisibilitySeaColorIndex',		DEFAULT: "indexOf('IDS_TT_TITLE_SEA_DETECTION_RANGE', TMap_RANGE_COLORS.ALL)",		MODIFIER: 1,	OFFSET: 0}, # Dropdown
-
-	# Visibility by Air Range
-	VISIBILITY_AIR_DISPLAY_MODE	: {KEY: 'ttMinimapVisibilityAirDisplayMode',	DEFAULT: 2,		MODIFIER: 1,	OFFSET: 0}, # Dropdown/Global Visibility Config
-	VISIBILITY_AIR_SOLID_LINE	: {KEY: 'ttMinimapVisibilityAirSolidLine',		DEFAULT: false},
-	VISIBILITY_AIR_FILL_CIRCLE	: {KEY: 'ttMinimapVisibilityAirFillCircle',		DEFAULT: false},
-	VISIBILITY_AIR_ALPHA		: {KEY: 'ttMinimapVisibilityAirOpacity',		DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
-	VISIBILITY_AIR_COLOR_INDEX	: {KEY: 'ttMinimapVisibilityAirColorIndex',		DEFAULT: "indexOf('IDS_TT_TITLE_AIR_DETECTION_RANGE', TMap_RANGE_COLORS.ALL)",		MODIFIER: 1,	OFFSET: 0}, # Dropdown
-
-	# Main Armament Range
-	MAIN_ARMAMENT_DISPLAY_MODE	: {KEY: 'ttMinimapMainArmamentDisplayMode',		DEFAULT: 2,		MODIFIER: 1,	OFFSET: 0}, # Dropdown/Global Visibility Config
-	MAIN_ARMAMENT_SOLID_LINE	: {KEY: 'ttMinimapMainArmamentSolidLine',		DEFAULT: true},
-	MAIN_ARMAMENT_FILL_CIRCLE	: {KEY: 'ttMinimapMainArmamentFillCircle',		DEFAULT: false},
-	MAIN_ARMAMENT_ALPHA			: {KEY: 'ttMinimapMainArmamentOpacity',			DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
-	MAIN_ARMAMENT_COLOR_INDEX	: {KEY: 'ttMinimapMainArmamentColorIndex',		DEFAULT: "indexOf('IDS_TT_TITLE_MAIN_ARMAMENT_RANGE', TMap_RANGE_COLORS.ALL)",		MODIFIER: 1,	OFFSET: 0}, # Dropdown
-
-	# Secondary Range
-	SECONDARY_DISPLAY_MODE		: {KEY: 'ttMinimapSecondaryDisplayMode',		DEFAULT: 2,		MODIFIER: 1,	OFFSET: 0}, # Dropdown/Global Visibility Config
-	SECONDARY_SOLID_LINE		: {KEY: 'ttMinimapSecondarySolidLine',			DEFAULT: true},
-	SECONDARY_FILL_CIRCLE		: {KEY: 'ttMinimapSecondaryFillCircle',			DEFAULT: false},
-	SECONDARY_ALPHA				: {KEY: 'ttMinimapSecondaryOpacity',			DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
-	SECONDARY_COLOR_INDEX		: {KEY: 'ttMinimapSecondaryColorIndex',			DEFAULT: "indexOf('IDS_TT_TITLE_SECONDARY_RANGE', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
-
-	# Torpedo Range
-	TORPEDO_DISPLAY_MODE		: {KEY: 'ttMinimapTorpedoDisplayMode',			DEFAULT: 2,		MODIFIER: 1,	OFFSET: 0}, # Dropdown/Global Visibility Config
-	TORPEDO_SOLID_LINE			: {KEY: 'ttMinimapTorpedoSolidLine',			DEFAULT: true},
-	TORPEDO_FILL_CIRCLE			: {KEY: 'ttMinimapTorpedoFillCircle',			DEFAULT: false},
-	TORPEDO_ALPHA				: {KEY: 'ttMinimapTorpedoOpacity',				DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
-	TORPEDO_COLOR_INDEX			: {KEY: 'ttMinimapTorpedoColorIndex',			DEFAULT: "indexOf('IDS_TT_TITLE_MAIN_ARMAMENT_RANGE', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
-
-	# Air Support Range
-	AIRSUPPORT_DISPLAY_MODE		: {KEY: 'ttMinimapAirSupportDisplayMode',		DEFAULT: 2,		MODIFIER: 1,	OFFSET: 0}, # Dropdown/Global Visibility Config
-	AIRSUPPORT_SOLID_LINE		: {KEY: 'ttMinimapAirSupportSolidLine',			DEFAULT: true},
-	AIRSUPPORT_FILL_CIRCLE		: {KEY: 'ttMinimapAirSupportFillCircle',		DEFAULT: false},
-	AIRSUPPORT_ALPHA			: {KEY: 'ttMinimapAirSupportOpacity',			DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
-	AIRSUPPORT_COLOR_INDEX		: {KEY: 'ttMinimapAirSupportColorIndex',		DEFAULT: "indexOf('IDS_TT_TITLE_MAIN_ARMAMENT_RANGE', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
-
-	# Pinger Range #################
-	PINGER_DISPLAY_MODE			: {KEY: 'ttMinimapPingerDisplayMode',			DEFAULT: 2,		MODIFIER: 1,	OFFSET: 0}, # Dropdown/Global Visibility Config
-	PINGER_SOLID_LINE			: {KEY: 'ttMinimapPingerSolidLine',				DEFAULT: true},
-	PINGER_FILL_CIRCLE			: {KEY: 'ttMinimapPingerFillCircle',			DEFAULT: false},
-	PINGER_ALPHA				: {KEY: 'ttMinimapPingerOpacity',				DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
-	PINGER_COLOR_INDEX			: {KEY: 'ttMinimapPingerColorIndex',			DEFAULT: "indexOf('IDS_TT_TITLE_MAIN_ARMAMENT_RANGE', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
-	# NOT IN USE ###################
-
-	# Anti Air Range
-	ANTIAIR_DISPLAY_MODE		: {KEY: 'ttMinimapAntiAirDisplayMode',			DEFAULT: 2,		MODIFIER: 1,	OFFSET: 0}, # Dropdown/Global Visibility Config
-	ANTIAIR_SOLID_LINE			: {KEY: 'ttMinimapAntiAirSolidLine',			DEFAULT: true},
-	ANTIAIR_FILL_CIRCLE			: {KEY: 'ttMinimapAntiAirFillCircle',			DEFAULT: false},
-	ANTIAIR_ALPHA				: {KEY: 'ttMinimapAntiAirOpacity',				DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
-	ANTIAIR_COLOR_INDEX			: {KEY: 'ttMinimapAntiAirColorIndex',			DEFAULT: "indexOf('IDS_TT_TITLE_AA_RANGE', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
-
-	# Own Hydrophone Range
-	HYDROPHONE_SELF_DISPLAY_MODE: {KEY: 'ttMinimapHydrophoneSelfDisplayMode',	DEFAULT: 2,		MODIFIER: 1,	OFFSET: 0}, # Dropdown/Global Visibility Config
-	HYDROPHONE_SELF_SOLID_LINE	: {KEY: 'ttMinimapHydrophoneSelfSolidLine',		DEFAULT: false},
-	HYDROPHONE_SELF_FILL_CIRCLE	: {KEY: 'ttMinimapHydrophoneSelfFillCircle',	DEFAULT: false},
-	HYDROPHONE_SELF_ALPHA		: {KEY: 'ttMinimapHydrophoneSelfOpacity',		DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
-	HYDROPHONE_SELF_COLOR_INDEX	: {KEY: 'ttMinimapHydrophoneSelfColorIndex',	DEFAULT: "indexOf('IDS_TT_TITLE_SURFACE_CONSUMABLE_RANGE', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
-
-	# Own Radar Range
-	RADAR_SELF_DISPLAY_MODE		: {KEY: 'ttMinimapRadarSelfDisplayMode',		DEFAULT: 2,		MODIFIER: 1,	OFFSET: 0}, # Dropdown/Global Visibility Config
-	RADAR_SELF_SOLID_LINE		: {KEY: 'ttMinimapRadarSelfSolidLine',			DEFAULT: false},
-	RADAR_SELF_FILL_CIRCLE		: {KEY: 'ttMinimapRadarSelfFillCircle',			DEFAULT: false},
-	RADAR_SELF_ALPHA			: {KEY: 'ttMinimapRadarSelfOpacity',			DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
-	RADAR_SELF_COLOR_INDEX		: {KEY: 'ttMinimapRadarSelfColorIndex',			DEFAULT: "indexOf('IDS_TT_TITLE_SURFACE_CONSUMABLE_RANGE', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
-
-	# Ally Radar Range
-	RADAR_ALLY_VISIBLE_ON_ALT	: {KEY: 'ttMinimapRadarAllyVisibleOnAlt',		DEFAULT: false},
-	RADAR_ALLY_VISIBLE_ON_ACTIVATION: {KEY: 'ttMinimapRadarAllyVisibleOnActivation',DEFAULT: false},
-	RADAR_ALLY_FILL_CIRCLE		: {KEY: 'ttMinimapRadarAllyFillCircle',			DEFAULT: true},
-	RADAR_ALLY_ALPHA			: {KEY: 'ttMinimapRadarAllyOpacity',			DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
-	RADAR_ALLY_COLOR_INDEX		: {KEY: 'ttMinimapRadarAllyColorIndex',			DEFAULT: "indexOf('23', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
-
-	# Own Hydro Range
-	HYDRO_SELF_DISPLAY_MODE		: {KEY: 'ttMinimapHydroSelfDisplayMode',		DEFAULT: 2,		MODIFIER: 1,	OFFSET: 0}, # Dropdown/Global Visibility Config
-	HYDRO_SELF_SOLID_LINE		: {KEY: 'ttMinimapHydroSelfSolidLine',			DEFAULT: false},
-	HYDRO_SELF_FILL_CIRCLE		: {KEY: 'ttMinimapHydroSelfFillCircle',			DEFAULT: false},
-	HYDRO_SELF_ALPHA			: {KEY: 'ttMinimapHydroSelfOpacity',			DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
-	HYDRO_SELF_COLOR_INDEX		: {KEY: 'ttMinimapHydroSelfColorIndex',			DEFAULT: "indexOf('IDS_TT_TITLE_SURFACE_CONSUMABLE_RANGE', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
-
-	# Ally Hydro Range
-	HYDRO_ALLY_VISIBLE_ON_ALT	: {KEY: 'ttMinimapHydroAllyVisibleOnAlt',		DEFAULT: false},
-	HYDRO_ALLY_VISIBLE_ON_ACTIVATION: {KEY: 'ttMinimapHydroAllyVisibleOnActivation',DEFAULT: false},
-	HYDRO_ALLY_FILL_CIRCLE		: {KEY: 'ttMinimapHydroAllyFillCircle',			DEFAULT: true},
-	HYDRO_ALLY_ALPHA			: {KEY: 'ttMinimapHydroAllyOpacity',			DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
-	HYDRO_ALLY_COLOR_INDEX		: {KEY: 'ttMinimapHydroAllyColorIndex',			DEFAULT: "indexOf('23', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
-
-	# Own SubRadar Range
-	SUBRADAR_SELF_DISPLAY_MODE	: {KEY: 'ttMinimapSubRadarSelfDisplayMode',		DEFAULT: 2,		MODIFIER: 1,	OFFSET: 0}, # Dropdown/Global Visibility Config
-	SUBRADAR_SELF_SOLID_LINE	: {KEY: 'ttMinimapSubRadarSelfSolidLine',		DEFAULT: false},
-	SUBRADAR_SELF_FILL_CIRCLE	: {KEY: 'ttMinimapSubRadarSelfFillCircle',		DEFAULT: false},
-	SUBRADAR_SELF_ALPHA			: {KEY: 'ttMinimapSubRadarSelfOpacity',			DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
-	SUBRADAR_SELF_COLOR_INDEX	: {KEY: 'ttMinimapSubRadarSelfColorIndex',		DEFAULT: "indexOf('IDS_TT_TITLE_SURFACE_CONSUMABLE_RANGE', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
-
-	# Ally SubRadar Range
-	SUBRADAR_ALLY_VISIBLE_ON_ALT: {KEY: 'ttMinimapSubRadarAllyVisibleOnAlt',	DEFAULT: false},
-	SUBRADAR_ALLY_VISIBLE_ON_ACTIVATION: {KEY: 'ttMinimapSubRadarAllyVisibleOnActivation',DEFAULT: false},
-	SUBRADAR_ALLY_FILL_CIRCLE	: {KEY: 'ttMinimapSubRadarAllyFillCircle',		DEFAULT: true},
-	SUBRADAR_ALLY_ALPHA			: {KEY: 'ttMinimapSubRadarAllyOpacity',			DEFAULT: 1.0,	MODIFIER: 0.1,	OFFSET: 0.0},
-	SUBRADAR_ALLY_COLOR_INDEX	: {KEY: 'ttMinimapSubRadarAllyColorIndex',		DEFAULT: "indexOf('26', TMap_RANGE_COLORS.ALL)",			MODIFIER: 1,	OFFSET: 0}, # Dropdown
-})
-
 # battle\minimap\markers\base_marker.unbound
 (def constant TMap_RANGE_COLORS {
     'IDS_TT_TITLE_MAIN_ARMAMENT_RANGE'      : "0xbbbbbb",
@@ -367,19 +214,6 @@
 	(extends $FontEnableReadability)
 )
 
-(def macro TMap_GET_USERPREF()
-	(var userPrefsComponent:gfx = "$datahub.getSingleComponent(CC.userPrefs)")
-	(var _userPrefsNum:gfx = "userPrefsComponent.userPrefs.chatBoxWidth" watch=false (event "userPrefsComponent.evUserPrefsChanged"))
-)
-
-(def macro TMap_GET_PREF_NUMBER (_varName:expression, _pref:expression)
-	(var name="_varName" type=number value="_userPrefsNum && isNumber(_userPrefsNum[_pref.KEY]) ? _pref.OFFSET + (round(_userPrefsNum[_pref.KEY]) * _pref.MODIFIER) : _pref.DEFAULT")
-)
-
-(def macro TMap_GET_PREF_BOOL (_varName:expression, _pref:expression)
-	(var name="_varName" type=bool value="_userPrefsNum && isNumber(_userPrefsNum[_pref.KEY]) ? round(_userPrefsNum[_pref.KEY]) : _pref.DEFAULT")
-)
-
 # `altVision:bool` must exist!
 # Loads `_varName:bool` into scope
 (def macro TMap_GET_DISPLAY_MODE (_varName:expression, _prefValue:expression)
@@ -467,7 +301,7 @@
 		(var isOnCoolDown:bool = "isAntiSpamEnabled ? coolDownCount + 1 > TMap_RPF_MESSAGE_COOLDOWN_MAX_COUNT : false")
 
 		# Key Bind
-		(macro TMap_GET_PREF_NUMBER _varName="'rpfKeyIndex'" _pref="TMap_PREFS.RPF_KEYBIND")
+		(macro TT_GET_PREF_NUMBER _varName="'rpfKeyIndex'" _pref="TMap_PREFS.RPF_KEYBIND")
 
 		(var keyDesc:str = "rpfKeyIndex < TMap_RPF_KEYS.ALL.length ? TMap_RPF_KEYS.ALL[rpfKeyIndex] : TMap_RPF_KEYS.ALL[0]")
 		(var keyName:str = "keyDesc in TMap_RPF_KEYS ? TMap_RPF_KEYS[keyDesc] : ''")
@@ -553,16 +387,16 @@
         (var defaultPos:dict = "{'positionX': stageWidth - XS, 'positionY': stageHeight - XS}")
         (macro DRAGGABLE_GET_DROP_POSITION _wndName="'TTaroMinimap'" _defaults="defaultPos")
 
-		(macro TMap_GET_USERPREF)
+		(macro TT_GET_USERPREF)
 		
 		(macro TMap_GET_SCALE_RATIO)
         
 		(var mouseComponent:gfx = "$datahub.getSingleComponent(CC.mouse)")
 		(var isMouseActive:bool = "mouseComponent.active" (event "mouseComponent.evActiveChanged"))
 
-		(macro TMap_GET_PREF_BOOL _varName="'isNerbyRadarVisible'"	_pref="TMap_PREFS.NEARBY_RADAR_RANGE")
-		(macro TMap_GET_PREF_BOOL _varName="'isDragDropDisabled'"	_pref="TMap_PREFS.DISABLE_DRAG_DROP")
-		(macro TMap_GET_PREF_BOOL _varName="'isBlurEnabled'"		_pref="TMap_PREFS.USE_BLUR")
+		(macro TT_GET_PREF_BOOL _varName="'isNerbyRadarVisible'"	_pref="TMap_PREFS.NEARBY_RADAR_RANGE")
+		(macro TT_GET_PREF_BOOL _varName="'isDragDropDisabled'"	_pref="TMap_PREFS.DISABLE_DRAG_DROP")
+		(macro TT_GET_PREF_BOOL _varName="'isBlurEnabled'"		_pref="TMap_PREFS.USE_BLUR")
 	)
 
     (style
@@ -1149,8 +983,8 @@
 		(var minimapComponent:gfx = "$datahub.getSingleComponent(CC.minimap)")
 
 		# Mod
-		(macro TMap_GET_PREF_BOOL	_varName="'isBlurEnabled'"		_pref="TMap_PREFS.USE_BLUR")
-		(macro TMap_GET_PREF_NUMBER _varName="'blurIntensity'"		_pref="TMap_PREFS.BLUR_INTENSITY")
+		(macro TT_GET_PREF_BOOL	_varName="'isBlurEnabled'"		_pref="TMap_PREFS.USE_BLUR")
+		(macro TT_GET_PREF_NUMBER _varName="'blurIntensity'"		_pref="TMap_PREFS.BLUR_INTENSITY")
 		#
 	)
 
@@ -1603,19 +1437,19 @@
 		(var isEnemy:bool = "relationComponent && relationComponent.value == SC.Battle.PLAYER_RELATION.ENEMY" (event "relationComponent.evChanged"))
 
 		# Player Name
-		(macro TMap_GET_PREF_NUMBER _varName="'playerNameDisplayMode'" _pref="TMap_PREFS.PLAYER_NAME_DISPLAY_MODE")
+		(macro TT_GET_PREF_NUMBER _varName="'playerNameDisplayMode'" _pref="TMap_PREFS.PLAYER_NAME_DISPLAY_MODE")
 		(macro TMap_GET_DISPLAY_MODE _varName="'isPlayerNameVisible'" _prefValue="playerNameDisplayMode")
 
 		# Directional Line
-		(macro TMap_GET_PREF_NUMBER _varName="'dirEnemyShipDisplayMode'" _pref="TMap_PREFS.DIRECTION_SHIPS")
+		(macro TT_GET_PREF_NUMBER _varName="'dirEnemyShipDisplayMode'" _pref="TMap_PREFS.DIRECTION_SHIPS")
 		(macro TMap_GET_DISPLAY_MODE _varName="'isDirEnemyShipVisible'" _prefValue="dirEnemyShipDisplayMode")
 		(var isEnemyDirVisible:bool = "isDirEnemyShipVisible && !(isAlly || isSelf) ")
 
 		# Detection Icon
-		(macro TMap_GET_PREF_BOOL _varName="'isDetectionVisible'" _pref="TMap_PREFS.DETECTION")
+		(macro TT_GET_PREF_BOOL _varName="'isDetectionVisible'" _pref="TMap_PREFS.DETECTION")
 
 		# Nearby AA
-		(macro TMap_GET_PREF_BOOL _varName="'isNearbyAAVisible'" _pref="TMap_PREFS.NEARBY_AA_RANGE")
+		(macro TT_GET_PREF_BOOL _varName="'isNearbyAAVisible'" _pref="TMap_PREFS.NEARBY_AA_RANGE")
 
 		(macro IS_ON_PLANE)
 		#
@@ -1819,8 +1653,7 @@
 		# Mod
 		(var prefName:str = "'prefName' in rangeSettings ? rangeSettings.prefName : 'FAKE'")
 		(var globalDisplayModeKey:str = "prefName + '_DISPLAY_MODE'")
-
-		(macro TMap_GET_PREF_NUMBER	_varName="'globalDisplayMode'"		_pref="TMap_PREFS[globalDisplayModeKey]")
+		(macro TT_GET_PREF_NUMBER	_varName="'globalDisplayMode'"		_pref="TMap_PREFS[globalDisplayModeKey]")
 		(var useIndividualShipPref:bool = "globalDisplayMode == TMap_DISPLAY_MODES.ADAPTIVE")
 		(var globalVisiblity:bool = "globalDisplayMode == TMap_DISPLAY_MODES.ENABLE ? true : false")
 		(var isRangeVisible:bool = "useIndividualShipPref ? rangeOptionsEnabled : globalVisiblity")
@@ -1862,10 +1695,10 @@
 		(var alphaKey:str = "prefName + '_ALPHA'")
 		(var colorIndexKey:str = "prefName + '_COLOR_INDEX'")
 
-		(macro TMap_GET_PREF_BOOL	_varName="'isSolidLine'"		_pref="TMap_PREFS[solidLineKey]")
-		(macro TMap_GET_PREF_BOOL	_varName="'isCircleFill'"		_pref="TMap_PREFS[fillCircleKey]")
-		(macro TMap_GET_PREF_NUMBER _varName="'alphaMultiplier'"	_pref="TMap_PREFS[alphaKey]")
-		(macro TMap_GET_PREF_NUMBER _varName="'colorIndex'"			_pref="TMap_PREFS[colorIndexKey]")
+		(macro TT_GET_PREF_BOOL	_varName="'isSolidLine'"		_pref="TMap_PREFS[solidLineKey]")
+		(macro TT_GET_PREF_BOOL	_varName="'isCircleFill'"		_pref="TMap_PREFS[fillCircleKey]")
+		(macro TT_GET_PREF_NUMBER _varName="'alphaMultiplier'"	_pref="TMap_PREFS[alphaKey]")
+		(macro TT_GET_PREF_NUMBER _varName="'colorIndex'"			_pref="TMap_PREFS[colorIndexKey]")
 
 		(var colorName:str = "colorIndex < TMap_RANGE_COLORS.ALL.length ? TMap_RANGE_COLORS.ALL[colorIndex] : TMap_RANGE_COLORS.ALL[0]")
 		(var color:number = "colorName in TMap_RANGE_COLORS ? TMap_RANGE_COLORS[colorName] : 0xBBBBBB")
@@ -2063,11 +1896,11 @@
 		(var shipNamesDisplayMode:number = "shipNamesDisplayModeComponent.value" (event "shipNamesDisplayModeComponent.evValueChanged"))
 		(var isTimerAvailable:bool = "shipNamesDisplayMode == TMap_DISPLAY_MODES.ENABLE") # Disable: never. Adaptive: need to display ship name instead
 
-		(macro TMap_GET_PREF_BOOL _varName="'isLastSpottedTimerEnabled'" _pref="TMap_PREFS.LAST_SPOTTED_ON_ALT")
+		(macro TT_GET_PREF_BOOL _varName="'isLastSpottedTimerEnabled'" _pref="TMap_PREFS.LAST_SPOTTED_ON_ALT")
 
 		(var isTimerVisible:bool = "!mapVisible && altVision && isLastSpottedTimerEnabled && isTimerAvailable")
 
-		(macro TMap_GET_PREF_NUMBER _varName="'fontSizePref'" _pref="TMap_PREFS.MARKER_FONT_SIZE")
+		(macro TT_GET_PREF_NUMBER _varName="'fontSizePref'" _pref="TMap_PREFS.MARKER_FONT_SIZE")
 		(var fontSize:number = "isTimerVisible ? max(11, fontSizePref) : fontSizePref")
 		#
 	)
@@ -2106,7 +1939,7 @@
 														:	tkStatus && isAlly	?	'teamkiller' 
 																				: toLower(SC.Battle.PLAYER_RELATION.VALUE_TO_NAME[relationComponent.value])")
 
-		(macro TMap_GET_PREF_NUMBER _varName="'fontSizePref'" _pref="TMap_PREFS.MARKER_FONT_SIZE")
+		(macro TT_GET_PREF_NUMBER _varName="'fontSizePref'" _pref="TMap_PREFS.MARKER_FONT_SIZE")
 		#
 	)
 
@@ -2137,7 +1970,7 @@
 														:	tkStatus && isAlly	?	'teamkiller' 
 																				: toLower(SC.Battle.PLAYER_RELATION.VALUE_TO_NAME[relationComponent.value])")
 
-		(macro TMap_GET_PREF_NUMBER _varName="'fontSize'" _pref="TMap_PREFS.MARKER_FONT_SIZE")
+		(macro TT_GET_PREF_NUMBER _varName="'fontSize'" _pref="TMap_PREFS.MARKER_FONT_SIZE")
 	)
 
 	(style (width = 100%) (align = "center|bottom")(height = 5px))
@@ -2168,12 +2001,12 @@
 		(var prefGreen:dict = "isSelf ? TMap_PREFS.RPF_SELF_GREEN : TMap_PREFS.RPF_ALLY_GREEN")
 		(var prefBlue:dict = "isSelf ? TMap_PREFS.RPF_SELF_BLUE : TMap_PREFS.RPF_ALLY_BLUE")
 
-		(macro TMap_GET_PREF_NUMBER _varName="'alphaScale'"	_pref="prefAlpha")
-		(macro TMap_GET_PREF_NUMBER _varName="'redScale'"	_pref="prefRed")
-		(macro TMap_GET_PREF_NUMBER _varName="'greenScale'"	_pref="prefGreen")
-		(macro TMap_GET_PREF_NUMBER _varName="'blueScale'"	_pref="prefBlue")
+		(macro TT_GET_PREF_NUMBER _varName="'alphaScale'"	_pref="prefAlpha")
+		(macro TT_GET_PREF_NUMBER _varName="'redScale'"	_pref="prefRed")
+		(macro TT_GET_PREF_NUMBER _varName="'greenScale'"	_pref="prefGreen")
+		(macro TT_GET_PREF_NUMBER _varName="'blueScale'"	_pref="prefBlue")
 
-		(macro TMap_GET_PREF_NUMBER _varName="'rpfAllyDisplayMode'" _pref="TMap_PREFS.RPF_ALLY_DISPLAY_MODE")
+		(macro TT_GET_PREF_NUMBER _varName="'rpfAllyDisplayMode'" _pref="TMap_PREFS.RPF_ALLY_DISPLAY_MODE")
 		(macro TMap_GET_DISPLAY_MODE _varName="'isAllyRPFEnabeld'" _prefValue="rpfAllyDisplayMode")
 
 		# Chat
@@ -2208,10 +2041,10 @@
 		(var prefKey:str = "_isAlly ? 'HEALTH_ALLY' : 'HEALTH_ENEMY'")
 		(macro TMap_GET_ALT_VISION)
 
-		(macro TMap_GET_PREF_NUMBER _varName="'healthDisplayMode'" _pref="TMap_PREFS[prefKey]")
+		(macro TT_GET_PREF_NUMBER _varName="'healthDisplayMode'" _pref="TMap_PREFS[prefKey]")
 		(macro TMap_GET_DISPLAY_MODE _varName="'isHealthVisible'" _prefValue="healthDisplayMode")
 
-		(macro TMap_GET_PREF_BOOL _varName="'isMaxHealthHidden'"	_pref="TMap_PREFS.HEALTH_MAX_HIDE")
+		(macro TT_GET_PREF_BOOL _varName="'isMaxHealthHidden'"	_pref="TMap_PREFS.HEALTH_MAX_HIDE")
 
 		(var healthComponent:gfx = "_markerEntity.health ? _markerEntity.health : null")
 		(var healthValue:number = "healthComponent ? healthComponent.value : 0" (event "healthComponent.evValueChanged"))
@@ -2449,11 +2282,11 @@
 		(var visibleOnAltKey:str = "_type + '_ALLY_VISIBLE_ON_ALT'")
 		(var visibleOnActivation:str = "_type + '_ALLY_VISIBLE_ON_ACTIVATION'")
 
-		(macro TMap_GET_PREF_BOOL	_varName="'isVisibleOnAlt'" _pref="TMap_PREFS[visibleOnAltKey]")
-		(macro TMap_GET_PREF_BOOL	_varName="'isVisibleOnActivation'" _pref="TMap_PREFS[visibleOnActivation]")
-		(macro TMap_GET_PREF_BOOL	_varName="'isCircleFill'" _pref="TMap_PREFS[fillCircleKey]")
-		(macro TMap_GET_PREF_NUMBER _varName="'alphaMultiplier'" _pref="TMap_PREFS[alphaKey]")
-		(macro TMap_GET_PREF_NUMBER _varName="'colorIndex'" _pref="TMap_PREFS[colorIndexKey]")
+		(macro TT_GET_PREF_BOOL	_varName="'isVisibleOnAlt'" _pref="TMap_PREFS[visibleOnAltKey]")
+		(macro TT_GET_PREF_BOOL	_varName="'isVisibleOnActivation'" _pref="TMap_PREFS[visibleOnActivation]")
+		(macro TT_GET_PREF_BOOL	_varName="'isCircleFill'" _pref="TMap_PREFS[fillCircleKey]")
+		(macro TT_GET_PREF_NUMBER _varName="'alphaMultiplier'" _pref="TMap_PREFS[alphaKey]")
+		(macro TT_GET_PREF_NUMBER _varName="'colorIndex'" _pref="TMap_PREFS[colorIndexKey]")
 
 		(var colorName:str = "colorIndex < TMap_RANGE_COLORS.ALL.length ? TMap_RANGE_COLORS.ALL[colorIndex] : TMap_RANGE_COLORS.ALL[0]")
 		(var color:number = "colorName in TMap_RANGE_COLORS ? TMap_RANGE_COLORS[colorName] : 0xBBBBBB")
@@ -2589,7 +2422,7 @@
 		(macro SCOPE_HIGHLIGHT_MARKER_ON_MAP_MOUSE_OVER "_markerEntity")
 
 		# Mod
-		(macro TMap_GET_PREF_BOOL _varName="'isContestedCapHighlighted'" _pref="TMap_PREFS.CONTESTED_CAPS")
+		(macro TT_GET_PREF_BOOL _varName="'isContestedCapHighlighted'" _pref="TMap_PREFS.CONTESTED_CAPS")
 		(var isBothInside:bool = "_markerEntity.capturePoint.bothInside" (event "_markerEntity.capturePoint.evBothInsideChanged"))
 		(var capSettingKey:str = "toUpper(relation)")
 		(var strokeSettingKey:str = "isBothInside && isContestedCapHighlighted ? 'CONTESTED' : capSettingKey")
@@ -2997,10 +2830,10 @@
 		(var ownerEntity:gfx = "_markerEntity.squadron.owner.ref")
 
 		(macro TMap_GET_ALT_VISION)
-		(macro TMap_GET_PREF_NUMBER _varName="'playerNameDisplayMode'"	_pref="TMap_PREFS.PLANE_OWNER_NAME_DISPLAY_MODE")
+		(macro TT_GET_PREF_NUMBER _varName="'playerNameDisplayMode'"	_pref="TMap_PREFS.PLANE_OWNER_NAME_DISPLAY_MODE")
 		(macro TMap_GET_DISPLAY_MODE _varName="'isPlayerNameVisible'"	_prefValue="playerNameDisplayMode")
 
-		(macro TMap_GET_PREF_NUMBER _varName="'shipNameDisplayMode'"	_pref="TMap_PREFS.PLANE_OWNER_SHIP_DISPLAY_MODE")
+		(macro TT_GET_PREF_NUMBER _varName="'shipNameDisplayMode'"	_pref="TMap_PREFS.PLANE_OWNER_SHIP_DISPLAY_MODE")
 		(macro TMap_GET_DISPLAY_MODE _varName="'isShipNameVisible'"		_prefValue="shipNameDisplayMode")
 		#
 	)
@@ -3114,13 +2947,13 @@
 		(var rangesAlphaComponent:gfx = "$datahub.getPrimaryEntity(CC.minimapOption, SC.Battle.MINIMAP_OPTION.rangesAlpha).minimapOption")
 		(var rangesAlpha:number = "rangesAlphaComponent.value * 0.01" (event "rangesAlphaComponent.evValueChanged"))
 		(macro TMap_GET_ALT_VISION)
-		(macro TMap_GET_PREF_NUMBER _varName="'isDirectionLineEnabled'" _pref="TMap_PREFS.DIRECTION_SQUADRONS")
+		(macro TT_GET_PREF_NUMBER _varName="'isDirectionLineEnabled'" _pref="TMap_PREFS.DIRECTION_SQUADRONS")
 		(macro TMap_GET_DISPLAY_MODE _varName="'isDirectionLineVisible'" _prefValue="isDirectionLineEnabled")
 
-		(macro TMap_GET_PREF_NUMBER _varName="'playerNameDisplayMode'"	_pref="TMap_PREFS.PLANE_OWNER_NAME_DISPLAY_MODE")
+		(macro TT_GET_PREF_NUMBER _varName="'playerNameDisplayMode'"	_pref="TMap_PREFS.PLANE_OWNER_NAME_DISPLAY_MODE")
 		(macro TMap_GET_DISPLAY_MODE _varName="'isPlayerNameVisible'"	_prefValue="playerNameDisplayMode")
 
-		(macro TMap_GET_PREF_NUMBER _varName="'shipNameDisplayMode'"	_pref="TMap_PREFS.PLANE_OWNER_SHIP_DISPLAY_MODE")
+		(macro TT_GET_PREF_NUMBER _varName="'shipNameDisplayMode'"	_pref="TMap_PREFS.PLANE_OWNER_SHIP_DISPLAY_MODE")
 		(macro TMap_GET_DISPLAY_MODE _varName="'isShipNameVisible'"		_prefValue="shipNameDisplayMode")
 		#
 	)
