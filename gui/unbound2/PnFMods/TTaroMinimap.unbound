@@ -1595,9 +1595,6 @@
 		)
 		# Health
 		(block
-			(style
-				#(marginTop = 3px)
-			)
 			(controller $Instance (renderer = 'TMap_MapMarkerHealthBar')
 				(bind enabled "!(isPlayerAvatar) && isAlive && (isAlly || isEnemy)")
 				(args _markerEntity="_markerEntity" _isAlly="isAlly" _userPrefsNum="_userPrefsNum")
