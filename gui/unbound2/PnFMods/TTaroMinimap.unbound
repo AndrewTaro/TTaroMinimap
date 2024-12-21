@@ -1574,6 +1574,9 @@
 			(position = "absolute")
 			(pivotY = -8)
 			(bind rotation "-(angleToRotate)")
+			# Mod
+			(align = "top|center")
+			#
 		)
 		(block
 			(controller $Instance (renderer = 'TMap_MapMarkerShipName')
@@ -1582,10 +1585,17 @@
 			)
 		)
 		# Mod
+		# Last Spot
+		(block
+			(controller $Instance (renderer = 'TMap_MapMarkerShipLastSpottedTimer')
+				(bind enabled "!(isPlayerAvatar) && isAlive && !isAlly")
+				(args _markerEntity="_markerEntity" _userPrefsNum="_userPrefsNum")
+			)
+		)
 		# Health
 		(block
 			(style
-				(marginTop = 3px)
+				#(marginTop = 3px)
 			)
 			(controller $Instance (renderer = 'TMap_MapMarkerHealthBar')
 				(bind enabled "!(isPlayerAvatar) && isAlive && (isAlly || isEnemy)")
@@ -1876,6 +1886,49 @@
 																				: toLower(SC.Battle.PLAYER_RELATION.VALUE_TO_NAME[relationComponent.value])")
 
 		# Mod
+		(macro TMap_GET_ALT_VISION)
+		(var shipNamesDisplayModeComponent:gfx = "$datahub.getPrimaryEntity(CC.minimapOption, SC.Battle.MINIMAP_OPTION.shipNamesDisplayEnabled).minimapOption")
+		(var shipNamesDisplayMode:number = "shipNamesDisplayModeComponent.value" (event "shipNamesDisplayModeComponent.evValueChanged"))
+
+		(macro TT_GET_PREF_BOOL _varName="'isLastSpottedTimerEnabled'" _pref="TMap_PREFS.LAST_SPOTTED_ON_ALT")
+
+		(var isShipNameVisible:bool = "isLastSpottedTimerEnabled && altVision && shipNamesDisplayMode == TMap_DISPLAY_MODES.ENABLE && !mapVisible
+										? false
+										: true"
+		)
+		# Hide ship name when the ship name is always visible && timer is visible
+		# otherwise we need to display both the ship name and timer
+
+		(macro TT_GET_PREF_NUMBER _varName="'fontSizePref'" _pref="TMap_PREFS.MARKER_FONT_SIZE")
+		#
+	)
+
+	(bind visible "isShipNameVisible")
+
+	(style 
+		(width = 100%)
+		(align = "center")
+		# Mod
+		(marginBottom = 3px)
+		#
+	)
+
+	(tf
+		(class $TextDefaultBold9NM)
+		(bind class "isMultyTeamEnabled && !isAlly	? MULTI_TEAMS_COLOR_CLASSES[teamId]
+													: TWO_TEAMS_FONT_COLOR_CLASSES[colorPresetName]")
+		(class $FontEnableReadability)
+		# Mod
+		(style
+			(bind fontSize "fontSizePref")
+		)
+		#
+		(bind text "shipName")
+	)
+)
+
+(def element TMap_MapMarkerShipLastSpottedTimer (_markerEntity:gfx, _userPrefsNum:gfx=null) layout=true
+	(scope
 		(event evShipBecomeInvisible)
 		(event evPosChanged)
 
@@ -1886,46 +1939,43 @@
 		(var invisibleTime:number = "timer.currentTime - timeStamp" (event "timer.evInfrequent"))
 		(macro HUMAN_READABLE_COUNTDOWN_SCOPE "invisibleTime")
 
-		(var mapPos:gfx = "entity.mapPosition.position")
+		(var mapVisible:bool = "_markerEntity && _markerEntity.hasComponent(CC.visibility) && _markerEntity.visibility.mapVisible" (event "_markerEntity.visibility.evChanged"))
+
+		(var mapPos:gfx = "_markerEntity.mapPosition.position")
 		(var lastKnownPosX:number = "mapPos.x" init=false watch=false (event "evShipBecomeInvisible"))
 		(var lastKnownPosY:number = "mapPos.y" init=false watch=false (event "evShipBecomeInvisible"))
 		(var currentPosX:number = "mapPos.x" init=false watch=false (event "timer.evInfrequent"))
 		(var currentPosY:number = "mapPos.y" init=false watch=false (event "timer.evInfrequent"))
 
-		(var shipNamesDisplayModeComponent:gfx = "$datahub.getPrimaryEntity(CC.minimapOption, SC.Battle.MINIMAP_OPTION.shipNamesDisplayEnabled).minimapOption")
-		(var shipNamesDisplayMode:number = "shipNamesDisplayModeComponent.value" (event "shipNamesDisplayModeComponent.evValueChanged"))
-		(var isTimerAvailable:bool = "shipNamesDisplayMode == TMap_DISPLAY_MODES.ENABLE") # Disable: never. Adaptive: need to display ship name instead
-
 		(macro TT_GET_PREF_BOOL _varName="'isLastSpottedTimerEnabled'" _pref="TMap_PREFS.LAST_SPOTTED_ON_ALT")
 
-		(var isTimerVisible:bool = "!mapVisible && altVision && isLastSpottedTimerEnabled && isTimerAvailable")
+		(var isTimerVisible:bool = "!mapVisible && altVision && isLastSpottedTimerEnabled")
 
 		(macro TT_GET_PREF_NUMBER _varName="'fontSizePref'" _pref="TMap_PREFS.MARKER_FONT_SIZE")
-		(var fontSize:number = "isTimerVisible ? max(11, fontSizePref) : fontSizePref")
-		#
+		(var fontSize:number = "max(11, fontSizePref)")
 	)
 
-	# Mod
+	(bind visible "isTimerVisible")
+
 	(dispatch evPosChanged (bind enabled "!mapVisible && (lastKnownPosX != currentPosX)") (bind trigger "currentPosX"))
 	(dispatch evPosChanged (bind enabled "!mapVisible && (lastKnownPosY != currentPosY)") (bind trigger "currentPosY"))
 	(dispatch evShipBecomeInvisible (bind trigger "mapVisible") (event "evPosChanged"))
-	#
 
-	(style (width = 100%) (align = "center"))
+	# Mod
+	(style
+		(width = 100%)
+		(align = "center")
+		(marginBottom = 3px)
+	)
+	#
 	(tf
 		(class $TextDefaultBold9NM)
-		# Mod
-		(bind class "isTimerVisible ? '$FontColorDefault' :
-					 				isMultyTeamEnabled && !isAlly	? MULTI_TEAMS_COLOR_CLASSES[teamId]
-																	: TWO_TEAMS_FONT_COLOR_CLASSES[colorPresetName]")
-		#
+		(class $FontColorDefault)
 		(class $FontEnableReadability)
-		# Mod
 		(style
 			(bind fontSize "fontSize")
 		)
-		(bind text "isTimerVisible ? countdownText : shipName")
-		#
+		(bind text "countdownText")
 	)
 )
 
@@ -2067,42 +2117,49 @@
 	(bind visible "isHealthVisible && isMaxHPVisible")
 
 	(style
-		(width = "20px")
-		(height = "3px")
-		(marginLeft = -50%)
+		(width = "100%")
 		(hitTest = false)
 	)
-	# BG
+
 	(block
-		(class $FullsizeAbsolute)
 		(style
-			(backgroundColor = 0xFF999999)
-			(backgroundSize = "fill")
+			(width = "20px")
+			(height = "3px")
+			(position = "absolute")
+			(pivotX = 50%)
 		)
-	)
-	# # Regen
-	# (block
-	# 	(class $FullsizeAbsolute)
-	# 	(bind scaleX "regenRatio")
-
-	# 	(style
-	# 		(backgroundColor = "0xFFFFFFFF")
-	# 		(backgroundSize = "fill")
-	# 	)
-
-	# 	(bind colorTransform "regenBarColorTransform")
-	# )
-	# HP
-	(block
-		(class $FullsizeAbsolute)
-		(bind scaleX "healthRatio")
-
-		(style
-			(backgroundColor = "0xFFFFFFFF")
-			(backgroundSize = "fill")
+		# BG
+		(block
+			(class $FullsizeAbsolute)
+			(style
+				(backgroundColor = 0xFF999999)
+				(backgroundSize = "fill")
+			)
 		)
+		# # Regen
+		# (block
+		# 	(class $FullsizeAbsolute)
+		# 	(bind scaleX "regenRatio")
 
-		(bind colorTransform "markerColorTransform")
+		# 	(style
+		# 		(backgroundColor = "0xFFFFFFFF")
+		# 		(backgroundSize = "fill")
+		# 	)
+
+		# 	(bind colorTransform "regenBarColorTransform")
+		# )
+		# HP
+		(block
+			(class $FullsizeAbsolute)
+			(bind scaleX "healthRatio")
+
+			(style
+				(backgroundColor = "0xFFFFFFFF")
+				(backgroundSize = "fill")
+			)
+
+			(bind colorTransform "markerColorTransform")
+		)
 	)
 )
 
