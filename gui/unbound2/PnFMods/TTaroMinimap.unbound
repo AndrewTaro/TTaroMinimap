@@ -1518,8 +1518,8 @@
 		(controller $Instance (renderer = 'TMap_MapMarkerDirectionalLine')
 			# Mod
 			(bind enabled "(isPlayerAvatar || isTargetLocked || isEnemyDirVisible) && isAlive && mapVisible && isBattleInProgress")
+			(args _isFullSize="isTargetLocked || isPlayerAvatar" _isSelf="isSelf" _isShip="true" _userPrefsNum="_userPrefsNum")
 			#
-			(args _isTargetLocked="isTargetLocked" _userPrefsNum="_userPrefsNum")
 			(exprs
 				(style
 					(bind rotation "markerYaw")
@@ -1610,13 +1610,31 @@
 )
 
 # battle\minimap\markers\ship_marker.unbound
-(def element TMap_MapMarkerDirectionalLine (_isTargetLocked:bool=false, _userPrefsNum:gfx=null) layout=true
+(def element TMap_MapMarkerDirectionalLine (_isFullSize:bool=false, _isSelf:bool=false, _isShip:bool=false, _userPrefsNum:gfx=null) layout=true
+	(scope
+		(var prefKey:str = "_isShip ? 'DIRECTION_SHIPS_COLOR_INDEX' : 'DIRECTION_SQUADRONS_COLOR_INDEX'")
+		(macro TT_GET_PREF_NUMBER _varName="'colorIndexPref'" _pref="TMap_PREFS[prefKey]")
+		(var colorIndex:number = "colorIndexPref < TMap_RANGE_COLORS.ALL.length ? colorIndexPref : 0")
+		(var colorName:str = "TMap_RANGE_COLORS.ALL[colorIndex]")
+		(var color:number = "TMap_RANGE_COLORS[colorName]")
+		(var red:number = "(color & 0x00FF0000) >> 16")
+		(var green:number = "(color & 0x0000FF00) >> 8")
+		(var blue:number = "color & 0x000000FF")
+		(var isDefault:bool = "colorIndex == 0 || _isSelf")
+		(var alphaOffset:number = "isDefault ? 0 : 0xee")
+		(var artificialScale:number = "isDefault ? 1.0 : 0.3")
+		(var lengthScale:number = "_isFullSize	? 1.0 : 0.4")
+		(var ct:dict = "isDefault	? {}
+									: {redMultiplier:0,greenMultiplier:0,blueMultiplier:0,alphaMultiplier:1,redOffset:red,greenOffset:green,blueOffset:blue,alphaOffset: alphaOffset}"
+		)
+	)
 	(block
 		(style
 			(position = "absolute")
 			(backgroundImage = "'symbol:minimap_direction_line'")
-			(bind scaleY "_isTargetLocked ? 1.0 : 0.3")
+			(bind scaleY "lengthScale * artificialScale")
 		)
+		(bind colorTransform "ct")
 	)
 )
 
@@ -2100,6 +2118,8 @@
 
 		(macro TT_GET_PREF_BOOL _varName="'isMaxHealthHidden'"	_pref="TMap_PREFS.HEALTH_MAX_HIDE")
 
+		(macro TT_GET_PREF_NUMBER _varName="'healthBarScale'" _pref="TMap_PREFS.HEALTH_SCALE")
+
 		(var healthComponent:gfx = "_markerEntity.health ? _markerEntity.health : null")
 		(var healthValue:number = "healthComponent ? healthComponent.value : 0" (event "healthComponent.evValueChanged"))
 		(var healthMax:number = "healthComponent ? healthComponent.max : 0" (event "healthComponent.evMaxChanged"))
@@ -2127,7 +2147,7 @@
 
 	(block
 		(style
-			(width = "20px")
+			(bind width "20px * healthBarScale")
 			(height = "3px")
 			(position = "absolute")
 			(pivotX = 50%)
@@ -3033,7 +3053,7 @@
 		)
 		(controller $Instance (renderer = 'TMap_MapMarkerDirectionalLine')
 			(bind enabled "isDirectionLineVisible && !(isSelf  || isAlly || isConsumable)")
-			(args _isTargetLocked="false" _userPrefsNum="_userPrefsNum")
+			(args _isFullSize="false" _userPrefsNum="_userPrefsNum")
 			(exprs
 				(style
 					(bind rotation "rotation")
