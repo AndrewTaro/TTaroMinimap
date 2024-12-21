@@ -3109,7 +3109,6 @@
 		(var markerYaw:number = "radToGrad(_markerEntity.mapPosition.yaw) + 180.0" (event "evEnterFrame"))
 		#
 
-		(var markerYaw:number = "radToGrad(_markerEntity.mapPosition.yaw)" (event "evEnterFrame"))
 		(var markerScale:number = "_itemScale / _mapScale")
 
 		(macro GET_MARKER_ENTITY_COMPONENT 'torpedo')
