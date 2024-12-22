@@ -1436,6 +1436,9 @@
 		# Mod
 		(var isEnemy:bool = "relationComponent && relationComponent.value == SC.Battle.PLAYER_RELATION.ENEMY" (event "relationComponent.evChanged"))
 
+		# Show Dead
+		(macro TT_GET_PREF_BOOL _varName="'isDeadVisible'" _pref="TMap_PREFS.SHOW_DEAD")
+
 		# Player Name
 		(macro TT_GET_PREF_NUMBER _varName="'playerNameDisplayMode'" _pref="TMap_PREFS.PLAYER_NAME_DISPLAY_MODE")
 		(macro TMap_GET_DISPLAY_MODE _varName="'isPlayerNameVisible'" _prefValue="playerNameDisplayMode")
@@ -1561,7 +1564,7 @@
 		)
 		(block
 			(controller $Instance (renderer = 'TMap_MapMarkerPlayerName')
-				(bind enabled "!(isPlayerAvatar) && isAlive && isPlayerNameVisible")
+				(bind enabled "!(isPlayerAvatar) && (isAlive || isDeadVisible) && isPlayerNameVisible")
 				(args _markerEntity="_markerEntity" _userPrefsNum="_userPrefsNum")
 			)
 		)
@@ -1582,7 +1585,7 @@
 		# Ship Name
 		(block
 			(controller $Instance (renderer = 'TMap_MapMarkerShipName')
-				(bind enabled "!(isPlayerAvatar) && isAlive && isShipNameVisible")
+				(bind enabled "!(isPlayerAvatar) && (isAlive || isDeadVisible) && isShipNameVisible")
 				(args _markerEntity="_markerEntity" _userPrefsNum="_userPrefsNum")
 			)
 		)
@@ -1902,6 +1905,11 @@
 																				: toLower(SC.Battle.PLAYER_RELATION.VALUE_TO_NAME[relationComponent.value])")
 
 		# Mod
+
+		# Hide ship name when the ship name is always visible && timer is visible because I like this style. Do not complain.
+		# Too much info causes clutters.
+		#
+		# If the visibility of ship names is set to adaptive mode, we need to display both the ship name and timer
 		(macro TMap_GET_ALT_VISION)
 		(var shipNamesDisplayModeComponent:gfx = "$datahub.getPrimaryEntity(CC.minimapOption, SC.Battle.MINIMAP_OPTION.shipNamesDisplayEnabled).minimapOption")
 		(var shipNamesDisplayMode:number = "shipNamesDisplayModeComponent.value" (event "shipNamesDisplayModeComponent.evValueChanged"))
@@ -1913,12 +1921,13 @@
 										? false
 										: true"
 		)
-		# Hide ship name when the ship name is always visible && timer is visible because I like this style. Do not complain.
-		# Too much info causes clutters.
 		#
-		# If the visibility of ship names is set to adaptive mode, we need to display both the ship name and timer
-
+		
 		(macro TT_GET_PREF_NUMBER _varName="'fontSizePref'" _pref="TMap_PREFS.MARKER_FONT_SIZE")
+
+		(var fontColor:number = "isMultyTeamEnabled && !isAlly	? MULTI_TEAMS_FONT_COLOR[teamId]
+																: TWO_TEAMS_FONT_COLOR[colorPresetName]"
+		)
 		#
 	)
 
@@ -1934,11 +1943,10 @@
 
 	(tf
 		(class $TextDefaultBold9NM)
-		(bind class "isMultyTeamEnabled && !isAlly	? MULTI_TEAMS_COLOR_CLASSES[teamId]
-													: TWO_TEAMS_FONT_COLOR_CLASSES[colorPresetName]")
 		(class $FontEnableReadability)
 		# Mod
 		(style
+			(bind textColor "fontColor")
 			(bind fontSize "fontSizePref")
 		)
 		#
@@ -2009,19 +2017,20 @@
 																				: toLower(SC.Battle.PLAYER_RELATION.VALUE_TO_NAME[relationComponent.value])")
 
 		(macro TT_GET_PREF_NUMBER _varName="'fontSizePref'" _pref="TMap_PREFS.MARKER_FONT_SIZE")
+
+		(var fontColor:number = "isMultyTeamEnabled && !isAlly	? MULTI_TEAMS_FONT_COLOR[teamId]
+																: TWO_TEAMS_FONT_COLOR[colorPresetName]"
+		)
 		#
 	)
 
 	(style (width = 100%) (align = "center"))
 	(tf
 		(class $TextDefaultBold9NM)
-		# Mod
-		(bind class "isMultyTeamEnabled && !isAlly	? MULTI_TEAMS_COLOR_CLASSES[teamId]
-													: TWO_TEAMS_FONT_COLOR_CLASSES[colorPresetName]")
-		#
 		(class $FontEnableReadability)
 		# Mod
 		(style
+			(bind textColor "fontColor")
 			(bind fontSize "fontSizePref")
 		)
 		(bind text "shipName")
@@ -2040,15 +2049,19 @@
 																				: toLower(SC.Battle.PLAYER_RELATION.VALUE_TO_NAME[relationComponent.value])")
 
 		(macro TT_GET_PREF_NUMBER _varName="'fontSize'" _pref="TMap_PREFS.MARKER_FONT_SIZE")
+
+		(var fontColor:number = "isMultyTeamEnabled && !isAlly	? MULTI_TEAMS_FONT_COLOR[teamId]
+																: TWO_TEAMS_FONT_COLOR[colorPresetName]"
+		)
 	)
 
 	(style (width = 100%) (align = "center|bottom")(height = 5px))
 	(tf
+		# Mod
 		(class $TextDefaultBold9NM)
-		(bind class "isMultyTeamEnabled && !isAlly	? MULTI_TEAMS_COLOR_CLASSES[teamId]
-													: TWO_TEAMS_FONT_COLOR_CLASSES[colorPresetName]")
 		(class $FontEnableReadability)
 		(style
+			(bind textColor "fontColor")
 			(bind fontSize "fontSize")
 		)
 		(bind text "playerName")
