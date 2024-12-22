@@ -202,7 +202,6 @@
 	air_supportMaxDist: 			{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 , 	prefName: 'AIRSUPPORT',		optionName: 'shootAirSupportRangeEnabled' }
 }")
 
-
 (def css $TMap_NearbyRadarBoldText ()
 	(extends $TextDefaultBoldNM)
 	(extends $FontColorDefault)
@@ -212,6 +211,31 @@
 	(extends $TextDefault13NM)
 	(extends $FontColorDefault)
 	(extends $FontEnableReadability)
+)
+
+(def css $TMap_MarkerText()
+	(extends $Bold)
+	(extends $FontColorWhite)
+	(extends $TextMouseDisable)
+	(extends $FontEnableReadability)
+	(marginTextTop = -5px)
+	(marginTextBottom = -5px)
+)
+
+# $FontDropShadowFilter <- $FontFamilyDefaultBold <- $TextDefaultBold9NM
+(def macro TMap_MARKER_TEXT_DROPSHADOW()
+	(filters 
+		(dropShadow 
+			(bind distance "isAlive ? 1 : 0")
+			(angle = 45)
+			(bind color "isAlive ? 0x000000 : relationColor")
+			(alpha = 1)
+			(blurX = 2.0)
+			(blurY = 2.0)
+			(bind strength "isAlive ? 0.5 : 0.8")
+			(quality = 1)
+		)
+	)
 )
 
 # `altVision:bool` must exist!
@@ -1904,6 +1928,7 @@
 														:	tkStatus && isAlly	?	'teamkiller' 
 																				: toLower(SC.Battle.PLAYER_RELATION.VALUE_TO_NAME[relationComponent.value])")
 
+		
 		# Mod
 
 		# Hide ship name when the ship name is always visible && timer is visible because I like this style. Do not complain.
@@ -1925,9 +1950,11 @@
 		
 		(macro TT_GET_PREF_NUMBER _varName="'fontSizePref'" _pref="TMap_PREFS.MARKER_FONT_SIZE")
 
-		(var fontColor:number = "isMultyTeamEnabled && !isAlly	? MULTI_TEAMS_FONT_COLOR[teamId]
-																: TWO_TEAMS_FONT_COLOR[colorPresetName]"
+		# Mod
+		(var relationColor:number = "isMultyTeamEnabled && !isAlly	? MULTI_TEAMS_FONT_COLOR[teamId]
+																	: TWO_TEAMS_FONT_COLOR[colorPresetName]"
 		)
+		(var fontColor:number = "isAlive ? relationColor : C_DEAD")
 		#
 	)
 
@@ -1942,18 +1969,19 @@
 	)
 
 	(tf
-		(class $TextDefaultBold9NM)
-		(class $FontEnableReadability)
 		# Mod
+		(class $TMap_MarkerText)
 		(style
 			(bind textColor "fontColor")
 			(bind fontSize "fontSizePref")
+			(macro TMap_MARKER_TEXT_DROPSHADOW)
 		)
 		#
 		(bind text "shipName")
 	)
 )
 
+# Custom
 (def element TMap_MapMarkerShipLastSpottedTimer (_markerEntity:gfx, _userPrefsNum:gfx=null) layout=true
 	(scope
 		(event evShipBecomeInvisible)
@@ -2018,20 +2046,21 @@
 
 		(macro TT_GET_PREF_NUMBER _varName="'fontSizePref'" _pref="TMap_PREFS.MARKER_FONT_SIZE")
 
-		(var fontColor:number = "isMultyTeamEnabled && !isAlly	? MULTI_TEAMS_FONT_COLOR[teamId]
-																: TWO_TEAMS_FONT_COLOR[colorPresetName]"
+		(var relationColor:number = "isMultyTeamEnabled && !isAlly	? MULTI_TEAMS_FONT_COLOR[teamId]
+																	: TWO_TEAMS_FONT_COLOR[colorPresetName]"
 		)
+		(var fontColor:number = "isAlive ? relationColor : C_DEAD")
 		#
 	)
 
 	(style (width = 100%) (align = "center"))
 	(tf
-		(class $TextDefaultBold9NM)
-		(class $FontEnableReadability)
 		# Mod
+		(class $TMap_MarkerText)
 		(style
 			(bind textColor "fontColor")
 			(bind fontSize "fontSizePref")
+			(macro TMap_MARKER_TEXT_DROPSHADOW)
 		)
 		(bind text "shipName")
 		#
@@ -2050,19 +2079,20 @@
 
 		(macro TT_GET_PREF_NUMBER _varName="'fontSize'" _pref="TMap_PREFS.MARKER_FONT_SIZE")
 
-		(var fontColor:number = "isMultyTeamEnabled && !isAlly	? MULTI_TEAMS_FONT_COLOR[teamId]
-																: TWO_TEAMS_FONT_COLOR[colorPresetName]"
+		(var relationColor:number = "isMultyTeamEnabled && !isAlly	? MULTI_TEAMS_FONT_COLOR[teamId]
+																	: TWO_TEAMS_FONT_COLOR[colorPresetName]"
 		)
+		(var fontColor:number = "isAlive ? relationColor : C_DEAD")
 	)
 
 	(style (width = 100%) (align = "center|bottom")(height = 5px))
 	(tf
 		# Mod
-		(class $TextDefaultBold9NM)
-		(class $FontEnableReadability)
+		(class $TMap_MarkerText)
 		(style
 			(bind textColor "fontColor")
 			(bind fontSize "fontSize")
+			(macro TMap_MARKER_TEXT_DROPSHADOW)
 		)
 		(bind text "playerName")
 	)
