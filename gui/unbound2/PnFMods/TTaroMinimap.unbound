@@ -143,6 +143,12 @@
 	ADAPTIVE: 2,
 })
 
+(def constant TMap_GRADIENT_BACKGROUNDS [
+	'',
+	'url:../map_background/gradient_background_0.png',
+	'url:../map_background/gradient_background_45.png',
+])
+
 # battle\minimap\markers\base_marker.unbound
 (def constant TMap_MINIMAP_MARKERS_SETTINGS [
 	{markerRenderer: 'TMap_MapShipMarker',				disableUpdatePos: false, rotateBack: false,	hideOnDeath: false}, # CC.avatar
@@ -989,7 +995,6 @@
 
 # battle/minimap/minimap.unbound
 (def element TMap_MinimapBG (_scaleRatio:number, _mapScale:number, _mapBorderScale:number, _mapBorderMarginX:number, _mapBorderMarginY:number, _showGrid:bool = true, _isLoading:bool = false, _userPrefsNum:gfx = null) layout=true
-	# TODO: add gradient fill
 	(scope
 		(var scaleRatio:number = "_scaleRatio")
 		(var mapScale:number = "_mapScale")
@@ -1009,6 +1014,10 @@
 		# Mod
 		(macro TT_GET_PREF_BOOL	_varName="'isBlurEnabled'"		_pref="TMap_PREFS.USE_BLUR")
 		(macro TT_GET_PREF_NUMBER _varName="'blurIntensity'"		_pref="TMap_PREFS.BLUR_INTENSITY")
+
+		(macro TT_GET_PREF_NUMBER _varName="'gradientType'"		_pref="TMap_PREFS.GRADIENT_BACKGROUND_MODE")
+		(var gradientIndex:number = "gradientType < TMap_GRADIENT_BACKGROUNDS.length ? gradientType : 0")
+		(var gradientBackground:str = "TMap_GRADIENT_BACKGROUNDS[gradientIndex]")
 		#
 	)
 
@@ -1036,6 +1045,17 @@
 			(position = "absolute")
 			(bind width "scaleRatio") 
 			(bind height "scaleRatio") 
+		)
+		(blendMode = 'layer')
+		(block
+			(bind visible "gradientIndex > 0")
+			(style
+				(backgroundSize = "fill")
+				(bind backgroundImage "gradientBackground")
+				(bind width "scaleRatio") 
+				(bind height "scaleRatio")
+			)
+			(blendMode = 'alpha')
 		)
 	)
 
