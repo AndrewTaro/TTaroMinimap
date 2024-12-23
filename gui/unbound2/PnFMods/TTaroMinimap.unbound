@@ -60,42 +60,42 @@
     'IDS_TT_TITLE_AA_RANGE'                 : "0xf0a522",
     'IDS_TT_TITLE_SECONDARY_RANGE'          : "0xa9c272",
     'IDS_TT_TITLE_SURFACE_CONSUMABLE_RANGE' : "0xccff",
+    'MARKERS'                               : "0xcccccc",
     '0'                                     : "0xff0000",
-    '1'                                     : "0xff2e00",
-    '2'                                     : "0xff5c00",
-    '3'                                     : "0xff8b00",
-    '4'                                     : "0xffb900",
-    '5'                                     : "0xffe700",
-    '6'                                     : "0xe7ff00",
-    '7'                                     : "0xb9ff00",
-    '8'                                     : "0x8bff00",
-    '9'                                     : "0x5cff00",
-    '10'                                    : "0x2eff00",
-    '11'                                    : "0xff00",
-    '12'                                    : "0xff2e",
-    '13'                                    : "0xff5c",
-    '14'                                    : "0xff8b",
-    '15'                                    : "0xffb9",
-    '16'                                    : "0xffe7",
-    '17'                                    : "0xe7ff",
-    '18'                                    : "0xb9ff",
-    '19'                                    : "0x8bff",
-    '20'                                    : "0x5cff",
-    '21'                                    : "0x2eff",
-    '22'                                    : "0xff",
-    '23'                                    : "0x2e00ff",
-    '24'                                    : "0x5c00ff",
-    '25'                                    : "0x8b00ff",
-    '26'                                    : "0xb900ff",
-    '27'                                    : "0xe700ff",
-    '28'                                    : "0xff00e7",
-    '29'                                    : "0xff00b9",
-    '30'                                    : "0xff008b",
-    '31'                                    : "0xff005c",
-    '32'                                    : "0xff002e",
-    '33'                                    : "0xff0000",
+    '1'                                     : "0xff2f00",
+    '2'                                     : "0xff5f00",
+    '3'                                     : "0xff8f00",
+    '4'                                     : "0xffbf00",
+    '5'                                     : "0xffef00",
+    '6'                                     : "0xdfff00",
+    '7'                                     : "0xafff00",
+    '8'                                     : "0x7fff00",
+    '9'                                     : "0x4fff00",
+    '10'                                    : "0x1fff00",
+    '11'                                    : "0xff0f",
+    '12'                                    : "0xff3f",
+    '13'                                    : "0xff6f",
+    '14'                                    : "0xff9f",
+    '15'                                    : "0xffcf",
+    '16'                                    : "0xffff",
+    '17'                                    : "0xcfff",
+    '18'                                    : "0x9fff",
+    '19'                                    : "0x6fff",
+    '20'                                    : "0x3fff",
+    '21'                                    : "0xfff",
+    '22'                                    : "0x1f00ff",
+    '23'                                    : "0x4f00ff",
+    '24'                                    : "0x7f00ff",
+    '25'                                    : "0xaf00ff",
+    '26'                                    : "0xdf00ff",
+    '27'                                    : "0xff00ef",
+    '28'                                    : "0xff00bf",
+    '29'                                    : "0xff008f",
+    '30'                                    : "0xff005f",
+    '31'                                    : "0xff002f",
+    '32'                                    : "0xff0000",
 
-    ALL: ['IDS_TT_TITLE_MAIN_ARMAMENT_RANGE', 'IDS_TT_TITLE_SEA_DETECTION_RANGE', 'IDS_TT_TITLE_AIR_DETECTION_RANGE', 'IDS_TT_TITLE_AA_RANGE', 'IDS_TT_TITLE_SECONDARY_RANGE', 'IDS_TT_TITLE_SURFACE_CONSUMABLE_RANGE', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33'],
+    ALL: ['IDS_TT_TITLE_MAIN_ARMAMENT_RANGE', 'IDS_TT_TITLE_SEA_DETECTION_RANGE', 'IDS_TT_TITLE_AIR_DETECTION_RANGE', 'IDS_TT_TITLE_AA_RANGE', 'IDS_TT_TITLE_SECONDARY_RANGE', 'IDS_TT_TITLE_SURFACE_CONSUMABLE_RANGE', 'MARKERS', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32'],
 })
 
 # battle\minimap\markers\capture_point_marker.unbound
@@ -145,8 +145,14 @@
 
 (def constant TMap_GRADIENT_BACKGROUNDS [
 	'',
-	'url:../map_background/gradient_background_0.png',
-	'url:../map_background/gradient_background_45.png',
+	'url:../ttaro_minimap/map_background/gradient_background_0.png',
+	'url:../ttaro_minimap/map_background/gradient_background_45.png',
+])
+
+(def constant TMap_AIM_POSITION_ELEMENTS [
+	'TMap_AimPositionDefault',
+	'TMap_AimPositionCross1',
+	'TMap_AimPositionCross2',
 ])
 
 # battle\minimap\markers\base_marker.unbound
@@ -1036,7 +1042,7 @@
 	)
 	#
 
-	
+	# Mod
 	(block
 		(bind alpha "waterAlpha")
 		(style
@@ -1058,6 +1064,7 @@
 			(blendMode = 'alpha')
 		)
 	)
+	#
 
 	(block
 		(style
@@ -1118,6 +1125,7 @@
 	#
 )
 
+# Custom
 (def element TMap_BackgroundBlur(_blurIntensity:number = 0.3)
 	(class $FullsizeAbsolute)
 	(mc mc_blurmap_medium
@@ -1664,13 +1672,14 @@
 		(var red:number = "(color & 0x00FF0000) >> 16")
 		(var green:number = "(color & 0x0000FF00) >> 8")
 		(var blue:number = "color & 0x000000FF")
-		(var isDefault:bool = "colorIndex == 0 || _isSelf")
+		(var isDefault:bool = "colorIndex == TMap_PREFS.DIRECTION_SHIPS_COLOR_INDEX.DEFAULT || _isSelf") # Marker Color Index.
 		(var alphaOffset:number = "isDefault ? 0 : 0xee")
 		(var artificialScale:number = "isDefault ? 1.0 : 0.3")
 		(var lengthScale:number = "_isFullSize	? 1.0 : 0.4")
 		(var ct:dict = "isDefault	? {}
 									: {redMultiplier:0,greenMultiplier:0,blueMultiplier:0,alphaMultiplier:1,redOffset:red,greenOffset:green,blueOffset:blue,alphaOffset: alphaOffset}"
 		)
+		# Default one has a really long image and applying scaleY and ct without alpha offset will make it invisible
 	)
 	(block
 		(style
@@ -1961,7 +1970,6 @@
 
 		(macro TT_GET_PREF_BOOL _varName="'isLastSpottedTimerEnabled'" _pref="TMap_PREFS.LAST_SPOTTED_ON_ALT")
 
-		#
 		(var isShipNameVisible:bool = "isLastSpottedTimerEnabled && altVision && shipNamesDisplayMode == TMap_DISPLAY_MODES.ENABLE && !mapVisible
 										? false
 										: true"
@@ -1971,8 +1979,14 @@
 		(macro TT_GET_PREF_NUMBER _varName="'fontSizePref'" _pref="TMap_PREFS.MARKER_FONT_SIZE")
 
 		# Mod
-		(var relationColor:number = "isMultyTeamEnabled && !isAlly	? MULTI_TEAMS_FONT_COLOR[teamId]
-																	: TWO_TEAMS_FONT_COLOR[colorPresetName]"
+		(macro IS_SPECTATOR_MODE)
+		(var isBot:bool = "avatarComponent ? avatarComponent.isBot : false")
+		(var isLoadedInBattle:bool = "avatarComponent ? avatarComponent.isLoadedInBattle : true" (event "avatarComponent.evIsLoadedInBattleChanged"))
+		(var isAFK:bool = "isAlive && !isSpectatorTrainingMode && !isSelf && !isBot && !isLoadedInBattle")
+
+		(var relationColor:number = "isAFK	? FONT_CLASS_TO_COLOR['$FontColorOrange']
+											: isMultyTeamEnabled && !isAlly	? MULTI_TEAMS_FONT_COLOR[teamId]
+																			: TWO_TEAMS_FONT_COLOR[colorPresetName]"
 		)
 		(var fontColor:number = "isAlive ? relationColor : C_DEAD")
 		#
@@ -2054,7 +2068,7 @@
 	)
 )
 
-# Custom: based on MapMarkerShipName but without timer
+# Custom: based on MapMarkerShipName/TMap_MapMarkerShipName but without timer
 (def element TMap_MapMarkerOwnerShipName (_markerEntity:gfx, _userPrefsNum:gfx=null) layout=true
 	(scope
 		(macro SHIP_MARKER_ICON_DATA "_markerEntity.id")
@@ -3310,12 +3324,30 @@
 							(bind enabled "isVisible")
 			)
 		)
+
+		# Mod
+		(macro TT_GET_PREF_NUMBER _varName="'markerType'"	_pref="TMap_PREFS.AIM_MARKER_TYPE")
+		(var elemIndex:number = "markerType < TMap_AIM_POSITION_ELEMENTS.length ? markerType: 0")
+		(var elem:str = "TMap_AIM_POSITION_ELEMENTS[elemIndex]")
+
+		(macro TT_GET_PREF_NUMBER _varName="'colorIndex'"	_pref="TMap_PREFS.AIM_MARKER_COLOR_INDEX")
+		(var colorName:str = "colorIndex < TMap_RANGE_COLORS.ALL.length ? TMap_RANGE_COLORS.ALL[colorIndex] : TMap_RANGE_COLORS.ALL[0]")
+		(var color:number = "TMap_RANGE_COLORS[colorName]")
+
+		(var red:number = "(color & 0x00FF0000) >> 16")
+		(var green:number = "(color & 0x0000FF00) >> 8")
+		(var blue:number = "color & 0x000000FF")
+
+		(var ct:dict = "{redMultiplier:0, greenMultiplier: 0, blueMultiplier: 0, redOffset: red, greenOffset: green, blueOffset: blue}")
+		#
 	)
 	(style
 		(position = "absolute")
 		(bind left "positionX")
 		(bind top "positionY")
-		(bind rotation "yaw")
+		# Mod
+		(bind rotation "elemIndex == 0 ? yaw : 0")
+		#
 		(bind alpha "rangesAlpha")
 	)
 
@@ -3327,12 +3359,40 @@
 			(position = "absolute")
 			(bind top "-offset")
 		)
-		(block
-			(style
-				(backgroundImage = "'symbol:minimap_aim_position'")	
-			)
+		(controller $Instance
+			(bind renderer "elem")
 		)
+		(bind colorTransform "ct")
 	)
+)
+
+(def element TMap_AimPositionDefault()
+	(style
+		(backgroundImage = "'symbol:minimap_aim_position'")
+	)
+)
+
+(def element TMap_AimPositionCrossBase(_rotation:number)
+	(.graphics
+		(lineStyle "0.7" "0xeeeeee")
+		(moveTo "-2" "-2")
+		(lineTo "2" "2")
+		(moveTo "2" "-2")
+		(lineTo "-2" "2")
+		# very counterintuitive but okay sqrt2 seemed good
+	)
+	(style
+		(bind rotation "_rotation")
+	)
+	(cacheAsBitmap = true)
+)
+
+(def element TMap_AimPositionCross1()
+	(element TMap_AimPositionCrossBase _rotation="45")
+)
+
+(def element TMap_AimPositionCross2()
+	(element TMap_AimPositionCrossBase _rotation="0")
 )
 
 # battle\minimap\markers\interactive_zone_marker.unbound
