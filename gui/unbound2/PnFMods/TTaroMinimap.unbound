@@ -863,8 +863,7 @@
 	
 	(dispatch evSwitchOptionsPanel args="{isVisible: false}" dir="EventDirection.DOWN" (event "evMouseDownMap") (bind trigger "mapScale"))
 
-	# TODO: remove
-	(element MinimapOptionsButton
+	(element TMap_MinimapOptionsButton
 		(bind visible "!_isLoading")
 		(style (position = "absolute") (right = "20px") (top = "-22px"))
 	)
@@ -1672,7 +1671,7 @@
 		(var red:number = "(color & 0x00FF0000) >> 16")
 		(var green:number = "(color & 0x0000FF00) >> 8")
 		(var blue:number = "color & 0x000000FF")
-		(var isDefault:bool = "colorIndex == TMap_PREFS.DIRECTION_SHIPS_COLOR_INDEX.DEFAULT || _isSelf") # Marker Color Index.
+		(var isDefault:bool = "colorIndex == TMap_PREFS.DIRECTION_SHIPS_COLOR_INDEX.default || _isSelf") # Marker Color Index.
 		(var alphaOffset:number = "isDefault ? 0 : 0xee")
 		(var artificialScale:number = "isDefault ? 1.0 : 0.3")
 		(var lengthScale:number = "_isFullSize	? 1.0 : 0.4")
@@ -1734,8 +1733,9 @@
 
 		# Mod
 		(var prefName:str = "'prefName' in rangeSettings ? rangeSettings.prefName : 'FAKE'")
-		(var globalDisplayModeKey:str = "prefName + '_DISPLAY_MODE'")
-		(macro TT_GET_PREF_NUMBER	_varName="'globalDisplayMode'"		_pref="TMap_PREFS[globalDisplayModeKey]")
+		(var prefs:dict = "TMap_PREFS[prefName]")
+
+		(macro TT_GET_PREF_NUMBER	_varName="'globalDisplayMode'"		_pref="prefs.DISPLAY_MODE")
 		(var useIndividualShipPref:bool = "globalDisplayMode == TMap_DISPLAY_MODES.ADAPTIVE")
 		(var globalVisiblity:bool = "globalDisplayMode == TMap_DISPLAY_MODES.ENABLE ? true : false")
 		(var isRangeVisible:bool = "useIndividualShipPref ? rangeOptionsEnabled : globalVisiblity")
@@ -1772,15 +1772,10 @@
 																			: 0")
 
 		# Mod
-		(var solidLineKey:str = "prefName + '_SOLID_LINE'")
-		(var fillCircleKey:str = "prefName + '_FILL_CIRCLE'")
-		(var alphaKey:str = "prefName + '_ALPHA'")
-		(var colorIndexKey:str = "prefName + '_COLOR_INDEX'")
-
-		(macro TT_GET_PREF_BOOL	_varName="'isSolidLine'"		_pref="TMap_PREFS[solidLineKey]")
-		(macro TT_GET_PREF_BOOL	_varName="'isCircleFill'"		_pref="TMap_PREFS[fillCircleKey]")
-		(macro TT_GET_PREF_NUMBER _varName="'alphaMultiplier'"	_pref="TMap_PREFS[alphaKey]")
-		(macro TT_GET_PREF_NUMBER _varName="'colorIndex'"			_pref="TMap_PREFS[colorIndexKey]")
+		(macro TT_GET_PREF_BOOL	_varName="'isSolidLine'"		_pref="prefs.SOLID_LINE")
+		(macro TT_GET_PREF_BOOL	_varName="'isCircleFill'"		_pref="prefs.FILL_CIRCLE")
+		(macro TT_GET_PREF_NUMBER _varName="'alphaMultiplier'"	_pref="prefs.ALPHA")
+		(macro TT_GET_PREF_NUMBER _varName="'colorIndex'"			_pref="prefs.COLOR_INDEX")
 
 		(var colorName:str = "colorIndex < TMap_RANGE_COLORS.ALL.length ? TMap_RANGE_COLORS.ALL[colorIndex] : TMap_RANGE_COLORS.ALL[0]")
 		(var color:number = "colorName in TMap_RANGE_COLORS ? TMap_RANGE_COLORS[colorName] : 0xBBBBBB")
@@ -2431,17 +2426,14 @@
 		(var isEmpty:bool = "_state == SC.Battle.CONSUMABLE_STATES.NO_AMMO")
 		(var isPreparation:bool = "_state == SC.Battle.CONSUMABLE_STATES.PREPARATION")
 
-		(var fillCircleKey:str = "_type + '_ALLY_FILL_CIRCLE'")
-		(var alphaKey:str = "_type + '_ALLY_ALPHA'")
-		(var colorIndexKey:str = "_type + '_ALLY_COLOR_INDEX'")
-		(var visibleOnAltKey:str = "_type + '_ALLY_VISIBLE_ON_ALT'")
-		(var visibleOnActivation:str = "_type + '_ALLY_VISIBLE_ON_ACTIVATION'")
+		(var prefKey:str = "_type + '_ALLY'")
+		(var prefs:dict = "TMap_PREFS[prefKey]")
 
-		(macro TT_GET_PREF_BOOL	_varName="'isVisibleOnAlt'" _pref="TMap_PREFS[visibleOnAltKey]")
-		(macro TT_GET_PREF_BOOL	_varName="'isVisibleOnActivation'" _pref="TMap_PREFS[visibleOnActivation]")
-		(macro TT_GET_PREF_BOOL	_varName="'isCircleFill'" _pref="TMap_PREFS[fillCircleKey]")
-		(macro TT_GET_PREF_NUMBER _varName="'alphaMultiplier'" _pref="TMap_PREFS[alphaKey]")
-		(macro TT_GET_PREF_NUMBER _varName="'colorIndex'" _pref="TMap_PREFS[colorIndexKey]")
+		(macro TT_GET_PREF_BOOL	_varName="'isVisibleOnAlt'" _pref="prefs.VISIBLE_ON_ALT")
+		(macro TT_GET_PREF_BOOL	_varName="'isVisibleOnActivation'" _pref="prefs.VISIBLE_ON_ACTIVATION")
+		(macro TT_GET_PREF_BOOL	_varName="'isCircleFill'" _pref="prefs.FILL_CIRCLE")
+		(macro TT_GET_PREF_NUMBER _varName="'alphaMultiplier'" _pref="prefs.ALPHA")
+		(macro TT_GET_PREF_NUMBER _varName="'colorIndex'" _pref="prefs.COLOR_INDEX")
 
 		(var colorName:str = "colorIndex < TMap_RANGE_COLORS.ALL.length ? TMap_RANGE_COLORS.ALL[colorIndex] : TMap_RANGE_COLORS.ALL[0]")
 		(var color:number = "colorName in TMap_RANGE_COLORS ? TMap_RANGE_COLORS[colorName] : 0xBBBBBB")
@@ -3792,4 +3784,679 @@
 		)
 	)
 	
+)
+
+##################################################
+### Options
+##################################################
+
+# battle\minimap\minimap_options.unbound
+(def constant TMap_MINIMAP_OPTIONS_SETTINGS {
+	'visibilityRangeEnabled': {
+		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
+		controlStyle: 'visibilityRangeStyle',
+		prefName: 'VISIBILITY_SEA'
+	},
+	'visibilityPlaneRangeEnabled': {
+		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
+		controlStyle: 'visibilityPlaneRangeStyle',
+		prefName: 'VISIBILITY_AIR'
+	},
+	'visibilityByShipRangePingerEnabled': {
+		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
+		controlStyle: 'visibilityByShipRangePingerStyle',
+		prefName: 'MAIN_ARMAMENT'
+	},
+	'atbaRangeEnabled': {
+		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
+		controlStyle: 'atbaRangeStyle',
+		prefName: 'SECONDARY'
+	},
+	'aaRangeMaxEnabled': {
+		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
+		controlStyle: 'aaRangeMaxStyle',
+		prefName: 'ANTIAIR'
+	},
+	'sonarRangeEnabled': {
+		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
+		controlStyle: 'sonarRlsRangeStyle',
+		prefName: 'HYDRO_SELF'
+	},
+	'rlsRangeEnabled': {
+		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
+		controlStyle: 'sonarRlsRangeStyle',
+		prefName: 'RADAR_SELF'
+	},
+	'hydrophoneRangeEnabled': {
+		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
+		controlStyle: 'sonarRlsRangeStyle',
+		prefName: 'HYDROPHONE_SELF'
+	},
+	'submarineLocatorRangeEnabled':{
+		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
+		controlStyle: 'sonarRlsRangeStyle',
+		prefName: 'SUBRADAR_SELF'
+	},
+
+	'shootMGRangeEnabled': {
+		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
+		controlStyle: 'activeEquipmentStyle',
+		prefName: 'MAIN_ARMAMENT'
+	},
+	'shootPhaserLaserRangeEnabled': {
+		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
+		controlStyle: 'activeEquipmentStyle',
+		prefName: 'MAIN_ARMAMENT'
+	},
+	'shootTARangeEnabled': {
+		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
+		controlStyle: 'activeEquipmentStyle',
+		prefName: 'TORPEDO'
+	},
+	'shootPulsePhaserRangeEnabled': {
+		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
+		controlStyle: 'activeEquipmentStyle',
+		prefName: 'MAIN_ARMAMENT'
+	},
+	'shootIonicPhaserRangeEnabled': {
+		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
+		controlStyle: 'activeEquipmentStyle',
+		prefName: 'MAIN_ARMAMENT'
+	},
+	'shootTorpedoPhotonRangeEnabled': {
+		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
+		controlStyle: 'activeEquipmentStyle',
+		prefName: 'TORPEDO'
+	},
+	'shootPingerRangeEnabled': {
+		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
+		controlStyle: 'activeEquipmentStyle',
+		prefName: 'MAIN_ARMAMENT'
+	},
+	'shootChargeLaserRangeEnabled': {
+		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
+		controlStyle: 'activeEquipmentStyle',
+		prefName: 'MAIN_ARMAMENT'
+	},
+	'shootImpulseLaserRangeEnabled': {
+		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
+		controlStyle: 'activeEquipmentStyle',
+		prefName: 'MAIN_ARMAMENT'
+	},
+	'shootAxisLaserRangeEnabled': {
+		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
+		controlStyle: 'activeEquipmentStyle',
+		prefName: 'MAIN_ARMAMENT'
+	},
+	'shootWaveGunRangeEnabled': {
+		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
+		controlStyle: 'activeEquipmentStyle',
+		prefName: 'MAIN_ARMAMENT'
+	},
+	'shootAirSupportRangeEnabled': {
+		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
+		controlStyle: 'activeEquipmentStyle',
+		prefName: 'AIRSUPPORT'
+	},
+
+	'distanceDisplayEnabled': {
+		controlType: "TMap_SETTINGS_CONTROL_TYPE.CHECKBOX",
+		hasTooltip: false,
+		controlStyle: 'defaultStyle'
+	},
+	'shipNamesDisplayEnabled': {
+		controlType: "TMap_SETTINGS_CONTROL_TYPE.CHECKBOX",
+		hasTooltip: false,
+		controlStyle: 'defaultStyle'
+	},
+	'minimapRotationEnabled': {
+		controlType: "TMap_SETTINGS_CONTROL_TYPE.CHECKBOX",
+		hasTooltip: false,
+		controlStyle: 'defaultStyle'
+	},
+
+	'pointAttentionEnabled': {
+		controlType: "TMap_SETTINGS_CONTROL_TYPE.CHECKBOX",
+		hasTooltip: true,
+		controlStyle: 'defaultStyle'
+	},
+
+	'mouseCommandsEnabled': {
+		controlType: "TMap_SETTINGS_CONTROL_TYPE.CHECKBOX",
+		hasTooltip: true,
+		controlStyle: 'defaultStyle'
+	},
+
+	'rangesAlpha': {
+		controlType: "TMap_SETTINGS_CONTROL_TYPE.SLIDER",
+		minValue: 20, maxValue: 100,
+		controlStyle: 'defaultStyle'
+	},
+	'waterAlpha': {
+		controlType: "TMap_SETTINGS_CONTROL_TYPE.SLIDER",
+		minValue: 0, maxValue: 100,
+		controlStyle: 'defaultStyle'
+	}
+})
+
+# battle\minimap\minimap_options.unbound
+(def constant TMap_SETTINGS_CONTROL_TYPE {
+	CHECKBOX: 'TMap_MinimapOptionsCheckBox',
+	RANGE_CHECKBOX: 'TMap_MinimapOptionsRangeCheckBox',
+	SLIDER: 'TMap_MinimapOptionsSlider'
+})
+
+# battle\minimap\minimap.unbound
+(def element TMap_MinimapOptionsButton () layout=true
+	(scope
+		(event evHideInfotip)
+		(event evOnButtonClicked)
+
+		(var mouse:gfx = "$datahub.getSingleComponent(CC.mouse)")
+		(var isMouseActive:bool = "mouse.active" (event "mouse.evActiveChanged"))
+
+		(var infotipVisible:bool = false)
+	)
+	(dispatch evHideInfotip args="{}" (bind trigger "isMouseActive"))
+
+	(controller $Tooltip
+		(renderer='TMap_MinimapOptionsTooltip')
+		(bindcall show animation={duration:0.1, easing:"Easing.cubic_in", from:{alpha:0}, to:{alpha:1}} on='rollOver')
+		(bindcall hide animation={duration:0.1, easing:"Easing.cubic_out", from:{alpha:1}, to:{alpha:0}} on='rollOut')
+		(bind enabled "!(infotipVisible)")
+		(macro MINIMAP_TOOLTIP_COMMON_PARAMS)
+	)
+
+	(controller $Tooltip
+		(renderer='TMap_MinimapOptionsInfotip')
+		(bindcall show animation={duration:0.1, easing:"Easing.cubic_in", from:{alpha:1}, to:{alpha:1}} (event "evOnButtonClicked"))
+		(bindcall hide animation={duration:0.1, easing:"Easing.cubic_out", from:{alpha:1}, to:{alpha:0}} (event "evHideInfotip"))
+		(bind infotipVisible "true" init=false on='evShow')
+		(bind infotipVisible "false" init=false on='evHide')
+		(priority=1)
+		(macro MINIMAP_TOOLTIP_COMMON_PARAMS)
+	)
+
+	
+	(element ButtonSettingsSmall
+		(style
+			(position = "absolute") (right = "-20px") (top = "-18px")
+		)
+	)
+)
+
+# battle\minimap\minimap_options.unbound
+(def element TMap_MinimapOptionsTooltip () layout=true
+	(style (hitTest = false))
+
+	(macro TOOLTIP_SYSTEM_DEFAULT_BACKGROUND)
+
+	(element TOOLTIP_SYSTEM_DEFAULT_CONTAINER
+		(style (width = "auto"))
+
+		(element TMap_MinimapOptionsContent "true")
+
+		(element TooltipSystemHorizontalDivider)
+		(element TooltipSystemStatusLine
+				_unifiedStatus = "SC.Ui_styles.UNIFIED_STATUS.MOUSE_LEFT"
+				_text = 'IDS_MINIMAP_OPTIONS_HINT'
+		)
+	)
+)
+
+# battle\minimap\minimap_options.unbound
+(def element TMap_MinimapOptionsInfotip () layout=true
+	(scope
+		(event evPinPositionChanged)	
+										
+		
+		(var pinParams:dict = "MINIMAP_INFOTIP_PIN_SETTINGS['bottom']" watch=false)
+		(bind pinParams "MINIMAP_INFOTIP_PIN_SETTINGS[$event.pinPosition]" init=false (event "evPinPositionChanged"))
+
+		(var offsetTop:number = "0" watch=false)
+		(bind offsetTop "$event.pinPosition == 'top' ? 8 : 0" init=false (event "evPinPositionChanged"))
+	)
+
+	(style (bind marginTop "offsetTop"))
+
+	(macro TOOLTIP_SYSTEM_DEFAULT_BACKGROUND)
+
+	(element TOOLTIP_SYSTEM_DEFAULT_CONTAINER
+		(style (width = "auto"))
+		(element TMap_MinimapOptionsContent "false")
+	)
+	(element InfotipPins "pinParams" "!isHighContrast")
+)
+
+# battle\minimap\minimap_options.unbound
+(def element TMap_MinimapOptionsContent (_isReadOnly:bool) layout=true
+	(scope
+		(macro IS_SPECTATOR_MODE_SCOPE "'isSpectatorMode'")
+		(var minimapOptions:gfx = "$datahub.getCollection(CC.minimapOption)")
+	)
+	(element TooltipSystemHeaderSubheaderText
+			_headerText="'IDS_MINIMAP_OPTIONS_CAPTION'"
+			_unifiedStatus="SC.Ui_styles.UNIFIED_STATUS.DEFAULT"
+	)
+	(element TooltipSystemHorizontalDivider)
+	(hblock
+		(block
+			(controller $Instance renderer='TMap_ShipRelatedOptions'
+				(bind enabled "!isSpectatorMode")
+				(args _minimapOptions="minimapOptions" _isReadOnly="_isReadOnly")
+			)
+		)
+		(block
+			(style (height = 100%))
+			(controller $Instance renderer='TooltipSystemVerticalDivider'
+				(bind enabled "!isSpectatorMode")
+			)
+		)
+		(element TMap_MinimapRelatedOptions _minimapOptions="minimapOptions" _isReadOnly="_isReadOnly")
+	)
+)
+
+# battle\minimap\minimap_options.unbound
+(def element TMap_ShipRelatedOptions (_minimapOptions:gfx, _isReadOnly:bool) layout=true
+	(scope	
+		(var shipParametersCollection:gfx = "_minimapOptions.getChildByPath('byCategory.'+ SC.Battle.MINIMAP_OPTION_CATEGORY.SHIP_PARAMETERS + '.sorted')")
+
+		(var shipWeaponsCollection:gfx = "_minimapOptions.getChildByPath('byCategory.'+ SC.Battle.MINIMAP_OPTION_CATEGORY.SHIP_WEAPONS + '.sorted')" (event "_minimapOptions.evChildAdded") (event "_minimapOptions.evChildRemoved"))
+		(var shipWeaponsCount:number = "shipWeaponsCollection && shipWeaponsCollection.items ? shipWeaponsCollection.items.length : 0" (event "shipWeaponsCollection.evAdded") (event "shipWeaponsCollection.evRemoved"))
+	)
+	(style (width = "OPTION_COLUMN_WIDTH"))
+
+	(element TMap_MinimapOptionsSection "'IDS_MINIMAP_OPTIONS_CATEGORY_SHIP_PARAMETERS'" "shipParametersCollection" "_isReadOnly"
+		(style
+			(bind marginBottom "shipWeaponsCount > 0 ? SXS : 0")
+		)
+	)
+	(element TMap_MinimapOptionsSection "''" "shipWeaponsCollection" "_isReadOnly")
+)
+
+# battle\minimap\minimap_options.unbound
+(def element TMap_MinimapRelatedOptions (_minimapOptions:gfx, _isReadOnly:bool) layout=true
+	(scope
+		(var minimapAppearanceCollection:gfx = "_minimapOptions.getChildByPath('byCategory.'+ SC.Battle.MINIMAP_OPTION_CATEGORY.MINIMAP_APPEARANCE + '.sorted')")
+		(var minimapActionsCollection:gfx = "_minimapOptions.getChildByPath('byCategory.'+ SC.Battle.MINIMAP_OPTION_CATEGORY.MINIMAP_ACTIONS + '.sorted')")
+		(var minimapAlphasCollection:gfx = "_minimapOptions.getChildByPath('byCategory.'+ SC.Battle.MINIMAP_OPTION_CATEGORY.MINIMAP_ALPHAS + '.sorted')")
+	)
+	(style (width = "OPTION_COLUMN_WIDTH"))
+	
+	(element TMap_MinimapOptionsSection "'IDS_MINIMAP_OPTIONS_CATEGORY_MINIMAP_ACTIONS'" "minimapActionsCollection" "_isReadOnly")
+	(element TooltipSystemHorizontalDivider)
+	(element TMap_MinimapOptionsSection "'IDS_MINIMAP_OPTIONS_CATEGORY_MINIMAP_APPEARANCE'" "minimapAppearanceCollection" "_isReadOnly"
+		(style (marginBottom = "M"))
+	)
+	(element TMap_MinimapOptionsSection "''" "minimapAlphasCollection" "_isReadOnly")
+)
+
+# battle\minimap\minimap_options.unbound
+(def element TMap_MinimapOptionsSection (_headerText:str, _optionCollection:gfx, _isReadOnly:bool) layout=true
+	(scope
+		(var sectionItemsCount:number = "_optionCollection && _optionCollection.items ? _optionCollection.items.length : 0")
+	)
+	(style (width = 100%))
+
+	(element TooltipSystemInnerHeaderText _headerText="_headerText" _unifiedStatus="SC.Ui_styles.UNIFIED_STATUS.DEFAULT"
+		(bind visible "_headerText != ''")
+		(style
+			(marginBottom = "SXS")
+		)
+	)
+
+	(block
+		(style (width = 100%))
+		(controller $Repeat renderer='TMap_MinimapOptionsItemAdapter'
+			(bind count "sectionItemsCount")
+			(bindcall removeChildAt "$event[1]" (event "_optionCollection.evRemoved"))
+			(bindcall addChildAt "$event[1]" (event "_optionCollection.evAdded"))
+			(args "_optionCollection.items[$index]" "_isReadOnly")
+		)
+	)
+)
+
+# battle\minimap\minimap_options.unbound
+(def element TMap_MinimapOptionsItemAdapter (_entity:gfx, _isReadOnly:bool) layout=true
+	(scope
+		(var itemSetting:dict = "TMap_MINIMAP_OPTIONS_SETTINGS[_entity.minimapOption.key]")
+	)
+
+	(style
+		(width = 100%)
+		(bind marginTop "$index > 0 ? SXS : 0")
+	)
+
+	(controller $Instance (bind renderer "itemSetting.controlType")
+		(args	_entity="_entity"
+				_itemSetting="itemSetting"
+				_enabled="!_isReadOnly")
+	)
+)
+
+(def element TMap_MinimapOptionsCheckBox (_entity:gfx, _itemSetting:dict, _enabled:bool=true) layout=true
+	(scope
+		(var minimapOption:gfx = "_entity.minimapOption")
+		(var propValue:bool = "minimapOption.value > 0" (event "minimapOption.evValueChanged"))
+
+		(macro MOUSE_HANDLER_SCOPE)
+
+		(var clickMethods:array = "[ { type: 'direct.action', name: 'battle.saveMinimapOption', args: [ minimapOption.key, !propValue ] } ]")
+	)
+
+	(controller $Tooltip
+		(bind enabled "_itemSetting.hasTooltip")
+		(renderer = 'TooltipSystemSimpleTooltip')
+		(args _tooltipText="tr('IDS_MINIMAP_OPTIONS_TOOLTIP_' + toUpper(minimapOption.key))")
+		(align="top|right")
+		(offset=[0, 20])
+		(screenBoundsOffset={left:10, top:10, right:10, bottom:10})
+		(macro SIMPLE_TOOLTIP_ANIMATION)
+	)
+
+	(style (flow = "horizontal") (width = "100%") (align = "middle"))
+
+	(element CheckBoxNoLabel
+		_selected = "propValue"
+		_enabled = "_enabled"
+		_rollOver = "rollOver"
+		_interactive = "_enabled"
+	)
+
+	(tf
+		(class $TextDefaultNM)
+		(bind alpha "_enabled ? (rollOver && !(mouseDown) ? TA : TC) : TEXT_PREVIEW_ALPHA")
+		(style
+			(width = "100%")
+			(marginLeft = "S")
+			(marginTop = -3px)
+		)
+		(text = "'IDS_MINIMAP_OPTIONS_' + toUpper(minimapOption.key)")
+	)
+
+	(macro MOUSE_HANDLER
+		_enabled = "_enabled"
+		_methods = "clickMethods"
+		_soundSet = "'default_checkbox'"
+	)
+)
+
+# battle\minimap\minimap_options.unbound
+(def element TMap_MinimapOptionsSlider (_entity:gfx, _itemSetting:dict, _enabled:bool=true) layout=true
+	(scope
+		(event evValueChanged)
+		(var minimapOption:gfx = "_entity.minimapOption")
+		(var propValue:number = "minimapOption.value" (event "minimapOption.evValueChanged"))
+	)
+
+	(bindcall externalCall 'direct.action' "['battle.saveMinimapOption', [minimapOption.key, $event.value]]" init=false watch=false (event "evValueChanged"))
+
+	(style (width = "100%") (align = "middle"))
+
+	(tf
+		(class $TextDefaultNM)
+		(bind alpha "_enabled ? TC : TEXT_PREVIEW_ALPHA")
+		(text = "'IDS_MINIMAP_OPTIONS_' + toUpper(minimapOption.key)")
+	)
+	(hblock
+		(style
+			(marginTop = "S")
+		)
+		(element TMap_Slider
+				_value="propValue"
+				_min="_itemSetting.minValue"
+				_max="_itemSetting.maxValue"
+				_enabled="_enabled"
+		)
+		(tf
+			(class $TextDefaultNM)
+			(style
+				(marginLeft = "S")
+			)
+			(bind alpha "_enabled ? TC : TEXT_PREVIEW_ALPHA")
+			(bind text "propValue")
+		)
+	)
+)
+
+# shared\components_lib\sliders.unbound
+(def element TMap_Slider (_value:number, _min:number, _max:number, _enabled:bool=true) layout=true
+	(scope
+		(event evShow)
+		(event evValueChanged)
+	)
+	(dispatch evShow args="{}" on='addedToStage')
+
+	(mc minimap_slider_default
+		(bind value "_value" watch=false (event "evShow"))
+		(bind minimum "_min")
+		(bind maximum "_max")
+		(bind enabled "_enabled")
+		# Mod
+		(snapping = "true")
+		(snapInterval = "5")
+		#
+		(dispatch evValueChanged args="{value: $event.value}" dir="EventDirection.UP" on='valueChange')
+	)
+)
+
+# battle\minimap\minimap_options.unbound
+(def element TMap_MinimapOptionsRangeCheckBox (_entity:gfx, _itemSetting:dict, _enabled:bool=true) layout=true
+	(scope
+		(var minimapOption:gfx = "_entity.minimapOption")
+		(var propValue:bool = "minimapOption.value > 0" (event "minimapOption.evValueChanged"))
+
+		(var textPropParameter:number = "_entity.parameter ? _entity.parameter.currentValue : 0" (event "_entity.parameter.evChanged"))
+		(var textProp:str = "formatFloatingPoint(textPropParameter, 1)")
+
+		(var itemVisual:dict = "MINIMAP_OPTIONS_STYLES[_itemSetting.controlStyle]")
+
+		(macro MOUSE_HANDLER_SCOPE)
+
+		# Mod
+		(var hasPrefs:bool = "'prefName' in _itemSetting && _itemSetting.prefName in TMap_PREFS")
+		(var prefName:str = "hasPrefs ? _itemSetting.prefName : 'FAKE'")
+		(var prefs:dict = "TMap_PREFS[prefName]")
+		(var displayModeKey:str = "hasPrefs ? prefs.DISPLAY_MODE.key : ''")
+
+		(event evHideInfotip)
+		(event evOpenInfotip)
+		(event evOpenDisplayModeInfotip)
+		(event evClickOption)
+		(var mouse:gfx = "$datahub.getSingleComponent(CC.mouse)")
+		(var isMouseActive:bool = "mouse.active" (event "mouse.evActiveChanged"))
+
+		(var infotipVisible:bool = false)
+
+		(macro TT_GET_USERPREF)
+		(var displayMode:number = "hasPrefs && isNumber(_userPrefsNum[displayModeKey])	? round(_userPrefsNum[displayModeKey])
+																						: TMap_DISPLAY_MODES.ADAPTIVE"
+		)
+		(var isOverrideEnabled:bool = "hasPrefs && displayMode != TMap_DISPLAY_MODES.ADAPTIVE")
+
+		(var prefValue:bool = "isOverrideEnabled ? TMap_DISPLAY_MODES.ENABLE == displayMode
+												 : propValue")
+
+		(var clickMethods:array = "isOverrideEnabled ? []
+													 : [ { type: 'direct.action', name: 'battle.saveMinimapOption', args: [ minimapOption.key, !prefValue ] } ] "
+		)
+
+		(var allPrefs:array = "hasPrefs ? [prefs.DISPLAY_MODE, prefs.SOLID_LINE, prefs.FILL_CIRCLE, prefs.ALPHA, prefs.COLOR_INDEX] : []")
+		#
+	)
+
+	(dispatch evHideInfotip args="{}" watch=false init=false (bind trigger "isMouseActive"))
+
+	(dispatch evOpenDisplayModeInfotip args="{}" watch=false init=false (bind enabled "isOverrideEnabled") (event "evClickOption"))
+	
+	(style (flow = "horizontal") (width = "100%") (align = "middle|center"))
+
+	(block
+		(style
+			(width = 20px)
+			(height = 20px)
+			(align = "middle|center")
+			(marginLeft = "-S")
+			(marginRight = "S")
+		)
+		(controller $Instance renderer='ImageButton'
+			(bind enabled "hasPrefs && _enabled")
+			(args
+				_width = "24px"
+				_height = "24px"
+				_backgroundImage = 'url:../service_kit/buttons/icons/add.png'
+				_dispatchedEv="'evOpenInfotip'"
+			)
+		)
+		# Infotip
+		(controller $Tooltip
+			(renderer='TMap_CustomPrefsInfotip')
+			(bind enabled "hasPrefs && _enabled")
+			(args
+				_prefs			= "allPrefs"
+				_isEnabled		= "_enabled"
+				_userPrefsNum	= "_userPrefsNum"
+			)
+			(bindcall show animation={duration:0.1, easing:"Easing.cubic_in", from:{alpha:1}, to:{alpha:1}} (event "evOpenInfotip"))
+			(bindcall hide animation={duration:0.1, easing:"Easing.cubic_out", from:{alpha:1}, to:{alpha:0}} on='evClickOutside' (event "evHideInfotip"))
+			(bind infotipVisible "true" init=false on='evShow')
+			(bind infotipVisible "false" init=false on='evHide')
+
+			(pinRight = 'TMap_CustomPinRight')
+
+			(priority=1)
+			(align="left|middle")
+			(position="border")
+			(offset=[0, 0])
+			(screenBoundsOffset={left:5, top:5, right:5, bottom:5})
+		)
+		# Tooltip
+		(controller $Tooltip
+			(renderer='TMap_CustomPrefsInfotip')
+			(bind enabled "hasPrefs && _enabled && !infotipVisible")
+			(args
+				_prefs			= "allPrefs"
+				_isEnabled		= "false"
+				_userPrefsNum	= "_userPrefsNum"
+			)
+			(bindcall show animation={duration:0.1, easing:"Easing.cubic_in", from:{alpha:1}, to:{alpha:1}} (event "evRollOver"))
+			(bindcall hide animation={duration:0.1, easing:"Easing.cubic_out", from:{alpha:1}, to:{alpha:0}} (event "evRollOut"))
+
+			(pinRight = 'TMap_CustomPinRight')
+			
+			(priority=1)
+			(align="left|middle")
+			(position="border")
+			(offset=[0, 0])
+			(screenBoundsOffset={left:5, top:5, right:5, bottom:5})
+		)
+		# Only Display Mode
+		(controller $Tooltip
+			(renderer='TMap_CustomPrefsInfotip')
+			(bind enabled "hasPrefs && _enabled")
+			(args
+				_prefs			= "[prefs.DISPLAY_MODE]"
+				_isEnabled		= "_enabled"
+				_userPrefsNum	= "_userPrefsNum"
+			)
+			(bindcall show animation={duration:0.1, easing:"Easing.cubic_in", from:{alpha:1}, to:{alpha:1}} (event "evOpenDisplayModeInfotip"))
+			(bindcall hide animation={duration:0.1, easing:"Easing.cubic_out", from:{alpha:1}, to:{alpha:0}} on='evClickOutside' (event "evHideInfotip"))
+			(bind infotipVisible "true" init=false on='evShow')
+			(bind infotipVisible "false" init=false on='evHide')
+
+			(pinRight = 'TMap_CustomPinRight')
+
+			(priority=1)
+			(align="left|middle")
+			(position="border")
+			(offset=[0, 0])
+			(screenBoundsOffset={left:5, top:5, right:5, bottom:5})
+		)
+	)
+
+	(hblock
+		(style
+			(width = 100%)
+			(align = "middle|center")
+		)
+
+		(element CheckBoxNoLabel
+			_selected = "prefValue"
+			_enabled = "_enabled"
+			_rollOver = "rollOver"
+			_interactive = "_enabled"
+		)
+
+		(block
+			(style (width = "64px") (marginTop = -3px) (align = "center"))
+			(block
+				(tf
+					(class "itemVisual.textClass")
+					(style (textColor = "itemVisual.textColor"))
+					(bind text "textProp + ' ' + tr('IDS_KILOMETER')")
+				)
+				(mc "itemVisual.strokeClip"
+					(style (position = "absolute") (bottom = "-6px") (width = "100%") (alpha = "TC"))
+				)
+			)
+		)
+
+		(tf
+			(class $TextDefaultNM)
+			(bind alpha "_enabled ? (rollOver && !(mouseDown) ? TA : TC) : TEXT_PREVIEW_ALPHA")
+			(style
+				(width = "100%")
+				(marginLeft = "S")
+				(marginTop = -3px)
+			)
+			(text = "'IDS_MINIMAP_OPTIONS_' + toUpper(minimapOption.key)")
+		)
+
+		(macro MOUSE_HANDLER
+			_enabled = "_enabled"
+			_methods = "clickMethods"
+			_soundSet = "'default_checkbox'"
+			_dispatchedEv = "'evClickOption'"
+		)
+	)
+)
+
+# Custom
+(def element TMap_CustomPrefsInfotip(_prefs:array, _isEnabled:bool=false, _userPrefsNum:gfx=null)
+	(style
+		(bind hitTest "_isEnabled")
+	)
+	(macro TOOLTIP_SYSTEM_DEFAULT_BACKGROUND)
+
+	(element TOOLTIP_SYSTEM_DEFAULT_CONTAINER
+		(style
+			(width = "480px")
+			(align = "middle|center")
+		)
+
+		(controller $Repeat renderer='TT_ConfigElement'
+			(bind count "_prefs.length")
+			(args
+				_pref			= "_prefs[$index]"
+				_isConfigurable	= "true"
+				_userPrefsNum	= "_userPrefsNum"
+			)
+		)
+	)
+)
+
+# Custom
+(def element TMap_CustomPinRight ()
+	(controller $Instance renderer = 'InfotipPin'
+		(args "false")
+		(exprs
+			(name = 'pinRight')
+			(style (position = "absolute") (right = -33px) (rotation = 90)
+				(bind marginTop "0")
+			)
+		)
+	)
+	(style
+		(hitTest = false)
+	)
 )
