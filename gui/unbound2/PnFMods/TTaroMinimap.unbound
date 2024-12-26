@@ -3176,6 +3176,8 @@
 	(scope
 		# FIX
 		(var markerYaw:number = "radToGrad(_markerEntity.mapPosition.yaw) + 180.0" (event "evEnterFrame"))
+
+		(macro TT_GET_PREF_BOOL _varName="'isVisible'" _pref="TMap_PREFS.TORPEDO_MARKER")
 		#
 
 		(var markerScale:number = "_itemScale / _mapScale")
@@ -3191,6 +3193,10 @@
 		(var markerIcon:str = "visibleAsNormal	?	'icon_torpedo_' + SC.Battle.TORPEDO_MARKER_TYPE.NORMAL + '_' + relation
 												:	'icon_torpedo_' + type + '_' + relation")
 	)
+
+	# Mod
+	(bind visible "isVisible")
+	#
 
 	# FIX
 	(style
