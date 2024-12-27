@@ -435,6 +435,8 @@
 		(macro TT_GET_PREF_BOOL _varName="'isBlurEnabled'"		_pref="TMap_PREFS.USE_BLUR")
 	)
 
+	(bindcall externalCall 'inputMapping.onAction' "['createParamsForAllShipsInBattle', {}]" on='addedToStage')
+
     (style
         (bind width "stageWidth")
         (bind height "stageHeight")
