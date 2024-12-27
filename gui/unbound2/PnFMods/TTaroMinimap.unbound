@@ -265,9 +265,11 @@
 # Custom
 (def macro TMap_GET_SCALE_RATIO()
 	(var _isLoading:bool = false)
+	(macro TT_GET_PREF_BOOL _varName="'isScaleExtended'" _pref="TMap_PREFS.EXTEND_SCALE")
 	(var minimapSizeIndexComponent:gfx = "$datahub.getPrimaryEntity(CC.minimapOption, SC.Battle.MINIMAP_OPTION.minimapSizeIndex).minimapOption")
 	(var scaleIndex:number = "minimapSizeIndexComponent.value" (event "minimapSizeIndexComponent.evValueChanged"))
-	(var mapScale:number = "scaleIndex < LIST_MAP_SCALES.length ? LIST_MAP_SCALES[scaleIndex] : LIST_MAP_SCALES[LIST_MAP_SCALES.length - 1] + SCALE_STEP * (scaleIndex - LIST_MAP_SCALES.length + 1)")
+	(var baseMapScale:number = "scaleIndex < LIST_MAP_SCALES.length ? LIST_MAP_SCALES[scaleIndex] : LIST_MAP_SCALES[LIST_MAP_SCALES.length - 1] + SCALE_STEP * (scaleIndex - LIST_MAP_SCALES.length + 1)")
+	(var mapScale:number = "baseMapScale * (1 + isScaleExtended)")
 	(var loadingMinimapScale:number = "1.84") 
 	(var scaleRatio:number = "MINIMAP_ASSETS_SIZE * (_isLoading ? loadingMinimapScale : mapScale)")
 )
@@ -293,6 +295,32 @@
 			)
 		)
 	)
+)
+
+# battle\minimap\minimap.unbound
+(def macro TMap_MINIMAP_SCOPE ()
+	(var minimapEntity:gfx = "$datahub.getSingleEntity(CC.minimap)")
+
+	(var minimapSizeIndexComponent:gfx = "$datahub.getPrimaryEntity(CC.minimapOption, SC.Battle.MINIMAP_OPTION.minimapSizeIndex).minimapOption")
+	(macro TT_GET_PREF_BOOL _varName="'isScaleExtended'" _pref="TMap_PREFS.EXTEND_SCALE")
+	(var scaleIndex:number = "minimapSizeIndexComponent.value" (event "minimapSizeIndexComponent.evValueChanged"))
+	(var baseMapScale:number = "scaleIndex < LIST_MAP_SCALES.length ? LIST_MAP_SCALES[scaleIndex] : LIST_MAP_SCALES[LIST_MAP_SCALES.length - 1] + SCALE_STEP * (scaleIndex - LIST_MAP_SCALES.length + 1)")
+	(var mapScale:number = "baseMapScale * (1 + isScaleExtended)")
+	(var itemScale:number = "scaleIndex < LIST_ICON_SCALES.length ? LIST_ICON_SCALES[scaleIndex] : LIST_ICON_SCALES[LIST_MAP_SCALES.length - 1]")
+	(var loadingMinimapScale:number = "1.84") 
+	(var scaleRatio:number = "MINIMAP_ASSETS_SIZE * (_isLoading ? loadingMinimapScale : mapScale)")
+
+	(var waterAlphaComponent:gfx = "$datahub.getPrimaryEntity(CC.minimapOption, SC.Battle.MINIMAP_OPTION.waterAlpha).minimapOption")
+	(var waterAlpha:number = "waterAlphaComponent.value * 0.01" (event "waterAlphaComponent.evValueChanged"))
+
+	(var mapBorderScale:number = "minimapEntity.mapBorder.ratio")
+	(var mapBorderMarginX:number = "- scaleRatio * minimapEntity.mapBorder.relativeMargin.x")
+	(var mapBorderMarginY:number = "- scaleRatio * minimapEntity.mapBorder.relativeMargin.y")
+
+	(event evMouseOverMap)
+	(event evMouseOutMap)
+	(event evMouseMoveMap)
+	(event evMouseDownMap)
 )
 
 # Custom
@@ -362,6 +390,7 @@
 (def element BattleMinimapUb2() layout=true dispatch_size_change=true
 	# TODO: make the height adjustable with prefs
 	(scope
+		(macro TT_GET_USERPREF)
 		(macro TMap_GET_SCALE_RATIO)
 	)
 	(style
@@ -874,7 +903,7 @@
 # battle/minimap/minimap.unbound
 (def element TMap_FullMinimap (_isLoading:bool = false, _userPrefsNum:gfx = null) layout=true dispatch_size_change=true
 	(scope
-		(macro MINIMAP_SCOPE)
+		(macro TMap_MINIMAP_SCOPE)
 		(var angleToRotate:number = "minimapEntity.minimap.rotationAngleDeg" (event "minimapEntity.minimap.evRotationAngleDegChanged"))
 		(var rotationAngle:number = "minimapEntity.minimap.rotationAngleDeg" watch=false)
 		(controller $Animation
