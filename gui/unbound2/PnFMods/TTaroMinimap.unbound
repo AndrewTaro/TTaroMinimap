@@ -1718,9 +1718,8 @@
 		(style
 			(position = "absolute")
 			(backgroundImage = "'symbol:minimap_direction_line'")
-			(backgroundSize = "fill")
-			(bind height "285 * sizeScale")
-			(width = 1px)
+			(bind scaleY "sizeScale")
+			(bind scaleX "isDefaultColor ? 1.0 : 2.0")
 		)
 		(bind colorTransform "ct")
 	)
