@@ -1665,28 +1665,33 @@
 # battle\minimap\markers\ship_marker.unbound
 (def element TMap_MapMarkerDirectionalLine (_isFullSize:bool=false, _isSelf:bool=false, _isShip:bool=false, _userPrefsNum:gfx=null) layout=true
 	(scope
-		(var prefKey:str = "_isShip ? 'DIRECTION_SHIPS_COLOR_INDEX' : 'DIRECTION_SQUADRONS_COLOR_INDEX'")
-		(macro TT_GET_PREF_NUMBER _varName="'colorIndexPref'" _pref="TMap_PREFS[prefKey]")
+		(var colorPrefKey:str = "_isShip ? 'DIRECTION_SHIPS_COLOR_INDEX' : 'DIRECTION_SQUADRONS_COLOR_INDEX'")
+		(var scalePrefKey:str = "_isShip ? 'DIRECTION_SHIPS_SCALE' : 'DIRECTION_SQUADRONS_SCALE'")
+		(macro TT_GET_PREF_NUMBER _varName="'colorIndexPref'" _pref="TMap_PREFS[colorPrefKey]")
+		(macro TT_GET_PREF_NUMBER _varName="'sizeScalePref'" _pref="TMap_PREFS[scalePrefKey]")
+
 		(var colorIndex:number = "colorIndexPref < TMap_RANGE_COLORS.ALL.length ? colorIndexPref : 0")
 		(var colorName:str = "TMap_RANGE_COLORS.ALL[colorIndex]")
 		(var color:number = "TMap_RANGE_COLORS[colorName]")
+		(var isDefaultColor:bool = "_isSelf || (colorIndex == TMap_PREFS.DIRECTION_SHIPS_COLOR_INDEX.default)")
+		
 		(var red:number = "(color & 0x00FF0000) >> 16")
 		(var green:number = "(color & 0x0000FF00) >> 8")
 		(var blue:number = "color & 0x000000FF")
-		(var isDefault:bool = "colorIndex == TMap_PREFS.DIRECTION_SHIPS_COLOR_INDEX.default || _isSelf") # Marker Color Index.
-		(var alphaOffset:number = "isDefault ? 0 : 0xee")
-		(var artificialScale:number = "isDefault ? 1.0 : 0.3")
-		(var lengthScale:number = "_isFullSize	? 1.0 : 0.4")
-		(var ct:dict = "isDefault	? {}
-									: {redMultiplier:0,greenMultiplier:0,blueMultiplier:0,alphaMultiplier:1,redOffset:red,greenOffset:green,blueOffset:blue,alphaOffset: alphaOffset}"
+		(var ct:dict = "isDefaultColor	? {}
+										: {redMultiplier:0,greenMultiplier:0,blueMultiplier:0,alphaMultiplier:1.5,redOffset:red,greenOffset:green,blueOffset:blue,alphaOffset: 0}"
 		)
-		# Default one has a really long image and applying scaleY and ct without alpha offset will make it invisible
+
+		(var sizeScale:number = "_isFullSize ? 1.0 : sizeScalePref")
 	)
+	# Enclose the block so that the expr.style.alpha affects properly
 	(block
 		(style
 			(position = "absolute")
 			(backgroundImage = "'symbol:minimap_direction_line'")
-			(bind scaleY "lengthScale * artificialScale")
+			(backgroundSize = "fill")
+			(bind height "285 * sizeScale")
+			(width = 1px)
 		)
 		(bind colorTransform "ct")
 	)
