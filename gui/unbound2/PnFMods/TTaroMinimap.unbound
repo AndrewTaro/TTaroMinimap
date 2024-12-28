@@ -3144,6 +3144,14 @@
 
 		(macro TT_GET_PREF_NUMBER _varName="'shipNameDisplayMode'"	_pref="TMap_PREFS.PLANE_OWNER_SHIP_DISPLAY_MODE")
 		(macro TMap_GET_DISPLAY_MODE _varName="'isShipNameVisible'"		_prefValue="shipNameDisplayMode")
+
+		(var isAirSupport:bool = "_markerEntity.plane.isAirSupport")
+
+		(var visiblePrefKey:str = "isAirSupport ? 'PLANE_OWNER_AIRSUPPORTS' : 'PLANE_OWNER_MAIN_SQUADRONS' ")
+		(macro TT_GET_PREF_BOOL _varName="'isNameVisiblePref'" _pref="TMap_PREFS[visiblePrefKey]")
+		(var isNameVsibleType:bool = "isConsumable  ? false
+													: isNameVisiblePref"
+		)
 		#
 	)
 	(style 
@@ -3181,7 +3189,7 @@
 		)
 		(block
 			(controller $Instance (renderer = 'TMap_MapMarkerPlayerName')
-				(bind enabled "!(isControlledByPlayer) && ownerEntity && isPlayerNameVisible && !isConsumable")
+				(bind enabled "!(isControlledByPlayer) && ownerEntity && isPlayerNameVisible && isNameVsibleType")
 				(args _markerEntity="ownerEntity" _userPrefsNum="_userPrefsNum")
 			)
 		)
@@ -3196,7 +3204,7 @@
 		)
 		(block
 			(controller $Instance (renderer = 'TMap_MapMarkerOwnerShipName')
-				(bind enabled "!(isControlledByPlayer) && ownerEntity && isShipNameVisible && !isConsumable")
+				(bind enabled "!(isControlledByPlayer) && ownerEntity && isShipNameVisible && isNameVsibleType")
 				(args _markerEntity="ownerEntity" _userPrefsNum="_userPrefsNum")
 			)
 		)
@@ -4072,7 +4080,11 @@
 		(bind offsetTop "$event.pinPosition == 'top' ? 8 : 0" init=false (event "evPinPositionChanged"))
 	)
 
-	(style (bind marginTop "offsetTop"))
+	# Mod
+	# backgroundColor is required to prevent the tooltip from disappearing when clicking on the non-config area.
+	# I guess it's a bug/unintended behavior of the original code -_-
+	(style (bind marginTop "offsetTop")(backgroundColor=0x01000000))
+	#
 
 	(macro TOOLTIP_SYSTEM_DEFAULT_BACKGROUND)
 
@@ -4349,6 +4361,12 @@
 		)
 
 		(var allPrefs:array = "hasPrefs ? [prefs.DISPLAY_MODE, prefs.SOLID_LINE, prefs.FILL_CIRCLE, prefs.ALPHA, prefs.COLOR_INDEX] : []")
+
+		(event evItemChooserOpened)
+		(event evItemChooserClosed)
+		(var isChooserOpen:bool = "false" watch=false)
+		(bind isChooserOpen "true" watch=false init=false (event "evItemChooserOpened"))
+		(bind isChooserOpen "false" watch=false init=false (event "evItemChooserClosed"))
 		#
 	)
 
@@ -4385,7 +4403,8 @@
 				_userPrefsNum	= "_userPrefsNum"
 			)
 			(bindcall show animation={duration:0.1, easing:"Easing.cubic_in", from:{alpha:1}, to:{alpha:1}} (event "evOpenInfotip"))
-			(bindcall hide animation={duration:0.1, easing:"Easing.cubic_out", from:{alpha:1}, to:{alpha:0}} on='evClickOutside' (event "evHideInfotip"))
+			(bindcall hide animation={duration:0.1, easing:"Easing.cubic_out", from:{alpha:1}, to:{alpha:0}} (event "evHideInfotip"))
+			(dispatch evHideInfotip args="{}" on='evClickOutside' (bind enabled "!isChooserOpen"))
 			(bind infotipVisible "true" init=false on='evShow')
 			(bind infotipVisible "false" init=false on='evHide')
 
@@ -4427,7 +4446,8 @@
 				_userPrefsNum	= "_userPrefsNum"
 			)
 			(bindcall show animation={duration:0.1, easing:"Easing.cubic_in", from:{alpha:1}, to:{alpha:1}} (event "evOpenDisplayModeInfotip"))
-			(bindcall hide animation={duration:0.1, easing:"Easing.cubic_out", from:{alpha:1}, to:{alpha:0}} on='evClickOutside' (event "evHideInfotip"))
+			(bindcall hide animation={duration:0.1, easing:"Easing.cubic_out", from:{alpha:1}, to:{alpha:0}} (event "evHideInfotip"))
+			(dispatch evHideInfotip args="{}" on='evClickOutside' (bind enabled "!isChooserOpen"))
 			(bind infotipVisible "true" init=false on='evShow')
 			(bind infotipVisible "false" init=false on='evHide')
 
