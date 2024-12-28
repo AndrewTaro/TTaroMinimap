@@ -274,6 +274,13 @@
 	(var scaleRatio:number = "MINIMAP_ASSETS_SIZE * (_isLoading ? loadingMinimapScale : mapScale)")
 )
 
+# Custom
+(def macro TMap_GET_RGB(_hexValue:expression)
+	(var red:number = "(_hexValue & 0x00FF0000) >> 16")
+	(var green:number = "(_hexValue & 0x0000FF00) >> 8")
+	(var blue:number = "_hexValue & 0x000000FF")
+)
+
 # battle\minimap\markers\base_marker.unbound
 (def macro TMap_RANGE_CIRCLE ()
 	(block
@@ -1704,9 +1711,7 @@
 		(var color:number = "TMap_RANGE_COLORS[colorName]")
 		(var isDefaultColor:bool = "_isSelf || (colorIndex == TMap_PREFS.DIRECTION_SHIPS_COLOR_INDEX.default)")
 		
-		(var red:number = "(color & 0x00FF0000) >> 16")
-		(var green:number = "(color & 0x0000FF00) >> 8")
-		(var blue:number = "color & 0x000000FF")
+		(macro TMap_GET_RGB _hexValue="color")
 		(var ct:dict = "isDefaultColor	? {}
 										: {redMultiplier:0,greenMultiplier:0,blueMultiplier:0,alphaMultiplier:1.5,redOffset:red,greenOffset:green,blueOffset:blue,alphaOffset: 0}"
 		)
@@ -1825,7 +1830,7 @@
 																				: rangeSettings.dashLength"
 		) # TODO: make it modifiable?
 
-		(var drawDotted:bool = "rangeSettings.drawDotted")
+		(var drawDotted:bool = "isSolidLine ? false : rangeSettings.drawDotted")
 		(var lineThickness:number = "rangeSettings.lineThickness")
 		#
 	)
@@ -1910,7 +1915,9 @@
 						(width = "38px") (height = "20px")
 						(left = "-19px") (top = "-10px")
 						(textAlign = "center")
-						(textColor = "rangeSettings.color")
+						# Mod
+						(bind textColor "color")
+						#
 					)
 					(bind class "rangeSettings.boldText ? '$TextMinimapRangeBold' : '$TextMinimapRange'")
 					(bind text "rangeValue")
@@ -3174,7 +3181,7 @@
 		)
 		(block
 			(controller $Instance (renderer = 'TMap_MapMarkerPlayerName')
-				(bind enabled "!(isControlledByPlayer) && ownerEntity && isPlayerNameVisible")
+				(bind enabled "!(isControlledByPlayer) && ownerEntity && isPlayerNameVisible && !isConsumable")
 				(args _markerEntity="ownerEntity" _userPrefsNum="_userPrefsNum")
 			)
 		)
@@ -3189,7 +3196,7 @@
 		)
 		(block
 			(controller $Instance (renderer = 'TMap_MapMarkerOwnerShipName')
-				(bind enabled "!(isControlledByPlayer) && ownerEntity && isShipNameVisible")
+				(bind enabled "!(isControlledByPlayer) && ownerEntity && isShipNameVisible && !isConsumable")
 				(args _markerEntity="ownerEntity" _userPrefsNum="_userPrefsNum")
 			)
 		)
@@ -3367,10 +3374,7 @@
 		(var colorName:str = "colorIndex < TMap_RANGE_COLORS.ALL.length ? TMap_RANGE_COLORS.ALL[colorIndex] : TMap_RANGE_COLORS.ALL[0]")
 		(var color:number = "TMap_RANGE_COLORS[colorName]")
 
-		(var red:number = "(color & 0x00FF0000) >> 16")
-		(var green:number = "(color & 0x0000FF00) >> 8")
-		(var blue:number = "color & 0x000000FF")
-
+		(macro TMap_GET_RGB _hexValue="color")
 		(var ct:dict = "{redMultiplier:0, greenMultiplier: 0, blueMultiplier: 0, redOffset: red, greenOffset: green, blueOffset: blue}")
 		#
 	)
@@ -3997,11 +4001,18 @@
 		(var isMouseActive:bool = "mouse.active" (event "mouse.evActiveChanged"))
 
 		(var infotipVisible:bool = false)
+
+		# Mod
+		(macro TT_GET_USERPREF)
+		#
 	)
 	(dispatch evHideInfotip args="{}" (bind trigger "isMouseActive"))
 
 	(controller $Tooltip
 		(renderer='TMap_MinimapOptionsTooltip')
+		(args
+			_userPrefsNum="_userPrefsNum"
+		)
 		(bindcall show animation={duration:0.1, easing:"Easing.cubic_in", from:{alpha:0}, to:{alpha:1}} on='rollOver')
 		(bindcall hide animation={duration:0.1, easing:"Easing.cubic_out", from:{alpha:1}, to:{alpha:0}} on='rollOut')
 		(bind enabled "!(infotipVisible)")
@@ -4010,6 +4021,9 @@
 
 	(controller $Tooltip
 		(renderer='TMap_MinimapOptionsInfotip')
+		(args
+			_userPrefsNum="_userPrefsNum"
+		)
 		(bindcall show animation={duration:0.1, easing:"Easing.cubic_in", from:{alpha:1}, to:{alpha:1}} (event "evOnButtonClicked"))
 		(bindcall hide animation={duration:0.1, easing:"Easing.cubic_out", from:{alpha:1}, to:{alpha:0}} (event "evHideInfotip"))
 		(bind infotipVisible "true" init=false on='evShow')
@@ -4027,7 +4041,7 @@
 )
 
 # battle\minimap\minimap_options.unbound
-(def element TMap_MinimapOptionsTooltip () layout=true
+(def element TMap_MinimapOptionsTooltip (_userPrefsNum:gfx=null) layout=true
 	(style (hitTest = false))
 
 	(macro TOOLTIP_SYSTEM_DEFAULT_BACKGROUND)
@@ -4035,7 +4049,7 @@
 	(element TOOLTIP_SYSTEM_DEFAULT_CONTAINER
 		(style (width = "auto"))
 
-		(element TMap_MinimapOptionsContent "true")
+		(element TMap_MinimapOptionsContent "true" _userPrefsNum="_userPrefsNum")
 
 		(element TooltipSystemHorizontalDivider)
 		(element TooltipSystemStatusLine
@@ -4046,7 +4060,7 @@
 )
 
 # battle\minimap\minimap_options.unbound
-(def element TMap_MinimapOptionsInfotip () layout=true
+(def element TMap_MinimapOptionsInfotip (_userPrefsNum:gfx=null) layout=true
 	(scope
 		(event evPinPositionChanged)	
 										
@@ -4064,13 +4078,13 @@
 
 	(element TOOLTIP_SYSTEM_DEFAULT_CONTAINER
 		(style (width = "auto"))
-		(element TMap_MinimapOptionsContent "false")
+		(element TMap_MinimapOptionsContent "false" _userPrefsNum="_userPrefsNum")
 	)
 	(element InfotipPins "pinParams" "!isHighContrast")
 )
 
 # battle\minimap\minimap_options.unbound
-(def element TMap_MinimapOptionsContent (_isReadOnly:bool) layout=true
+(def element TMap_MinimapOptionsContent (_isReadOnly:bool, _userPrefsNum:gfx=null) layout=true
 	(scope
 		(macro IS_SPECTATOR_MODE_SCOPE "'isSpectatorMode'")
 		(var minimapOptions:gfx = "$datahub.getCollection(CC.minimapOption)")
@@ -4084,7 +4098,9 @@
 		(block
 			(controller $Instance renderer='TMap_ShipRelatedOptions'
 				(bind enabled "!isSpectatorMode")
-				(args _minimapOptions="minimapOptions" _isReadOnly="_isReadOnly")
+				# Mod
+				(args _minimapOptions="minimapOptions" _isReadOnly="_isReadOnly" _userPrefsNum="_userPrefsNum")
+				#
 			)
 		)
 		(block
@@ -4093,12 +4109,12 @@
 				(bind enabled "!isSpectatorMode")
 			)
 		)
-		(element TMap_MinimapRelatedOptions _minimapOptions="minimapOptions" _isReadOnly="_isReadOnly")
+		(element TMap_MinimapRelatedOptions _minimapOptions="minimapOptions" _isReadOnly="_isReadOnly" _userPrefsNum="_userPrefsNum")
 	)
 )
 
 # battle\minimap\minimap_options.unbound
-(def element TMap_ShipRelatedOptions (_minimapOptions:gfx, _isReadOnly:bool) layout=true
+(def element TMap_ShipRelatedOptions (_minimapOptions:gfx, _isReadOnly:bool, _userPrefsNum:gfx=null) layout=true
 	(scope	
 		(var shipParametersCollection:gfx = "_minimapOptions.getChildByPath('byCategory.'+ SC.Battle.MINIMAP_OPTION_CATEGORY.SHIP_PARAMETERS + '.sorted')")
 
@@ -4107,16 +4123,16 @@
 	)
 	(style (width = "OPTION_COLUMN_WIDTH"))
 
-	(element TMap_MinimapOptionsSection "'IDS_MINIMAP_OPTIONS_CATEGORY_SHIP_PARAMETERS'" "shipParametersCollection" "_isReadOnly"
+	(element TMap_MinimapOptionsSection "'IDS_MINIMAP_OPTIONS_CATEGORY_SHIP_PARAMETERS'" "shipParametersCollection" "_isReadOnly" _userPrefsNum="_userPrefsNum"
 		(style
 			(bind marginBottom "shipWeaponsCount > 0 ? SXS : 0")
 		)
 	)
-	(element TMap_MinimapOptionsSection "''" "shipWeaponsCollection" "_isReadOnly")
+	(element TMap_MinimapOptionsSection "''" "shipWeaponsCollection" "_isReadOnly" _userPrefsNum="_userPrefsNum")
 )
 
 # battle\minimap\minimap_options.unbound
-(def element TMap_MinimapRelatedOptions (_minimapOptions:gfx, _isReadOnly:bool) layout=true
+(def element TMap_MinimapRelatedOptions (_minimapOptions:gfx, _isReadOnly:bool, _userPrefsNum:gfx=null) layout=true
 	(scope
 		(var minimapAppearanceCollection:gfx = "_minimapOptions.getChildByPath('byCategory.'+ SC.Battle.MINIMAP_OPTION_CATEGORY.MINIMAP_APPEARANCE + '.sorted')")
 		(var minimapActionsCollection:gfx = "_minimapOptions.getChildByPath('byCategory.'+ SC.Battle.MINIMAP_OPTION_CATEGORY.MINIMAP_ACTIONS + '.sorted')")
@@ -4124,16 +4140,16 @@
 	)
 	(style (width = "OPTION_COLUMN_WIDTH"))
 	
-	(element TMap_MinimapOptionsSection "'IDS_MINIMAP_OPTIONS_CATEGORY_MINIMAP_ACTIONS'" "minimapActionsCollection" "_isReadOnly")
+	(element TMap_MinimapOptionsSection "'IDS_MINIMAP_OPTIONS_CATEGORY_MINIMAP_ACTIONS'" "minimapActionsCollection" "_isReadOnly" _userPrefsNum="_userPrefsNum")
 	(element TooltipSystemHorizontalDivider)
-	(element TMap_MinimapOptionsSection "'IDS_MINIMAP_OPTIONS_CATEGORY_MINIMAP_APPEARANCE'" "minimapAppearanceCollection" "_isReadOnly"
+	(element TMap_MinimapOptionsSection "'IDS_MINIMAP_OPTIONS_CATEGORY_MINIMAP_APPEARANCE'" "minimapAppearanceCollection" "_isReadOnly" _userPrefsNum="_userPrefsNum"
 		(style (marginBottom = "M"))
 	)
-	(element TMap_MinimapOptionsSection "''" "minimapAlphasCollection" "_isReadOnly")
+	(element TMap_MinimapOptionsSection "''" "minimapAlphasCollection" "_isReadOnly" _userPrefsNum="_userPrefsNum")
 )
 
 # battle\minimap\minimap_options.unbound
-(def element TMap_MinimapOptionsSection (_headerText:str, _optionCollection:gfx, _isReadOnly:bool) layout=true
+(def element TMap_MinimapOptionsSection (_headerText:str, _optionCollection:gfx, _isReadOnly:bool, _userPrefsNum:gfx=null) layout=true
 	(scope
 		(var sectionItemsCount:number = "_optionCollection && _optionCollection.items ? _optionCollection.items.length : 0")
 	)
@@ -4152,13 +4168,13 @@
 			(bind count "sectionItemsCount")
 			(bindcall removeChildAt "$event[1]" (event "_optionCollection.evRemoved"))
 			(bindcall addChildAt "$event[1]" (event "_optionCollection.evAdded"))
-			(args "_optionCollection.items[$index]" "_isReadOnly")
+			(args "_optionCollection.items[$index]" "_isReadOnly" _userPrefsNum="_userPrefsNum")
 		)
 	)
 )
 
 # battle\minimap\minimap_options.unbound
-(def element TMap_MinimapOptionsItemAdapter (_entity:gfx, _isReadOnly:bool) layout=true
+(def element TMap_MinimapOptionsItemAdapter (_entity:gfx, _isReadOnly:bool, _userPrefsNum:gfx=null) layout=true
 	(scope
 		(var itemSetting:dict = "TMap_MINIMAP_OPTIONS_SETTINGS[_entity.minimapOption.key]")
 	)
@@ -4169,13 +4185,16 @@
 	)
 
 	(controller $Instance (bind renderer "itemSetting.controlType")
-		(args	_entity="_entity"
-				_itemSetting="itemSetting"
-				_enabled="!_isReadOnly")
+		(args
+			_entity="_entity"
+			_itemSetting="itemSetting"
+			_enabled="!_isReadOnly"
+			_userPrefsNum="_userPrefsNum"
+		)
 	)
 )
 
-(def element TMap_MinimapOptionsCheckBox (_entity:gfx, _itemSetting:dict, _enabled:bool=true) layout=true
+(def element TMap_MinimapOptionsCheckBox (_entity:gfx, _itemSetting:dict, _enabled:bool=true, _userPrefsNum:gfx=null) layout=true
 	(scope
 		(var minimapOption:gfx = "_entity.minimapOption")
 		(var propValue:bool = "minimapOption.value > 0" (event "minimapOption.evValueChanged"))
@@ -4223,7 +4242,7 @@
 )
 
 # battle\minimap\minimap_options.unbound
-(def element TMap_MinimapOptionsSlider (_entity:gfx, _itemSetting:dict, _enabled:bool=true) layout=true
+(def element TMap_MinimapOptionsSlider (_entity:gfx, _itemSetting:dict, _enabled:bool=true, _userPrefsNum:gfx=null) layout=true
 	(scope
 		(event evValueChanged)
 		(var minimapOption:gfx = "_entity.minimapOption")
@@ -4282,7 +4301,7 @@
 )
 
 # battle\minimap\minimap_options.unbound
-(def element TMap_MinimapOptionsRangeCheckBox (_entity:gfx, _itemSetting:dict, _enabled:bool=true) layout=true
+(def element TMap_MinimapOptionsRangeCheckBox (_entity:gfx, _itemSetting:dict, _enabled:bool=true, _userPrefsNum:gfx=null) layout=true
 	(scope
 		(var minimapOption:gfx = "_entity.minimapOption")
 		(var propValue:bool = "minimapOption.value > 0" (event "minimapOption.evValueChanged"))
@@ -4298,7 +4317,18 @@
 		(var hasPrefs:bool = "'prefName' in _itemSetting && _itemSetting.prefName in TMap_PREFS")
 		(var prefName:str = "hasPrefs ? _itemSetting.prefName : 'FAKE'")
 		(var prefs:dict = "TMap_PREFS[prefName]")
-		(var displayModeKey:str = "hasPrefs ? prefs.DISPLAY_MODE.key : ''")
+
+		(macro TT_GET_PREF_NUMBER _varName="'displayMode'" _pref="prefs.DISPLAY_MODE")
+		(macro TT_GET_PREF_NUMBER _varName="'colorIndexPref'" _pref="prefs.COLOR_INDEX")
+
+		(macro TT_GET_PREF_BOOL _varName="'isSolidLine'" _pref="prefs.SOLID_LINE")
+		(var dashStrokeClip:str = "false == prefs.SOLID_LINE.default ? itemVisual.strokeClip : 'VisibilityRangeStroke'")
+
+		(var colorIndex:number = "colorIndexPref < TMap_RANGE_COLORS.ALL.length ? colorIndexPref : 0")
+		(var colorName:str = "TMap_RANGE_COLORS.ALL[colorIndex]")
+		(var color:number = "TMap_RANGE_COLORS[colorName]")
+		(macro TMap_GET_RGB _hexValue="color")
+		(var ct:dict = "{redMultiplier:0,greenMultiplier:0,blueMultiplier:0,redOffset:red,greenOffset:green,blueOffset:blue}")
 
 		(event evHideInfotip)
 		(event evOpenInfotip)
@@ -4309,10 +4339,6 @@
 
 		(var infotipVisible:bool = false)
 
-		(macro TT_GET_USERPREF)
-		(var displayMode:number = "hasPrefs && isNumber(_userPrefsNum[displayModeKey])	? round(_userPrefsNum[displayModeKey])
-																						: TMap_DISPLAY_MODES.ADAPTIVE"
-		)
 		(var isOverrideEnabled:bool = "hasPrefs && displayMode != TMap_DISPLAY_MODES.ADAPTIVE")
 
 		(var prefValue:bool = "isOverrideEnabled ? TMap_DISPLAY_MODES.ENABLE == displayMode
@@ -4433,11 +4459,20 @@
 			(block
 				(tf
 					(class "itemVisual.textClass")
-					(style (textColor = "itemVisual.textColor"))
+					(style
+						(bind textColor "color")
+					)
 					(bind text "textProp + ' ' + tr('IDS_KILOMETER')")
 				)
-				(mc "itemVisual.strokeClip"
+				(mc "dashStrokeClip"
+					(bind visible "!isSolidLine")
 					(style (position = "absolute") (bottom = "-6px") (width = "100%") (alpha = "TC"))
+					(bind colorTransform "ct")
+				)
+				(mc MGRangeStroke
+					(bind visible "isSolidLine")
+					(style (position = "absolute") (bottom = "-6px") (width = "100%") (alpha = "TC"))
+					(bind colorTransform "ct")
 				)
 			)
 		)
