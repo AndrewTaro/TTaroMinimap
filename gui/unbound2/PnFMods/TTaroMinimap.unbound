@@ -4012,6 +4012,12 @@
 
 		# Mod
 		(macro TT_GET_USERPREF)
+
+		(event evPrefInfotiopOpened)
+		(event evPrefInfotiopClosed)
+		(var isPrefInfotipOpen:bool = false watch=false)
+		(bind isPrefInfotipOpen "true"  watch=false init=false (event "evPrefInfotiopOpened"))
+		(bind isPrefInfotipOpen "false" watch=false init=false (event "evPrefInfotiopClosed"))
 		#
 	)
 	(dispatch evHideInfotip args="{}" (bind trigger "isMouseActive"))
@@ -4036,11 +4042,15 @@
 		(bindcall hide animation={duration:0.1, easing:"Easing.cubic_out", from:{alpha:1}, to:{alpha:0}} (event "evHideInfotip"))
 		(bind infotipVisible "true" init=false on='evShow')
 		(bind infotipVisible "false" init=false on='evHide')
+		# Mod
+		(dispatch evHideInfotip args="{}" on='evClickOutside' (bind enabled "!isPrefInfotipOpen"))
+		# To hide all the children
+		(dispatch evMenuClosed  args="{}" on='evHide' dir="EventDirection.DOWN")
+		#
 		(priority=1)
 		(macro MINIMAP_TOOLTIP_COMMON_PARAMS)
 	)
 
-	
 	(element ButtonSettingsSmall
 		(style
 			(position = "absolute") (right = "-20px") (top = "-18px")
@@ -4342,6 +4352,9 @@
 		(macro TMap_GET_RGB _hexValue="color")
 		(var ct:dict = "{redMultiplier:0,greenMultiplier:0,blueMultiplier:0,redOffset:red,greenOffset:green,blueOffset:blue}")
 
+		(event evPrefInfotiopOpened)
+		(event evPrefInfotiopClosed)
+
 		(event evHideInfotip)
 		(event evOpenInfotip)
 		(event evOpenDisplayModeInfotip)
@@ -4408,6 +4421,9 @@
 			(bind infotipVisible "true" init=false on='evShow')
 			(bind infotipVisible "false" init=false on='evHide')
 
+			(dispatch evPrefInfotiopOpened init=false dir="EventDirection.UP" args="{}" on='evShow')
+			(dispatch evPrefInfotiopClosed init=false dir="EventDirection.UP" args="{}" on='evHide')
+
 			(pinRight = 'TMap_CustomPinRight')
 
 			(priority=1)
@@ -4450,6 +4466,9 @@
 			(dispatch evHideInfotip args="{}" on='evClickOutside' (bind enabled "!isChooserOpen"))
 			(bind infotipVisible "true" init=false on='evShow')
 			(bind infotipVisible "false" init=false on='evHide')
+
+			(dispatch evPrefInfotiopOpened init=false dir="EventDirection.UP" args="{}" on='evShow')
+			(dispatch evPrefInfotiopClosed init=false dir="EventDirection.UP" args="{}" on='evHide')
 
 			(pinRight = 'TMap_CustomPinRight')
 
