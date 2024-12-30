@@ -587,6 +587,16 @@
 		(var enemyItems:array = "enemyCollection ? enemyCollection.items : null" (event "enemyCollection.evAdded") (event "enemyCollection.evRemoved"))
 		(var itemsLength:number = "enemyItems ? enemyItems.length : 0")
 
+		# tr
+		(macro TT_GET_LANGUAGE_INDEX)
+		(var titleTranslations:array = "TT_CONFIG_LOCALIZATIONS['IDS_TT_NEARBY_RADARS']")
+		(var isTitleValid:bool = "titleTranslations.length > languageIndex && !isIn(titleTranslations[languageIndex], ['', ' '])")
+		(var titleText:str = "isTitleValid ? titleTranslations[languageIndex] : titleTranslations[0]")
+
+		(var noRadarTranslations:array = "TT_CONFIG_LOCALIZATIONS['IDS_TT_NO_NEARBY_RADARS']")
+		(var isNoRadarValid:bool = "noRadarTranslations.length > languageIndex && !isIn(noRadarTranslations[languageIndex], ['', ' '])")
+		(var noRadarText:str = "isNoRadarValid ? noRadarTranslations[languageIndex] : noRadarTranslations[0]")
+
 		# Events for tracking element count
 		(event evEnterRadarRange)
 		(event evLeaveRadarRange)
@@ -597,8 +607,7 @@
 
 	(style
 		(align = "middle|center")
-		(vgap = 10px)
-		(width = 120px)
+		(width = 130px)
 	)
 
 	# BG
@@ -622,29 +631,45 @@
 	(tf
 		(class $TextDefaultBold17NM)
 		(class $TextColorHUDWarningPC)
-		(text = 'Nearby Radars')
+		(bind text "titleText")
+		(style
+			(marginTop = 2px)
+		)
 	)
-
-	(element HorizontalDividerTwoPx)
 
 	# Content
 	(block
 		(style
 			(width = 100%)
+			(marginBottom = 5px)
 		)
-		(controller $Repeat renderer='TMap_NearbyRadarItem' count = "itemsLength"
-			(args _entities="enemyItems" _userPrefsNum="_userPrefsNum")
-			(bindcall removeChildAt "$event[1]" (event "enemyCollection.evRemoved"))
-			(bindcall addChildAt "$event[1]" (event "enemyCollection.evAdded"))
+		(block
+			(style
+				(width = 100%)
+			)
+			(controller $Repeat renderer='TMap_NearbyRadarItem' count = "itemsLength"
+				(args _entities="enemyItems" _userPrefsNum="_userPrefsNum")
+				(bindcall removeChildAt "$event[1]" (event "enemyCollection.evRemoved"))
+				(bindcall addChildAt "$event[1]" (event "enemyCollection.evAdded"))
+			)
+			(bind visible "elementsCount > 0")
 		)
-		(bind visible "elementsCount > 0")
-	)
-	(block
-		(tf
-			(class $TMap_NearbyRadarBoldText)
-			(text = 'No Radar Nearby')
+		(block
+			(style
+				(vgap = 10px)
+				(align = "middle|center")
+				(width = 100%)
+				(marginTop = 10px)
+			)
+			(element HorizontalDividerTwoPx)
+
+			(tf
+				(class $TMap_NearbyRadarBoldText)
+				(bind text "noRadarText")
+			)
+			
+			(bind visible "elementsCount == 0")
 		)
-		(bind visible "elementsCount == 0")
 	)
 )
 
@@ -737,12 +762,12 @@
 		(var iconPath:str = "'icon_white_' + shipType")
 
 		# Warning Color
-		(var textRed:number = "isInRange ? 1 : 0.93" watch=false)
-		(var textGreen:number = "isInRange ? 0.3 : 0.93" watch=false)
-		(var textBlue:number = "isInRange ? 0.16 : 0.93" watch=false)
+		(var textRed:number = "isInRange ? 1 : 1" watch=false)
+		(var textGreen:number = "isInRange ? 0.3 : 0.8" watch=false)
+		(var textBlue:number = "isInRange ? 0.16 : 0.4" watch=false)
 		(controller $Animation
 			(bindcall play duration=0.25 to="{textRed:1,textGreen:0.3, textBlue:0.16}" watch=false init=false (bind enabled "isInRange"))
-			(bindcall play duration=0.25 to="{textRed:0.93,textGreen:0.93,textBlue:0.93}" watch=false init=false (bind enabled "!isInRange"))
+			(bindcall play duration=0.25 to="{textRed:1,textGreen:0.8,textBlue:0.4}" watch=false init=false (bind enabled "!isInRange"))
 		)
 
 		# Alpha Animation
@@ -786,20 +811,27 @@
 		(pivotX = 50%)
 		(pivotY = 50%)
 		(width = 100%)
+		(marginTop = 10px)
 	)
 
 	(bind visible "animatedAlpha > 0")
 
+	(element HorizontalDividerTwoPx)
+
 	(block
 		(style
 			(align = "middle|center")
-			(marginBottom = 10px)
+			(marginTop = 10px)
 			(width = 100%)
 			(vgap = 5px)
 		)
 		
 		# Ship Name
 		(hblock
+			(style
+				(width = 100%)
+				(align = "middle|center")
+			)
 			(block
 				(style
 					(bind backgroundImage "'url:../battle_hud/markers/ship/' + iconPath + '.png'")
@@ -815,6 +847,10 @@
 			(tf
 				(class $TMap_NearbyRadarBoldText)
 				(bind text "shipName")
+				(style
+					(maxWidth = 100%)
+					(elideMode = true)
+				)
 			)
 			(bind colorTransform "{redMultiplier:textRed,greenMultiplier:textGreen,blueMultiplier:textBlue}")
 		)
@@ -853,7 +889,6 @@
 			)
 		)
 	)
-	(element HorizontalDividerTwoPx)
 )
 
 # battle\minimap\minimap.unbound BattleMinimapUb2
