@@ -1,12 +1,20 @@
 # TTaro Minimap
 This is a fully customizable minimap that enhances the gameplay.
 
-There were similar mods - AutoSpy and BattleFrame minimaps. However, the authors are no longer playing WoWS, and their creations are deprecated. This project aims to replace these.
-
-The mod accommodates most of the options their mods had.
-Additionally, all the unique features of the mods I've published so far, are available in this package.
+This mod accommodates most of the options other minimap mods had.
+Additionally, this package includes all the unique features of the mods I've published so far.
 
 ![image](https://github.com/user-attachments/assets/e7cba5f6-1e3e-42b9-af97-f370cf4b268a)
+
+# Features
+- **Support of Drag-Drop**: You can move the minimap freely!
+- **Last Spotted Timer**: Displays the timer since enemies are last spotted.
+- **RPF Communication**: Shares the direction of your RPF, receives teammates' direction via chat, and indicates them on the map.
+- **Radar/Hydro/Submarine Locator**: Shows the range of allys' consumables. The duration of active consumables is always accurate too!
+- **Gradient Background**: A semi-transparent background lets you see the enemies even when the minimap is enlarged.
+- **Blur Background**: Allows you to see the text with ease!
+
+...and a lot more!
 
 # Install
 1. Download a zip.
