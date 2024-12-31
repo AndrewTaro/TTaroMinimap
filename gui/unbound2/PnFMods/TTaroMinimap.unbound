@@ -1878,11 +1878,15 @@
 																			: 0")
 
 		# Mod
-		(macro TT_GET_PREF_BOOL	_varName="'isCircleFill'"		_pref="prefs.FILL_CIRCLE")
-		(macro TT_GET_PREF_NUMBER _varName="'alphaMultiplier'"	_pref="prefs.ALPHA")
-		(macro TT_GET_PREF_NUMBER _varName="'colorIndex'"		_pref="prefs.COLOR_INDEX")
-		(macro TT_GET_PREF_NUMBER _varName="'outlineType'"		_pref="prefs.LINE_TYPE")
-		(macro TT_GET_PREF_NUMBER _varName="'lineThickness'"	_pref="prefs.LINE_THICKNESS")
+		(macro TT_GET_PREF_BOOL	_varName="'isThicknessFixed'"		_pref="TMap_PREFS.RANGE_OUTLINE_FIX")
+
+		(macro TT_GET_PREF_BOOL	_varName="'isCircleFill'"			_pref="prefs.FILL_CIRCLE")
+		(macro TT_GET_PREF_NUMBER _varName="'alphaMultiplier'"		_pref="prefs.ALPHA")
+		(macro TT_GET_PREF_NUMBER _varName="'colorIndex'"			_pref="prefs.COLOR_INDEX")
+		(macro TT_GET_PREF_NUMBER _varName="'outlineType'"			_pref="prefs.LINE_TYPE")
+		(macro TT_GET_PREF_NUMBER _varName="'lineThicknessPref'"	_pref="prefs.LINE_THICKNESS")
+
+		(var lineThickness:number = "isThicknessFixed ? lineThicknessPref * 0.1 / rangeRadius : lineThicknessPref")
 
 		(var isOutlineDisabled:bool = "outlineType == TMap_OUTLINE_TYPES.DISABLE")
 		(var isSolid:bool = "outlineType == TMap_OUTLINE_TYPES.SOLID")
@@ -2422,6 +2426,7 @@
 		(var lineThickness:number = 1.0)
 		(var color:number = 0xFFCC66)
 		(var alphaMultiplier:number = 0.15)
+		(var lineAlpha:number = 0.6)
 		(var dashLength:number = 0)
 		(var spacing:number = 0)
 		(var drawDotted:bool = false)
