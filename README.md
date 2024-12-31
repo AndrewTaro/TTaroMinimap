@@ -5,6 +5,7 @@ There were similar mods - AutoSpy and BattleFrame minimaps. However, the authors
 
 The mod accommodates most of the options their mods had.
 Additionally, all the unique features of the mods I've published so far, are available in this package.
+
 ![image](https://github.com/user-attachments/assets/e7cba5f6-1e3e-42b9-af97-f370cf4b268a)
 
 # Install
