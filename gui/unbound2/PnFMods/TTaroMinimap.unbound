@@ -210,7 +210,7 @@
 	atbaMaxDist:					{ color: 0xA9C272, boldText: false, dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 , 	prefName: 'SECONDARY',		optionName: 'atbaRangeEnabled' },
 	rlsShipRange:					{ color: 0x00CCFF, boldText: false, dashLength: 0 , drawDotted: true , forceEnabled: false, lineThickness: 1.5, spacing: 15.5 , prefName: 'RADAR_SELF',		optionName: 'rlsRangeEnabled' },
 	sonarShipRange:					{ color: 0x00CCFF, boldText: false, dashLength: 0 , drawDotted: true , forceEnabled: false, lineThickness: 2  , spacing: 21 , 	prefName: 'HYDRO_SELF',		optionName: 'sonarRangeEnabled' },
-	hydrophoneRange:				{ color: 0x00CCFF, boldText: false, dashLength: 0 , drawDotted: true , forceEnabled: false, lineThickness: 2.5, spacing: 17.5 , prefName: 'HYDROPHONE',		optionName: 'hydrophoneRangeEnabled' },
+	hydrophoneRange:				{ color: 0x00CCFF, boldText: false, dashLength: 0 , drawDotted: true , forceEnabled: false, lineThickness: 2.5, spacing: 17.5 , prefName: 'HYDROPHONE_SELF',optionName: 'hydrophoneRangeEnabled' },
 	submarineLocatorRange:			{ color: 0x00CCFF, boldText: false, dashLength: 0 , drawDotted: true , forceEnabled: false, lineThickness: 2.5, spacing: 17.5 , prefName: 'SUBRADAR_SELF',	optionName: 'submarineLocatorRangeEnabled' },
 	visDistance:					{ color: 0x00CCFF, boldText: false, dashLength: 0 , drawDotted: false, forceEnabled: true , lineThickness: 1  , spacing: 0 , 	prefName: '',				optionName: '' },
 	visibilityAfterPingByShipRange:	{ color: 0x00BBFF, boldText: false, dashLength: 16, drawDotted: false, forceEnabled: true , lineThickness: 1  , spacing: 40 , 	prefName: '',				optionName: 'visibilityAfterPingByShipRangeEnabled' },
