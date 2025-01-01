@@ -2713,19 +2713,25 @@
 		(hitTest = false)
 	)
 	# Radar
-	(controller $Instance renderer='TMap_MapMarkerEnemyConsumableItemRange'
-		(bind enabled "radarDisplayMode != TMap_DISPLAY_MODES.DISABLE && isRadarValid")
-		(args _markerEntity="_markerEntity" _type="'RADAR'" _ranges="consumableRanges" _userPrefsNum="_userPrefsNum")
+	(block
+		(controller $Instance renderer='TMap_MapMarkerEnemyConsumableItemRange'
+			(bind enabled "radarDisplayMode != TMap_DISPLAY_MODES.DISABLE && isRadarValid")
+			(args _markerEntity="_markerEntity" _type="'RADAR'" _ranges="consumableRanges" _userPrefsNum="_userPrefsNum")
+		)
 	)
 	# Hydro
-	(controller $Instance renderer='TMap_MapMarkerEnemyConsumableItemRange'
-		(bind enabled "hydroDisplayMode != TMap_DISPLAY_MODES.DISABLE && isHydroValid")
-		(args _markerEntity="_markerEntity" _type="'HYDRO'" _ranges="consumableRanges" _userPrefsNum="_userPrefsNum")
+	(block
+		(controller $Instance renderer='TMap_MapMarkerEnemyConsumableItemRange'
+			(bind enabled "hydroDisplayMode != TMap_DISPLAY_MODES.DISABLE && isHydroValid")
+			(args _markerEntity="_markerEntity" _type="'HYDRO'" _ranges="consumableRanges" _userPrefsNum="_userPrefsNum")
+		)
 	)
 	# SubRadar
-	(controller $Instance renderer='TMap_MapMarkerEnemyConsumableItemRange'
-		(bind enabled "subRadarDisplayMode != TMap_DISPLAY_MODES.DISABLE && isSubRadarValid")
-		(args _markerEntity="_markerEntity" _type="'SUBRADAR'" _ranges="consumableRanges" _userPrefsNum="_userPrefsNum")
+	(block
+		(controller $Instance renderer='TMap_MapMarkerEnemyConsumableItemRange'
+			(bind enabled "subRadarDisplayMode != TMap_DISPLAY_MODES.DISABLE && isSubRadarValid")
+			(args _markerEntity="_markerEntity" _type="'SUBRADAR'" _ranges="consumableRanges" _userPrefsNum="_userPrefsNum")
+		)
 	)
 )
 
