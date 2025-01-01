@@ -2551,20 +2551,35 @@
 		(var prefKey:str = "_type + '_ALLY'")
 		(var prefs:dict = "TMap_PREFS[prefKey]")
 
+		(macro TT_GET_PREF_BOOL	_varName="'isThicknessFixed'"		_pref="TMap_PREFS.RANGE_OUTLINE_FIX")
+
 		(macro TT_GET_PREF_BOOL	_varName="'isVisibleOnAlt'" _pref="prefs.VISIBLE_ON_ALT")
 		(macro TT_GET_PREF_BOOL	_varName="'isVisibleOnActivation'" _pref="prefs.VISIBLE_ON_ACTIVATION")
 		(macro TT_GET_PREF_BOOL	_varName="'isCircleFill'" _pref="prefs.FILL_CIRCLE")
 		(macro TT_GET_PREF_NUMBER _varName="'alphaMultiplier'" _pref="prefs.ALPHA")
 		(macro TT_GET_PREF_NUMBER _varName="'colorIndex'" _pref="prefs.COLOR_INDEX")
 
+		(macro TT_GET_PREF_NUMBER _varName="'outlineType'"			_pref="prefs.LINE_TYPE")
+		(macro TT_GET_PREF_NUMBER _varName="'lineThicknessPref'"	_pref="prefs.LINE_THICKNESS")
+
+
+		(var isOutlineDisabled:bool = "outlineType == TMap_OUTLINE_TYPES.DISABLE")
+		(var isSolid:bool = "outlineType == TMap_OUTLINE_TYPES.SOLID")
+
+		(var lineAlpha:number = "isOutlineDisabled ? 0 : 1")
+
 		(var colorName:str = "colorIndex < TMap_RANGE_COLORS.ALL.length ? TMap_RANGE_COLORS.ALL[colorIndex] : TMap_RANGE_COLORS.ALL[0]")
 		(var color:number = "colorName in TMap_RANGE_COLORS ? TMap_RANGE_COLORS[colorName] : 0xBBBBBB")
 
 		(var innerRadius:number = "isCircleFill ? 0 : MINIMAP_ASSETS_SIZE")
-		(var lineThickness:number = "isActive ? 1.5 : 1.0")
-		(var drawDotted:bool = false)
-		(var dashLength:number = 0)
-		(var spacing:number = 0)
+		(var drawDotted:bool = "outlineType == TMap_OUTLINE_TYPES.DOT")
+		
+		(var spacing:number = "isSolid	? 0 
+										: 13"
+		)
+		(var dashLength:number = "isSolid	? 0 
+											: 13"
+		)
 
 		(var avatarId:str = "_markerEntity.avatar ? toString(_markerEntity.avatar.id) : ''")
 		(var entityWatcher:gfx = "$datahub.getPrimWatcher(CC.mods_DataComponent, TMap_COMPONENT_KEY_CONSUMABLE_RANGES)")
@@ -2573,6 +2588,9 @@
 		(var consumableData:dict = "dataComponent ? dataComponent.data : {}" (event "dataComponent.evDataChanged"))
 		(var consumableRanges:dict = "avatarId in consumableData ? consumableData[avatarId] : {}")
 		(var rangeRadius:number = "_type in consumableRanges ? consumableRanges[_type] : 0")
+
+		(var lineThicknessBase:number = "isThicknessFixed ? lineThicknessPref * 0.1 / rangeRadius : lineThicknessPref")
+		(var lineThickness:number = "(isActive ? 1.5 : 1.0) * lineThicknessBase")
 
 		(macro TMap_GET_ALT_VISION)
 
