@@ -1607,7 +1607,7 @@
 		(macro TT_GET_PREF_BOOL _varName="'isDetectionVisible'" _pref="TMap_PREFS.DETECTION")
 
 		# Nearby AA
-		(macro TT_GET_PREF_BOOL _varName="'isNearbyAAVisible'" _pref="TMap_PREFS.NEARBY_AA_RANGE")
+		(macro TT_GET_PREF_BOOL _varName="'isNearbyAAVisible'" _pref="TMap_PREFS.NEARBY_AA.VISIBLE")
 
 		(macro IS_ON_PLANE)
 		#
@@ -1625,6 +1625,17 @@
 				(bind enabled "!(isPlayerAvatar) && isAlive && isAlly")
 				(args _markerEntity="_markerEntity" _userPrefsNum="_userPrefsNum")
 			)
+		)
+	)
+
+	# Enemy Consumables
+	(block
+		(style
+			(position = "absolute")
+		)
+		(controller $Instance renderer='TMap_MapMarkerEnemyConsumableRanges'
+			(bind enabled "!(isPlayerAvatar) && isAlive && !isAlly")
+			(args _markerEntity="_markerEntity" _userPrefsNum="_userPrefsNum")	
 		)
 	)
 
@@ -2421,15 +2432,36 @@
 
 		(var isNearby:bool = "isValidAA && isValidPos && (distanceToShipSquared < warnRangeSqared)")
 
+		(macro TT_GET_PREF_BOOL	_varName="'isThicknessFixed'"		_pref="TMap_PREFS.RANGE_OUTLINE_FIX")
+
+		(macro TT_GET_PREF_BOOL	_varName="'isCircleFill'" _pref="TMap_PREFS.NEARBY_AA.FILL_CIRCLE")
+		(macro TT_GET_PREF_NUMBER _varName="'alphaMultiplier'" _pref="TMap_PREFS.NEARBY_AA.ALPHA")
+		(macro TT_GET_PREF_NUMBER _varName="'colorIndex'" _pref="TMap_PREFS.NEARBY_AA.COLOR_INDEX")
+
+		(macro TT_GET_PREF_NUMBER _varName="'outlineType'"			_pref="TMap_PREFS.NEARBY_AA.LINE_TYPE")
+		(macro TT_GET_PREF_NUMBER _varName="'lineThicknessPref'"	_pref="TMap_PREFS.NEARBY_AA.LINE_THICKNESS")
+
+		(var isOutlineDisabled:bool = "outlineType == TMap_OUTLINE_TYPES.DISABLE")
+		(var isSolid:bool = "outlineType == TMap_OUTLINE_TYPES.SOLID")
+
+		(var lineAlpha:number = "isOutlineDisabled ? 0 : 1")
+
+		(var colorName:str = "colorIndex < TMap_RANGE_COLORS.ALL.length ? TMap_RANGE_COLORS.ALL[colorIndex] : TMap_RANGE_COLORS.ALL[0]")
+		(var color:number = "colorName in TMap_RANGE_COLORS ? TMap_RANGE_COLORS[colorName] : 0xBBBBBB")
+
+		(var innerRadius:number = "isCircleFill ? 0 : MINIMAP_ASSETS_SIZE")
+		(var drawDotted:bool = "outlineType == TMap_OUTLINE_TYPES.DOT")
+		
+		(var spacing:number = "isSolid	? 0 
+										: 13"
+		)
+		(var dashLength:number = "isSolid	? 0 
+											: 13"
+		)
+
 		(var rangeRadius:number = "aaRange / mapSize")
-		(var innerRadius:number = "0")
-		(var lineThickness:number = 1.0)
-		(var color:number = 0xFFCC66)
-		(var alphaMultiplier:number = 0.15)
-		(var lineAlpha:number = 0.6)
-		(var dashLength:number = 0)
-		(var spacing:number = 0)
-		(var drawDotted:bool = false)
+
+		(var lineThickness:number = "isThicknessFixed ? lineThicknessPref * 0.1 / rangeRadius : lineThicknessPref")
 	)
 
 	(style
@@ -2605,60 +2637,148 @@
 	)
 
 	(block
+		(style
+			(bind alpha "isActive ? 1 : 0.65")
+		)
+		(macro TMap_RANGE_CIRCLE)
+		
 		(block
 			(style
-				(bind alpha "isActive ? 1 : 0.65")
+				(alpha = "0")
+				(filters
+					(dropShadow
+						(distance = 0)
+						(angle = 90)
+						(color = 0xFFFFFF)
+						(alpha = 1.0)
+						(blurX = 3.5)
+						(blurY = 3.5)
+						(strength = 1.2)
+						(quality = 2)
+					)
+				)
 			)
+			# Mod
 			(macro TMap_RANGE_CIRCLE)
-			
-			(block
-				(style
-					(alpha = "0")
-					(filters
-						(dropShadow
-							(distance = 0)
-							(angle = 90)
-							(color = 0xFFFFFF)
-							(alpha = 1.0)
-							(blurX = 3.5)
-							(blurY = 3.5)
-							(strength = 1.2)
-							(quality = 2)
-						)
-					)
-				)
-				# Mod
-				(macro TMap_RANGE_CIRCLE)
-				#
-
-				(controller $Animation
-					(bindcall play 	duration=0.4
-									easing="Easing.line"
-									keyframes="[{
-										percent:50,
-										from:{ alpha: 0 },
-										to:{ alpha: 1 }
-									},{
-										percent:100,
-										to:{ alpha: 0 }
-									}]"
-									(bind enabled "isActive")
-									(bind trigger "isActive")
-					)
-				)
-			)
+			#
 
 			(controller $Animation
-				(bindcall play 	duration=0.6
+				(bindcall play 	duration=0.4
 								easing="Easing.line"
-								from="{ alpha: 0.65 }"
-								to="{ alpha: 1 }"
-								reverse="!(isActive)"
+								keyframes="[{
+									percent:50,
+									from:{ alpha: 0 },
+									to:{ alpha: 1 }
+								},{
+									percent:100,
+									to:{ alpha: 0 }
+								}]"
+								(bind enabled "isActive")
 								(bind trigger "isActive")
 				)
 			)
 		)
+
+		(controller $Animation
+			(bindcall play 	duration=0.6
+							easing="Easing.line"
+							from="{ alpha: 0.65 }"
+							to="{ alpha: 1 }"
+							reverse="!(isActive)"
+							(bind trigger "isActive")
+			)
+		)
 	)
+)
+
+# Custom
+(def element TMap_MapMarkerEnemyConsumableRanges (_markerEntity:gfx, _userPrefsNum:gfx=null) layout=true
+	(scope
+		(var avatarId:str = "_markerEntity.avatar ? toString(_markerEntity.avatar.id) : ''")
+		(var entityWatcher:gfx = "$datahub.getPrimWatcher(CC.mods_DataComponent, TMap_COMPONENT_KEY_CONSUMABLE_RANGES)")
+		(var dataEntity:gfx = "entityWatcher.entity" (event "entityWatcher.event"))
+		(var dataComponent:gfx = "dataEntity ? dataEntity.mods_DataComponent : null")
+		(var consumableData:dict = "dataComponent ? dataComponent.data : {}" (event "dataComponent.evDataChanged"))
+		(var consumableRanges:dict = "avatarId in consumableData ? consumableData[avatarId] : {}")
+
+		(macro TT_GET_PREF_NUMBER _varName="'radarDisplayMode'"		_pref="TMap_PREFS.RADAR_ENEMY.DISPLAY_MODE")
+		(macro TT_GET_PREF_NUMBER _varName="'hydroDisplayMode'"		_pref="TMap_PREFS.HYDRO_ENEMY.DISPLAY_MODE")
+		(macro TT_GET_PREF_NUMBER _varName="'subRadarDisplayMode'"	_pref="TMap_PREFS.SUBRADAR_ENEMY.DISPLAY_MODE")
+
+		(var isRadarValid:bool = "'RADAR' in consumableRanges && consumableRanges.RADAR > 0")
+		(var isHydroValid:bool = "'HYDRO' in consumableRanges && consumableRanges.HYDRO > 0")
+		(var isSubRadarValid:bool = "'SUBRADAR' in consumableRanges && consumableRanges.SUBRADAR > 0")
+	)
+	(style
+		(hitTest = false)
+	)
+	# Radar
+	(controller $Instance renderer='TMap_MapMarkerEnemyConsumableItemRange'
+		(bind enabled "radarDisplayMode != TMap_DISPLAY_MODES.DISABLE && isRadarValid")
+		(args _markerEntity="_markerEntity" _type="'RADAR'" _ranges="consumableRanges" _userPrefsNum="_userPrefsNum")
+	)
+	# Hydro
+	(controller $Instance renderer='TMap_MapMarkerEnemyConsumableItemRange'
+		(bind enabled "hydroDisplayMode != TMap_DISPLAY_MODES.DISABLE && isHydroValid")
+		(args _markerEntity="_markerEntity" _type="'HYDRO'" _ranges="consumableRanges" _userPrefsNum="_userPrefsNum")
+	)
+	# SubRadar
+	(controller $Instance renderer='TMap_MapMarkerEnemyConsumableItemRange'
+		(bind enabled "subRadarDisplayMode != TMap_DISPLAY_MODES.DISABLE && isSubRadarValid")
+		(args _markerEntity="_markerEntity" _type="'SUBRADAR'" _ranges="consumableRanges" _userPrefsNum="_userPrefsNum")
+	)
+)
+
+# Custom
+(def element TMap_MapMarkerEnemyConsumableItemRange (_markerEntity:gfx, _type:str, _ranges:dict, _userPrefsNum:gfx=null) layout=true
+	(scope
+		(var prefKey:str = "_type + '_ENEMY'")
+		(var prefs:dict = "TMap_PREFS[prefKey]")
+
+		(macro TT_GET_PREF_BOOL	_varName="'isThicknessFixed'"		_pref="TMap_PREFS.RANGE_OUTLINE_FIX")
+
+		(macro TT_GET_PREF_BOOL	_varName="'isCircleFill'" _pref="prefs.FILL_CIRCLE")
+		(macro TT_GET_PREF_NUMBER _varName="'alphaMultiplier'" _pref="prefs.ALPHA")
+		(macro TT_GET_PREF_NUMBER _varName="'colorIndex'" _pref="prefs.COLOR_INDEX")
+
+		(macro TT_GET_PREF_NUMBER _varName="'outlineType'"			_pref="prefs.LINE_TYPE")
+		(macro TT_GET_PREF_NUMBER _varName="'lineThicknessPref'"	_pref="prefs.LINE_THICKNESS")
+
+		(macro TMap_GET_ALT_VISION)
+		(macro TT_GET_PREF_NUMBER _varName="'displayMode'" _pref="prefs.DISPLAY_MODE")
+		(macro TMap_GET_DISPLAY_MODE _varName="'isVisible'" _prefValue="displayMode")
+
+
+		(var isOutlineDisabled:bool = "outlineType == TMap_OUTLINE_TYPES.DISABLE")
+		(var isSolid:bool = "outlineType == TMap_OUTLINE_TYPES.SOLID")
+
+		(var lineAlpha:number = "isOutlineDisabled ? 0 : 1")
+
+		(var colorName:str = "colorIndex < TMap_RANGE_COLORS.ALL.length ? TMap_RANGE_COLORS.ALL[colorIndex] : TMap_RANGE_COLORS.ALL[0]")
+		(var color:number = "colorName in TMap_RANGE_COLORS ? TMap_RANGE_COLORS[colorName] : 0xBBBBBB")
+
+		(var innerRadius:number = "isCircleFill ? 0 : MINIMAP_ASSETS_SIZE")
+		(var drawDotted:bool = "outlineType == TMap_OUTLINE_TYPES.DOT")
+		
+		(var spacing:number = "isSolid	? 0 
+										: 13"
+		)
+		(var dashLength:number = "isSolid	? 0 
+											: 13"
+		)
+
+		(var rangeRadius:number = "_ranges[_type]")
+
+		(var lineThickness:number = "isThicknessFixed ? lineThicknessPref * 0.1 / rangeRadius : lineThicknessPref")
+	)
+
+	(bind visible "isVisible")
+
+	(style
+		(hitTest = false)
+	)
+
+	(macro TMap_RANGE_CIRCLE)
 )
 
 # battle\minimap\markers\building_marker.unbound
@@ -3482,6 +3602,8 @@
 
 		(macro TMap_GET_RGB _hexValue="color")
 		(var ct:dict = "{redMultiplier:0, greenMultiplier: 0, blueMultiplier: 0, redOffset: red, greenOffset: green, blueOffset: blue}")
+
+		(macro TT_GET_PREF_NUMBER _varName="'scale'"	_pref="TMap_PREFS.AIM_MARKER_SCALE")
 		#
 	)
 	(style
@@ -3501,6 +3623,8 @@
 		(style
 			(position = "absolute")
 			(bind top "-offset")
+			(bind scaleX "scale")
+			(bind scaleY "scale")
 		)
 		(controller $Instance
 			(bind renderer "elem")
