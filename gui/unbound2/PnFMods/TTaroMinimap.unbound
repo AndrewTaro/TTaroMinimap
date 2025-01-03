@@ -612,7 +612,25 @@
 		(macro TT_GET_PREF_BOOL _varName="'isDragDropDisabled'"	_pref="TMap_PREFS.DISABLE_DRAG_DROP")
 		(var defaultPos:dict = "{'positionX': stageWidth-scaleRatio-XS-170px, 'positionY': stageHeight - scaleRatio - XS}")
         (macro DRAGGABLE_GET_DROP_POSITION _wndName="'TTaroMinimapRadarWarning'" _defaults="defaultPos")
+
+		# Config
+		(macro TT_GET_PREF_NUMBER _varName="'backgroundAlpha'"	_pref="TMap_PREFS.NEARBY_RADAR_ALPHA")
+		(macro TT_GET_PREF_NUMBER _varName="'scale'"			_pref="TMap_PREFS.NEARBY_RADAR_SCALE")
+
+		(event evHideInfotip)
+		(event evOnButtonClicked)
+
+		(var mouse:gfx = "$datahub.getSingleComponent(CC.mouse)")
+		(var isMouseActive:bool = "mouse.active" (event "mouse.evActiveChanged"))
+
+		(event evItemChooserOpened)
+		(event evItemChooserClosed)
+		(var isChooserOpen:bool = "false" watch=false)
+		(bind isChooserOpen "true" watch=false init=false (event "evItemChooserOpened"))
+		(bind isChooserOpen "false" watch=false init=false (event "evItemChooserClosed"))
 	)
+
+	(dispatch evHideInfotip args="{}" (bind trigger "isMouseActive"))
 
 	(style
 		(bind width "stageWidth")
@@ -627,83 +645,119 @@
 			(position = "absolute")
 			(bind top "dragPosY")
 			(bind left "dragPosX")
-			(align = "middle|center")
 			(width = 150px)
 		)
+		
+		(block
+			(style
+				(width = 100%)
+				(align = "middle|center")
+				(bind scaleX "scale")
+				(bind scaleY "scale")
+			)
 
-		(controller $Instance renderer='ModDraggableElement'
-			(bind enabled "!isDragDropDisabled")
-			(args
-				_wndName="'TTaroMinimapRadarWarning'"
-				_defaults="defaultPos"
+			(controller $Instance renderer='ModDraggableElement'
+				(bind enabled "!isDragDropDisabled")
+				(args
+					_wndName="'TTaroMinimapRadarWarning'"
+					_defaults="defaultPos"
+				)
+			)
+
+			(block
+				(style
+					(hitTest = false)
+					(width = 100%)
+					(align = "middle|center")
+				)
+				# BG
+				(block
+					(class $FullsizeAbsolute)
+					(style
+						(bind alpha "backgroundAlpha")
+					)
+					(block
+						(class $FullsizeAbsolute)
+						(style (backgroundImage = "'url:../service_kit/panel_backgrounds/hint_panel_high_contrast.png'") (scale9grid = 3))
+					)
+					(block
+						(class $FullsizeAbsolute)
+						(style (backgroundImage = 'url:../service_kit/frames/one_pixel_frame.png') (scale9grid = 2) (alpha = 0.1))
+					)
+				)
+
+				# Title
+				(tf
+					(class $TextDefaultBold17NM)
+					(class $TextColorHUDWarningPC)
+					(bind text "titleText")
+					(style
+						(marginTop = "10px + 2px")
+					)
+				)
+
+				# Content
+				(block
+					(style
+						(width = 100%)
+						(marginBottom = "8px + 5px")
+					)
+					(block
+						(style
+							(width = 100%)
+						)
+						(controller $Repeat renderer='TMap_NearbyRadarItem' count = "itemsLength"
+							(args _entities="enemyItems" _userPrefsNum="_userPrefsNum")
+							(bindcall removeChildAt "$event[1]" (event "enemyCollection.evRemoved"))
+							(bindcall addChildAt "$event[1]" (event "enemyCollection.evAdded"))
+						)
+						(bind visible "elementsCount > 0")
+					)
+					(block
+						(style
+							(vgap = 8px)
+							(align = "middle|center")
+							(width = 100%)
+							(marginTop = 8px)
+						)
+						(element HorizontalDividerTwoPx)
+
+						(tf
+							(class $TMap_NearbyRadarBoldText)
+							(bind text "noRadarText")
+						)
+						
+						(bind visible "elementsCount == 0")
+					)
+				)
 			)
 		)
 
-		(block
+		# Cfg
+		(element ButtonSettingsSmall
+			(bind visible "isMouseActive")
 			(style
-				(hitTest = false)
-				(width = 100%)
-				(align = "middle|center")
+				(position = "absolute")
+				(left = "-25px")
+				(hitTest = true)
+				(alpha = 0.7)
 			)
-			# BG
-			(block
-				(class $FullsizeAbsolute)
-				(style
-					(alpha = 0.6)
+			(controller $Tooltip
+				(renderer='TMap_CustomPrefsInfotip')
+				(args
+					_prefs			= "[TMap_PREFS.NEARBY_RADAR_SCALE, TMap_PREFS.NEARBY_RADAR_ALPHA, TMap_PREFS.DISABLE_DRAG_DROP]"
+					_isEnabled		= true
+					_userPrefsNum	= "_userPrefsNum"
 				)
-				(block
-					(class $FullsizeAbsolute)
-					(style (backgroundImage = "'url:../service_kit/panel_backgrounds/hint_panel_high_contrast.png'") (scale9grid = 3))
-				)
-				(block
-					(class $FullsizeAbsolute)
-					(style (backgroundImage = 'url:../service_kit/frames/one_pixel_frame.png') (scale9grid = 2) (alpha = 0.1))
-				)
-			)
+				(bindcall show animation={duration:0.1, easing:"Easing.cubic_in", from:{alpha:1}, to:{alpha:1}} (event "evOnButtonClicked"))
+				(bindcall hide animation={duration:0.1, easing:"Easing.cubic_out", from:{alpha:1}, to:{alpha:0}} (event "evHideInfotip"))
+				(dispatch evHideInfotip args="{}" on='evClickOutside' (bind enabled "!isChooserOpen"))
 
-			# Title
-			(tf
-				(class $TextDefaultBold17NM)
-				(class $TextColorHUDWarningPC)
-				(bind text "titleText")
-				(style
-					(marginTop = "10px + 2px")
-				)
-			)
-
-			# Content
-			(block
-				(style
-					(width = 100%)
-					(marginBottom = "8px + 5px")
-				)
-				(block
-					(style
-						(width = 100%)
-					)
-					(controller $Repeat renderer='TMap_NearbyRadarItem' count = "itemsLength"
-						(args _entities="enemyItems" _userPrefsNum="_userPrefsNum")
-						(bindcall removeChildAt "$event[1]" (event "enemyCollection.evRemoved"))
-						(bindcall addChildAt "$event[1]" (event "enemyCollection.evAdded"))
-					)
-					(bind visible "elementsCount > 0")
-				)
-				(block
-					(style
-						(vgap = 8px)
-						(align = "middle|center")
-						(width = 100%)
-						(marginTop = 8px)
-					)
-					(element HorizontalDividerTwoPx)
-
-					(tf
-						(class $TMap_NearbyRadarBoldText)
-						(bind text "noRadarText")
-					)
-					
-					(bind visible "elementsCount == 0")
-				)
+				(priority=1)
+				(align="left|middle")
+				(position="border")
+				(offset=[0, 0])
+				(screenBoundsOffset={left:5, top:5, right:5, bottom:5})
 			)
 		)
 	)
@@ -1770,7 +1824,7 @@
 		)
 		# Health
 		(block
-			(controller $Instance (renderer = 'TMap_MapMarkerHealthBar')
+			(controller $Instance (renderer = 'TMap_MapMarkerHealthItem')
 				(bind enabled "!(isPlayerAvatar) && isAlive && (isAlly || isEnemy)")
 				(args _markerEntity="_markerEntity" _isAlly="isAlly" _userPrefsNum="_userPrefsNum")
 			)
@@ -2315,7 +2369,7 @@
 )
 
 # Custom
-(def element TMap_MapMarkerHealthBar(_markerEntity:gfx, _isAlly:bool, _userPrefsNum:gfx=null) layout=true
+(def element TMap_MapMarkerHealthItem(_markerEntity:gfx, _isAlly:bool, _userPrefsNum:gfx=null) layout=true
 	(scope
 		(var prefKey:str = "_isAlly ? 'HEALTH_ALLY' : 'HEALTH_ENEMY'")
 		(macro TMap_GET_ALT_VISION)
@@ -2324,8 +2378,6 @@
 		(macro TMap_GET_DISPLAY_MODE _varName="'isHealthVisible'" _prefValue="healthDisplayMode")
 
 		(macro TT_GET_PREF_BOOL _varName="'isMaxHealthHidden'"	_pref="TMap_PREFS.HEALTH_MAX_HIDE")
-
-		(macro TT_GET_PREF_NUMBER _varName="'healthBarScale'" _pref="TMap_PREFS.HEALTH_SCALE")
 
 		(var healthComponent:gfx = "_markerEntity.health ? _markerEntity.health : null")
 		(var healthValue:number = "healthComponent ? healthComponent.value : 0" (event "healthComponent.evValueChanged"))
@@ -2343,9 +2395,34 @@
 
 		(var markerColorTransform:dict = "TWO_TEAMS_COLOR_TRANSFORMS[relationStr]")
 		(var regenBarColorTransform:dict = "{redMultiplier:0,greenMultiplier:0,blueMultiplier:0,alphaMultiplier:1.0,redOffset:230,greenOffset:230,blueOffset:230,alphaOffset:0 }")
+
+		(macro TT_GET_PREF_NUMBER _varName="'rendererType'" _pref="TMap_PREFS.HEALTH_TYPE")
+		(var renderer:str = "rendererType == 0 ? 'TMap_MapMarkerHealthBar' : 'TMap_MapMarkerHealthValue' ")
 	)
 
 	(bind visible "isHealthVisible && isMaxHPVisible")
+
+	(style
+		(width = "100%")
+		(hitTest = false)
+	)
+
+	(controller $Instance
+		(bind renderer "renderer")
+		(args
+			_healthRatio = "healthRatio"
+			_healthValue = "healthValue"
+			_markerColorTransform = "markerColorTransform"
+			_userPrefsNum = "_userPrefsNum"
+		)
+	)
+)
+
+# Custom
+(def element TMap_MapMarkerHealthBar (_healthRatio:number, _markerColorTransform:dict, _userPrefsNum:gfx=null)
+	(scope
+		(macro TT_GET_PREF_NUMBER _varName="'healthBarScale'" _pref="TMap_PREFS.HEALTH_SCALE")
+	)
 
 	(style
 		(width = "100%")
@@ -2357,6 +2434,7 @@
 			(bind width "20px * healthBarScale")
 			(height = "3px")
 			(position = "absolute")
+			(align = "middle|center")
 			(pivotX = 50%)
 		)
 		# BG
@@ -2382,15 +2460,34 @@
 		# HP
 		(block
 			(class $FullsizeAbsolute)
-			(bind scaleX "healthRatio")
+			(bind scaleX "_healthRatio")
 
 			(style
 				(backgroundColor = "0xFFFFFFFF")
 				(backgroundSize = "fill")
 			)
 
-			(bind colorTransform "markerColorTransform")
+			(bind colorTransform "_markerColorTransform")
 		)
+	)
+)
+
+# Custom
+(def element TMap_MapMarkerHealthValue (_healthValue:number, _markerColorTransform:dict, _userPrefsNum:gfx=null)
+	(scope
+		(macro TT_GET_PREF_NUMBER _varName="'fontSizePref'" _pref="TMap_PREFS.MARKER_FONT_SIZE")
+	)
+	(style
+		(width = 100%)
+		(align = "middle|center")
+	)
+	(tf
+		(class $TMap_MarkerText)
+		(style
+			(bind fontSize "fontSizePref")
+		)
+		(bind text "_healthValue")
+		(bind colorTransform "_markerColorTransform")
 	)
 )
 
