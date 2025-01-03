@@ -580,9 +580,14 @@
 (def element TMap_NearbyRadarsWarning (_userPrefsNum:gfx=null) layout=true
 	(scope
 		(var collection:gfx = "$datahub.getCollection(CC.avatar)")
-		(var enemyCollection:gfx = "collection ? collection.getChildByPath('team.enemy.sortedAlive') : null" (event "collection.evChildAdded") (event "collection.evChildRemoved"))
+		(var enemyCollection:gfx = "collection ? collection.getChildByPath('team.enemy') : null" (event "collection.evChildAdded") (event "collection.evChildRemoved"))
 		(var enemyItems:array = "enemyCollection ? enemyCollection.items : null" (event "enemyCollection.evAdded") (event "enemyCollection.evRemoved"))
 		(var itemsLength:number = "enemyItems ? enemyItems.length : 0")
+
+		#
+		(var playerEntity:gfx = "$datahub.getSingleEntity(CC.playerAvatar)")
+		(var selfHealthComponent:gfx = "playerEntity && playerEntity.hasComponent(CC.health) ? playerEntity.health : null" (event "playerEntity.evAdded"))
+		(var isVisible:bool = "selfHealthComponent ? selfHealthComponent.isAlive : false" (event "selfHealthComponent.evIsAliveChanged"))
 
 		# tr
 		(macro TT_GET_LANGUAGE_INDEX)
@@ -613,6 +618,8 @@
 		(bind width "stageWidth")
 		(bind height "stageHeight")
 	)
+
+	(bind visible "isVisible")
 
 	(block
 
@@ -668,7 +675,7 @@
 			(block
 				(style
 					(width = 100%)
-					(marginBottom = "10px + 5px")
+					(marginBottom = "8px + 5px")
 				)
 				(block
 					(style
@@ -683,10 +690,10 @@
 				)
 				(block
 					(style
-						(vgap = 10px)
+						(vgap = 8px)
 						(align = "middle|center")
 						(width = 100%)
-						(marginTop = 10px)
+						(marginTop = 8px)
 					)
 					(element HorizontalDividerTwoPx)
 
@@ -711,9 +718,6 @@
 		(var cameraComponent:gfx = "$datahub.getSingleComponent(CC.camera)")
 		(var mapSize:number = "cameraComponent.visibilityRange / cameraComponent.visibilityRangePerc" watch=false)
 
-		(macro GET_MARKER_ENTITY_COMPONENT 'health')
-		(var isAlive:bool = "healthComponent ? healthComponent.isAlive : false" (event "healthComponent.evIsAliveChanged"))
-
 		# Radar Range
 		(var avatarId:str = "_markerEntity.avatar ? toString(_markerEntity.avatar.id) : ''")
 		(var entityWatcher:gfx = "$datahub.getPrimWatcher(CC.mods_DataComponent, TMap_COMPONENT_KEY_CONSUMABLE_RANGES)")
@@ -735,7 +739,7 @@
 	)
 
 	(controller $Instance renderer='TMap_NearbyRadar'
-		(bind enabled "isRadarShip && isAlive")
+		(bind enabled "isRadarShip")
 		(args _markerEntity="_markerEntity" _radarRange="radarRange" _userPrefsNum="_userPrefsNum")
 	)
 
@@ -747,6 +751,7 @@
 		# Events for parent
 		(event evEnterRadarRange)
 		(event evLeaveRadarRange)
+		(event evUpdateDistance)
 
 		# Timer
 		(var timer:gfx = "$datahub.getSingleComponent(CC.timer)")
@@ -759,29 +764,33 @@
 		# Existence of mapPosition component is NOT guaranteed
 		(var playerEntity:gfx = "$datahub.getSingleEntity(CC.playerAvatar)")
 		(var ownShipMapPosComponent:gfx = "playerEntity.hasComponent(CC.mapPosition) ? playerEntity.mapPosition : null" (event "playerEntity.evAdded"))
-		(var ownPosX:number = "ownShipMapPosComponent ? ownShipMapPosComponent.position.x : -1" watch=false (event "timer.evInfrequent"))
-		(var ownPosY:number = "ownShipMapPosComponent ? ownShipMapPosComponent.position.y : -1" watch=false (event "timer.evInfrequent"))
+		(var ownPosX:number = "ownShipMapPosComponent ? ownShipMapPosComponent.position.x : -1" watch=false (event "evUpdateDistance"))
+		(var ownPosY:number = "ownShipMapPosComponent ? ownShipMapPosComponent.position.y : -1" watch=false (event "evUpdateDistance"))
 
 		# Radar Range
 		(var warnRange:number = "_radarRange + 2")
 
+		# Alive
+		(macro GET_MARKER_ENTITY_COMPONENT 'health')
+		(var isAlive:bool = "healthComponent ? healthComponent.isAlive : false" (event "healthComponent.evIsAliveChanged"))
+
 		# Ship Position
 		# Existence of mapPosition component is NOT guaranteed because I'm iterating over CC.avatar
 		(var shipPosComponent:gfx = "_markerEntity.hasComponent(CC.mapPosition) ? _markerEntity.mapPosition : null" (event "_markerEntity.evAdded"))
-		(var shipPosX:number = "shipPosComponent ? shipPosComponent.position.x : -1" watch=false (event "timer.evInfrequent"))
-		(var shipPosY:number = "shipPosComponent ? shipPosComponent.position.y : -1" watch=false (event "timer.evInfrequent"))
+		(var shipPosX:number = "shipPosComponent ? shipPosComponent.position.x : -1" watch=false (event "evUpdateDistance"))
+		(var shipPosY:number = "shipPosComponent ? shipPosComponent.position.y : -1" watch=false (event "evUpdateDistance"))
 
 		# Calc
 		(var isValidPos:bool = "ownShipMapPosComponent && shipPosComponent")
 		(var posDiffX:number = "(ownPosX - shipPosX) * mapSize")
 		(var posDiffY:number = "(ownPosY - shipPosY) * mapSize")
 
-		(var distanceToShip:number = " sqrt( pow(posDiffX, 2) + pow(posDiffY, 2) ) " watch=false (event "timer.evInfrequent"))
+		(var distanceToShip:number = " sqrt( pow(posDiffX, 2) + pow(posDiffY, 2) ) " watch=false (event "evUpdateDistance"))
 		# Use this instead of Distance Component
 		# in order to avoid the situation where distance to ship becomes "incorrect" while using planes.
 
-		(var isNearby:bool = "isValidPos && (distanceToShip < warnRange)")
-		(var isInRange:bool = "isValidPos && (_radarRange >= distanceToShip)")
+		(var isNearby:bool = "isValidPos && (distanceToShip < warnRange) && isAlive")
+		(var isInRange:bool = "isValidPos && (_radarRange >= distanceToShip) && isAlive")
 
 		# Shipdata
 		(var shipEntity:gfx = "_markerEntity.avatar ? _markerEntity.avatar.ship.ref.ship : null")
@@ -826,13 +835,10 @@
 		)
 	)
 
-	(dispatch evEnterRadarRange args="{}" dir="EventDirection.UP" watch=false init=false (bind enabled "isNearby")  (bind trigger "isNearby"))
-	(dispatch evLeaveRadarRange args="{}" dir="EventDirection.UP" watch=false init=false delay=0.4 (bind enabled "!isNearby") (bind trigger "isNearby"))
+	(dispatch evUpdateDistance args="{}" watch=false init=false (bind enabled "isAlive && isValidPos") (event "timer.evInfrequent"))
 
-	# Only For Specific Cases: Init after reloading, etc.
-	(dispatch evEnterRadarRange args="{}" dir="EventDirection.UP" watch=false init=false on="isNearby ? 'addedToStage' : ''")
-	# When vehicle dies
-	(dispatch evLeaveRadarRange args="{}" dir="EventDirection.UP" watch=false init=false on='removedFromStage')
+	(dispatch evEnterRadarRange args="{}" dir="EventDirection.UP" watch=false init=false on='addedToStage' (bind enabled "isNearby")  (bind trigger "isNearby"))
+	(dispatch evLeaveRadarRange args="{}" dir="EventDirection.UP" watch=false init=false delay=0.4 (bind enabled "!isNearby") (bind trigger "isNearby"))
 
 	(style
 		(hitTest = false)
@@ -842,7 +848,7 @@
 		(pivotX = 50%)
 		(pivotY = 50%)
 		(width = 100%)
-		(marginTop = 10px)
+		(marginTop = 8px)
 	)
 
 	(bind visible "animatedAlpha > 0")
@@ -852,7 +858,7 @@
 	(block
 		(style
 			(align = "middle|center")
-			(marginTop = 10px)
+			(marginTop = 8px)
 			(width = 100%)
 			(vgap = 5px)
 		)
