@@ -779,7 +779,7 @@
 		(var avatarId:str = "_markerEntity.avatar ? toString(_markerEntity.avatar.id) : ''")
 		
 		(var consumableRanges:dict = "avatarId in _consumableData ? _consumableData[avatarId] : {}")
-		(var radarRange:number = "'RADAR' in consumableRanges ? consumableRanges.RADAR.world : 0")
+		(var radarRange:number = "'radar' in consumableRanges ? consumableRanges.radar.world : 0")
 
 		(var isRadarShip:bool = "radarRange > 0")
 	)
