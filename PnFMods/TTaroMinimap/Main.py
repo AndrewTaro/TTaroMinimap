@@ -28,9 +28,9 @@ class ShipConsumableChecker(object):
     COMPONENT_KEY = 'modTTaroMinimapConsumableRanges'
 
     TITLE_TO_INFO = {
-        'RLSSearch'         : {'type': 'RADAR',             'attr': 'distShip'},
-        'SonarSearch'       : {'type': 'HYDRO',             'attr': 'distShip'},
-        'SubmarineLocator'  : {'type': 'SUBRADAR',          'attr': 'acousticWaveMaxDist_submarine_detection'},
+        'RLSSearch'         : {'type': 'radar',             'attr': 'distShip'},
+        'SonarSearch'       : {'type': 'hydro',             'attr': 'distShip'},
+        'SubmarineLocator'  : {'type': 'subRadar',          'attr': 'acousticWaveMaxDist_submarine_detection'},
         #'Hydrophone'        : {'type': 'hydrophone',        'attr': 'hydrophoneWaveRadius'},
     }
 
@@ -67,7 +67,7 @@ class ShipConsumableChecker(object):
             if consInfo is None:
                 continue
             consType = consInfo['type']
-            data[consType] = self.__getConsumableRange(cons, consInfo)
+            data[consType] = self.__getConsumableRanges(cons, consInfo)
 
         if len(data) > 0:
             return data
@@ -80,12 +80,13 @@ class ShipConsumableChecker(object):
                 return consInfo
         return None
 
-    def __getConsumableRange(self, consumable, consInfo):
+    def __getConsumableRanges(self, consumable, consInfo):
         paramName = consInfo['attr']
         for attr in consumable.attributes.neutral:
             if attr.paramName == paramName:
                 bw = attr.numericValue * KM_TO_BW
-                return ui.getLengthOnMiniMap(bw)
+                data = {'world': attr.numericValue, 'map': ui.getLengthOnMiniMap(bw)}
+                return  data
             
 consChecker = ShipConsumableChecker()
 
