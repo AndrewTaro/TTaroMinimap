@@ -3336,17 +3336,6 @@
 		(var minimapEntity:gfx = "$datahub.getSingleEntity(CC.minimap)")
 		(var minimapComponent:gfx = "minimapEntity.minimap")
 		(var angleToRotate:number = "minimapComponent && !isControlledByPlayer ? minimapComponent.rotationAngleDeg : 0" (event "minimapComponent.evRotationAngleDegChanged"))
-
-		# Mod
-		(var ownerEntity:gfx = "_markerEntity.squadron.owner.ref")
-
-		(macro TMap_GET_ALT_VISION)
-		(macro TT_GET_PREF_NUMBER _varName="'playerNameDisplayMode'"	_pref="TMap_PREFS.PLANE_OWNER_NAME_DISPLAY_MODE")
-		(macro TMap_GET_DISPLAY_MODE _varName="'isPlayerNameVisible'"	_prefValue="playerNameDisplayMode")
-
-		(macro TT_GET_PREF_NUMBER _varName="'shipNameDisplayMode'"	_pref="TMap_PREFS.PLANE_OWNER_SHIP_DISPLAY_MODE")
-		(macro TMap_GET_DISPLAY_MODE _varName="'isShipNameVisible'"		_prefValue="shipNameDisplayMode")
-		#
 	)
 
 	(style
@@ -3494,7 +3483,7 @@
 			(args _isFullSize="false" _userPrefsNum="_userPrefsNum")
 			(exprs
 				(style
-					(bind rotation "rotation")
+					(bind rotation "rotation + angleToRotate")
 					(bind alpha "rangesAlpha")
 				)
 			)
@@ -3507,7 +3496,6 @@
 		(style
 			(position = "absolute")
 			(pivotY = 16)
-			(bind rotation "-(angleToRotate)")
 		)
 		(block
 			(controller $Instance (renderer = 'TMap_MapMarkerPlayerName')
@@ -3522,7 +3510,6 @@
 		(style
 			(position = "absolute")
 			(pivotY = -8)
-			(bind rotation "-(angleToRotate)")
 		)
 		(block
 			(controller $Instance (renderer = 'TMap_MapMarkerOwnerShipName')
