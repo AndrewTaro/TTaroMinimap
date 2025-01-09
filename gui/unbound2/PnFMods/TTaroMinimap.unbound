@@ -3499,7 +3499,7 @@
 		)
 		(block
 			(controller $Instance (renderer = 'TMap_MapMarkerPlayerName')
-				(bind enabled "!(isControlledByPlayer) && ownerEntity && isPlayerNameVisible && isNameVsibleType")
+				(bind enabled "!isSelf && ownerEntity && isPlayerNameVisible && isNameVsibleType")
 				(args _markerEntity="ownerEntity" _userPrefsNum="_userPrefsNum")
 			)
 		)
@@ -3513,7 +3513,7 @@
 		)
 		(block
 			(controller $Instance (renderer = 'TMap_MapMarkerOwnerShipName')
-				(bind enabled "!(isControlledByPlayer) && ownerEntity && isShipNameVisible && isNameVsibleType")
+				(bind enabled "!isSelf && ownerEntity && isShipNameVisible && isNameVsibleType")
 				(args _markerEntity="ownerEntity" _userPrefsNum="_userPrefsNum")
 			)
 		)
