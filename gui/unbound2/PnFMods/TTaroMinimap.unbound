@@ -2857,15 +2857,13 @@
 		(var state:number = "'currentState' in _consumablesData ? _consumablesData.currentState : -1")
 
 		(var isValidConsumable:bool = "range > 0")
-
-		(macro SHIP_MARKER_ICON_DATA "_markerEntity.id")
 	)
 	(style
 		(hitTest = false)
 	)
 	(block
 		(controller $Instance (renderer = 'TMap_MapMarkerConsumableItemRange')
-			(bind enabled "isAlive && !isSelf && isAlly && isValidConsumable")
+			(bind enabled "isValidConsumable")
 			(args
 				_markerEntity	= "_markerEntity"
 				_type			= "toUpper(consType)"
@@ -2880,8 +2878,11 @@
 # Custom
 (def element TMap_MapMarkerConsumableItemRange (_markerEntity:gfx, _type:str, _range:number, _state:number, _userPrefsNum:gfx=null) layout=true
 	(scope
+		(var isVisibleInWorld:bool = "_markerEntity && _markerEntity.hasComponent(CC.visibility) && _markerEntity.visibility.visible" (event "_markerEntity.visibility.evChanged"))
+
 		(var isReady:bool = "_state == SC.Battle.CONSUMABLE_STATES.READY")
-		(var isActive:bool = "_state == SC.Battle.CONSUMABLE_STATES.AT_WORK")
+		# Fix for a bug where the consumable circle remains forever when activing consumable then immediately going out the rendering range
+		(var isActive:bool = "_state == SC.Battle.CONSUMABLE_STATES.AT_WORK && isVisibleInWorld")
 		(var isReload:bool = "_state == SC.Battle.CONSUMABLE_STATES.RELOAD")
 		(var isEmpty:bool = "_state == SC.Battle.CONSUMABLE_STATES.NO_AMMO")
 		(var isPreparation:bool = "_state == SC.Battle.CONSUMABLE_STATES.PREPARATION")
