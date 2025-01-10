@@ -221,6 +221,23 @@
 	air_supportMaxDist: 			{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 , 	prefName: 'AIRSUPPORT',		optionName: 'shootAirSupportRangeEnabled' }
 }")
 
+(def constant TMap_CONCEALMENT_SKILL_ID {
+	'AirCarrier': 45,
+	#'Auxiliary': null,
+	'Battleship': 12,
+	'Cruiser': 12,
+	'Destroyer': 12,
+	#'Submarine': null
+})
+(def constant TMap_ATBA_SKILL_ID {
+	'AirCarrier': 41,
+	#'Auxiliary': null,
+	'Battleship': 40,
+	'Cruiser': 30,
+	#'Destroyer': null,
+	#'Submarine': null
+})
+
 (def css $TMap_NearbyRadarBoldText ()
 	(extends $TextDefaultBoldNM)
 	(extends $FontColorDefault)
@@ -1658,7 +1675,8 @@
 		(var isEnemy:bool = "relationComponent && relationComponent.value == SC.Battle.PLAYER_RELATION.ENEMY" (event "relationComponent.evChanged"))
 
 		# Show Dead
-		(macro TT_GET_PREF_BOOL _varName="'isDeadVisible'" _pref="TMap_PREFS.SHOW_DEAD")
+		(macro TT_GET_PREF_NUMBER _varName="'deadDisplayMode'" _pref="TMap_PREFS.SHOW_DEAD")
+		(macro TMap_GET_DISPLAY_MODE _varName="'isDeadVisible'" _prefValue="deadDisplayMode")
 
 		# Player Name
 		(macro TT_GET_PREF_NUMBER _varName="'playerNameDisplayMode'" _pref="TMap_PREFS.PLAYER_NAME_DISPLAY_MODE")
@@ -1702,6 +1720,17 @@
 		(controller $Instance renderer='TMap_MapMarkerEnemyConsumableRanges'
 			(bind enabled "!(isPlayerAvatar) && isAlive && !isAlly")
 			(args _markerEntity="_markerEntity" _consumableRanges="consumableRanges" _userPrefsNum="_userPrefsNum")	
+		)
+	)
+
+	# Non-Player Ranges
+	(block
+		(style
+			(position = "absolute")
+		)
+		(controller $Instance renderer='TMap_MapMarkerNonPlayerRanges'
+			(bind enabled "!(isPlayerAvatar) && isAlive")
+			(args _markerEntity="_markerEntity" _isAlly="isAlly" _userPrefsNum="_userPrefsNum")	
 		)
 	)
 
@@ -2081,6 +2110,172 @@
 			)
 		)
 	)
+)
+
+# Custom
+(def element TMap_MapMarkerNonPlayerRanges (_markerEntity:gfx, _isAlly:bool, _userPrefsNum:gfx=null) layout=true
+	(scope
+		(var rangesAlphaComponent:gfx = "$datahub.getPrimaryEntity(CC.minimapOption, SC.Battle.MINIMAP_OPTION.rangesAlpha).minimapOption")
+		(var rangesAlpha:number = "rangesAlphaComponent.value * 0.01" (event "rangesAlphaComponent.evValueChanged"))
+
+		(var avatarId:str = "_markerEntity.avatar ? _markerEntity.avatar.id : ''")
+
+		#Classic TTX
+		(var ttxEntityWatcher:gfx = "$datahub.getPrimWatcher(CC.mods_ShipParamsInBattle, avatarId)")
+		(var ttxEntity:gfx = "ttxEntityWatcher.entity" (event "ttxEntityWatcher.event"))
+		(var classicTTX:gfx = "ttxEntity ? ttxEntity.mods_ShipParamsInBattle.shipTTX : null")
+
+		#New TTX
+		(var shipBattleInfoEntityWatcher:gfx = "$datahub.getPrimWatcher(CC.mods_ShipParamsInBattle, avatarId)")
+		(var shipBattleInfoEntity:gfx = "shipBattleInfoEntityWatcher.entity" (event "shipBattleInfoEntityWatcher.event"))
+		(var shipBattleInfo:gfx = "shipBattleInfoEntity ? shipBattleInfoEntity.shipBattleInfo : null")
+		(var newTTX:gfx = "shipBattleInfo ? shipBattleInfo.shipTTX : null" (event "shipBattleInfo.evChanged"))
+
+		# TTX
+		(var isRealParams:bool = "shipBattleInfo ? shipBattleInfo.isRealParams : false" (event "shipBattleInfo.evChanged"))
+		(var shipTTX:gfx = "isRealParams ? newTTX : classicTTX")
+
+		(var prefPostfix:str = "_isAlly ? '_ALLY' : '_ENEMY'")
+		# MG
+		(var mgPref:dict = "TMap_PREFS['MAIN_ARMAMENT' + prefPostfix]")
+
+		# SG
+		(var sgPref:dict = "TMap_PREFS['SECONDARY' + prefPostfix]")
+		(var shipId:number = "_markerEntity.avatar ? _markerEntity.avatar.ship.ref.ship.id : null" (event "_markerEntity.avatar.evShipRefChanged"))
+		(var shipType:str = "_markerEntity.avatar ? _markerEntity.avatar.shipType : null" (event "_markerEntity.avatar.evShipTypeChanged"))
+		(var ownShipEntity:gfx = "$datahub.getPrimaryEntity(CC.ownShip, shipId)")
+		(var crewId:number = "ownShipEntity ? ownShipEntity.ownShip.crewId : null" (event "ownShipEntity.ownShip.evCrewChanged"))
+
+		(var sgSkillId:number = "shipType in TMap_ATBA_SKILL_ID ? TMap_ATBA_SKILL_ID[shipType] : null")
+		(var sgSkillEntity:gfx = "$datahub.getPrimaryCompositeEntity(CC.skill, sgSkillId, shipType, -1)")
+		
+		(var sgCrewSkillEntity:gfx = "$datahub.getPrimaryCompositeEntity(CC.crewSkill, crewId, sgSkillEntity.id)")
+		#(crewId, skill) -> rutrns crewSkill if the crew is onboard and has skill
+
+		(var isSGCorrectionNeeded:bool = "!(sgCrewSkillEntity || isRealParams)")
+		# Fix when (the captain doesn't exist | captain doesn'thave atba skill | fake params)
+
+		(var sgModifiers:dict = "sgSkillEntity ? sgSkillEntity.attributes.modifiers : null")
+		(var sgRangeModifier:number = "isSGCorrectionNeeded && sgModifiers ? (1 + sgModifiers.GSMaxDist * 0.01) : 1.0") #value is negative and %
+
+
+		# Torp
+		(var torpPref:dict = "TMap_PREFS['TORPEDO' + prefPostfix]")
+		(var torps:gfx = "shipTTX.torpedoes ? shipTTX.torpedoes : null")
+		(var torp1:number = "torps && torps.torpedo ? torps.torpedo.maxDist.value : 0")
+		(var torp2:number = "torps && torps.torpedoDeepwater ? torps.torpedoDeepwater.maxDist.value : 0")
+		(var torp3:number = "torps && torps.torpedoAlt ? torps.torpedoAlt.maxDist.value : 0")
+		(var subTorps:gfx = "shipTTX.torpedoGroups ? shipTTX.torpedoGroups : null")
+		(var torp4:number = "subTorps && subTorps.torpedo ? subTorps.torpedo.maxDist.value : 0")
+		(var torp5:number = "subTorps && subTorps.torpedoDeepwater ? subTorps.torpedoDeepwater.maxDist.value : 0")
+		(var torp6:number = "subTorps && subTorps.torpedoAlt ? subTorps.torpedoAlt.maxDist.value : 0")
+		(var torpMaxRange:number = "max(torp1, torp2, torp3, torp4, torp5, torp6)")
+
+		# AS
+		(var asPref:dict = "TMap_PREFS['AIRSUPPORT' + prefPostfix]")
+
+		# Visibility Sea
+		(var seaPref:dict = "TMap_PREFS['VISIBILITY_SEA' + prefPostfix]")
+
+		(var concealSkillId:number = "shipType in TMap_CONCEALMENT_SKILL_ID ? TMap_CONCEALMENT_SKILL_ID[shipType] : null")
+		(var concealSkillEntity:gfx = "$datahub.getPrimaryCompositeEntity(CC.skill, concealSkillId, shipType, -1)")
+		
+		(var concealCrewSkillEntity:gfx = "$datahub.getPrimaryCompositeEntity(CC.crewSkill, crewId, concealSkillEntity.id)")
+		#(crewId, skill) -> rutrns crewSkill if the crew is onboard and has skill
+
+		(var isConcealCorrectionNeeded:bool = "!(concealCrewSkillEntity || isRealParams)")
+		# Fix when (the captain doesn't exist | captain doesn'thave conceal | fake params)
+
+		(var concealModifiers:dict = "concealSkillEntity ? concealSkillEntity.attributes.modifiers : null")
+		(var visibilityModifier:number = "isConcealCorrectionNeeded && concealModifiers ? (1 + concealModifiers.visibilityDistCoeff * 0.01) : 1.0") #value is negative and %
+
+		# Visibility Air
+		(var airPref:dict = "TMap_PREFS['VISIBILITY_AIR' + prefPostfix]")
+	)
+	(style
+		(bind alpha "rangesAlpha")
+	)
+
+	# MG
+	(controller $Instance renderer='TMap_MapMarkerItemNonPlayerRange'
+		(bind enabled "shipTTX.artillery")
+		(args _range="shipTTX.artillery.mgMaxDist.value" _pref="mgPref" _userPrefsNum="_userPrefsNum")
+	)
+
+	# ATBA
+	(controller $Instance renderer='TMap_MapMarkerItemNonPlayerRange'
+		(bind enabled "shipTTX.artillery")
+		(args _range="shipTTX.artillery.atbaMaxDist.value * sgRangeModifier" _pref="sgPref" _userPrefsNum="_userPrefsNum")
+	)
+
+	# Torpedo
+	(controller $Instance renderer='TMap_MapMarkerItemNonPlayerRange'
+		(bind enabled "shipTTX.torpedoes")
+		(args _range="torpMaxRange" _pref="torpPref" _userPrefsNum="_userPrefsNum")
+	)
+
+	# AS
+	(controller $Instance renderer='TMap_MapMarkerItemNonPlayerRange'
+		(bind enabled "shipTTX.airSupport")
+		(args _range="shipTTX.airSupport.maxDist.value" _pref="asPref" _userPrefsNum="_userPrefsNum")
+	)
+
+	# Sea
+	(controller $Instance renderer='TMap_MapMarkerItemNonPlayerRange'
+		(bind enabled "shipTTX.visibility")
+		(args _range="shipTTX.visibility.visibilityByShip.normal.value * visibilityModifier" _pref="seaPref" _userPrefsNum="_userPrefsNum")
+	)
+
+	# Air
+	(controller $Instance renderer='TMap_MapMarkerItemNonPlayerRange'
+		(bind enabled "shipTTX.visibility")
+		(args _range="shipTTX.visibility.visibilityByPlane.normal.value * visibilityModifier" _pref="airPref" _userPrefsNum="_userPrefsNum")
+	)
+)
+
+# Custom
+(def element TMap_MapMarkerItemNonPlayerRange (_range:number, _pref:dict, _userPrefsNum:gfx=null) layout = true
+	(scope
+		(macro TMap_GET_ALT_VISION)
+		(macro TT_GET_PREF_NUMBER	_varName="'displayMode'"		_pref="_pref.DISPLAY_MODE")
+		(macro TMap_GET_DISPLAY_MODE _varName="'isVisible'" _prefValue="displayMode")
+
+		(var mapSize:number = "cameraComponent.visibilityRange / cameraComponent.visibilityRangePerc" watch=false)
+
+		(var rangeRadius:number = "_range / mapSize")
+
+		(macro TT_GET_PREF_BOOL	_varName="'isThicknessFixed'"		_pref="TMap_PREFS.RANGE_OUTLINE_FIX")
+
+		(macro TT_GET_PREF_BOOL	_varName="'isCircleFill'"			_pref="_pref.FILL_CIRCLE")
+		(macro TT_GET_PREF_NUMBER _varName="'alphaMultiplier'"		_pref="_pref.ALPHA")
+		(macro TT_GET_PREF_NUMBER _varName="'colorIndex'"			_pref="_pref.COLOR_INDEX")
+		(macro TT_GET_PREF_NUMBER _varName="'outlineType'"			_pref="_pref.LINE_TYPE")
+		(macro TT_GET_PREF_NUMBER _varName="'lineThicknessPref'"	_pref="_pref.LINE_THICKNESS")
+
+		(var lineThickness:number = "isThicknessFixed ? lineThicknessPref * 0.1 / _range : lineThicknessPref")
+
+		(var isOutlineDisabled:bool = "outlineType == TMap_OUTLINE_TYPES.DISABLE")
+		(var isSolid:bool = "outlineType == TMap_OUTLINE_TYPES.SOLID")
+
+		(var lineAlpha:number = "isOutlineDisabled ? 0 : 1")
+
+		(var colorName:str = "colorIndex < TMap_RANGE_COLORS.ALL.length ? TMap_RANGE_COLORS.ALL[colorIndex] : TMap_RANGE_COLORS.ALL[0]")
+		(var color:number = "colorName in TMap_RANGE_COLORS ? TMap_RANGE_COLORS[colorName] : 0xBBBBBB")
+
+		(var innerRadius:number = "isCircleFill ? 0 : MINIMAP_ASSETS_SIZE")
+		(var spacing:number = "isSolid	? 0 
+										: 13"
+		)
+		(var dashLength:number = "isSolid	? 0
+											: 13"
+		)
+
+		(var drawDotted:bool = "outlineType == TMap_OUTLINE_TYPES.DOT")
+		#
+	)
+	(bind visible "isVisible")
+
+	(macro TMap_RANGE_CIRCLE)
 )
 
 # battle\minimap\markers\ship_marker.unbound
