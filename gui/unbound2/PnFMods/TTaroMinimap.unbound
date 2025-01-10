@@ -2161,11 +2161,11 @@
 
 		# Torp
 		(var torpPref:dict = "TMap_PREFS['TORPEDO' + prefPostfix]")
-		(var torps:gfx = "shipTTX.torpedoes ? shipTTX.torpedoes : null")
+		(var torps:gfx = "shipTTX && shipTTX.torpedoes ? shipTTX.torpedoes : null")
 		(var torp1:number = "torps && torps.torpedo ? torps.torpedo.maxDist.value : 0")
 		(var torp2:number = "torps && torps.torpedoDeepwater ? torps.torpedoDeepwater.maxDist.value : 0")
 		(var torp3:number = "torps && torps.torpedoAlt ? torps.torpedoAlt.maxDist.value : 0")
-		(var subTorps:gfx = "shipTTX.torpedoGroups ? shipTTX.torpedoGroups : null")
+		(var subTorps:gfx = "shipTTX && shipTTX.torpedoGroups ? shipTTX.torpedoGroups : null")
 		(var torp4:number = "subTorps && subTorps.torpedo ? subTorps.torpedo.maxDist.value : 0")
 		(var torp5:number = "subTorps && subTorps.torpedoDeepwater ? subTorps.torpedoDeepwater.maxDist.value : 0")
 		(var torp6:number = "subTorps && subTorps.torpedoAlt ? subTorps.torpedoAlt.maxDist.value : 0")
@@ -2198,37 +2198,37 @@
 
 	# MG
 	(controller $Instance renderer='TMap_MapMarkerItemNonPlayerRange'
-		(bind enabled "shipTTX.artillery")
+		(bind enabled "shipTTX && shipTTX.artillery")
 		(args _range="shipTTX.artillery.mgMaxDist.value" _pref="mgPref" _userPrefsNum="_userPrefsNum")
 	)
 
 	# ATBA
 	(controller $Instance renderer='TMap_MapMarkerItemNonPlayerRange'
-		(bind enabled "shipTTX.artillery")
+		(bind enabled "shipTTX && shipTTX.artillery")
 		(args _range="shipTTX.artillery.atbaMaxDist.value * sgRangeModifier" _pref="sgPref" _userPrefsNum="_userPrefsNum")
 	)
 
 	# Torpedo
 	(controller $Instance renderer='TMap_MapMarkerItemNonPlayerRange'
-		(bind enabled "shipTTX.torpedoes")
+		(bind enabled "shipTTX && shipTTX.torpedoes")
 		(args _range="torpMaxRange" _pref="torpPref" _userPrefsNum="_userPrefsNum")
 	)
 
 	# AS
 	(controller $Instance renderer='TMap_MapMarkerItemNonPlayerRange'
-		(bind enabled "shipTTX.airSupport")
+		(bind enabled "shipTTX && shipTTX.airSupport")
 		(args _range="shipTTX.airSupport.maxDist.value" _pref="asPref" _userPrefsNum="_userPrefsNum")
 	)
 
 	# Sea
 	(controller $Instance renderer='TMap_MapMarkerItemNonPlayerRange'
-		(bind enabled "shipTTX.visibility")
+		(bind enabled "shipTTX && shipTTX.visibility")
 		(args _range="shipTTX.visibility.visibilityByShip.normal.value * visibilityModifier" _pref="seaPref" _userPrefsNum="_userPrefsNum")
 	)
 
 	# Air
 	(controller $Instance renderer='TMap_MapMarkerItemNonPlayerRange'
-		(bind enabled "shipTTX.visibility")
+		(bind enabled "shipTTX && shipTTX.visibility")
 		(args _range="shipTTX.visibility.visibilityByPlane.normal.value * visibilityModifier" _pref="airPref" _userPrefsNum="_userPrefsNum")
 	)
 )
