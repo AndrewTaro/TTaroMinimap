@@ -1675,7 +1675,8 @@
 		(var isEnemy:bool = "relationComponent && relationComponent.value == SC.Battle.PLAYER_RELATION.ENEMY" (event "relationComponent.evChanged"))
 
 		# Show Dead
-		(macro TT_GET_PREF_BOOL _varName="'isDeadVisible'" _pref="TMap_PREFS.SHOW_DEAD")
+		(macro TT_GET_PREF_NUMBER _varName="'deadDisplayMode'" _pref="TMap_PREFS.SHOW_DEAD")
+		(macro TMap_GET_DISPLAY_MODE _varName="'isDeadVisible'" _prefValue="deadDisplayMode")
 
 		# Player Name
 		(macro TT_GET_PREF_NUMBER _varName="'playerNameDisplayMode'" _pref="TMap_PREFS.PLAYER_NAME_DISPLAY_MODE")
