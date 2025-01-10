@@ -229,6 +229,14 @@
 	'Destroyer': 12,
 	#'Submarine': null
 })
+(def constant TMap_ATBA_SKILL_ID {
+	'AirCarrier': 41,
+	#'Auxiliary': null,
+	'Battleship': 40,
+	'Cruiser': 30,
+	#'Destroyer': null,
+	#'Submarine': null
+})
 
 (def css $TMap_NearbyRadarBoldText ()
 	(extends $TextDefaultBoldNM)
@@ -2103,6 +2111,7 @@
 	)
 )
 
+# Custom
 (def element TMap_MapMarkerNonPlayerRanges (_markerEntity:gfx, _isAlly:bool, _userPrefsNum:gfx=null) layout=true
 	(scope
 		(var rangesAlphaComponent:gfx = "$datahub.getPrimaryEntity(CC.minimapOption, SC.Battle.MINIMAP_OPTION.rangesAlpha).minimapOption")
@@ -2130,7 +2139,24 @@
 		(var mgPref:dict = "TMap_PREFS['MAIN_ARMAMENT' + prefPostfix]")
 
 		# SG
-		(var gsPref:dict = "TMap_PREFS['SECONDARY' + prefPostfix]")
+		(var sgPref:dict = "TMap_PREFS['SECONDARY' + prefPostfix]")
+		(var shipId:number = "_markerEntity.avatar ? _markerEntity.avatar.ship.ref.ship.id : null" (event "_markerEntity.avatar.evShipRefChanged"))
+		(var shipType:str = "_markerEntity.avatar ? _markerEntity.avatar.shipType : null" (event "_markerEntity.avatar.evShipTypeChanged"))
+		(var ownShipEntity:gfx = "$datahub.getPrimaryEntity(CC.ownShip, shipId)")
+		(var crewId:number = "ownShipEntity ? ownShipEntity.ownShip.crewId : null" (event "ownShipEntity.ownShip.evCrewChanged"))
+
+		(var sgSkillId:number = "shipType in TMap_ATBA_SKILL_ID ? TMap_ATBA_SKILL_ID[shipType] : null")
+		(var sgSkillEntity:gfx = "$datahub.getPrimaryCompositeEntity(CC.skill, sgSkillId, shipType, -1)")
+		
+		(var sgCrewSkillEntity:gfx = "$datahub.getPrimaryCompositeEntity(CC.crewSkill, crewId, sgSkillEntity.id)")
+		#(crewId, skill) -> rutrns crewSkill if the crew is onboard and has skill
+
+		(var isSGCorrectionNeeded:bool = "!(sgCrewSkillEntity || isRealParams)")
+		# Fix when (the captain doesn't exist | captain doesn'thave atba skill | fake params)
+
+		(var sgModifiers:dict = "sgSkillEntity ? sgSkillEntity.attributes.modifiers : null")
+		(var sgRangeModifier:number = "isSGCorrectionNeeded && sgModifiers ? (1 + sgModifiers.GSMaxDist * 0.01) : 1.0") #value is negative and %
+
 
 		# Torp
 		(var torpPref:dict = "TMap_PREFS['TORPEDO' + prefPostfix]")
@@ -2150,22 +2176,17 @@
 		# Visibility Sea
 		(var seaPref:dict = "TMap_PREFS['VISIBILITY_SEA' + prefPostfix]")
 
-		(var shipId:number = "_markerEntity.avatar ? _markerEntity.avatar.ship.ref.ship.id : null" (event "_markerEntity.avatar.evShipRefChanged"))
-		(var shipType:str = "_markerEntity.avatar ? _markerEntity.avatar.shipType : null" (event "_markerEntity.avatar.evShipTypeChanged"))
-		(var ownShipEntity:gfx = "$datahub.getPrimaryEntity(CC.ownShip, shipId)")
-
-		(var skillId:number = "shipType in TMap_CONCEALMENT_SKILL_ID ? TMap_CONCEALMENT_SKILL_ID[shipType] : null")
-		(var concealSkillEntity:gfx = "$datahub.getPrimaryCompositeEntity(CC.skill, skillId, shipType, -1)")
+		(var concealSkillId:number = "shipType in TMap_CONCEALMENT_SKILL_ID ? TMap_CONCEALMENT_SKILL_ID[shipType] : null")
+		(var concealSkillEntity:gfx = "$datahub.getPrimaryCompositeEntity(CC.skill, concealSkillId, shipType, -1)")
 		
-		(var crewId:number = "ownShipEntity ? ownShipEntity.ownShip.crewId : null" (event "ownShipEntity.ownShip.evCrewChanged"))
-		(var crewSkillEntity:gfx = "$datahub.getPrimaryCompositeEntity(CC.crewSkill, crewId, concealSkillEntity.id)")
+		(var concealCrewSkillEntity:gfx = "$datahub.getPrimaryCompositeEntity(CC.crewSkill, crewId, concealSkillEntity.id)")
 		#(crewId, skill) -> rutrns crewSkill if the crew is onboard and has skill
 
-		(var isCorrectionNeeded:bool = "!(crewSkillEntity || isRealParams)")
+		(var isConcealCorrectionNeeded:bool = "!(concealCrewSkillEntity || isRealParams)")
 		# Fix when (the captain doesn't exist | captain doesn'thave conceal | fake params)
 
-		(var modifiers:dict = "concealSkillEntity ? concealSkillEntity.attributes.modifiers : null")
-		(var visibilityModifier:number = "isCorrectionNeeded && modifiers ? (1 + modifiers.visibilityDistCoeff * 0.01) : 1.0") #value is negative and %
+		(var concealModifiers:dict = "concealSkillEntity ? concealSkillEntity.attributes.modifiers : null")
+		(var visibilityModifier:number = "isConcealCorrectionNeeded && concealModifiers ? (1 + concealModifiers.visibilityDistCoeff * 0.01) : 1.0") #value is negative and %
 
 		# Visibility Air
 		(var airPref:dict = "TMap_PREFS['VISIBILITY_AIR' + prefPostfix]")
@@ -2183,7 +2204,7 @@
 	# ATBA
 	(controller $Instance renderer='TMap_MapMarkerItemNonPlayerRange'
 		(bind enabled "shipTTX.artillery")
-		(args _range="shipTTX.artillery.atbaMaxDist.value" _pref="gsPref" _userPrefsNum="_userPrefsNum")
+		(args _range="shipTTX.artillery.atbaMaxDist.value * sgRangeModifier" _pref="sgPref" _userPrefsNum="_userPrefsNum")
 	)
 
 	# Torpedo
@@ -2211,6 +2232,7 @@
 	)
 )
 
+# Custom
 (def element TMap_MapMarkerItemNonPlayerRange (_range:number, _pref:dict, _userPrefsNum:gfx=null) layout = true
 	(scope
 		(macro TMap_GET_ALT_VISION)
