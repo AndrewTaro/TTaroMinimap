@@ -189,7 +189,9 @@ class RadioLocation(object):
     def __updateDataByDirIndex(self, playerId, rpfDirIndex):
         if rpfDirIndex != INVALID_DIRECTION:
             rpfDirRad = RPF_SECTOR_WIDTH_RAD * (rpfDirIndex - 1)
-        self._rpfDirections[playerId] = degrees(rpfDirRad)
+            self._rpfDirections[playerId] = degrees(rpfDirRad)
+        else:
+            self._rpfDirections[playerId] = INVALID_DIRECTION
         self.entityController.updateEntity(self._rpfDirections)
 
     def __onChatReceived(self, component):
