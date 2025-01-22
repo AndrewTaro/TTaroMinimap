@@ -1267,6 +1267,17 @@
 			(bind left "mapBorderMarginX * mapBorderScale")
 			(bind top "mapBorderMarginY * mapBorderScale")
 		)
+		(blendMode = 'layer')
+		(block
+			(bind visible "gradientIndex > 0")
+			(style
+				(backgroundSize = "fill")
+				(bind backgroundImage "gradientBackground")
+				(bind width "scaleRatio") 
+				(bind height "scaleRatio")
+			)
+			(blendMode = 'alpha')
+		)
 	)
 
 	# Mod
