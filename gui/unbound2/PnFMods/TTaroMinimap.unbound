@@ -2818,7 +2818,7 @@
 (def element TMap_MapMarkerDetectionIcon(_markerEntity:gfx, _userPrefsNum:gfx=null) layout=true
 	(scope
 		(macro SHIP_MARKER_ICON_DATA "_markerEntity.id")
-		(var vehicleComponent:gfx = "_markerEntity.hasComponent(CC.vehicle) ? _markerEntity.vehicle : null")
+		(macro GET_MARKER_ENTITY_COMPONENT 'vehicle')
 		(var isSpotted:bool = "vehicleComponent ? vehicleComponent.visibilityFlags : false" (event "vehicleComponent.evVisibilityFlagsChanged"))
 
 		(var isIconVisible:bool = "isSpotted && isAlly && !isSelf && isAlive")
