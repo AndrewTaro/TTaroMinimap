@@ -24,5 +24,6 @@ Additionally, this package includes all the unique features of the mods I've pub
 
 # Requirements
 You must install the following in order to use the mod.
+- [Mods Installer](../../../ModsInstaller)
 - [TTaro Mod Config](../../../TTaroModConfig)
 - [DraggableUnbound2](../../../DraggableUnbound2)
