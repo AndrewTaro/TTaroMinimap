@@ -1342,7 +1342,7 @@
 	(class $FullsizeAbsolute)
 
 	# Mod
-	(element MapSmokeMarkersContainer "_mapScale" "_itemScale" "_scaleRatio")
+	(element SM_MapSmokeMarkersContainer "_mapScale" "_itemScale" "_scaleRatio")
 	#
 
 	(controller $Repeat renderer='TMap_MapMarkerItem'
