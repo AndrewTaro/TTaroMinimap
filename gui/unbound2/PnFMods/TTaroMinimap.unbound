@@ -1203,6 +1203,7 @@
 		(macro TT_GET_PREF_NUMBER _varName="'gradientType'"		_pref="TMap_PREFS.GRADIENT_BACKGROUND_MODE")
 		(var gradientIndex:number = "gradientType < TMap_GRADIENT_BACKGROUNDS.length ? gradientType : 0")
 		(var gradientBackground:str = "TMap_GRADIENT_BACKGROUNDS[gradientIndex]")
+		(var isGardientBackEnabled:bool = "gradientIndex > 0")
 		#
 	)
 
@@ -1233,12 +1234,12 @@
 		)
 		(blendMode = 'layer')
 		(block
-			(bind visible "gradientIndex > 0")
+			(bind visible "isGardientBackEnabled")
 			(style
 				(backgroundSize = "fill")
 				(bind backgroundImage "gradientBackground")
-				(bind width "scaleRatio") 
-				(bind height "scaleRatio")
+				(width = 100%)
+				(height = 100%)
 			)
 			(blendMode = 'alpha')
 		)
@@ -1256,7 +1257,7 @@
 		)
 	)
 
-	
+	# Mod
 	(block
 		(class $FullsizeAbsolute)
 		(style
@@ -1269,16 +1270,17 @@
 		)
 		(blendMode = 'layer')
 		(block
-			(bind visible "gradientIndex > 0")
+			(bind visible "isGardientBackEnabled")
 			(style
 				(backgroundSize = "fill")
 				(bind backgroundImage "gradientBackground")
-				(bind width "scaleRatio") 
-				(bind height "scaleRatio")
+				(width = 100%)
+				(height = 100%)
 			)
 			(blendMode = 'alpha')
 		)
 	)
+	#
 
 	# Mod
 	(controller $Repeat renderer='TMap_MinimapGridVertical' count=10
@@ -3656,6 +3658,7 @@
 		(macro TMap_GET_ALT_VISION)
 		(macro TT_GET_PREF_NUMBER _varName="'isDirectionLineEnabled'" _pref="TMap_PREFS.DIRECTION_SQUADRONS")
 		(macro TMap_GET_DISPLAY_MODE _varName="'isDirectionLineVisible'" _prefValue="isDirectionLineEnabled")
+		(var isInVisionRange:bool = "_markerEntity && _markerEntity.hasComponent(CC.screenPosition)" (event "_markerEntity.evAdded")(event "_markerEntity.evRemoved"))
 
 		(macro TT_GET_PREF_NUMBER _varName="'playerNameDisplayMode'"	_pref="TMap_PREFS.PLANE_OWNER_NAME_DISPLAY_MODE")
 		(macro TMap_GET_DISPLAY_MODE _varName="'isPlayerNameVisible'"	_prefValue="playerNameDisplayMode")
@@ -3686,7 +3689,7 @@
 			(position = "absolute")
 		)
 		(controller $Instance (renderer = 'TMap_MapMarkerDirectionalLine')
-			(bind enabled "isDirectionLineVisible && !(isSelf  || isAlly || isConsumable)")
+			(bind enabled "isDirectionLineVisible && isInVisionRange && !(isSelf  || isAlly || isConsumable)")
 			(args _isFullSize="false" _userPrefsNum="_userPrefsNum")
 			(exprs
 				(style
