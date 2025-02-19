@@ -150,10 +150,10 @@
 	SOLID		: 3,
 })
 
-(def constant TMap_GRADIENT_BACKGROUNDS [
-	'',
-	'url:../ttaro_minimap/map_background/gradient_background_0.png',
-	'url:../ttaro_minimap/map_background/gradient_background_45.png',
+(def constant TMap_GRADIENT_MASKS [
+	{water: 'static_background.png',			island: 'static_background.png'},				# None
+	{water: 'gradient_background_0_water.png',	island: 'gradient_background_0_island.png'},	# 0 deg
+	{water: 'gradient_background_45_water.png',	island: 'gradient_background_45_island.png'},	# 45 deg
 ])
 
 (def constant TMap_AIM_POSITION_ELEMENTS [
@@ -1201,9 +1201,11 @@
 		(macro TT_GET_PREF_NUMBER _varName="'blurIntensity'"		_pref="TMap_PREFS.BLUR_INTENSITY")
 
 		(macro TT_GET_PREF_NUMBER _varName="'gradientType'"		_pref="TMap_PREFS.GRADIENT_BACKGROUND_MODE")
-		(var gradientIndex:number = "gradientType < TMap_GRADIENT_BACKGROUNDS.length ? gradientType : 0")
-		(var gradientBackground:str = "TMap_GRADIENT_BACKGROUNDS[gradientIndex]")
-		(var isGardientBackEnabled:bool = "gradientIndex > 0")
+		(var gradientIndex:number = "gradientType < TMap_GRADIENT_MASKS.length ? gradientType : 0")
+		(var gradientMasks:dict = "TMap_GRADIENT_MASKS[gradientIndex]")
+		(var gradientPathBase:str = 'url:../ttaro_minimap/map_background/')
+		(var gradientIslandMask:str = "gradientPathBase + gradientMasks.island")
+		(var gradientWaterMask:str = "gradientPathBase + gradientMasks.water")
 		#
 	)
 
@@ -1234,10 +1236,9 @@
 		)
 		(blendMode = 'layer')
 		(block
-			(bind visible "isGardientBackEnabled")
 			(style
 				(backgroundSize = "fill")
-				(bind backgroundImage "gradientBackground")
+				(bind backgroundImage "gradientWaterMask")
 				(width = 100%)
 				(height = 100%)
 			)
@@ -1290,10 +1291,9 @@
 		)
 		(blendMode = 'layer')
 		(block
-			(bind visible "isGardientBackEnabled")
 			(style
 				(backgroundSize = "fill")
-				(bind backgroundImage "gradientBackground")
+				(bind backgroundImage "gradientIslandMask")
 				(width = 100%)
 				(height = 100%)
 			)
