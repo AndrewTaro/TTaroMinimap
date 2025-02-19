@@ -1242,7 +1242,7 @@
 				(height = 100%)
 			)
 			(blendMode = 'alpha')
-		)
+		)(tf)
 	)
 	#
 
@@ -1278,7 +1278,7 @@
 				(height = 100%)
 			)
 			(blendMode = 'alpha')
-		)
+		)(tf)
 	)
 	#
 
