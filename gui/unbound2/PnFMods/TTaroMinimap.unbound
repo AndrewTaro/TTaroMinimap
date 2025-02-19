@@ -1243,6 +1243,26 @@
 			)
 			(blendMode = 'alpha')
 		)(tf)
+		#
+		# This textfield fixes all the bug with blendMode = layer
+		# Without this marverous savior, the target images (sea and terrain) will RANDOMLY dissapear, completely messing up the alpha blend.
+		# How random? It depends on the computer or OS or GPU memory or whatever cursed cause, and the reproducibility is not high.
+		# (block) doesn't work, unlike (tf). It could be related to Sprite/Style/Layout system, could be not.
+		# Praise Flash and Action Script 3, and let us pray...
+		#
+		#       /\  
+		#      /**\  
+		#     /****\    /\  
+		#    /      \  /**\   In this house...
+		#   /  []  []\/****\  We build UI with Action Script...
+		#  /_________/      \ 
+		#   |  _  _  |  []  | 
+		#   | | || | |      |  
+		#   | | || | |  []  |  
+		#   | | || | |      |  
+		#   | | || | |______|  
+		#   |_|_||_|_|______| 
+		#
 	)
 	#
 
