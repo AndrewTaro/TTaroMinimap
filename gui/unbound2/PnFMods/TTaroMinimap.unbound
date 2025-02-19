@@ -1218,7 +1218,7 @@
 		(var differedInit:bool = false)
 		(controller $Animation
 			(play
-				duration = 0.01
+				duration = 0.1
 				from     = "{differedInit:false}"
 				to       = "{differedInit:true}"
 				init=true
