@@ -1178,17 +1178,6 @@
 	)
 )
 
-# Custom: Differed Init for BlendMode.LAYER mode bug
-(def element TMap_GradientBackground (_gradientBackground:str='') layout=true
-	(style
-		(backgroundSize = "fill")
-		(bind backgroundImage "_gradientBackground")
-		(width = 100%)
-		(height = 100%)
-	)
-	(blendMode = 'alpha')
-)
-
 # battle/minimap/minimap.unbound
 (def element TMap_MinimapBG (_scaleRatio:number, _mapScale:number, _mapBorderScale:number, _mapBorderMarginX:number, _mapBorderMarginY:number, _showGrid:bool = true, _isLoading:bool = false, _userPrefsNum:gfx = null) layout=true
 	(scope
@@ -1215,15 +1204,6 @@
 		(var gradientIndex:number = "gradientType < TMap_GRADIENT_BACKGROUNDS.length ? gradientType : 0")
 		(var gradientBackground:str = "TMap_GRADIENT_BACKGROUNDS[gradientIndex]")
 		(var isGardientBackEnabled:bool = "gradientIndex > 0")
-		(var differedInit:bool = false)
-		(controller $Animation
-			(play
-				duration = 0.1
-				from     = "{differedInit:false}"
-				to       = "{differedInit:true}"
-				init=true
-			)
-		)
 		#
 	)
 
@@ -1254,11 +1234,14 @@
 		)
 		(blendMode = 'layer')
 		(block
-			(class $FullsizeAbsolute)
-			(controller $Instance renderer='TMap_GradientBackground'
-				(bind enabled "differedInit")
-				(args _gradientBackground = "gradientBackground")
+			(bind visible "isGardientBackEnabled")
+			(style
+				(backgroundSize = "fill")
+				(bind backgroundImage "gradientBackground")
+				(width = 100%)
+				(height = 100%)
 			)
+			(blendMode = 'alpha')
 		)
 	)
 	#
@@ -1287,11 +1270,14 @@
 		)
 		(blendMode = 'layer')
 		(block
-			(class $FullsizeAbsolute)
-			(controller $Instance renderer='TMap_GradientBackground'
-				(bind enabled "differedInit")
-				(args _gradientBackground = "gradientBackground")
+			(bind visible "isGardientBackEnabled")
+			(style
+				(backgroundSize = "fill")
+				(bind backgroundImage "gradientBackground")
+				(width = 100%)
+				(height = 100%)
 			)
+			(blendMode = 'alpha')
 		)
 	)
 	#
