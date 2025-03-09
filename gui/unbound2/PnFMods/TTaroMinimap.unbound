@@ -318,7 +318,7 @@
 				(bind lineAlpha "lineAlpha")
 				(bind lineColor "color")
 				(bind colors "[color]")
-				(bind alphas "[alphaMultiplier * 0.5]")
+				(bind alphas "[alphaMultiplier * 0.35]")
 				(bind ratios "[1.0]")
 				(bind dashLength "dashLength")
 				(bind spacing "spacing")
@@ -1808,6 +1808,20 @@
 	)
 	#
 
+	# Smoke Penalty
+	(block
+		(style
+			(position = "absolute")
+		)
+		(block
+			(controller $Instance (renderer='TMap_MapMarkerSmokePenaltyRange')
+				(bind enabled "isPlayerAvatar && isAlive && !isOnPlane")
+				(args _markerEntity="_markerEntity" _mapScale="_mapScale" _userPrefsNum="_userPrefsNum")
+			)
+		)
+	)
+	#
+
 	(block
 		(style
 			(position = "absolute")
@@ -2138,6 +2152,146 @@
 						#
 					)
 					(bind class "rangeSettings.boldText ? '$TextMinimapRangeBold' : '$TextMinimapRange'")
+					(bind text "rangeValue")
+				)
+			)
+		)
+	)
+)
+
+(def element TMap_MapMarkerSmokePenaltyRange(_markerEntity:gfx, _mapScale:number, _userPrefsNum:gfx=null) layout=true
+	(scope
+		(event evPlayAnimation)
+
+		(var rangesTextScale:number = "_mapScale > 1 ? 1 / _mapScale : 1")
+
+		(macro TMap_GET_ALT_VISION)
+		(var pref:dict = "TMap_PREFS.VISIBILITY_SMOKE")
+		(macro TT_GET_PREF_BOOL	_varName="'isVisibleOnAlt'"			_pref="pref.VISIBLE_ON_ALT")
+		(macro TT_GET_PREF_BOOL	_varName="'isVisibleInSmoke'"		_pref="pref.VISIBLE_IN_SMOKE")
+		(var smokeIndication:gfx = "$datahub.getSingleComponent(CC.smokeIndication)")
+		(var isInSmoke:bool = "smokeIndication ? smokeIndication.smokeInsideLifeTime > 0 : false" (event "smokeIndication.evSmokeTimerChanged"))
+		
+		(var isVisible:bool = "(isVisibleOnAlt && altVision) || (isVisibleInSmoke && isInSmoke)")
+
+		(var rangesAlphaComponent:gfx = "$datahub.getPrimaryEntity(CC.minimapOption, SC.Battle.MINIMAP_OPTION.rangesAlpha).minimapOption")
+		(var rangesAlpha:number = "rangesAlphaComponent.value * 0.01" (event "rangesAlphaComponent.evValueChanged"))
+
+		(var distanceDisplayEnabledComponent:gfx = "$datahub.getPrimaryEntity(CC.minimapOption, SC.Battle.MINIMAP_OPTION.distanceDisplayEnabled).minimapOption")
+		(var distanceDisplayEnabled:bool = "distanceDisplayEnabledComponent.value > 0" (event "distanceDisplayEnabledComponent.evValueChanged"))
+
+		(var smokePenaltyEntity:gfx = "$datahub.getPrimaryEntity(CC.parameter, '' + _markerEntity.id + '_visibilityInSmokeRangeGK')")
+        (var smokePenaltyRange:number = "smokePenaltyEntity ? smokePenaltyEntity.parameter.currentValue : 0" (event "smokePenaltyEntity.parameter.evChanged"))
+
+		(var rangeValue:str = "formatFloatingPoint(round(smokePenaltyRange * 10) / 10, 1)")
+		
+		(var mapSize:number = "cameraComponent.visibilityRange / cameraComponent.visibilityRangePerc" watch=false)
+		(var rangeRadius:number = "smokePenaltyRange / mapSize")
+
+		(macro TT_GET_PREF_BOOL	_varName="'isThicknessFixed'"		_pref="TMap_PREFS.RANGE_OUTLINE_FIX")
+
+		(macro TT_GET_PREF_BOOL	_varName="'isCircleFill'"			_pref="pref.FILL_CIRCLE")
+		(macro TT_GET_PREF_NUMBER _varName="'alphaMultiplier'"		_pref="pref.ALPHA")
+		(macro TT_GET_PREF_NUMBER _varName="'colorIndex'"			_pref="pref.COLOR_INDEX")
+		(macro TT_GET_PREF_NUMBER _varName="'outlineType'"			_pref="pref.LINE_TYPE")
+		(macro TT_GET_PREF_NUMBER _varName="'lineThicknessPref'"	_pref="pref.LINE_THICKNESS")
+
+		(var lineThickness:number = "isThicknessFixed ? lineThicknessPref * 0.1 / smokePenaltyRange : lineThicknessPref")
+
+		(var isOutlineDisabled:bool = "outlineType == TMap_OUTLINE_TYPES.DISABLE")
+		(var isSolid:bool = "outlineType == TMap_OUTLINE_TYPES.SOLID")
+
+		(var lineAlpha:number = "isOutlineDisabled ? 0 : rangesAlpha")
+
+		(var colorName:str = "colorIndex < TMap_RANGE_COLORS.ALL.length ? TMap_RANGE_COLORS.ALL[colorIndex] : TMap_RANGE_COLORS.ALL[0]")
+		(var color:number = "colorName in TMap_RANGE_COLORS ? TMap_RANGE_COLORS[colorName] : 0xBBBBBB")
+
+		(var innerRadius:number = "isCircleFill ? 0 : MINIMAP_ASSETS_SIZE")
+		(var spacing:number = "isSolid	? 0 
+										: 13"
+		)
+		(var dashLength:number = "isSolid	? 0
+											: 13"
+		)
+
+		(var drawDotted:bool = "outlineType == TMap_OUTLINE_TYPES.DOT")
+		#
+	)
+
+	(dispatch evPlayAnimation args="{}" (bind trigger "isVisible"))
+
+	(block
+		(style
+			(alpha = "isVisible")
+		)
+		(macro TMap_RANGE_CIRCLE)
+
+		(controller $Animation
+			(bindcall play 	duration=0.3
+							easing="Easing.line"
+							from="{ alpha: 0 }"
+							to="{ alpha: 1 }"
+							reverse="!(isVisible)"
+							(event "evPlayAnimation")
+			)
+		)
+
+		(block
+			(style
+				(alpha = "0")
+				(filters
+					(dropShadow
+						(distance = 0)
+						(angle = 90)
+						(color = 0xFFFFFF)
+						(alpha = 1.0)
+						(blurX = 3.5)
+						(blurY = 3.5)
+						(strength = 1.2)
+						(quality = 2)
+					)
+				)
+			)
+			(macro TMap_RANGE_CIRCLE)
+
+			(controller $Animation
+				(bindcall play 	duration=0.3
+								easing="Easing.line"
+								keyframes="[{
+									percent:50,
+									from:{ alpha: 0 },
+									to:{ alpha: 1 }
+								},{
+									percent:100,
+									to:{ alpha: 0 }
+								}]"
+								(bind enabled "isVisible")
+								(event "evPlayAnimation")
+				)
+			)
+		)
+	)
+
+	(block
+		(bind visible "isVisible && (distanceDisplayEnabled || altVision)")
+		(block
+			(style
+				(position = "absolute")
+				(bind left "rangeRadius * MINIMAP_ASSETS_SIZE")
+			)
+			(block
+				(macro BIND_FAIR_SCALE "rangesTextScale")
+				(tf
+					(style
+						(position = "absolute")
+						(width = "38px") (height = "20px")
+						(left = "-19px") (top = "-10px")
+						(textAlign = "center")
+						# Mod
+						(bind textColor "color")
+						#
+					)
+					(class $TextMinimapRange)
 					(bind text "rangeValue")
 				)
 			)
@@ -2864,9 +3018,13 @@
 	(scope
 		(macro GET_MARKER_ENTITY_COMPONENT 'data')
 		(var consData:array = "dataComponent ? dataComponent.data['consMonitor']: []" (event "dataComponent.evChanged"))
+
+		(var rangesAlphaComponent:gfx = "$datahub.getPrimaryEntity(CC.minimapOption, SC.Battle.MINIMAP_OPTION.rangesAlpha).minimapOption")
+		(var rangesAlpha:number = "rangesAlphaComponent.value * 0.01" (event "rangesAlphaComponent.evValueChanged"))
 	)
 	(style
 		(hitTest = false)
+		(bind alpha "rangesAlpha")
 	)
 	# Mod
 	(controller $Repeat renderer='TMap_MapMarkerConsumableItem'
