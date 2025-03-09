@@ -2159,6 +2159,7 @@
 	)
 )
 
+# Custom
 (def element TMap_MapMarkerSmokePenaltyRange(_markerEntity:gfx, _mapScale:number, _userPrefsNum:gfx=null) layout=true
 	(scope
 		(event evPlayAnimation)
@@ -2218,23 +2219,12 @@
 		#
 	)
 
-	(dispatch evPlayAnimation args="{}" (bind trigger "isVisible"))
+	(dispatch evPlayAnimation args="{}" (bind trigger "isInSmoke"))
+
+	(bind visible "isVisible")
 
 	(block
-		(style
-			(alpha = "isVisible")
-		)
 		(macro TMap_RANGE_CIRCLE)
-
-		(controller $Animation
-			(bindcall play 	duration=0.3
-							easing="Easing.line"
-							from="{ alpha: 0 }"
-							to="{ alpha: 1 }"
-							reverse="!(isVisible)"
-							(event "evPlayAnimation")
-			)
-		)
 
 		(block
 			(style
@@ -2265,7 +2255,7 @@
 									percent:100,
 									to:{ alpha: 0 }
 								}]"
-								(bind enabled "isVisible")
+								(bind enabled "isInSmoke")
 								(event "evPlayAnimation")
 				)
 			)
@@ -2273,7 +2263,7 @@
 	)
 
 	(block
-		(bind visible "isVisible && (distanceDisplayEnabled || altVision)")
+		(bind visible "distanceDisplayEnabled || altVision")
 		(block
 			(style
 				(position = "absolute")
