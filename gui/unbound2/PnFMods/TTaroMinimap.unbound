@@ -2172,8 +2172,6 @@
 		(macro TT_GET_PREF_BOOL	_varName="'isVisibleInSmoke'"		_pref="pref.VISIBLE_IN_SMOKE")
 		(var smokeIndication:gfx = "$datahub.getSingleComponent(CC.smokeIndication)")
 		(var isInSmoke:bool = "smokeIndication ? smokeIndication.smokeInsideLifeTime > 0 : false" (event "smokeIndication.evSmokeTimerChanged"))
-		
-		(var isVisible:bool = "(isVisibleOnAlt && altVision) || (isVisibleInSmoke && isInSmoke)")
 
 		(var rangesAlphaComponent:gfx = "$datahub.getPrimaryEntity(CC.minimapOption, SC.Battle.MINIMAP_OPTION.rangesAlpha).minimapOption")
 		(var rangesAlpha:number = "rangesAlphaComponent.value * 0.01" (event "rangesAlphaComponent.evValueChanged"))
@@ -2183,6 +2181,8 @@
 
 		(var smokePenaltyEntity:gfx = "$datahub.getPrimaryEntity(CC.parameter, '' + _markerEntity.id + '_visibilityInSmokeRangeGK')")
         (var smokePenaltyRange:number = "smokePenaltyEntity ? smokePenaltyEntity.parameter.currentValue : 0" (event "smokePenaltyEntity.parameter.evChanged"))
+
+		(var isVisible:bool = "smokePenaltyRange > 0 && ((isVisibleOnAlt && altVision) || (isVisibleInSmoke && isInSmoke))")
 
 		(var rangeValue:str = "formatFloatingPoint(round(smokePenaltyRange * 10) / 10, 1)")
 		
@@ -2245,7 +2245,7 @@
 			(macro TMap_RANGE_CIRCLE)
 
 			(controller $Animation
-				(bindcall play 	duration=0.3
+				(bindcall play 	duration=0.6
 								easing="Easing.line"
 								keyframes="[{
 									percent:50,
