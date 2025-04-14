@@ -82,7 +82,7 @@ class ShipConsumableChecker(object):
 
     def __getConsumableRanges(self, consumable, consInfo):
         paramName = consInfo['attr']
-        for attr in consumable.attributes.neutral:
+        for attr in consumable.activeAttributes.neutral:
             if attr.paramName == paramName:
                 bw = attr.numericValue * KM_TO_BW
                 data = {'world': attr.numericValue, 'map': ui.getLengthOnMiniMap(bw)}
