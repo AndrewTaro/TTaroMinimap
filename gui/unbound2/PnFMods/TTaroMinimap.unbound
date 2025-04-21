@@ -1800,7 +1800,7 @@
 		)
 		(block
 			(controller $Instance (renderer = 'TMap_MapMarkerDetectionIcon')
-				(bind enabled "!(isPlayerAvatar) && isAlive && isDetectionVisible")
+				(bind enabled "!(isPlayerAvatar) && isAlive && isAlly && isDetectionVisible")
 				(args _markerEntity="_markerEntity" _userPrefsNum="_userPrefsNum")
 			)
 			
@@ -2983,21 +2983,22 @@
 # Custom
 (def element TMap_MapMarkerDetectionIcon(_markerEntity:gfx, _userPrefsNum:gfx=null) layout=true
 	(scope
-		(macro SHIP_MARKER_ICON_DATA "_markerEntity.id")
 		(macro GET_MARKER_ENTITY_COMPONENT 'vehicle')
 		(var isSpotted:bool = "vehicleComponent ? vehicleComponent.visibilityFlags : false" (event "vehicleComponent.evVisibilityFlagsChanged"))
 
-		(var isIconVisible:bool = "isSpotted && isAlly && !isSelf && isAlive")
+		(macro TT_GET_PREF_NUMBER _varName="'colorIndex'" _pref="TMap_PREFS.DETECTION_COLOR_INDEX")
+		(var colorName:str = "colorIndex < TMap_RANGE_COLORS.ALL.length ? TMap_RANGE_COLORS.ALL[colorIndex] : TMap_RANGE_COLORS.ALL[0]")
+		(var color:number = "colorName in TMap_RANGE_COLORS ? TMap_RANGE_COLORS[colorName] : 0xFF9933")
 	)
 
-	(bind visible "isIconVisible")
+	(bind visible "isSpotted")
 	(style
 		(hitTest = false)
 		(alpha = 0.25)
 	)
 	
 	(controller $Sector
-		(bind color "0xFF9933")
+		(bind color "color")
 		(bind arc "360")
 		(bind radius "5")
 	)
