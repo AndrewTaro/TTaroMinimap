@@ -367,6 +367,10 @@
 		(var isRPFVisible:bool = "rpfComponent ? rpfComponent.showNearestEnemy : false" (event "rpfComponent.evShowNearestEnemyChanged"))
 		(var yawToNearestEnemy:number = "rpfComponent ? rpfComponent.yawToNearestEnemy : 0" (event "rpfComponent.evYawToNearestEnemyChanged"))
 
+		# PlayerAvatar
+		(var playerAvatarComponent:gfx = "$datahub.getSingleComponent(CC.playerAvatar)")
+		(var isAlive:bool = "playerAvatarComponent ? playerAvatarComponent.isAlive : false" (event "playerAvatarComponent.evIsAliveChanged"))
+
 		# Chat
 		(var chatComponent:gfx = "$datahub.getSingleComponent(CC.battleChatAndLog)")
 		(var currentChannelId:number = "chatComponent.currentChannelId" (event "chatComponent.evChannelChanged"))
@@ -406,7 +410,7 @@
 		(var commandComponent:gfx = "commandEntity && commandEntity.commandMappingCommand ? commandEntity.commandMappingCommand : null")
 
 		# Availability
-		(var canSendChat:bool = "isAllyChat && !isOnCoolDown && isRPFChanged")
+		(var canSendChat:bool = "isAllyChat && !isOnCoolDown && isRPFChanged && isAlive")
 	)
 	(visible = false)
 
@@ -2989,12 +2993,14 @@
 		(macro TT_GET_PREF_NUMBER _varName="'colorIndex'" _pref="TMap_PREFS.DETECTION_COLOR_INDEX")
 		(var colorName:str = "colorIndex < TMap_RANGE_COLORS.ALL.length ? TMap_RANGE_COLORS.ALL[colorIndex] : TMap_RANGE_COLORS.ALL[0]")
 		(var color:number = "colorName in TMap_RANGE_COLORS ? TMap_RANGE_COLORS[colorName] : 0xFF9933")
+
+		(macro TT_GET_PREF_NUMBER _varName="'alpha'" _pref="TMap_PREFS.DETECTION_ALPHA")
 	)
 
 	(bind visible "isSpotted")
 	(style
 		(hitTest = false)
-		(alpha = 0.25)
+		(bind alpha "alpha")
 	)
 	
 	(controller $Sector
