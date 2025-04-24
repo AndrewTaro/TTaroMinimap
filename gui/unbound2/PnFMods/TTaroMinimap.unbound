@@ -485,7 +485,7 @@
 	(scope
         (macro STAGE_SIZE)
         (var defaultPos:dict = "{'positionX': stageWidth - XS, 'positionY': stageHeight - XS}")
-        (macro DRAGGABLE_GET_DROP_POSITION _wndName="'TTaroMinimap'" _defaults="defaultPos")
+        (macro DRAGGABLE_GET_DROP_POSITION _elementName="'TTaroMinimap'" _defaultPosition="defaultPos")
 
 		(macro TT_GET_USERPREF)
 		
@@ -525,7 +525,7 @@
         (block
 			(style
 				(position = "absolute")
-				(bind bottom "scaleRatio - 2")
+				(bind bottom "scaleRatio - 2") # Offset to make it look natural
 				(bind right "scaleRatio - 2")
 				(flow = "Flow.HORIZONTAL")
 			)
@@ -535,9 +535,9 @@
 				(controller $Instance renderer='ModDraggableElement'
 					(bind enabled "!isDragDropDisabled")
 					(args
-						_wndName="'TTaroMinimap'"
-						_defaults="defaultPos"
-						_elmSize="{width: XS, height: XS}"
+						_elementName="'TTaroMinimap'"
+						_defaultPosition="defaultPos"
+						_screenBoundsOffset="{right: scaleRatio+XS-2, bottom: scaleRatio+XS-2}"
 					)
 				)
 				(block
@@ -638,7 +638,7 @@
 		(macro TMap_GET_SCALE_RATIO)
 		(macro TT_GET_PREF_BOOL _varName="'isDragDropDisabled'"	_pref="TMap_PREFS.DISABLE_DRAG_DROP")
 		(var defaultPos:dict = "{'positionX': stageWidth-scaleRatio-XS-170px, 'positionY': stageHeight - scaleRatio - XS}")
-        (macro DRAGGABLE_GET_DROP_POSITION _wndName="'TTaroMinimapRadarWarning'" _defaults="defaultPos")
+        (macro DRAGGABLE_GET_DROP_POSITION _elementName="'TTaroMinimapRadarWarning'" _defaultPosition="defaultPos")
 
 		# Config
 		(macro TT_GET_PREF_NUMBER _varName="'backgroundAlpha'"	_pref="TMap_PREFS.NEARBY_RADAR_ALPHA")
@@ -686,8 +686,8 @@
 			(controller $Instance renderer='ModDraggableElement'
 				(bind enabled "!isDragDropDisabled")
 				(args
-					_wndName="'TTaroMinimapRadarWarning'"
-					_defaults="defaultPos"
+					_elementName="'TTaroMinimapRadarWarning'"
+					_defaultPosition="defaultPos"
 				)
 			)
 
