@@ -3014,7 +3014,7 @@
 (def element TMap_MapMarkerConsumableRanges (_markerEntity:gfx, _consumableRanges:dict, _userPrefsNum:gfx=null) layout=true
 	(scope
 		(macro GET_MARKER_ENTITY_COMPONENT 'data')
-		(var consData:array = "dataComponent ? dataComponent.data['consMonitor']: []" (event "dataComponent.evChanged"))
+		(var consData:array = "dataComponent ? dataComponent.data.consMonitor: []" (event "dataComponent.evChanged"))
 
 		(var rangesAlphaComponent:gfx = "$datahub.getPrimaryEntity(CC.minimapOption, SC.Battle.MINIMAP_OPTION.rangesAlpha).minimapOption")
 		(var rangesAlpha:number = "rangesAlphaComponent.value * 0.01" (event "rangesAlphaComponent.evValueChanged"))
@@ -3027,22 +3027,22 @@
 	(controller $Repeat renderer='TMap_MapMarkerConsumableItem'
 		(bind enabled "consData.length > 0")
 		(bind count "consData.length")
-		(args _markerEntity="_markerEntity" _consumableRanges="_consumableRanges" _consumablesData="consData[$index]" _userPrefsNum="_userPrefsNum")
+		(args _markerEntity="_markerEntity" _consumableRanges="_consumableRanges" _consumableMonitorData="consData[$index]" _userPrefsNum="_userPrefsNum")
 	)
 	#
 )
 
 # Custom
-(def element TMap_MapMarkerConsumableItem(_markerEntity:gfx, _consumableRanges:dict, _consumablesData:dict, _userPrefsNum:gfx=null) layout=true
+(def element TMap_MapMarkerConsumableItem(_markerEntity:gfx, _consumableRanges:dict, _consumableMonitorData:dict, _userPrefsNum:gfx=null) layout=true
 	(scope
-		(var consName:str = "'icon' in _consumablesData ? _consumablesData.icon : ''")
-		(var consType:str = "	'RLSSearch' in consName			? 'radar' :
-								'SonarSearch' in consName		? 'hydro' :
-								'SubmarineLocator' in consName	? 'subRadar' :
-								''"
+		(var consumableType:number = "'consumableType' in _consumableMonitorData ? _consumableMonitorData.consumableType : -1")
+		(var consTypeName:str = "consumableType == 12	? 'radar'
+														: consumableType == 10	? 'hydro'
+																				: consumableType == 41	? 'subRadar'
+																										: ''"
 		)
-		(var range:number = "consType in _consumableRanges ? _consumableRanges[consType].map : 0")
-		(var state:number = "'currentState' in _consumablesData ? _consumablesData.currentState : -1")
+		(var range:number = "consTypeName in _consumableRanges ? _consumableRanges[consTypeName].map : 0")
+		(var state:number = "'state' in _consumableMonitorData ? _consumableMonitorData.state : -1")
 
 		(var isValidConsumable:bool = "range > 0")
 	)
@@ -3054,7 +3054,7 @@
 			(bind enabled "isValidConsumable")
 			(args
 				_markerEntity	= "_markerEntity"
-				_type			= "toUpper(consType)"
+				_type			= "toUpper(consTypeName)"
 				_range			= "range"
 				_state			= "state"
 				_userPrefsNum	= "_userPrefsNum"
