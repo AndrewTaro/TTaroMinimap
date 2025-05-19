@@ -618,13 +618,8 @@
 
 		# tr
 		(macro TT_GET_LANGUAGE_INDEX)
-		(var titleTranslations:array = "TT_CONFIG_LOCALIZATIONS['IDS_TT_NEARBY_RADARS']")
-		(var isTitleValid:bool = "titleTranslations.length > languageIndex && !isIn(titleTranslations[languageIndex], ['', ' '])")
-		(var titleText:str = "isTitleValid ? titleTranslations[languageIndex] : titleTranslations[0]")
-
-		(var noRadarTranslations:array = "TT_CONFIG_LOCALIZATIONS['IDS_TT_NO_NEARBY_RADARS']")
-		(var isNoRadarValid:bool = "noRadarTranslations.length > languageIndex && !isIn(noRadarTranslations[languageIndex], ['', ' '])")
-		(var noRadarText:str = "isNoRadarValid ? noRadarTranslations[languageIndex] : noRadarTranslations[0]")
+		(macro TT_GET_TRANSLATION _varName="'titleText'" _key="'IDS_TT_NEARBY_RADARS'")
+		(macro TT_GET_TRANSLATION _varName="'noRadarText'" _key="'IDS_TT_NO_NEARBY_RADARS'")
 
 		# Events for tracking element count
 		(event evEnterRadarRange)
