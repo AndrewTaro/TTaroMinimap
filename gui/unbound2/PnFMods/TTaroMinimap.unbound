@@ -771,8 +771,9 @@
 					_isEnabled		= true
 					_userPrefsNum	= "_userPrefsNum"
 				)
-				(bindcall show animation={duration:0.1, easing:"Easing.cubic_in", from:{alpha:1}, to:{alpha:1}} (event "evOnButtonClicked"))
-				(bindcall hide animation={duration:0.1, easing:"Easing.cubic_out", from:{alpha:1}, to:{alpha:0}} (event "evHideInfotip"))
+				(macro TMap_CONFIG_ANIMATION)
+				(bindcall show (event "evOnButtonClicked"))
+				(bindcall hide (event "evHideInfotip"))
 				(dispatch evHideInfotip args="{}" on='evClickOutside' (bind enabled "!isChooserOpen"))
 
 				(priority=1)
@@ -5356,8 +5357,9 @@
 				_isEnabled		= "_enabled"
 				_userPrefsNum	= "_userPrefsNum"
 			)
-			(bindcall show animation={duration:0.1, easing:"Easing.cubic_in", from:{alpha:1}, to:{alpha:1}} (event "evOpenInfotip"))
-			(bindcall hide animation={duration:0.1, easing:"Easing.cubic_out", from:{alpha:1}, to:{alpha:0}} (event "evHideInfotip"))
+			(macro TMap_CONFIG_ANIMATION)
+			(bindcall show (event "evOpenInfotip"))
+			(bindcall hide (event "evHideInfotip"))
 			(dispatch evHideInfotip args="{}" on='evClickOutside' (bind enabled "!isChooserOpen"))
 			(bind infotipVisible "true" init=false on='evShow')
 			(bind infotipVisible "false" init=false on='evHide')
@@ -5382,8 +5384,9 @@
 				_isEnabled		= "false"
 				_userPrefsNum	= "_userPrefsNum"
 			)
-			(bindcall show animation={duration:0.1, easing:"Easing.cubic_in", from:{alpha:1}, to:{alpha:1}} (event "evRollOver"))
-			(bindcall hide animation={duration:0.1, easing:"Easing.cubic_out", from:{alpha:1}, to:{alpha:0}} (event "evRollOut"))
+			(macro TMap_CONFIG_ANIMATION)
+			(bindcall show (event "evRollOver"))
+			(bindcall hide (event "evRollOut"))
 
 			(pinRight = 'TMap_CustomPinRight')
 			
@@ -5402,8 +5405,9 @@
 				_isEnabled		= "_enabled"
 				_userPrefsNum	= "_userPrefsNum"
 			)
-			(bindcall show animation={duration:0.1, easing:"Easing.cubic_in", from:{alpha:1}, to:{alpha:1}} (event "evOpenDisplayModeInfotip"))
-			(bindcall hide animation={duration:0.1, easing:"Easing.cubic_out", from:{alpha:1}, to:{alpha:0}} (event "evHideInfotip"))
+			(macro TMap_CONFIG_ANIMATION)
+			(bindcall show (event "evOpenDisplayModeInfotip"))
+			(bindcall hide (event "evHideInfotip"))
 			(dispatch evHideInfotip args="{}" on='evClickOutside' (bind enabled "!isChooserOpen"))
 			(bind infotipVisible "true" init=false on='evShow')
 			(bind infotipVisible "false" init=false on='evHide')
@@ -5520,4 +5524,22 @@
 	(style
 		(hitTest = false)
 	)
+)
+
+# Custom
+(def macro TMap_CONFIG_ANIMATION ()
+	(showAnimation = {
+		easing:"Easing.cubic_in",
+		duration: 0.1,
+		delay	: 0.0,
+		from	: {alpha: 0},
+		to		: {alpha: 1}
+	})
+	(hideAnimation = {
+		duration: 0.1,
+		delay	: 0.0,
+		from	: {alpha:1},
+		to		: {alpha:0}
+	})
+	(bindcall hide on='removedFromStage')
 )
