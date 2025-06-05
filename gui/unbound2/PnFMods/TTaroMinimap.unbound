@@ -52,6 +52,8 @@
 (def constant TMap_COMPONENT_KEY_CONSUMABLE_RANGES "'modTTaroMinimapConsumableRanges'")
 (def constant TMap_COMPONENT_KEY_RADIO_LOCATION "'modTTaroMinimapRadioLocation'")
 
+(def constant TMap_RANGE_OFFSET_MAX 6)
+
 # battle\minimap\markers\base_marker.unbound
 (def constant TMap_RANGE_COLORS {
     'IDS_TT_TITLE_MAIN_ARMAMENT_RANGE'      : "0xbbbbbb",
@@ -2889,10 +2891,12 @@
 		(var shipTTX:gfx = "paramEntity ? paramEntity.mods_ShipParamsInBattle.shipTTX : null")
 		
 		# AA
+		(macro TT_GET_PREF_NUMBER _varName="'rangeOffset'" _pref="TMap_PREFS.NEARBY_AA.RANGE_OFFSET")
+
 		(var airDefenseTTX:gfx = "shipTTX ? shipTTX.airDefense : null")
 		(var aaRange:number = "airDefenseTTX ? airDefenseTTX.averageAura.maxDist.value : 0")
-		(var warnRange:number = "aaRange + 2.5")
-		(var warnRangeSqared:number = "pow(warnRange, 2)")
+		(var warnRange:number = "aaRange + rangeOffset")
+		(var warnRangeSquared:number = "pow(warnRange, 2)")
 		(var isValidAA:bool = "aaRange > 0")
 
 		# Ship Position
@@ -2911,7 +2915,7 @@
 
 		(var isValidPos:bool = "ownSqdMapPosComponent && shipPosComponent")
 
-		(var isNearby:bool = "isValidAA && isValidPos && (distanceToShipSquared < warnRangeSqared)")
+		(var isNearby:bool = "isValidAA && isValidPos && (rangeOffset == TMap_RANGE_OFFSET_MAX || distanceToShipSquared < warnRangeSquared)")
 
 		(macro TT_GET_PREF_BOOL	_varName="'isThicknessFixed'"		_pref="TMap_PREFS.RANGE_OUTLINE_FIX")
 
