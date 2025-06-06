@@ -767,7 +767,7 @@
 				(alpha = 0.7)
 			)
 			(controller $Tooltip
-				(renderer='TMap_CustomPrefsInfotip')
+				(renderer='TT_CustomPrefsInfotipElement')
 				(args
 					_prefs			= "[TMap_PREFS.NEARBY_RADAR_SCALE, TMap_PREFS.NEARBY_RADAR_ALPHA, TMap_PREFS.DISABLE_DRAG_DROP]"
 					_isEnabled		= true
@@ -2294,17 +2294,17 @@
 # Custom
 (def element TMap_MapMarkerNonPlayerRanges (_markerEntity:gfx, _isAlly:bool, _userPrefsNum:gfx=null) layout=true
 	(scope
-		(var rangesAlphaComponent:gfx = "$datahub.getPrimaryEntity(CC.minimapOption, SC.Battle.MINIMAP_OPTION.rangesAlpha).minimapOption")
+		(var rangesAlphaComponent:gfx = "$datahub.getPrimaryComponent(CC.minimapOption, SC.Battle.MINIMAP_OPTION.rangesAlpha)")
 		(var rangesAlpha:number = "rangesAlphaComponent.value * 0.01" (event "rangesAlphaComponent.evValueChanged"))
 
 		(var avatarId:str = "_markerEntity.avatar ? _markerEntity.avatar.id : ''")
 
-		#Classic TTX
+		# Classic TTX
 		(var ttxEntityWatcher:gfx = "$datahub.getPrimWatcher(CC.mods_ShipParamsInBattle, avatarId)")
 		(var ttxEntity:gfx = "ttxEntityWatcher.entity" (event "ttxEntityWatcher.event"))
 		(var classicTTX:gfx = "ttxEntity ? ttxEntity.mods_ShipParamsInBattle.shipTTX : null")
 
-		#New TTX
+		# New TTX
 		(var shipBattleInfoEntityWatcher:gfx = "$datahub.getPrimWatcher(CC.mods_ShipParamsInBattle, avatarId)")
 		(var shipBattleInfoEntity:gfx = "shipBattleInfoEntityWatcher.entity" (event "shipBattleInfoEntityWatcher.event"))
 		(var shipBattleInfo:gfx = "shipBattleInfoEntity ? shipBattleInfoEntity.shipBattleInfo : null")
@@ -2315,8 +2315,17 @@
 		(var shipTTX:gfx = "isRealParams ? newTTX : classicTTX")
 
 		(var prefPostfix:str = "_isAlly ? '_ALLY' : '_ENEMY'")
+
+		# My class
+		(var playerAvataEntity:gfx = "$datahub.getSingleEntity(CC.playerAvatar)")
+		(var myShipType:str = "playerAvataEntity ? playerAvataEntity.avatar.shipType : ''" (event "playerAvataEntity.avatar.evShipTypeChanged"))
+		(var enableInClassPrefKey:str = "'ENABLE_IN_' + toUpper(myShipType)")
+		
 		# MG
 		(var mgPref:dict = "TMap_PREFS['MAIN_ARMAMENT' + prefPostfix]")
+		(macro TT_GET_PREF_NUMBER	_varName="'mgDisplayMode'"		_pref="mgPref.DISPLAY_MODE")
+		(macro TT_GET_NULLABLE_PREF_BOOL _varName="'isMGEnabledInClass'" _nullablePref="mgPref[enableInClassPrefKey]" _default="true")
+		(var isMGEnabled:bool = "mgDisplayMode != TMap_DISPLAY_MODES.DISABLE && isMGEnabledInClass")
 
 		# SG
 		(var sgPref:dict = "TMap_PREFS['SECONDARY' + prefPostfix]")
@@ -2337,6 +2346,9 @@
 		(var sgModifiers:dict = "sgSkillEntity ? sgSkillEntity.attributes.modifiers : null")
 		(var sgRangeModifier:number = "isSGCorrectionNeeded && sgModifiers ? (1 + sgModifiers.GSMaxDist * 0.01) : 1.0") #value is negative and %
 
+		(macro TT_GET_PREF_NUMBER	_varName="'sgDisplayMode'"		_pref="sgPref.DISPLAY_MODE")
+		(macro TT_GET_NULLABLE_PREF_BOOL _varName="'isSGEnabledInClass'" _nullablePref="sgPref[enableInClassPrefKey]" _default="true")
+		(var isSGEnabled:bool = "sgDisplayMode != TMap_DISPLAY_MODES.DISABLE && isSGEnabledInClass")
 
 		# Torp
 		(var torpPref:dict = "TMap_PREFS['TORPEDO' + prefPostfix]")
@@ -2349,12 +2361,21 @@
 		(var torp5:number = "subTorps && subTorps.torpedoDeepwater ? subTorps.torpedoDeepwater.maxDist.value : 0")
 		(var torp6:number = "subTorps && subTorps.torpedoAlt ? subTorps.torpedoAlt.maxDist.value : 0")
 		(var torpMaxRange:number = "max(torp1, torp2, torp3, torp4, torp5, torp6)")
+		(macro TT_GET_PREF_NUMBER	_varName="'torpDisplayMode'"		_pref="torpPref.DISPLAY_MODE")
+		(macro TT_GET_NULLABLE_PREF_BOOL _varName="'isTorpEnabledInClass'" _nullablePref="torpPref[enableInClassPrefKey]" _default="true")
+		(var isTorpEnabled:bool = "torpDisplayMode != TMap_DISPLAY_MODES.DISABLE && isTorpEnabledInClass")
 
 		# AS
 		(var asPref:dict = "TMap_PREFS['AIRSUPPORT' + prefPostfix]")
+		(macro TT_GET_PREF_NUMBER	_varName="'asDisplayMode'"		_pref="asPref.DISPLAY_MODE")
+		(macro TT_GET_NULLABLE_PREF_BOOL _varName="'isASEnabledInClass'" _nullablePref="asPref[enableInClassPrefKey]" _default="true")
+		(var isASEnabled:bool = "asDisplayMode != TMap_DISPLAY_MODES.DISABLE && isASEnabledInClass")
 
 		# Visibility Sea
 		(var seaPref:dict = "TMap_PREFS['VISIBILITY_SEA' + prefPostfix]")
+		(macro TT_GET_PREF_NUMBER	_varName="'seaDisplayMode'"		_pref="seaPref.DISPLAY_MODE")
+		(macro TT_GET_NULLABLE_PREF_BOOL _varName="'isSeaEnabledInClass'" _nullablePref="seaPref[enableInClassPrefKey]" _default="true")
+		(var isSeaVisEnabled:bool = "seaDisplayMode != TMap_DISPLAY_MODES.DISABLE && isSeaEnabledInClass")
 
 		(var concealSkillId:number = "shipType in TMap_CONCEALMENT_SKILL_ID ? TMap_CONCEALMENT_SKILL_ID[shipType] : null")
 		(var concealSkillEntity:gfx = "$datahub.getPrimaryCompositeEntity(CC.skill, concealSkillId, shipType, -1)")
@@ -2370,6 +2391,32 @@
 
 		# Visibility Air
 		(var airPref:dict = "TMap_PREFS['VISIBILITY_AIR' + prefPostfix]")
+		(macro TT_GET_PREF_NUMBER	_varName="'airDisplayMode'"		_pref="airPref.DISPLAY_MODE")
+		(macro TT_GET_NULLABLE_PREF_BOOL _varName="'isAirEnabledInClass'" _nullablePref="airPref[enableInClassPrefKey]" _default="true")
+		(var isAirVisEnabled:bool = "airDisplayMode != TMap_DISPLAY_MODES.DISABLE && isAirEnabledInClass")
+
+
+		# Distance
+		(var timer:gfx = "$datahub.getSingleComponent(CC.timer)")
+
+		# Own Ship
+		(var myVehMapPosComponent:gfx = "playerAvataEntity ? playerAvataEntity.mapPosition : null" (event "playerAvataEntity.evAdded"))
+		(var myPosX:number = "myVehMapPosComponent ? myVehMapPosComponent.position.x : 0" watch=false (event "timer.evInfrequent"))
+		(var myPosY:number = "myVehMapPosComponent ? myVehMapPosComponent.position.y : 0" watch=false (event "timer.evInfrequent"))
+
+		# Marker Ship
+		(var shipPosComponent:gfx = "_markerEntity.hasComponent(CC.mapPosition) ? _markerEntity.mapPosition : null" (event "_markerEntity.evAdded"))
+		(var shipPosX:number = "shipPosComponent ? shipPosComponent.position.x : 0" watch=false (event "timer.evInfrequent"))
+		(var shipPosY:number = "shipPosComponent ? shipPosComponent.position.y : 0" watch=false (event "timer.evInfrequent"))
+
+		# Map Size
+		(var cameraComponent:gfx = "$datahub.getSingleComponent(CC.camera)")
+		(var mapSize:number = "cameraComponent.visibilityRange / cameraComponent.visibilityRangePerc" watch=false)
+
+		# Calc
+		(var posDiffX:number = "(myPosX - shipPosX) * mapSize" watch=false (event "timer.evInfrequent"))
+		(var posDiffY:number = "(myPosY - shipPosY) * mapSize" watch=false (event "timer.evInfrequent"))
+		(var distanceToShipSquared:number = "pow(posDiffX, 2) + pow(posDiffY, 2)" watch=false (event "timer.evInfrequent"))
 	)
 	(style
 		(bind alpha "rangesAlpha")
@@ -2377,47 +2424,86 @@
 
 	# MG
 	(controller $Instance renderer='TMap_MapMarkerItemNonPlayerRange'
-		(bind enabled "shipTTX && shipTTX.artillery")
-		(args _range="shipTTX.artillery.mgMaxDist.value" _pref="mgPref" _userPrefsNum="_userPrefsNum")
+		(bind enabled "isMGEnabled && shipTTX && shipTTX.artillery")
+		(args
+			_range	= "shipTTX.artillery.mgMaxDist.value"
+			_pref	= "mgPref"
+			_distanceSquared = "distanceToShipSquared"
+			_userPrefsNum	 = "_userPrefsNum"
+		)
 	)
 
 	# ATBA
 	(controller $Instance renderer='TMap_MapMarkerItemNonPlayerRange'
-		(bind enabled "shipTTX && shipTTX.artillery")
-		(args _range="shipTTX.artillery.atbaMaxDist.value * sgRangeModifier" _pref="sgPref" _userPrefsNum="_userPrefsNum")
+		(bind enabled "isSGEnabled && shipTTX && shipTTX.artillery")
+		(args
+			_range	= "shipTTX.artillery.atbaMaxDist.value * sgRangeModifier"
+			_pref	= "sgPref"
+			_distanceSquared = "distanceToShipSquared"
+			_userPrefsNum	 = "_userPrefsNum"
+		)
 	)
 
 	# Torpedo
 	(controller $Instance renderer='TMap_MapMarkerItemNonPlayerRange'
-		(bind enabled "shipTTX && shipTTX.torpedoes")
-		(args _range="torpMaxRange" _pref="torpPref" _userPrefsNum="_userPrefsNum")
+		(bind enabled "isTorpEnabled && shipTTX && shipTTX.torpedoes")
+		(args
+			_range	= "torpMaxRange"
+			_pref	= "torpPref"
+			_distanceSquared = "distanceToShipSquared"
+			_userPrefsNum	 = "_userPrefsNum"
+		)
 	)
 
 	# AS
 	(controller $Instance renderer='TMap_MapMarkerItemNonPlayerRange'
-		(bind enabled "shipTTX && shipTTX.airSupport")
-		(args _range="shipTTX.airSupport.maxDist.value" _pref="asPref" _userPrefsNum="_userPrefsNum")
+		(bind enabled "isASEnabled && shipTTX && shipTTX.airSupport")
+		(args
+			_range	= "shipTTX.airSupport.maxDist.value"
+			_pref	= "asPref"
+			_distanceSquared = "distanceToShipSquared"
+			_userPrefsNum	 = "_userPrefsNum"
+		)
 	)
 
 	# Sea
 	(controller $Instance renderer='TMap_MapMarkerItemNonPlayerRange'
-		(bind enabled "shipTTX && shipTTX.visibility")
-		(args _range="shipTTX.visibility.visibilityByShip.normal.value * visibilityModifier" _pref="seaPref" _userPrefsNum="_userPrefsNum")
+		(bind enabled "isSeaVisEnabled && shipTTX && shipTTX.visibility")
+		(args
+			_range	= "shipTTX.visibility.visibilityByShip.normal.value * visibilityModifier"
+			_pref	= "seaPref"
+			_distanceSquared = "distanceToShipSquared"
+			_userPrefsNum	 = "_userPrefsNum"
+		)
 	)
 
 	# Air
 	(controller $Instance renderer='TMap_MapMarkerItemNonPlayerRange'
-		(bind enabled "shipTTX && shipTTX.visibility")
-		(args _range="shipTTX.visibility.visibilityByPlane.normal.value * visibilityModifier" _pref="airPref" _userPrefsNum="_userPrefsNum")
+		(bind enabled "isAirVisEnabled && shipTTX && shipTTX.visibility")
+		(args
+			_range	= "shipTTX.visibility.visibilityByPlane.normal.value * visibilityModifier"
+			_pref	= "airPref"
+			_distanceSquared = "distanceToShipSquared"
+			_userPrefsNum	 = "_userPrefsNum"
+		)
 	)
 )
 
 # Custom
-(def element TMap_MapMarkerItemNonPlayerRange (_range:number, _pref:dict, _userPrefsNum:gfx=null) layout = true
+(def element TMap_MapMarkerItemNonPlayerRange (_range:number, _pref:dict, _distanceSquared:number, _userPrefsNum:gfx=null) layout = true
 	(scope
 		(macro TMap_GET_ALT_VISION)
 		(macro TT_GET_PREF_NUMBER	_varName="'displayMode'"		_pref="_pref.DISPLAY_MODE")
-		(macro TMap_GET_DISPLAY_MODE _varName="'isVisible'" _prefValue="displayMode")
+		(macro TMap_GET_DISPLAY_MODE _varName="'isEnabled'" 		_prefValue="displayMode")
+
+		# Range Offset
+		(var rangePref:dict = "'RANGE_OFFSET' in _pref ? _pref.RANGE_OFFSET : TMap_PREFS.FAKE.RANGE_OFFSET")
+		(macro TT_GET_PREF_NUMBER	_varName="'rangeOffset'"		_pref="rangePref")
+		(var warnRange:number = "_range + rangeOffset")
+		(var warnRangeSquared:number = "pow(warnRange, 2)")
+		(var isInRange:bool = "rangeOffset == TMap_RANGE_OFFSET_MAX || (_distanceSquared < warnRangeSquared)")
+
+		(var isVisible:bool = "isEnabled && isInRange")
 
 		(var mapSize:number = "cameraComponent.visibilityRange / cameraComponent.visibilityRangePerc" watch=false)
 
@@ -5354,7 +5440,7 @@
 		)
 		# Infotip
 		(controller $Tooltip
-			(renderer='TMap_CustomPrefsInfotip')
+			(renderer='TT_CustomPrefsInfotipElement')
 			(bind enabled "hasPrefs && _enabled")
 			(args
 				_prefs			= "allPrefs"
@@ -5381,7 +5467,7 @@
 		)
 		# Tooltip
 		(controller $Tooltip
-			(renderer='TMap_CustomPrefsInfotip')
+			(renderer='TT_CustomPrefsInfotipElement')
 			(bind enabled "hasPrefs && _enabled && !infotipVisible")
 			(args
 				_prefs			= "allPrefs"
@@ -5402,7 +5488,7 @@
 		)
 		# Only Display Mode
 		(controller $Tooltip
-			(renderer='TMap_CustomPrefsInfotip')
+			(renderer='TT_CustomPrefsInfotipElement')
 			(bind enabled "hasPrefs && _enabled")
 			(args
 				_prefs			= "[prefs.DISPLAY_MODE]"
@@ -5486,30 +5572,6 @@
 			_methods = "clickMethods"
 			_soundSet = "'default_checkbox'"
 			_dispatchedEv = "'evClickOption'"
-		)
-	)
-)
-
-# Custom
-(def element TMap_CustomPrefsInfotip(_prefs:array, _isEnabled:bool=false, _userPrefsNum:gfx=null)
-	(style
-		(bind hitTest "_isEnabled")
-	)
-	(macro TOOLTIP_SYSTEM_DEFAULT_BACKGROUND)
-
-	(element TOOLTIP_SYSTEM_DEFAULT_CONTAINER
-		(style
-			(width = "480px")
-			(align = "middle|center")
-		)
-
-		(controller $Repeat renderer='TT_ConfigElement'
-			(bind count "_prefs.length")
-			(args
-				_pref			= "_prefs[$index]"
-				_isConfigurable	= "true"
-				_userPrefsNum	= "_userPrefsNum"
-			)
 		)
 	)
 )
