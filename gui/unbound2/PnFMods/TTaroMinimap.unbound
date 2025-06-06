@@ -2294,7 +2294,7 @@
 		(var classicTTX:gfx = "ttxEntity ? ttxEntity.mods_ShipParamsInBattle.shipTTX : null")
 
 		# New TTX
-		(var shipBattleInfoEntityWatcher:gfx = "$datahub.getPrimWatcher(CC.mods_ShipParamsInBattle, avatarId)")
+		(var shipBattleInfoEntityWatcher:gfx = "$datahub.getPrimWatcher(CC.shipBattleInfo, avatarId)")
 		(var shipBattleInfoEntity:gfx = "shipBattleInfoEntityWatcher.entity" (event "shipBattleInfoEntityWatcher.event"))
 		(var shipBattleInfo:gfx = "shipBattleInfoEntity ? shipBattleInfoEntity.shipBattleInfo : null")
 		(var newTTX:gfx = "shipBattleInfo ? shipBattleInfo.shipTTX : null" (event "shipBattleInfo.evChanged"))
