@@ -2322,16 +2322,10 @@
 		(var shipType:str = "_markerEntity.avatar ? _markerEntity.avatar.shipType : null" (event "_markerEntity.avatar.evShipTypeChanged"))
 		(var ownShipEntity:gfx = "$datahub.getPrimaryEntity(CC.ownShip, shipId)")
 		(var crewId:number = "ownShipEntity ? ownShipEntity.ownShip.crewId : null" (event "ownShipEntity.ownShip.evCrewChanged"))
-
 		(var sgSkillId:number = "shipType in TMap_ATBA_SKILL_ID ? TMap_ATBA_SKILL_ID[shipType] : null")
 		(var sgSkillEntity:gfx = "$datahub.getPrimaryCompositeEntity(CC.skill, sgSkillId, shipType, -1)")
-		
 		(var sgCrewSkillEntity:gfx = "$datahub.getPrimaryCompositeEntity(CC.crewSkill, crewId, sgSkillEntity.id)")
-		#(crewId, skill) -> rutrns crewSkill if the crew is onboard and has skill
-
 		(var isSGCorrectionNeeded:bool = "!(sgCrewSkillEntity || isRealParams)")
-		# Fix when (the captain doesn't exist | captain doesn'thave atba skill | fake params)
-
 		(var sgModifiers:dict = "sgSkillEntity ? sgSkillEntity.attributes.modifiers : null")
 		(var sgRangeModifier:number = "isSGCorrectionNeeded && sgModifiers ? (1 + sgModifiers.GSMaxDist * 0.01) : 1.0") #value is negative and %
 
@@ -2365,18 +2359,12 @@
 		(macro TT_GET_PREF_NUMBER	_varName="'seaDisplayMode'"		_pref="seaPref.DISPLAY_MODE")
 		(macro TT_GET_NULLABLE_PREF_BOOL _varName="'isSeaEnabledInClass'" _nullablePref="seaPref[enableInClassPrefKey]" _default="true")
 		(var isSeaVisEnabled:bool = "seaDisplayMode != TMap_DISPLAY_MODES.DISABLE && isSeaEnabledInClass")
-
 		(var concealSkillId:number = "shipType in TMap_CONCEALMENT_SKILL_ID ? TMap_CONCEALMENT_SKILL_ID[shipType] : null")
 		(var concealSkillEntity:gfx = "$datahub.getPrimaryCompositeEntity(CC.skill, concealSkillId, shipType, -1)")
-		
 		(var concealCrewSkillEntity:gfx = "$datahub.getPrimaryCompositeEntity(CC.crewSkill, crewId, concealSkillEntity.id)")
-		#(crewId, skill) -> rutrns crewSkill if the crew is onboard and has skill
-
 		(var isConcealCorrectionNeeded:bool = "!(concealCrewSkillEntity || isRealParams)")
-		# Fix when (the captain doesn't exist | captain doesn'thave conceal | fake params)
-
 		(var concealModifiers:dict = "concealSkillEntity ? concealSkillEntity.attributes.modifiers : null")
-		(var visibilityModifier:number = "isConcealCorrectionNeeded && concealModifiers ? (1 + concealModifiers.visibilityDistCoeff * 0.01) : 1.0") #value is negative and %
+		(var visibilityModifier:number = "isConcealCorrectionNeeded && concealModifiers ? (1 + concealModifiers.visibilityDistCoeff * 0.01) : 1.0") # value is negative and %
 
 		# Visibility Air
 		(var airPref:dict = "TMap_PREFS['VISIBILITY_AIR' + prefPostfix]")
