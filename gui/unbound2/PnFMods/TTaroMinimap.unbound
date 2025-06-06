@@ -1734,38 +1734,27 @@
 
 	# Mod
 
-	# Consumables
+	# Ally Consumables
 	(block
 		(style
 			(position = "absolute")
 		)
 		(block
-			(controller $Instance (renderer = 'TMap_MapMarkerConsumableRanges')
+			(controller $Instance (renderer = 'TMap_MapMarkerAllyConsumableRanges')
 				(bind enabled "!(isPlayerAvatar) && isAlive && isAlly")
 				(args _markerEntity="_markerEntity" _consumableRanges="consumableRanges" _userPrefsNum="_userPrefsNum")
 			)
 		)
 	)
 
-	# Enemy Consumables
-	(block
-		(style
-			(position = "absolute")
-		)
-		(controller $Instance renderer='TMap_MapMarkerEnemyConsumableRanges'
-			(bind enabled "!(isPlayerAvatar) && isAlive && !isAlly")
-			(args _markerEntity="_markerEntity" _consumableRanges="consumableRanges" _userPrefsNum="_userPrefsNum")	
-		)
-	)
-
-	# Non-Player Ranges
+	# Non-Player Ranges + Enemy Consumable Ranges
 	(block
 		(style
 			(position = "absolute")
 		)
 		(controller $Instance renderer='TMap_MapMarkerNonPlayerRanges'
 			(bind enabled "!(isPlayerAvatar) && isAlive")
-			(args _markerEntity="_markerEntity" _isAlly="isAlly" _userPrefsNum="_userPrefsNum")	
+			(args _markerEntity="_markerEntity" _isAlly="isAlly" _consumableRanges="consumableRanges" _userPrefsNum="_userPrefsNum")	
 		)
 	)
 
@@ -2292,7 +2281,7 @@
 )
 
 # Custom
-(def element TMap_MapMarkerNonPlayerRanges (_markerEntity:gfx, _isAlly:bool, _userPrefsNum:gfx=null) layout=true
+(def element TMap_MapMarkerNonPlayerRanges (_markerEntity:gfx, _isAlly:bool, _consumableRanges:dict, _userPrefsNum:gfx=null) layout=true
 	(scope
 		(var rangesAlphaComponent:gfx = "$datahub.getPrimaryComponent(CC.minimapOption, SC.Battle.MINIMAP_OPTION.rangesAlpha)")
 		(var rangesAlpha:number = "rangesAlphaComponent.value * 0.01" (event "rangesAlphaComponent.evValueChanged"))
@@ -2395,6 +2384,27 @@
 		(macro TT_GET_NULLABLE_PREF_BOOL _varName="'isAirEnabledInClass'" _nullablePref="airPref[enableInClassPrefKey]" _default="true")
 		(var isAirVisEnabled:bool = "airDisplayMode != TMap_DISPLAY_MODES.DISABLE && isAirEnabledInClass")
 
+		# Radar
+		(var radarPref:dict = "TMap_PREFS.RADAR_ENEMY")
+		(macro TT_GET_PREF_NUMBER _varName="'radarDisplayMode'"		_pref="radarPref.DISPLAY_MODE")
+		(macro TT_GET_NULLABLE_PREF_BOOL _varName="'isRadarEnabledInClass'" _nullablePref="radarPref[enableInClassPrefKey]" _default="false")
+		(var radarRange:number = "'radar' in _consumableRanges ? _consumableRanges.radar.world : 0")
+		(var isRadarEnabled:bool = "(radarDisplayMode != TMap_DISPLAY_MODES.DISABLE) && isRadarEnabledInClass && (radarRange > 0)")
+
+		# Hydro
+		(var hydroPref:dict = "TMap_PREFS.HYDRO_ENEMY")
+		(macro TT_GET_PREF_NUMBER _varName="'hydroDisplayMode'"		_pref="hydroPref.DISPLAY_MODE")
+		(macro TT_GET_NULLABLE_PREF_BOOL _varName="'isHydroEnabledInClass'" _nullablePref="hydroPref[enableInClassPrefKey]" _default="false")
+		(var hydroRange:number = "'hydro' in _consumableRanges ? _consumableRanges.hydro.world : 0")
+		(var isHydroEnabled:bool = "(hydroDisplayMode != TMap_DISPLAY_MODES.DISABLE) && isHydroEnabledInClass && (hydroRange > 0)")
+
+		# Sub Radar
+		(var subRadarPref:dict = "TMap_PREFS.SUBRADAR_ENEMY")
+		(macro TT_GET_PREF_NUMBER _varName="'subRadarDisplayMode'"	_pref="subRadarPref.DISPLAY_MODE")
+		(macro TT_GET_NULLABLE_PREF_BOOL _varName="'isSubRadarEnabledInClass'" _nullablePref="subRadarPref[enableInClassPrefKey]" _default="false")
+		(var subRadarRange:number = "'subRadar' in _consumableRanges ? _consumableRanges.subRadar.world : 0")
+		(var isSubRadarEnabled:bool = "(subRadarDisplayMode	!= TMap_DISPLAY_MODES.DISABLE) && isSubRadarEnabledInClass && (subRadarRange > 0)")
+
 
 		# Distance
 		(var timer:gfx = "$datahub.getSingleComponent(CC.timer)")
@@ -2420,6 +2430,37 @@
 	)
 	(style
 		(bind alpha "rangesAlpha")
+	)
+
+	# Enemy Radar
+	(controller $Instance renderer='TMap_MapMarkerItemNonPlayerRange'
+		(bind enabled "!_isAlly && isRadarEnabled")
+		(args
+			_range			= "radarRange"
+			_pref			= "radarPref"
+			_distanceSquared= "distanceToShipSquared"
+			_userPrefsNum	= "_userPrefsNum"
+		)
+	)
+	# Enemy Hydro
+	(controller $Instance renderer='TMap_MapMarkerItemNonPlayerRange'
+		(bind enabled "!_isAlly && isHydroEnabled")
+		(args
+			_range			= "hydroRange"
+			_pref			= "hydroPref"
+			_distanceSquared= "distanceToShipSquared"
+			_userPrefsNum	= "_userPrefsNum"
+		)
+	)
+	# Enemy SubRadar
+	(controller $Instance renderer='TMap_MapMarkerItemNonPlayerRange'
+		(bind enabled "!_isAlly && isSubRadarEnabled")
+		(args
+			_range			= "subRadarRange"
+			_pref			= "subRadarPref"
+			_distanceSquared= "distanceToShipSquared"
+			_userPrefsNum	= "_userPrefsNum"
+		)
 	)
 
 	# MG
@@ -2497,8 +2538,7 @@
 		(macro TMap_GET_DISPLAY_MODE _varName="'isEnabled'" 		_prefValue="displayMode")
 
 		# Range Offset
-		(var rangePref:dict = "'RANGE_OFFSET' in _pref ? _pref.RANGE_OFFSET : TMap_PREFS.FAKE.RANGE_OFFSET")
-		(macro TT_GET_PREF_NUMBER	_varName="'rangeOffset'"		_pref="rangePref")
+		(macro TT_GET_NULLABLE_PREF_NUMBER _varName="'rangeOffset'" _nullablePref="_pref.RANGE_OFFSET" _default="TMap_RANGE_OFFSET_MAX")
 		(var warnRange:number = "_range + rangeOffset")
 		(var warnRangeSquared:number = "pow(warnRange, 2)")
 		(var isInRange:bool = "rangeOffset == TMap_RANGE_OFFSET_MAX || (_distanceSquared < warnRangeSquared)")
@@ -3097,7 +3137,7 @@
 )
 
 # Custom
-(def element TMap_MapMarkerConsumableRanges (_markerEntity:gfx, _consumableRanges:dict, _userPrefsNum:gfx=null) layout=true
+(def element TMap_MapMarkerAllyConsumableRanges (_markerEntity:gfx, _consumableRanges:dict, _userPrefsNum:gfx=null) layout=true
 	(scope
 		(macro GET_MARKER_ENTITY_COMPONENT 'data')
 		(var consData:array = "dataComponent ? dataComponent.data.consMonitor: []" (event "dataComponent.evChanged"))
@@ -3110,7 +3150,7 @@
 		(bind alpha "rangesAlpha")
 	)
 	# Mod
-	(controller $Repeat renderer='TMap_MapMarkerConsumableItem'
+	(controller $Repeat renderer='TMap_MapMarkerAllyConsumableItem'
 		(bind enabled "consData.length > 0")
 		(bind count "consData.length")
 		(args _markerEntity="_markerEntity" _consumableRanges="_consumableRanges" _consumableMonitorData="consData[$index]" _userPrefsNum="_userPrefsNum")
@@ -3119,7 +3159,7 @@
 )
 
 # Custom
-(def element TMap_MapMarkerConsumableItem(_markerEntity:gfx, _consumableRanges:dict, _consumableMonitorData:dict, _userPrefsNum:gfx=null) layout=true
+(def element TMap_MapMarkerAllyConsumableItem(_markerEntity:gfx, _consumableRanges:dict, _consumableMonitorData:dict, _userPrefsNum:gfx=null) layout=true
 	(scope
 		(var consumableType:number = "'consumableType' in _consumableMonitorData ? _consumableMonitorData.consumableType : -1")
 		(var consTypeName:str = "consumableType == 12	? 'radar'
@@ -3136,7 +3176,7 @@
 		(hitTest = false)
 	)
 	(block
-		(controller $Instance (renderer = 'TMap_MapMarkerConsumableItemRange')
+		(controller $Instance (renderer = 'TMap_MapMarkerAllyConsumableItemRange')
 			(bind enabled "isValidConsumable")
 			(args
 				_markerEntity	= "_markerEntity"
@@ -3150,7 +3190,7 @@
 )
 
 # Custom
-(def element TMap_MapMarkerConsumableItemRange (_markerEntity:gfx, _type:str, _range:number, _state:number, _userPrefsNum:gfx=null) layout=true
+(def element TMap_MapMarkerAllyConsumableItemRange (_markerEntity:gfx, _type:str, _range:number, _state:number, _userPrefsNum:gfx=null) layout=true
 	(scope
 		(var isVisibleInWorld:bool = "_markerEntity && _markerEntity.hasComponent(CC.visibility) && _markerEntity.visibility.visible" (event "_markerEntity.visibility.evChanged"))
 
@@ -3264,95 +3304,6 @@
 			)
 		)
 	)
-)
-
-# Custom
-(def element TMap_MapMarkerEnemyConsumableRanges (_markerEntity:gfx, _consumableRanges:dict, _userPrefsNum:gfx=null) layout=true
-	(scope
-		(macro TT_GET_PREF_NUMBER _varName="'radarDisplayMode'"		_pref="TMap_PREFS.RADAR_ENEMY.DISPLAY_MODE")
-		(macro TT_GET_PREF_NUMBER _varName="'hydroDisplayMode'"		_pref="TMap_PREFS.HYDRO_ENEMY.DISPLAY_MODE")
-		(macro TT_GET_PREF_NUMBER _varName="'subRadarDisplayMode'"	_pref="TMap_PREFS.SUBRADAR_ENEMY.DISPLAY_MODE")
-
-		(var radarRange:number = "'radar' in _consumableRanges ? _consumableRanges.radar.map : 0")
-		(var hydroRange:number = "'hydro' in _consumableRanges ? _consumableRanges.hydro.map : 0")
-		(var subRadarRange:number = "'subRadar' in _consumableRanges ? _consumableRanges.subRadar.map : 0")
-	)
-	(style
-		(hitTest = false)
-	)
-	# Radar
-	(block
-		(controller $Instance renderer='TMap_MapMarkerEnemyConsumableItemRange'
-			(bind enabled "radarDisplayMode != TMap_DISPLAY_MODES.DISABLE && radarRange")
-			(args _markerEntity="_markerEntity" _type="'RADAR'" _range="radarRange" _userPrefsNum="_userPrefsNum")
-		)
-	)
-	# Hydro
-	(block
-		(controller $Instance renderer='TMap_MapMarkerEnemyConsumableItemRange'
-			(bind enabled "hydroDisplayMode != TMap_DISPLAY_MODES.DISABLE && hydroRange")
-			(args _markerEntity="_markerEntity" _type="'HYDRO'" _range="hydroRange" _userPrefsNum="_userPrefsNum")
-		)
-	)
-	# SubRadar
-	(block
-		(controller $Instance renderer='TMap_MapMarkerEnemyConsumableItemRange'
-			(bind enabled "subRadarDisplayMode != TMap_DISPLAY_MODES.DISABLE && subRadarRange")
-			(args _markerEntity="_markerEntity" _type="'SUBRADAR'" _range="subRadarRange" _userPrefsNum="_userPrefsNum")
-		)
-	)
-)
-
-# Custom
-(def element TMap_MapMarkerEnemyConsumableItemRange (_markerEntity:gfx, _type:str, _range:number, _userPrefsNum:gfx=null) layout=true
-	(scope
-		(var prefKey:str = "_type + '_ENEMY'")
-		(var prefs:dict = "TMap_PREFS[prefKey]")
-
-		(macro TT_GET_PREF_BOOL	_varName="'isThicknessFixed'"		_pref="TMap_PREFS.RANGE_OUTLINE_FIX")
-
-		(macro TT_GET_PREF_BOOL	_varName="'isCircleFill'" _pref="prefs.FILL_CIRCLE")
-		(macro TT_GET_PREF_NUMBER _varName="'alphaMultiplier'" _pref="prefs.ALPHA")
-		(macro TT_GET_PREF_NUMBER _varName="'colorIndex'" _pref="prefs.COLOR_INDEX")
-
-		(macro TT_GET_PREF_NUMBER _varName="'outlineType'"			_pref="prefs.LINE_TYPE")
-		(macro TT_GET_PREF_NUMBER _varName="'lineThicknessPref'"	_pref="prefs.LINE_THICKNESS")
-
-		(macro TMap_GET_ALT_VISION)
-		(macro TT_GET_PREF_NUMBER _varName="'displayMode'" _pref="prefs.DISPLAY_MODE")
-		(macro TMap_GET_DISPLAY_MODE _varName="'isVisible'" _prefValue="displayMode")
-
-
-		(var isOutlineDisabled:bool = "outlineType == TMap_OUTLINE_TYPES.DISABLE")
-		(var isSolid:bool = "outlineType == TMap_OUTLINE_TYPES.SOLID")
-
-		(var lineAlpha:number = "isOutlineDisabled ? 0 : 1")
-
-		(var colorName:str = "colorIndex < TMap_RANGE_COLORS.ALL.length ? TMap_RANGE_COLORS.ALL[colorIndex] : TMap_RANGE_COLORS.ALL[0]")
-		(var color:number = "colorName in TMap_RANGE_COLORS ? TMap_RANGE_COLORS[colorName] : 0xBBBBBB")
-
-		(var innerRadius:number = "isCircleFill ? 0 : MINIMAP_ASSETS_SIZE")
-		(var drawDotted:bool = "outlineType == TMap_OUTLINE_TYPES.DOT")
-		
-		(var spacing:number = "isSolid	? 0 
-										: 13"
-		)
-		(var dashLength:number = "isSolid	? 0 
-											: 13"
-		)
-
-		(var rangeRadius:number = "_range")
-
-		(var lineThickness:number = "isThicknessFixed ? lineThicknessPref * 0.1 / rangeRadius : lineThicknessPref")
-	)
-
-	(bind visible "isVisible")
-
-	(style
-		(hitTest = false)
-	)
-
-	(macro TMap_RANGE_CIRCLE)
 )
 
 # battle\minimap\markers\building_marker.unbound
