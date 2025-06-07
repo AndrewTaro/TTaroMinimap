@@ -53,6 +53,8 @@
 (def constant TMap_COMPONENT_KEY_RADIO_LOCATION "'modTTaroMinimapRadioLocation'")
 
 (def constant TMap_RANGE_OFFSET_MAX 6)
+(def constant TMap_RANGE_LIMIT_MAX 16)
+(def constant TMap_RANGE_INVALID -1)
 
 # battle\minimap\markers\base_marker.unbound
 (def constant TMap_RANGE_COLORS {
@@ -2526,10 +2528,14 @@
 		(macro TMap_GET_DISPLAY_MODE _varName="'isEnabled'" 		_prefValue="displayMode")
 
 		# Range Offset
-		(macro TT_GET_NULLABLE_PREF_NUMBER _varName="'rangeOffset'" _nullablePref="_pref['RANGE_OFFSET']" _default="TMap_RANGE_OFFSET_MAX")
-		(var warnRange:number = "_range + rangeOffset")
+		# Pref is supposed to have one of these.
+		(macro TT_GET_NULLABLE_PREF_NUMBER _varName="'rangeOffset'" _nullablePref="_pref['RANGE_OFFSET']"	_default="TMap_RANGE_INVALID")
+		(macro TT_GET_NULLABLE_PREF_NUMBER _varName="'rangeLimit'"	_nullablePref="_pref['RANGE_LIMIT']"	_default="TMap_RANGE_INVALID")
+		(var warnRange:number = "rangeOffset == TMap_RANGE_INVALID  ? rangeLimit
+																	: _range + rangeOffset"
+		)
 		(var warnRangeSquared:number = "pow(warnRange, 2)")
-		(var isInRange:bool = "rangeOffset == TMap_RANGE_OFFSET_MAX || (_distanceSquared < warnRangeSquared)")
+		(var isInRange:bool = "rangeOffset == TMap_RANGE_OFFSET_MAX || rangeLimit == TMap_RANGE_LIMIT_MAX || (_distanceSquared < warnRangeSquared)")
 
 		(var isVisible:bool = "isEnabled && isInRange")
 
@@ -3134,7 +3140,6 @@
 		(var rangesAlpha:number = "rangesAlphaComponent.value * 0.01" (event "rangesAlphaComponent.evValueChanged"))
 	)
 	(style
-		(hitTest = false)
 		(bind alpha "rangesAlpha")
 	)
 	# Mod
@@ -3159,16 +3164,22 @@
 		(var state:number = "'state' in _consumableMonitorData ? _consumableMonitorData.state : -1")
 
 		(var isValidConsumable:bool = "range > 0")
-	)
-	(style
-		(hitTest = false)
+
+		(var prefKey:str = "toUpper(consTypeName) + '_ALLY'")
+		(var pref:dict = "TMap_PREFS[prefKey]")
+
+		(var playerAvataEntity:gfx = "$datahub.getSingleEntity(CC.playerAvatar)")
+		(var subType:str = "playerAvataEntity ? playerAvataEntity.avatar.shipType : ''" (event "playerAvataEntity.avatar.evShipTypeChanged"))
+		(var enableInClassPrefKey:str = "'ENABLE_IN_' + toUpper(subType)")
+
+		(macro TT_GET_PREF_BOOL		_varName="'isEnabledInClass'"		_pref="pref[enableInClassPrefKey]")
 	)
 	(block
 		(controller $Instance (renderer = 'TMap_MapMarkerAllyConsumableItemRange')
-			(bind enabled "isValidConsumable")
+			(bind enabled "isValidConsumable && isEnabledInClass")
 			(args
 				_markerEntity	= "_markerEntity"
-				_type			= "toUpper(consTypeName)"
+				_pref			= "pref"
 				_range			= "range"
 				_state			= "state"
 				_userPrefsNum	= "_userPrefsNum"
@@ -3178,9 +3189,10 @@
 )
 
 # Custom
-(def element TMap_MapMarkerAllyConsumableItemRange (_markerEntity:gfx, _type:str, _range:number, _state:number, _userPrefsNum:gfx=null) layout=true
+(def element TMap_MapMarkerAllyConsumableItemRange (_markerEntity:gfx, _pref:dict, _range:number, _state:number, _userPrefsNum:gfx=null) layout=true
 	(scope
-		(var isVisibleInWorld:bool = "_markerEntity && _markerEntity.hasComponent(CC.visibility) && _markerEntity.visibility.visible" (event "_markerEntity.visibility.evChanged"))
+		(macro GET_MARKER_ENTITY_COMPONENT 'visibility')
+		(var isVisibleInWorld:bool = "visibilityComponent && visibilityComponent.visible" (event "visibilityComponent.evChanged"))
 
 		(var isReady:bool = "_state == SC.Battle.CONSUMABLE_STATES.READY")
 		# Fix for a bug where the consumable circle remains forever when activing consumable then immediately going out the rendering range
@@ -3189,19 +3201,16 @@
 		(var isEmpty:bool = "_state == SC.Battle.CONSUMABLE_STATES.NO_AMMO")
 		(var isPreparation:bool = "_state == SC.Battle.CONSUMABLE_STATES.PREPARATION")
 
-		(var prefKey:str = "_type + '_ALLY'")
-		(var prefs:dict = "TMap_PREFS[prefKey]")
+		(macro TT_GET_PREF_BOOL		_varName="'isThicknessFixed'"		_pref="TMap_PREFS.RANGE_OUTLINE_FIX")
 
-		(macro TT_GET_PREF_BOOL	_varName="'isThicknessFixed'"		_pref="TMap_PREFS.RANGE_OUTLINE_FIX")
+		(macro TT_GET_PREF_BOOL		_varName="'isVisibleOnAlt'" 		_pref="_pref.VISIBLE_ON_ALT")
+		(macro TT_GET_PREF_BOOL		_varName="'isVisibleOnActivation'"	_pref="_pref.VISIBLE_ON_ACTIVATION")
+		(macro TT_GET_PREF_BOOL		_varName="'isCircleFill'"			_pref="_pref.FILL_CIRCLE")
+		(macro TT_GET_PREF_NUMBER	_varName="'alphaMultiplier'"		_pref="_pref.ALPHA")
+		(macro TT_GET_PREF_NUMBER	_varName="'colorIndex'"				_pref="_pref.COLOR_INDEX")
 
-		(macro TT_GET_PREF_BOOL	_varName="'isVisibleOnAlt'" _pref="prefs.VISIBLE_ON_ALT")
-		(macro TT_GET_PREF_BOOL	_varName="'isVisibleOnActivation'" _pref="prefs.VISIBLE_ON_ACTIVATION")
-		(macro TT_GET_PREF_BOOL	_varName="'isCircleFill'" _pref="prefs.FILL_CIRCLE")
-		(macro TT_GET_PREF_NUMBER _varName="'alphaMultiplier'" _pref="prefs.ALPHA")
-		(macro TT_GET_PREF_NUMBER _varName="'colorIndex'" _pref="prefs.COLOR_INDEX")
-
-		(macro TT_GET_PREF_NUMBER _varName="'outlineType'"			_pref="prefs.LINE_TYPE")
-		(macro TT_GET_PREF_NUMBER _varName="'lineThicknessPref'"	_pref="prefs.LINE_THICKNESS")
+		(macro TT_GET_PREF_NUMBER	_varName="'outlineType'"			_pref="_pref.LINE_TYPE")
+		(macro TT_GET_PREF_NUMBER	_varName="'lineThicknessPref'"		_pref="_pref.LINE_THICKNESS")
 
 
 		(var isOutlineDisabled:bool = "outlineType == TMap_OUTLINE_TYPES.DISABLE")
