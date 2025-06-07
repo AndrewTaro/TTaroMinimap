@@ -2315,7 +2315,7 @@
 		# MG
 		(var mgPref:dict = "TMap_PREFS['MAIN_ARMAMENT' + prefPostfix]")
 		(macro TT_GET_PREF_NUMBER	_varName="'mgDisplayMode'"		_pref="mgPref.DISPLAY_MODE")
-		(macro TT_GET_PREF_BOOL 	_varName="'isMGEnabledInClass'" _pref="mgPref[enableInClassPrefKey]")
+		(macro TT_GET_NULLABLE_PREF_BOOL 	_varName="'isMGEnabledInClass'" _nullablePref="mgPref[enableInClassPrefKey]" _default="true")
 		(var isMGEnabled:bool = "mgDisplayMode != TMap_DISPLAY_MODES.DISABLE && isMGEnabledInClass")
 
 		# SG
@@ -2332,7 +2332,7 @@
 		(var sgRangeModifier:number = "isSGCorrectionNeeded && sgModifiers ? (1 + sgModifiers.GSMaxDist * 0.01) : 1.0") #value is negative and %
 
 		(macro TT_GET_PREF_NUMBER	_varName="'sgDisplayMode'"		_pref="sgPref.DISPLAY_MODE")
-		(macro TT_GET_PREF_BOOL		_varName="'isSGEnabledInClass'" _pref="sgPref[enableInClassPrefKey]")
+		(macro TT_GET_NULLABLE_PREF_BOOL	_varName="'isSGEnabledInClass'" _nullablePref="sgPref[enableInClassPrefKey]" _default="true")
 		(var isSGEnabled:bool = "sgDisplayMode != TMap_DISPLAY_MODES.DISABLE && isSGEnabledInClass")
 
 		# Torp
@@ -2347,19 +2347,19 @@
 		(var torp6:number = "subTorps && subTorps.torpedoAlt ? subTorps.torpedoAlt.maxDist.value : 0")
 		(var torpMaxRange:number = "max(torp1, torp2, torp3, torp4, torp5, torp6)")
 		(macro TT_GET_PREF_NUMBER	_varName="'torpDisplayMode'"		_pref="torpPref.DISPLAY_MODE")
-		(macro TT_GET_PREF_BOOL		_varName="'isTorpEnabledInClass'"	_pref="torpPref[enableInClassPrefKey]")
+		(macro TT_GET_NULLABLE_PREF_BOOL	_varName="'isTorpEnabledInClass'"	_nullablePref="torpPref[enableInClassPrefKey]" _default="true")
 		(var isTorpEnabled:bool = "torpDisplayMode != TMap_DISPLAY_MODES.DISABLE && isTorpEnabledInClass")
 
 		# AS
 		(var asPref:dict = "TMap_PREFS['AIRSUPPORT' + prefPostfix]")
 		(macro TT_GET_PREF_NUMBER	_varName="'asDisplayMode'"			_pref="asPref.DISPLAY_MODE")
-		(macro TT_GET_PREF_BOOL		_varName="'isASEnabledInClass'" 	_pref="asPref[enableInClassPrefKey]")
+		(macro TT_GET_NULLABLE_PREF_BOOL	_varName="'isASEnabledInClass'" 	_nullablePref="asPref[enableInClassPrefKey]" _default="true")
 		(var isASEnabled:bool = "asDisplayMode != TMap_DISPLAY_MODES.DISABLE && isASEnabledInClass")
 
 		# Visibility Sea
 		(var seaPref:dict = "TMap_PREFS['VISIBILITY_SEA' + prefPostfix]")
 		(macro TT_GET_PREF_NUMBER	_varName="'seaDisplayMode'"			_pref="seaPref.DISPLAY_MODE")
-		(macro TT_GET_PREF_BOOL		_varName="'isSeaEnabledInClass'" 	_pref="seaPref[enableInClassPrefKey]")
+		(macro TT_GET_NULLABLE_PREF_BOOL	_varName="'isSeaEnabledInClass'" 	_nullablePref="seaPref[enableInClassPrefKey]" _default="true")
 		(var isSeaVisEnabled:bool = "seaDisplayMode != TMap_DISPLAY_MODES.DISABLE && isSeaEnabledInClass")
 		(var concealSkillId:number = "shipType in TMap_CONCEALMENT_SKILL_ID ? TMap_CONCEALMENT_SKILL_ID[shipType] : null")
 		(var concealSkillEntity:gfx = "$datahub.getPrimaryCompositeEntity(CC.skill, concealSkillId, shipType, -1)")
@@ -2371,27 +2371,27 @@
 		# Visibility Air
 		(var airPref:dict = "TMap_PREFS['VISIBILITY_AIR' + prefPostfix]")
 		(macro TT_GET_PREF_NUMBER	_varName="'airDisplayMode'"			_pref="airPref.DISPLAY_MODE")
-		(macro TT_GET_PREF_BOOL		_varName="'isAirEnabledInClass'"	_pref="airPref[enableInClassPrefKey]")
+		(macro TT_GET_NULLABLE_PREF_BOOL	_varName="'isAirEnabledInClass'"	_nullablePref="airPref[enableInClassPrefKey]" _default="true")
 		(var isAirVisEnabled:bool = "airDisplayMode != TMap_DISPLAY_MODES.DISABLE && isAirEnabledInClass")
 
 		# Radar
 		(var radarPref:dict = "TMap_PREFS.RADAR_ENEMY")
 		(macro TT_GET_PREF_NUMBER	_varName="'radarDisplayMode'"		_pref="radarPref.DISPLAY_MODE")
-		(macro TT_GET_PREF_BOOL		_varName="'isRadarEnabledInClass'"	_pref="radarPref[enableInClassPrefKey]")
+		(macro TT_GET_NULLABLE_PREF_BOOL	_varName="'isRadarEnabledInClass'"	_nullablePref="radarPref[enableInClassPrefKey]" _default="true")
 		(var radarRange:number = "'radar' in _consumableRanges ? _consumableRanges.radar.world : 0")
 		(var isRadarEnabled:bool = "(radarDisplayMode != TMap_DISPLAY_MODES.DISABLE) && isRadarEnabledInClass && (radarRange > 0)")
 
 		# Hydro
 		(var hydroPref:dict = "TMap_PREFS.HYDRO_ENEMY")
 		(macro TT_GET_PREF_NUMBER	_varName="'hydroDisplayMode'"		_pref="hydroPref.DISPLAY_MODE")
-		(macro TT_GET_PREF_BOOL		_varName="'isHydroEnabledInClass'" 	_pref="hydroPref[enableInClassPrefKey]")
+		(macro TT_GET_NULLABLE_PREF_BOOL	_varName="'isHydroEnabledInClass'" 	_nullablePref="hydroPref[enableInClassPrefKey]" _default="true")
 		(var hydroRange:number = "'hydro' in _consumableRanges ? _consumableRanges.hydro.world : 0")
 		(var isHydroEnabled:bool = "(hydroDisplayMode != TMap_DISPLAY_MODES.DISABLE) && isHydroEnabledInClass && (hydroRange > 0)")
 
 		# Sub Radar
 		(var subRadarPref:dict = "TMap_PREFS.SUBRADAR_ENEMY")
 		(macro TT_GET_PREF_NUMBER	_varName="'subRadarDisplayMode'"	_pref="subRadarPref.DISPLAY_MODE")
-		(macro TT_GET_PREF_BOOL		_varName="'isSubRadarEnabledInClass'" _pref="subRadarPref[enableInClassPrefKey]")
+		(macro TT_GET_NULLABLE_PREF_BOOL 	_varName="'isSubRadarEnabledInClass'" _nullablePref="subRadarPref[enableInClassPrefKey]" _default="true")
 		(var subRadarRange:number = "'subRadar' in _consumableRanges ? _consumableRanges.subRadar.world : 0")
 		(var isSubRadarEnabled:bool = "(subRadarDisplayMode	!= TMap_DISPLAY_MODES.DISABLE) && isSubRadarEnabledInClass && (subRadarRange > 0)")
 
@@ -3167,16 +3167,10 @@
 
 		(var prefKey:str = "toUpper(consTypeName) + '_ALLY'")
 		(var pref:dict = "TMap_PREFS[prefKey]")
-
-		(var playerAvataEntity:gfx = "$datahub.getSingleEntity(CC.playerAvatar)")
-		(var subType:str = "playerAvataEntity ? playerAvataEntity.avatar.shipType : ''" (event "playerAvataEntity.avatar.evShipTypeChanged"))
-		(var enableInClassPrefKey:str = "'ENABLE_IN_' + toUpper(subType)")
-
-		(macro TT_GET_PREF_BOOL		_varName="'isEnabledInClass'"		_pref="pref[enableInClassPrefKey]")
 	)
 	(block
 		(controller $Instance (renderer = 'TMap_MapMarkerAllyConsumableItemRange')
-			(bind enabled "isValidConsumable && isEnabledInClass")
+			(bind enabled "isValidConsumable")
 			(args
 				_markerEntity	= "_markerEntity"
 				_pref			= "pref"
@@ -3200,6 +3194,11 @@
 		(var isReload:bool = "_state == SC.Battle.CONSUMABLE_STATES.RELOAD")
 		(var isEmpty:bool = "_state == SC.Battle.CONSUMABLE_STATES.NO_AMMO")
 		(var isPreparation:bool = "_state == SC.Battle.CONSUMABLE_STATES.PREPARATION")
+
+		(var playerAvataEntity:gfx = "$datahub.getSingleEntity(CC.playerAvatar)")
+		(var subType:str = "playerAvataEntity ? playerAvataEntity.avatar.shipType : ''" (event "playerAvataEntity.avatar.evShipTypeChanged"))
+		(var enableInClassPrefKey:str = "'ENABLE_IN_' + toUpper(subType)")
+		(macro TT_GET_NULLABLE_PREF_BOOL	_varName="'isEnabledInClass'"		_nullablePref="pref[enableInClassPrefKey]" _default="true")
 
 		(macro TT_GET_PREF_BOOL		_varName="'isThicknessFixed'"		_pref="TMap_PREFS.RANGE_OUTLINE_FIX")
 
@@ -3242,7 +3241,7 @@
 		(var isValid:bool = "rangeRadius > 0")
 	)
 
-	(bind visible "isValid && isVisible")
+	(bind visible "isValid && isVisible && isEnabledInClass")
 
 	(style
 		(hitTest = false)
