@@ -3198,7 +3198,7 @@
 		(var playerAvataEntity:gfx = "$datahub.getSingleEntity(CC.playerAvatar)")
 		(var subType:str = "playerAvataEntity ? playerAvataEntity.avatar.shipType : ''" (event "playerAvataEntity.avatar.evShipTypeChanged"))
 		(var enableInClassPrefKey:str = "'ENABLE_IN_' + toUpper(subType)")
-		(macro TT_GET_NULLABLE_PREF_BOOL	_varName="'isEnabledInClass'"		_nullablePref="pref[enableInClassPrefKey]" _default="true")
+		(macro TT_GET_NULLABLE_PREF_BOOL	_varName="'isEnabledInClass'"		_nullablePref="_pref[enableInClassPrefKey]" _default="true")
 
 		(macro TT_GET_PREF_BOOL		_varName="'isThicknessFixed'"		_pref="TMap_PREFS.RANGE_OUTLINE_FIX")
 
