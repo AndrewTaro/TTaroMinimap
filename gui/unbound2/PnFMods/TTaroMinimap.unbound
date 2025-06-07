@@ -55,6 +55,7 @@
 (def constant TMap_RANGE_OFFSET_MAX 6)
 (def constant TMap_RANGE_LIMIT_MAX 16)
 (def constant TMap_RANGE_INVALID -1)
+(def constant TMap_RANGE_SECTOR_MAX "90 + 5") # max angle + step
 
 # battle\minimap\markers\base_marker.unbound
 (def constant TMap_RANGE_COLORS {
@@ -310,12 +311,12 @@
 )
 
 # battle\minimap\markers\base_marker.unbound
-(def macro TMap_RANGE_CIRCLE ()
+(def macro TMap_RANGE_CIRCLE (_sector:expression="360")
 	(block
 		(macro BIND_FAIR_SCALE "rangeRadius")
 		(block
 			(controller $Sector
-				(bind arc "360")
+				(bind arc "_sector")
 				(bind radius "MINIMAP_ASSETS_SIZE")
 				(bind innerRadius "innerRadius")
 				(bind lineThickness "lineThickness")
@@ -2397,29 +2398,47 @@
 
 
 		# Distance
+		(event evCalculatePosition)
 		(var timer:gfx = "$datahub.getSingleComponent(CC.timer)")
 
 		# Own Ship
 		(var myVehMapPosComponent:gfx = "playerAvataEntity ? playerAvataEntity.mapPosition : null" (event "playerAvataEntity.evAdded"))
-		(var myPosX:number = "myVehMapPosComponent ? myVehMapPosComponent.position.x : 0" watch=false (event "timer.evInfrequent"))
-		(var myPosY:number = "myVehMapPosComponent ? myVehMapPosComponent.position.y : 0" watch=false (event "timer.evInfrequent"))
+		(var myPosX:number = "myVehMapPosComponent ? myVehMapPosComponent.position.x : 0" watch=false (event "evCalculatePosition"))
+		(var myPosY:number = "myVehMapPosComponent ? myVehMapPosComponent.position.y : 0" watch=false (event "evCalculatePosition"))
 
 		# Marker Ship
 		(var shipPosComponent:gfx = "_markerEntity.hasComponent(CC.mapPosition) ? _markerEntity.mapPosition : null" (event "_markerEntity.evAdded"))
-		(var shipPosX:number = "shipPosComponent ? shipPosComponent.position.x : 0" watch=false (event "timer.evInfrequent"))
-		(var shipPosY:number = "shipPosComponent ? shipPosComponent.position.y : 0" watch=false (event "timer.evInfrequent"))
+		(var shipPosX:number = "shipPosComponent ? shipPosComponent.position.x : 0" watch=false (event "evCalculatePosition"))
+		(var shipPosY:number = "shipPosComponent ? shipPosComponent.position.y : 0" watch=false (event "evCalculatePosition"))
 
 		# Map Size
 		(var cameraComponent:gfx = "$datahub.getSingleComponent(CC.camera)")
 		(var mapSize:number = "cameraComponent.visibilityRange / cameraComponent.visibilityRangePerc" watch=false)
 
 		# Calc
-		(var posDiffX:number = "(myPosX - shipPosX) * mapSize" watch=false (event "timer.evInfrequent"))
-		(var posDiffY:number = "(myPosY - shipPosY) * mapSize" watch=false (event "timer.evInfrequent"))
-		(var distanceToShipSquared:number = "pow(posDiffX, 2) + pow(posDiffY, 2)" watch=false (event "timer.evInfrequent"))
-	)
+		(var dx:number = "myPosX - shipPosX" watch=false (event "evCalculatePosition"))
+		(var dy:number = "myPosY - shipPosY" watch=false (event "evCalculatePosition"))
+		(var posDiffX:number = "dx * mapSize" watch=false (event "evCalculatePosition"))
+		(var posDiffY:number = "dy * mapSize" watch=false (event "evCalculatePosition"))
+		(var distanceToShipSquared:number = "pow(posDiffX, 2) + pow(posDiffY, 2)" watch=false (event "evCalculatePosition"))
+		(var angleToMyShip:number = "radToGrad(atan2(dy, dx))" watch=false (event "evCalculatePosition"))
+	) 
+	# This is a kind of optimazation but it is definitely, or most likely in the best case scenario, unnecessary.
+	# This will reduce the pos calculations by 3/4 but everything is a constant time complexity anyway.
+	# If someone's PC can't handle around 10(vars) * 4(updates) * 30(marker entities) of double-calculations and arctan in 2025
+	# Then they should buy a new PC instead of complaining.
+	# Clearly, there are more important things that require fixing and optimization.
+	#
+	# I'm just curious whether this *could* affect the performance of rendering (AS3) or not.
+	# But obviously such things are optimized in the first place and WG's code around markers doesn't do this either.
+	#
+	# Why am I doing this?
+	#
+	(dispatch evCalculatePosition args="{}" init=false (event "timer.evInfrequent"))
 	(style
+		(position = "absolute")
 		(bind alpha "rangesAlpha")
+		(bind rotation "angleToMyShip")
 	)
 
 	# Enemy Radar
@@ -2537,6 +2556,9 @@
 		(var warnRangeSquared:number = "pow(warnRange, 2)")
 		(var isInRange:bool = "rangeOffset == TMap_RANGE_OFFSET_MAX || rangeLimit == TMap_RANGE_LIMIT_MAX || (_distanceSquared < warnRangeSquared)")
 
+		(macro TT_GET_NULLABLE_PREF_NUMBER _varName="'sectorAnglePref'"	_nullablePref="_pref['SECTOR_ANGLE']"	_default="TMap_RANGE_SECTOR_MAX")
+		(var sectorAngle:number = "sectorAnglePref == TMap_RANGE_SECTOR_MAX ? 360 : sectorAnglePref")
+
 		(var isVisible:bool = "isEnabled && isInRange")
 
 		(var mapSize:number = "cameraComponent.visibilityRange / cameraComponent.visibilityRangePerc" watch=false)
@@ -2570,11 +2592,17 @@
 		)
 
 		(var drawDotted:bool = "outlineType == TMap_OUTLINE_TYPES.DOT")
+
+		(var rotationBackToCenter:number = "- (sectorAngle / 2)")
 		#
 	)
 	(bind visible "isVisible")
+	(style
+		(position = "absolute")
+		(bind rotation "rotationBackToCenter")
+	)
 
-	(macro TMap_RANGE_CIRCLE)
+	(macro TMap_RANGE_CIRCLE _sector="sectorAngle")
 )
 
 # battle\minimap\markers\ship_marker.unbound
