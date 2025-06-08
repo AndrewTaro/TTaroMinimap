@@ -2496,7 +2496,7 @@
 
 	# Torpedo
 	(controller $Instance renderer='TMap_MapMarkerItemNonPlayerRange'
-		(bind enabled "isTorpEnabled && shipTTX && shipTTX.torpedoes")
+		(bind enabled "isTorpEnabled && shipTTX && (torpMaxRange > 0)")
 		(args
 			_range	= "torpMaxRange"
 			_pref	= "torpPref"
