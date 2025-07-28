@@ -4205,10 +4205,13 @@
 		(var markerScale:number = "_itemScale / _mapScale")
 
 		(var type:number = "_markerEntity.interactiveZone.type")
+		(var visualId:number = "_markerEntity.interactiveZone.visualId")
 		(var visualType:number = "_markerEntity.interactiveZone.visualType")
 		(var isInversed:bool = "visualType == SC.Battle.INTERACTIVE_ZONE_VISUAL_TYPE.INVERSED")
 		(var relation:number = "_markerEntity.relation.value" (event "_markerEntity.relation.evChanged"))
-		(var circleSettings:dict = "type == INTERACTIVE_ZONE_TYPES.COLORED_BY_RELATION ? COLORED_BY_RELATION_INTERACTIVE_ZONES_SETTINGS[relation] : INTERACTIVE_ZONES_SETTINGS[type]")
+		(var circleSettings:dict = "type == INTERACTIVE_ZONE_TYPES.COLORED_BY_RELATION	? COLORED_BY_RELATION_INTERACTIVE_ZONES_SETTINGS[relation] :
+									type == INTERACTIVE_ZONE_TYPES.WEATHER_ZONE			? WEATHER_ZONE_SETTINGS[visualId]
+																						: INTERACTIVE_ZONES_SETTINGS[type]")
 		(var circleRadius:number = "_markerEntity.circle.radius" (event "_markerEntity.circle.evRadiusChanged"))
 
 		(event evShow)
@@ -4393,11 +4396,15 @@
 		(var isOvered:bool = "false")
 		(bind isOvered "!isOvered" watch=false (event "minimapPathComponent.evBlink"))
 
-		(var allyNumberPointsCollection:gfx = "$datahub.getCollection(CC.minimapBezierPath).child('byTeam').child(SC.Battle.PLAYER_RELATION.ALLY)")
-		(var allyNumberPointsList:array = "allyNumberPointsCollection.items" (event "allyNumberPointsCollection.evAdded") (event "allyNumberPointsCollection.evRemoved"))	
-		(var enemyNumberPointsCollection:gfx = "$datahub.getCollection(CC.minimapBezierPath).child('byTeam').child(SC.Battle.PLAYER_RELATION.ENEMY)")
-		(var enemyNumberPointsList:array = "enemyNumberPointsCollection.items" (event "enemyNumberPointsCollection.evAdded") (event "enemyNumberPointsCollection.evRemoved"))	
-		(var isNumberPointVisible:bool = "allyNumberPointsList.length > 1 || enemyNumberPointsList.length > 1")
+		(var pathsCollection:gfx = "$datahub.getCollection(CC.minimapBezierPath)")
+
+		(var allyNumberPointsCollection:gfx = "pathsCollection.child('byTeam').child(SC.Battle.PLAYER_RELATION.ALLY)" (event "pathsCollection.evChildAdded") (event "pathsCollection.evChildRemoved"))
+		(var enemyNumberPointsCollection:gfx = "pathsCollection.child('byTeam').child(SC.Battle.PLAYER_RELATION.ENEMY)" (event "pathsCollection.evChildAdded") (event "pathsCollection.evChildRemoved"))
+
+		(var allyNumberPointsCollectionLength:number = "allyNumberPointsCollection.items.length" (event "allyNumberPointsCollection.evAdded") (event "allyNumberPointsCollection.evRemoved"))
+		(var enemyNumberPointsCollectionLength:number = "enemyNumberPointsCollection.items.length" (event "enemyNumberPointsCollection.evAdded") (event "enemyNumberPointsCollection.evRemoved"))
+
+		(var isNumberPointVisible:bool = "allyNumberPointsCollectionLength > 1 || enemyNumberPointsCollectionLength > 1")
 	)
 
 	(block
