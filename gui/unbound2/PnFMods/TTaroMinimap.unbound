@@ -206,7 +206,7 @@
 	pulsePhaserMaxDist:				{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 ,	prefName: 'MAIN_ARMAMENT',	optionName: 'shootPulsePhaserRangeEnabled' },
 	ionicPhaserMaxDist:				{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 ,	prefName: 'MAIN_ARMAMENT',	optionName: 'shootIonicPhaserRangeEnabled' },
 	torpedoPhotonMaxDist:			{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 ,	prefName: 'TORPEDO',		optionName: 'shootTorpedoPhotonRangeEnabled' },
-	pingerMaxDist:					{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 ,	prefName: 'MAIN_ARMAMENT',	optionName: 'shootPingerRangeEnabled' },
+	pingerMaxDist:					{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 ,	prefName: 'PINGER',			optionName: 'shootPingerRangeEnabled' },
 	visibilityRange:				{ color: 0x6EE1F7, boldText: false, dashLength: 11, drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 11 ,	prefName: 'VISIBILITY_SEA',	optionName: 'visibilityRangeEnabled' },
 	visibilityRangeAlt:				{ color: 0x6EE1F7, boldText: false, dashLength: 11, drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 11 ,	prefName: 'VISIBILITY_SEA',	optionName: 'visibilityRangeEnabled' },
 	visibilityPlaneRange:			{ color: 0x6EE1D8, boldText: false, dashLength: 13, drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 27 ,	prefName: 'VISIBILITY_AIR',	optionName: 'visibilityPlaneRangeEnabled' },
@@ -4936,7 +4936,7 @@
 	'shootPingerRangeEnabled': {
 		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
 		controlStyle: 'activeEquipmentStyle',
-		prefName: 'MAIN_ARMAMENT'
+		prefName: 'PINGER'
 	},
 	'shootChargeLaserRangeEnabled': {
 		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
