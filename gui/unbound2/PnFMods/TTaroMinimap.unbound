@@ -542,7 +542,7 @@
 					(args
 						_elementName="'TTaroMinimap'"
 						_defaultPosition="defaultPos"
-						_screenBoundsOffset="{right: scaleRatio+XS-2, bottom: scaleRatio+XS-2}"
+						_screenBoundsOffset="{right: scaleRatio-XS+2, bottom: scaleRatio-XS+2}"
 					)
 				)
 				(block
