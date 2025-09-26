@@ -4539,7 +4539,7 @@
 	
 	(macro BIND_FAIR_SCALE "_itemScale / _mapScale")
 
-	(macro TMap_MapAttentionMarker _markerEntity="_markerEntity" _markerType='minimap')
+	(macro TMap_MapAttentionMarkerMacro _markerEntity="_markerEntity" _markerType='minimap')
 )
 
 # battle\markers\attention_marker.unbound
@@ -4550,13 +4550,13 @@
 	)
 
 	# Mod
-	(macro TMap_WorldAttentionMarker _markerEntity="_markerEntity" _markerType='world')
+	(macro TMap_WorldAttentionMarkerMacro _markerEntity="_markerEntity" _markerType='world')
 	#
 )
 
 # battle\markers\shared\attention_marker_assets.unbound
 # macro AttentionMarker
-(def macro TMap_WorldAttentionMarker (_markerEntity:expression, _markerType:str) layout=true
+(def macro TMap_WorldAttentionMarkerMacro (_markerEntity:expression, _markerType:str)
 	(scope
 		(event evShow)
 		(macro GET_MARKER_ENTITY_COMPONENT  'timeToLive')
@@ -4692,7 +4692,7 @@
 
 # battle\markers\shared\attention_marker_assets.unbound
 # macro AttentionMarker
-(def macro TMap_MapAttentionMarker (_markerEntity:expression, _markerType:str) layout=true
+(def macro TMap_MapAttentionMarkerMacro (_markerEntity:expression, _markerType:str)
 	(scope
 		(event evShow)
 		(macro GET_MARKER_ENTITY_COMPONENT  'timeToLive')
@@ -4735,15 +4735,16 @@
 				isInSameDivision	? TWO_TEAMS_COLOR_TRANSFORMS['division'] :
 				isAlly				? TWO_TEAMS_COLOR_TRANSFORMS['ally'] :
 				isEnemyPinger		? TWO_TEAMS_COLOR_TRANSFORMS['enemy']
-									: TWO_TEAMS_COLOR_TRANSFORMS['white']"
-		)
+									: TWO_TEAMS_COLOR_TRANSFORMS['white']
+		")
 		(macro GET_MARKER_ENTITY_COMPONENT  'mapPosition')
 		(macro GET_MARKER_ENTITY_COMPONENT  'data')
+		(var pingerData:gfx = "dataComponent && null != dataComponent.data ? dataComponent.data : null")
 		(var pingerYaw:number = "mapPositionComponent ? radToGrad(mapPositionComponent.yaw) : 0" (event "_markerEntity.evAdded")) # mapPos is added after mapAttention so we need this event
-		(var movingYaw:number = "dataComponent ? radToGrad(dataComponent.data.vehicleYaw) : 0" (event "_markerEntity.evAdded"))
+		(var movingYaw:number = "pingerData && null != pingerData.vehicleYaw ? radToGrad(pingerData.vehicleYaw) : 0" (event "_markerEntity.evAdded"))
 
-		(var isEnemyPingerOnMap:bool = " isEnemyPinger && _markerType == 'minimap' &&  dataComponent")
-		(var isEnemyOilLeakOnMap:bool = "isEnemyPinger && _markerType == 'minimap' && !dataComponent")
+		(var isEnemyPingerOnMap:bool = " isEnemyPinger && _markerType == 'minimap' &&  pingerData")
+		(var isEnemyOilLeakOnMap:bool = "isEnemyPinger && _markerType == 'minimap' && !pingerData")
 		#
 	)
 	(dispatch evShow on='addedToStage')
