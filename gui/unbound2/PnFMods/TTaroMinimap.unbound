@@ -833,7 +833,7 @@
 
 		# Map Size
 		(var cameraComponent:gfx = "$datahub.getSingleComponent(CC.camera)")
-		(var mapSize:number = "cameraComponent.visibilityRange / cameraComponent.visibilityRangePerc" watch=false)
+		(var mapSize:number = "cameraComponent ? cameraComponent.visibilityRange / cameraComponent.visibilityRangePerc : 42" watch=false)
 
 		# Own Ship
 		# Existence of mapPosition component is NOT guaranteed
@@ -2180,7 +2180,7 @@
 
 		(var rangeValue:str = "formatFloatingPoint(round(smokePenaltyRange * 10) / 10, 1)")
 		
-		(var mapSize:number = "cameraComponent.visibilityRange / cameraComponent.visibilityRangePerc" watch=false)
+		(var mapSize:number = "cameraComponent ? cameraComponent.visibilityRange / cameraComponent.visibilityRangePerc : 42" watch=false)
 		(var rangeRadius:number = "smokePenaltyRange / mapSize")
 
 		(macro TT_GET_PREF_BOOL	_varName="'isThicknessFixed'"		_pref="TMap_PREFS.RANGE_OUTLINE_FIX")
@@ -2413,7 +2413,7 @@
 
 		# Map Size
 		(var cameraComponent:gfx = "$datahub.getSingleComponent(CC.camera)")
-		(var mapSize:number = "cameraComponent.visibilityRange / cameraComponent.visibilityRangePerc" watch=false)
+		(var mapSize:number = "cameraComponent ? cameraComponent.visibilityRange / cameraComponent.visibilityRangePerc : 42" watch=false)
 
 		# Calc
 		(var dx:number = "myPosX - shipPosX" watch=false (event "evCalculatePosition"))
@@ -2561,7 +2561,7 @@
 
 		(var isVisible:bool = "isEnabled && isInRange")
 
-		(var mapSize:number = "cameraComponent.visibilityRange / cameraComponent.visibilityRangePerc" watch=false)
+		(var mapSize:number = "cameraComponent ? cameraComponent.visibilityRange / cameraComponent.visibilityRangePerc : 42" watch=false)
 
 		(var rangeRadius:number = "_range / mapSize")
 
@@ -3054,7 +3054,7 @@
 
 		# Map Size
 		(var cameraComponent:gfx = "$datahub.getSingleComponent(CC.camera)")
-		(var mapSize:number = "cameraComponent.visibilityRange / cameraComponent.visibilityRangePerc" watch=false)
+		(var mapSize:number = "cameraComponent ? cameraComponent.visibilityRange / cameraComponent.visibilityRangePerc : 42" watch=false)
 
 		# Calc
 		(var posDiffX:number = "(sqdPosX - shipPosX) * mapSize")
