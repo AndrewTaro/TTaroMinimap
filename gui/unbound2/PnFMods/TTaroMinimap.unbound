@@ -206,6 +206,8 @@
 	pulsePhaserMaxDist:				{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 ,	prefName: 'MAIN_ARMAMENT',	optionName: 'shootPulsePhaserRangeEnabled' },
 	ionicPhaserMaxDist:				{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 ,	prefName: 'MAIN_ARMAMENT',	optionName: 'shootIonicPhaserRangeEnabled' },
 	torpedoPhotonMaxDist:			{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 ,	prefName: 'TORPEDO',		optionName: 'shootTorpedoPhotonRangeEnabled' },
+	antiMissileMaxDist:				{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 , 	prefName: 'ANTIAIR',		optionName: 'shootAntiMissileSystemRangeEnabled' },
+	missilesMaxDist:				{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 , 	prefName: 'MAIN_ARMAMENT',	optionName: 'shootMissilesRangeEnabled' },
 	pingerMaxDist:					{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 ,	prefName: 'PINGER',			optionName: 'shootPingerRangeEnabled' },
 	visibilityRange:				{ color: 0x6EE1F7, boldText: false, dashLength: 11, drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 11 ,	prefName: 'VISIBILITY_SEA',	optionName: 'visibilityRangeEnabled' },
 	visibilityRangeAlt:				{ color: 0x6EE1F7, boldText: false, dashLength: 11, drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 11 ,	prefName: 'VISIBILITY_SEA',	optionName: 'visibilityRangeEnabled' },
