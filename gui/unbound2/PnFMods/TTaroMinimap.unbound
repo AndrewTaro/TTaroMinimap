@@ -1375,63 +1375,83 @@
 )
 
 # battle\minimap\map_sector_drawer.unbound
-(def element TMap_MapSectorItem (_items:array)  
+(def element TMap_MapSectorItem (_items:array)
 	(scope
 		(var sectorComponent:gfx = "_items[$index].mapSector")
-		(var pos:array = "sectorComponent ? sectorComponent.position : [0,0]" (event "sectorComponent.evPositionChanged"))
-		(var size:array = "sectorComponent ? sectorComponent.size : [0,0]" (event "sectorComponent.evSizeChanged"))
+		(var pos:dict = "sectorComponent ? sectorComponent.position : {x: 0, y: 0}" (event "sectorComponent.evPositionChanged"))
+		(var size:dict = "sectorComponent ? sectorComponent.size : {x: 0, y: 0}" (event "sectorComponent.evSizeChanged"))
 		(var borders:array = "sectorComponent ? sectorComponent.visibleBorders : [false, false, false, false]" (event "sectorComponent.evVisibleBordersChanged"))
+		(var corners:array = "sectorComponent ? sectorComponent.visibleCorners : [false, false, false, false]" (event "sectorComponent.evVisibleCornersChanged"))
+		(var color:number = "sectorComponent ? sectorComponent.color : 0x00000000" (event "sectorComponent.evColorChanged"))
+		(var fillAlpha:number = "sectorComponent ? sectorComponent.fillAlpha : 0" (event "sectorComponent.evFillAlphaChanged"))
+		(var borderAlpha:number = "sectorComponent ? sectorComponent.borderAlpha : 0" (event "sectorComponent.evBorderAlphaChanged"))
 
-		(var sideBorderHeight:number = "borders[0] && borders[3] ? size[1] - 4 : borders[3] || borders[0] ? size[1] - 2 : size[1]")
-		(var sideBorderOffset:number = "borders[0] && borders[3] ? 2 : borders[3] ? 0 : borders[0] ? 2 : 0")
+		(var lineWidth:number = "size.x == 0 ? 0 : size.x - (CORNERS_PER_SQUARE_SIDE * MAP_SECTOR_LINE_WIDTH)")
+		(var lineHeight:number = "size.y == 0 ? 0 : size.y - (CORNERS_PER_SQUARE_SIDE * MAP_SECTOR_LINE_WIDTH)")
 	)
-	
+
 	(style
 		(position = "absolute")
-		(bind width "size[0]")
-		(bind height "size[1]")
-		(bind left "pos[0]")
-		(bind top "pos[1]")
+		(bind width "size.x")
+		(bind height "size.y")
+		(bind left "pos.x")
+		(bind top "pos.y")
 	)
 
 	(block
 		(class $FullsizeAbsolute)
 		(style
-			(backgroundColor = "sectorComponent.color")
+			(bind backgroundColor "color")
 		)
-		(alpha = "sectorComponent.fillAlpha")
+		(bind alpha "fillAlpha")
 	)
 
-	(block
-		(bind visible "borders[0]")
+	(element MapSectorCorner _isVisible="corners[SC.Common.MAP_SECTOR_CORNERS.BOTTOM_LEFT]" _color="color" _alpha="borderAlpha"
 		(style
-			(position = "absolute") (bind width "size[0]") (height = 2) (bottom = 0) (left = 0) (backgroundColor = "sectorComponent.color")
+			(bottom = 0) (left = 0)
 		)
-		(alpha = "sectorComponent.borderAlpha")
 	)
 
-	(block
-		(bind visible "borders[1]")
+	(element MapSectorHorizontalLine _isVisible="borders[SC.Common.MAP_SECTOR_LINES.BOTTOM]" _color="color" _alpha="borderAlpha" _width="lineWidth"
 		(style
-			(position = "absolute") (width = "2") (bind height "sideBorderHeight") (bind bottom "sideBorderOffset") (left = 0) (backgroundColor = "sectorComponent.color")
+			(bottom = 0)
 		)
-		(alpha = "sectorComponent.borderAlpha")
 	)
 
-	(block
-		(bind visible "borders[2]")
+	(element MapSectorCorner _isVisible="corners[SC.Common.MAP_SECTOR_CORNERS.BOTTOM_RIGHT]" _color="color" _alpha="borderAlpha"
 		(style
-			(position = "absolute") (width = "2") (bind height "sideBorderHeight") (bind bottom "sideBorderOffset") (right = 0) (backgroundColor = "sectorComponent.color")
+			(bottom = 0) (right = 0)
 		)
-		(alpha = "sectorComponent.borderAlpha")
 	)
 
-	(block
-		(bind visible "borders[3]")
+	(element MapSectorVerticalLine _isVisible="borders[SC.Common.MAP_SECTOR_LINES.LEFT]" _color="color" _alpha="borderAlpha" _height="lineHeight"
 		(style
-			(position = "absolute") (bind width "size[0]") (height = 2) (top = 0) (left = 0) (backgroundColor = "sectorComponent.color")
+			(left = 0)
 		)
-		(alpha = "sectorComponent.borderAlpha")
+	)
+
+	(element MapSectorCorner _isVisible="corners[SC.Common.MAP_SECTOR_CORNERS.TOP_LEFT]" _color="color" _alpha="borderAlpha"
+		(style
+			(top = 0) (left = 0)
+		)
+	)
+
+	(element MapSectorVerticalLine _isVisible="borders[SC.Common.MAP_SECTOR_LINES.RIGHT]" _color="color" _alpha="borderAlpha" _height="lineHeight"
+		(style
+			(right = 0)
+		)
+	)
+
+	(element MapSectorCorner _isVisible="corners[SC.Common.MAP_SECTOR_CORNERS.TOP_RIGHT]" _color="color" _alpha="borderAlpha"
+		(style
+			(top = 0) (right = 0)
+		)
+	)
+
+	(element MapSectorHorizontalLine _isVisible="borders[SC.Common.MAP_SECTOR_LINES.TOP]" _color="color" _alpha="borderAlpha" _width="lineWidth"
+		(style
+			(top = 0)
+		)
 	)
 )
 
