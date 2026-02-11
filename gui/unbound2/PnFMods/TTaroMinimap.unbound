@@ -5032,11 +5032,6 @@
 		controlStyle: 'activeEquipmentStyle',
 		prefName: 'MAIN_ARMAMENT'
 	},
-	'shootTorpedoPhotonRangeEnabled': {
-		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
-		controlStyle: 'activeEquipmentStyle',
-		prefName: 'TORPEDO'
-	},
 	'shootPingerRangeEnabled': {
 		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
 		controlStyle: 'activeEquipmentStyle',
