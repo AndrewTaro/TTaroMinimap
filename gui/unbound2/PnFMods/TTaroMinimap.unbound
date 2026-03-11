@@ -4315,6 +4315,9 @@
 # battle\minimap\markers\interactive_zone_marker.unbound
 (def element TMap_MapInteractiveZoneMarker (_markerEntity:gfx, _mapScale:number, _itemScale:number, _scaleRatio:number, _userPrefsNum:gfx=null) layout=true
 	(scope
+		(event evForceHide)
+		(macro GET_MARKER_ENTITY_COMPONENT 'interactiveZoneEffects')
+
 		(var markerScale:number = "_itemScale / _mapScale")
 
 		(var type:number = "_markerEntity.interactiveZone.type")
@@ -4322,10 +4325,18 @@
 		(var visualType:number = "_markerEntity.interactiveZone.visualType")
 		(var isInversed:bool = "visualType == SC.Battle.INTERACTIVE_ZONE_VISUAL_TYPE.INVERSED")
 		(var relation:number = "_markerEntity.relation.value" (event "_markerEntity.relation.evChanged"))
-		(var circleSettings:dict = "type == INTERACTIVE_ZONE_TYPES.COLORED_BY_RELATION	? COLORED_BY_RELATION_INTERACTIVE_ZONES_SETTINGS[relation] :
-									type == INTERACTIVE_ZONE_TYPES.WEATHER_ZONE			? WEATHER_ZONE_SETTINGS[visualId]
-																						: INTERACTIVE_ZONES_SETTINGS[type]")
+
+		(var circleSettings:dict = "type == INTERACTIVE_ZONE_TYPES.COLORED_BY_RELATION || type == INTERACTIVE_ZONE_TYPES.CONSUMABLE_PREPARATION_ZONE ? COLORED_BY_RELATION_INTERACTIVE_ZONES_SETTINGS[relation] : 
+									type == INTERACTIVE_ZONE_TYPES.WEATHER_ZONE ? WEATHER_ZONE_SETTINGS[visualId]: INTERACTIVE_ZONES_SETTINGS[type]")
+
 		(var circleRadius:number = "_markerEntity.circle.radius" (event "_markerEntity.circle.evRadiusChanged"))
+
+		(var markerRenderer:str = "	type == INTERACTIVE_ZONE_TYPES.RESOURCE_ZONE					? 'MapInteractiveZoneIndicator'			:
+									type == INTERACTIVE_ZONE_TYPES.DROP_ZONE						? 'MapDropZoneIndicator'				:
+									type == INTERACTIVE_ZONE_TYPES.RESCUE_ZONE						? 'MapRescueZoneIndicator'			:
+									type == INTERACTIVE_ZONE_TYPES.ORBITAL_STRIKE_ZONE				? 'MapOrbitalStrikeZoneIndicator'	:
+									type == INTERACTIVE_ZONE_TYPES.CONSUMABLE_PREPARATION_ZONE		? 'MapConsumableZoneIndicator'		:
+									''")
 
 		(event evShow)
 		(event evHide)
@@ -4333,6 +4344,7 @@
 
 	(dispatch evShow on=addedToStage)
 	(dispatch evHide (event "_markerEntity.interactiveZone.evHide"))
+	(dispatch evHide (event "evForceHide"))
 
 	
 	
@@ -4371,34 +4383,13 @@
 	
 	(block
 		(style (position = "absolute"))
-		# TODO: Override these renderers too
-		(controller $Instance (renderer = 'MapInteractiveZoneIndicator') 
-			(bind enabled "type == INTERACTIVE_ZONE_TYPES.RESOURCE_ZONE")
-			(args entity="_markerEntity")
-			(exprs
-				(macro BIND_FAIR_SCALE "markerScale")
-			)
-		)
 
-		(controller $Instance (renderer = 'MapDropZoneIndicator') 
-			(bind enabled "type == INTERACTIVE_ZONE_TYPES.DROP_ZONE")
-			(args entity="_markerEntity")
-			(exprs
-				(macro BIND_FAIR_SCALE "markerScale")
+		(controller $Instance
+			(bind renderer "markerRenderer") 
+			(bind enabled "markerRenderer != ''")
+			(args
+				_markerEntity="_markerEntity"
 			)
-		)
-
-		(controller $Instance (renderer = 'MapRescueZoneIndicator') 
-			(bind enabled "type == INTERACTIVE_ZONE_TYPES.RESCUE_ZONE")
-			(args entity="_markerEntity")
-			(exprs
-				(macro BIND_FAIR_SCALE "markerScale")
-			)
-		)
-
-		(controller $Instance (renderer = 'MapOrbitalStrikeZoneIndicator') 
-			(bind enabled "type == INTERACTIVE_ZONE_TYPES.ORBITAL_STRIKE_ZONE")
-			(args entity="_markerEntity")
 			(exprs
 				(macro BIND_FAIR_SCALE "markerScale")
 			)
@@ -4414,7 +4405,6 @@
 			)
 			(bindcall  play
 				duration=0.3
-				from={alpha: 1, scaleX: 1, scaleY: 1}
 				to={alpha: 0, scaleX: 0, scaleY: 0}
 				easing="Easing.quint_in"
 				(event "evHide")
