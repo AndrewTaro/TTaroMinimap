@@ -2304,7 +2304,7 @@
 		(macro TT_GET_PREF_NUMBER _varName="'outlineType'"			_pref="pref.LINE_TYPE")
 		(macro TT_GET_PREF_NUMBER _varName="'lineThicknessPref'"	_pref="pref.LINE_THICKNESS")
 
-		(var lineThickness:number = "isThicknessFixed ? lineThicknessPref * 0.1 / smokePenaltyRange : lineThicknessPref")
+		(var lineThickness:number = "isThicknessFixed ? lineThicknessPref * 0.1 / rangeRadius : lineThicknessPref")
 
 		(var isOutlineDisabled:bool = "outlineType == TMap_OUTLINE_TYPES.DISABLE")
 		(var isSolid:bool = "outlineType == TMap_OUTLINE_TYPES.SOLID")
@@ -2686,7 +2686,7 @@
 		(macro TT_GET_PREF_NUMBER _varName="'outlineType'"			_pref="_pref.LINE_TYPE")
 		(macro TT_GET_PREF_NUMBER _varName="'lineThicknessPref'"	_pref="_pref.LINE_THICKNESS")
 
-		(var lineThickness:number = "isThicknessFixed ? lineThicknessPref * 0.1 / _range : lineThicknessPref")
+		(var lineThickness:number = "isThicknessFixed ? lineThicknessPref * 0.1 / rangeRadius : lineThicknessPref")
 
 		(var isOutlineDisabled:bool = "outlineType == TMap_OUTLINE_TYPES.DISABLE")
 		(var isSolid:bool = "outlineType == TMap_OUTLINE_TYPES.SOLID")
@@ -4736,13 +4736,20 @@
 				(alpha = 0)
 			)
 			(controller $Animation
-				(bindcall play	duration="0.15"
-								from="{alpha: 0}"
-								to="{alpha: 1}"
-								action="killAll"
-								reverse="!isInfoVisible"
-								(bind trigger "isInfoVisible")
-								(event "evShow")
+				(bindcall play
+					duration = 0.15
+					to       = "{alpha: 1}"
+					action	 = "killAll"
+					(bind enabled "isInfoVisible")
+					(bind trigger "isInfoVisible")
+					(event "evShow")
+				)
+				(bindcall play
+					duration = 0.15
+					to       = "{alpha: 0}"
+					action	 = "killAll"
+					(bind enabled "!isInfoVisible")
+					(bind trigger "isInfoVisible")
 				)
 			)
 			# Sub Pinger
