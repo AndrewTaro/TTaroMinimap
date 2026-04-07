@@ -4316,7 +4316,6 @@
 (def element TMap_MapInteractiveZoneMarker (_markerEntity:gfx, _mapScale:number, _itemScale:number, _scaleRatio:number, _userPrefsNum:gfx=null) layout=true
 	(scope
 		(event evForceHide)
-		(macro GET_MARKER_ENTITY_COMPONENT 'interactiveZoneEffects')
 
 		(var markerScale:number = "_itemScale / _mapScale")
 
