@@ -571,6 +571,27 @@
 	)
     
     (block
+		# Full-size drag surface over the whole container -- the plain use of TT_DRAGGABLE, and the
+		# reason it has to be this and not the move-hand icon: reportGeometry describes the block the
+		# macro sits in, and Python places THAT box against the schema's right/bottom anchor.  With the
+		# 29x29 icon it placed the icon bottom-right, which put the container's origin at [2946,1466]
+		# on a 2560x1080 stage and left the minimap almost entirely off-screen.
+		#
+		# Declared FIRST so the injected signifier stays behind the map (zindex does not cross a block
+		# boundary), and so the map content above keeps its own hit-testing -- the vanilla click-to-ping
+		# commands still reach it, and a grab starts only where the map does not consume the click.
+		(block
+			(class $FullsizeAbsolute)
+			(style
+				(backgroundColor = 0x00FFFFFF)
+				# hitTest is a STYLE property when BOUND -- a (bind hitTest ...) directly under a
+				# (block ...) throws at build time.  Dropping it also suppresses the drag-hint tooltip
+				# when locked; the macro only gates the writes and the signifier.
+				(bind hitTest "!isDragDropDisabled")
+			)
+			(macro TT_DRAGGABLE _fullKey="'ttMinimap.position'" _isDragEnabled="!isDragDropDisabled")
+		)
+
         (block
 			(style
 				(position = "absolute")
@@ -579,23 +600,13 @@
 				(flow = "Flow.HORIZONTAL")
 			)
 
-			# Draggable.  The grab surface is this HANDLE, not the minimap body -- the body owns the
-			# vanilla click-to-ping mouse commands and must not become a drag target.
-			#
-			# Consequence: TT_DRAGGABLE's reportGeometry describes the handle (~32x32), so Python clamps
-			# a handle-sized box and the minimap body can be dragged past a screen edge.  The old code
-			# corrected for exactly that with _screenBoundsOffset {right/bottom: scaleRatio}; the new
-			# framework takes no consumer bounds margin (BUILD_STATE open item #7, CMS-gated).
+			# The move-hand affordance.  Purely visual now: the drag surface is the full-size block
+			# declared at the top of the container, so what Python is told about is the MINIMAP, not
+			# this 29x29 icon.
 			(block
 				(style
-					(backgroundColor = 0x00FFFFFF)
-					# hitTest is a STYLE property when BOUND -- a (bind hitTest ...) directly under a
-					# (block ...) throws at build time.  Dropping it is also what suppresses the
-					# drag-hint tooltip when locked; the macro only gates the writes and signifier.
-					(bind hitTest "!isDragDropDisabled")
 					(bind alpha "isDragDropDisabled ? 0 : 1")
 				)
-				(macro TT_DRAGGABLE _fullKey="'ttMinimap.position'" _isDragEnabled="!isDragDropDisabled")
 				(block
 					(style
 						(hitTest = false)
