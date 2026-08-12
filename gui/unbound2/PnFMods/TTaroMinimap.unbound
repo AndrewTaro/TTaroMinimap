@@ -307,22 +307,31 @@
 # TMap_PREFS.FAKE defaults, and for a real key they only cover the window before Python publishes --
 # the schema default differs per variant, so no single literal could stand in for it.
 #
-# Lands: isThicknessFixed, isCircleFill, color (packed 0xAARRGGBB, bound straight through),
-# alphaMultiplier (0-1), outlineType, lineThicknessPref, isOutlineDisabled, isSolid, innerRadius,
-# drawDotted.  Each caller keeps its own lineAlpha / spacing / dashLength / lineThickness -- those are
-# where the five genuinely differ.
-(def macro TMap_RANGE_CIRCLE_PREFS (_prefKey:expression, _defaultColor:expression="0xFF6EE1F7", _defaultLineType:expression="0")
+# Lands: isThicknessFixed, isCircleFill, color (24-bit RGB -- see below), alphaMultiplier (0-1),
+# outlineType, lineThicknessPref, isOutlineDisabled, isSolid, innerRadius, drawDotted.  Each caller
+# keeps its own lineAlpha / spacing / dashLength / lineThickness -- those are where the five differ.
+#
+# `color` is RGB, NOT the packed value.  $Sector has two different colour binds: the scalar `color`
+# takes 0xAARRGGBB, but `colors`/`lineColor` -- the pair TMap_RANGE_CIRCLE uses -- take RGB with alpha
+# supplied on the sibling `alphas`/`lineAlpha` channel.  Vanilla base_marker/capture_point_marker pass
+# 6-digit colours there (implicit 0x00 high byte) alongside explicit alphas, and those circles render
+# solid.  Composed from the component's 0-255 channels rather than masked off `value`: arithmetic on a
+# packed value above 2^31 overflows, while this tops out at 0xFFFFFF.
+(def macro TMap_RANGE_CIRCLE_PREFS (_prefKey:expression, _defaultColor:expression="0x6EE1F7", _defaultLineType:expression="0")
 	(macro TT_GET_PREF _varName="'__rcFix'" _key="'ttMinimap.rangeOutlineFix'")
 	(var isThicknessFixed:bool = "null != __rcFix && null != __rcFix.value ? __rcFix.value : false")
 
 	(macro TT_GET_PREF _varName="'__rcFill'" _key="_prefKey == '' ? '' : _prefKey + '.fillCircle'")
 	(var isCircleFill:bool = "null != __rcFill && null != __rcFill.value ? __rcFill.value : false")
 
-	# One packed colour setting replaces the palette ORDINAL plus its separate opacity slider: `value`
-	# is the 0xAARRGGBB int bound as-is, `a` the unpacked 0-1 alpha.  Never derive one from the other
-	# in the view -- arithmetic on a value above 2^31 overflows.
+	# One packed colour setting replaces the palette ORDINAL plus its separate opacity slider.  The two
+	# still leave the component separately because the sector wants them on separate channels, and its
+	# alpha is never the stored one anyway: the fill gets alphaMultiplier * 0.35 and the outline gets
+	# 0 or 1 from the line type, neither of which is expressible from the packed int.
 	(macro TT_GET_PREF _varName="'__rcColor'" _key="_prefKey == '' ? '' : _prefKey + '.color'")
-	(var color:number = "null != __rcColor && null != __rcColor.value ? __rcColor.value : _defaultColor")
+	(var color:number = "null != __rcColor && isNumber(__rcColor.r255)
+							? __rcColor.r255 * 65536 + __rcColor.g255 * 256 + __rcColor.b255
+							: _defaultColor")
 	(var alphaMultiplier:number = "null != __rcColor && isNumber(__rcColor.a) ? __rcColor.a : 1")
 
 	(macro TT_GET_PREF _varName="'__rcType'" _key="_prefKey == '' ? '' : _prefKey + '.lineType'")
@@ -3223,7 +3232,7 @@
 
 		(var isNearby:bool = "isValidAA && isValidPos && (rangeOffset == TMap_RANGE_OFFSET_MAX || distanceToShipSquared < warnRangeSquared)")
 
-		(macro TMap_RANGE_CIRCLE_PREFS _prefKey="'ttMinimap.nearbyAa'" _defaultColor="0xFFFF9400" _defaultLineType="2")
+		(macro TMap_RANGE_CIRCLE_PREFS _prefKey="'ttMinimap.nearbyAa'" _defaultColor="0xFF9400" _defaultLineType="2")
 
 		(var lineAlpha:number = "isOutlineDisabled ? 0 : 1")
 		(var spacing:number = "isSolid ? 0 : 13")
@@ -3277,8 +3286,12 @@
 
 		# The icon's colour and its opacity were two settings; they are one packed colour now, so the
 		# alpha comes off the same component rather than a separate slider.  Default 0x40FF9400.
+		# Colour goes in as RGB and alpha stays on the style, exactly as before the sweep: passing the
+		# packed value into $Sector's colour AND keeping the style alpha would apply alpha twice.
 		(macro TT_GET_PREF _varName="'detectionColorPref'" _key="'ttMinimap.detectionColor'")
-		(var color:number = "null != detectionColorPref && null != detectionColorPref.value ? detectionColorPref.value : 0x40FF9400")
+		(var color:number = "null != detectionColorPref && isNumber(detectionColorPref.r255)
+								? detectionColorPref.r255 * 65536 + detectionColorPref.g255 * 256 + detectionColorPref.b255
+								: 0xFF9400")
 		(var alpha:number = "null != detectionColorPref && isNumber(detectionColorPref.a) ? detectionColorPref.a : 0.251")
 	)
 
@@ -3372,7 +3385,7 @@
 		(macro TT_GET_PREF _varName="'onActivationPref'" _key="_prefKey == '' ? '' : _prefKey + '.visibleOnActivation'")
 		(var isVisibleOnActivation:bool = "null != onActivationPref && null != onActivationPref.value ? onActivationPref.value : false")
 
-		(macro TMap_RANGE_CIRCLE_PREFS _prefKey="_prefKey" _defaultColor="0x1A7300FF" _defaultLineType="3")
+		(macro TMap_RANGE_CIRCLE_PREFS _prefKey="_prefKey" _defaultColor="0x7300FF" _defaultLineType="3")
 
 		(var lineAlpha:number = "isOutlineDisabled ? 0 : 1")
 		(var spacing:number = "isSolid ? 0 : 13")
