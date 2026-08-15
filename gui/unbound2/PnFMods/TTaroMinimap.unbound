@@ -735,12 +735,14 @@
 			(bind top "dragY")
 			(bind left "dragX")
 			(width = 150px)
-			# Pivot matches the schema's right/bottom defaultPosition anchors.  Python places the
-			# transform ORIGIN and bakes no size into it, so an anchor and a pivot that disagree put
-			# the box a full width/height away from where the default says (VIEW_CONTRACT, Positions).
+			# NO pivot -- top-left origin, as legacy.  A stored position is an ORIGIN, so a pivot change
+			# re-reads the folded legacy TTaroMinimapRadarWarning_positionX/Y at a different corner and
+			# moves every migrated panel by its own width/height.
+			# The schema's right/bottom anchors do NOT need a matching pivot: Python resolves defaults
+			# size-aware and the pivot cancels (boxLeft = P - f*size, via the reported pox/poy).
 			# The CMS default here is deliberately static -- this panel no longer tracks the minimap.
-			(pivotX = 100%)
-			(pivotY = 100%)
+			# NB the map element above keeps its 100%/100% pivot: that one is UNCHANGED from legacy,
+			# so its folded values still mean the same thing.
 		)
 
 		(block
