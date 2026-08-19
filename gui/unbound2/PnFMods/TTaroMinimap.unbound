@@ -3126,8 +3126,8 @@
 # Custom
 (def element TMap_MapMarkerHealthBar (_healthRatio:number, _markerColorTransform:dict)
 	(scope
-		(macro TT_GET_PREF _varName="'healthScalePref'" _key="'ttMinimap.healthScale'")
-		(var healthBarScale:number = "null != healthScalePref && null != healthScalePref.value ? healthScalePref.value : 1")
+		(macro TT_GET_PREF _varName="'healthWidthPref'" _key="'ttMinimap.healthWidth'")
+		(var healthBarWidth:number = "healthWidthPref.value")
 	)
 
 	(style
@@ -3137,7 +3137,7 @@
 
 	(block
 		(style
-			(bind width "20px * healthBarScale")
+			(bind width "healthBarWidth")
 			(height = "3px")
 			(position = "absolute")
 			(align = "middle|center")
