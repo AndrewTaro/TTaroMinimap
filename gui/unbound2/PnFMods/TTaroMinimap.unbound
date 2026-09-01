@@ -682,7 +682,6 @@
 		(var consumableData:dict = "dataComponent ? dataComponent.data : {}" (event "dataComponent.evDataChanged"))
 
 		# tr
-		(macro TT_GET_LANGUAGE_INDEX)
 		(macro TT_GET_TRANSLATION _varName="'titleText'" _key="'IDS_TT_NEARBY_RADARS'")
 		(macro TT_GET_TRANSLATION _varName="'noRadarText'" _key="'IDS_TT_NO_NEARBY_RADARS'")
 
