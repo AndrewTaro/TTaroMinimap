@@ -85,9 +85,9 @@
 # these `rangeCircle.<type>.ally` now, so a composed string would work -- kept a table because a
 # literal is what lint_pref_keys can check offline, and a composed one it cannot.
 (def constant TMap_ALLY_CONSUMABLE_KEYS {
-	radar		: 'ttMinimap.rangeCircle.radar.ally',
-	hydro		: 'ttMinimap.rangeCircle.hydro.ally',
-	subRadar	: 'ttMinimap.rangeCircle.subRadar.ally',
+	radar		: 'ttaro.ttMinimap.rangeCircle.radar.ally',
+	hydro		: 'ttaro.ttMinimap.rangeCircle.hydro.ally',
+	subRadar	: 'ttaro.ttMinimap.rangeCircle.subRadar.ally',
 })
 
 # battle\minimap\markers\capture_point_marker.unbound
@@ -191,28 +191,28 @@
 # every row declares it, so a reader can test the string instead of `'prefKey' in row` (a literal in
 # an initialiser reads as a candidate key to lint_pref_keys, and `in` is what forces one there).
 (def constant TMap_MINIMAP_RANGES_SETTINGS "{
-	artilleryMaxDist:				{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 ,	prefKey: 'ttMinimap.rangeCircle.primaryWeapon.self',		optionName: 'shootMGRangeEnabled' },
-	torpedoMaxDist:					{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 ,	prefKey: 'ttMinimap.rangeCircle.torpedo.self',			optionName: 'shootTARangeEnabled' },
-	antiMissileMaxDist:				{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 , 	prefKey: 'ttMinimap.rangeCircle.antiAir.self',			optionName: 'shootAntiMissileSystemRangeEnabled' },
-	missilesMaxDist:				{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 , 	prefKey: 'ttMinimap.rangeCircle.primaryWeapon.self',		optionName: 'shootMissilesRangeEnabled' },
-	pingerMaxDist:					{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 ,	prefKey: 'ttMinimap.rangeCircle.pinger.self',			optionName: 'shootPingerRangeEnabled' },
-	visibilityRange:				{ color: 0x6EE1F7, boldText: false, dashLength: 11, drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 11 ,	prefKey: 'ttMinimap.rangeCircle.visibilitySea.self',		optionName: 'visibilityRangeEnabled' },
-	visibilityRangeAlt:				{ color: 0x6EE1F7, boldText: false, dashLength: 11, drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 11 ,	prefKey: 'ttMinimap.rangeCircle.visibilitySea.self',		optionName: 'visibilityRangeEnabled' },
-	visibilityPlaneRange:			{ color: 0x6EE1D8, boldText: false, dashLength: 13, drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 27 ,	prefKey: 'ttMinimap.rangeCircle.visibilityAir.self',		optionName: 'visibilityPlaneRangeEnabled' },
-	visibilityPlaneRangeAlt:		{ color: 0x6EE1D8, boldText: false, dashLength: 13, drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 27 , 	prefKey: 'ttMinimap.rangeCircle.visibilityAir.self',		optionName: 'visibilityPlaneRangeEnabled' },
-	aaRangeMax:						{ color: 0xF0A522, boldText: false, dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 , 	prefKey: 'ttMinimap.rangeCircle.antiAir.self',			optionName: 'aaRangeMaxEnabled' },
-	atbaMaxDist:					{ color: 0xA9C272, boldText: false, dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 , 	prefKey: 'ttMinimap.rangeCircle.atba.self',			optionName: 'atbaRangeEnabled' },
-	rlsShipRange:					{ color: 0x00CCFF, boldText: false, dashLength: 0 , drawDotted: true , forceEnabled: false, lineThickness: 1.5, spacing: 15.5 , prefKey: 'ttMinimap.rangeCircle.radar.self',			optionName: 'rlsRangeEnabled' },
-	sonarShipRange:					{ color: 0x00CCFF, boldText: false, dashLength: 0 , drawDotted: true , forceEnabled: false, lineThickness: 2  , spacing: 21 , 	prefKey: 'ttMinimap.rangeCircle.hydro.self',			optionName: 'sonarRangeEnabled' },
-	hydrophoneRange:				{ color: 0x00CCFF, boldText: false, dashLength: 0 , drawDotted: true , forceEnabled: false, lineThickness: 2.5, spacing: 17.5 , prefKey: 'ttMinimap.rangeCircle.hydrophone.self',	optionName: 'hydrophoneRangeEnabled' },
-	submarineLocatorRange:			{ color: 0x00CCFF, boldText: false, dashLength: 0 , drawDotted: true , forceEnabled: false, lineThickness: 2.5, spacing: 17.5 , prefKey: 'ttMinimap.rangeCircle.subRadar.self',		optionName: 'submarineLocatorRangeEnabled' },
+	artilleryMaxDist:				{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 ,	prefKey: 'ttaro.ttMinimap.rangeCircle.primaryWeapon.self',		optionName: 'shootMGRangeEnabled' },
+	torpedoMaxDist:					{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 ,	prefKey: 'ttaro.ttMinimap.rangeCircle.torpedo.self',			optionName: 'shootTARangeEnabled' },
+	antiMissileMaxDist:				{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 , 	prefKey: 'ttaro.ttMinimap.rangeCircle.antiAir.self',			optionName: 'shootAntiMissileSystemRangeEnabled' },
+	missilesMaxDist:				{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 , 	prefKey: 'ttaro.ttMinimap.rangeCircle.primaryWeapon.self',		optionName: 'shootMissilesRangeEnabled' },
+	pingerMaxDist:					{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 ,	prefKey: 'ttaro.ttMinimap.rangeCircle.pinger.self',			optionName: 'shootPingerRangeEnabled' },
+	visibilityRange:				{ color: 0x6EE1F7, boldText: false, dashLength: 11, drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 11 ,	prefKey: 'ttaro.ttMinimap.rangeCircle.visibilitySea.self',		optionName: 'visibilityRangeEnabled' },
+	visibilityRangeAlt:				{ color: 0x6EE1F7, boldText: false, dashLength: 11, drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 11 ,	prefKey: 'ttaro.ttMinimap.rangeCircle.visibilitySea.self',		optionName: 'visibilityRangeEnabled' },
+	visibilityPlaneRange:			{ color: 0x6EE1D8, boldText: false, dashLength: 13, drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 27 ,	prefKey: 'ttaro.ttMinimap.rangeCircle.visibilityAir.self',		optionName: 'visibilityPlaneRangeEnabled' },
+	visibilityPlaneRangeAlt:		{ color: 0x6EE1D8, boldText: false, dashLength: 13, drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 27 , 	prefKey: 'ttaro.ttMinimap.rangeCircle.visibilityAir.self',		optionName: 'visibilityPlaneRangeEnabled' },
+	aaRangeMax:						{ color: 0xF0A522, boldText: false, dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 , 	prefKey: 'ttaro.ttMinimap.rangeCircle.antiAir.self',			optionName: 'aaRangeMaxEnabled' },
+	atbaMaxDist:					{ color: 0xA9C272, boldText: false, dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 , 	prefKey: 'ttaro.ttMinimap.rangeCircle.atba.self',			optionName: 'atbaRangeEnabled' },
+	rlsShipRange:					{ color: 0x00CCFF, boldText: false, dashLength: 0 , drawDotted: true , forceEnabled: false, lineThickness: 1.5, spacing: 15.5 , prefKey: 'ttaro.ttMinimap.rangeCircle.radar.self',			optionName: 'rlsRangeEnabled' },
+	sonarShipRange:					{ color: 0x00CCFF, boldText: false, dashLength: 0 , drawDotted: true , forceEnabled: false, lineThickness: 2  , spacing: 21 , 	prefKey: 'ttaro.ttMinimap.rangeCircle.hydro.self',			optionName: 'sonarRangeEnabled' },
+	hydrophoneRange:				{ color: 0x00CCFF, boldText: false, dashLength: 0 , drawDotted: true , forceEnabled: false, lineThickness: 2.5, spacing: 17.5 , prefKey: 'ttaro.ttMinimap.rangeCircle.hydrophone.self',	optionName: 'hydrophoneRangeEnabled' },
+	submarineLocatorRange:			{ color: 0x00CCFF, boldText: false, dashLength: 0 , drawDotted: true , forceEnabled: false, lineThickness: 2.5, spacing: 17.5 , prefKey: 'ttaro.ttMinimap.rangeCircle.subRadar.self',		optionName: 'submarineLocatorRangeEnabled' },
 	visDistance:					{ color: 0x00CCFF, boldText: false, dashLength: 0 , drawDotted: false, forceEnabled: true , lineThickness: 1  , spacing: 0 , 	prefKey: '',							optionName: '' },
 	visibilityAfterPingByShipRange:	{ color: 0x00BBFF, boldText: false, dashLength: 16, drawDotted: false, forceEnabled: true , lineThickness: 1  , spacing: 40 , 	prefKey: '',							optionName: 'visibilityAfterPingByShipRangeEnabled' },
-	charge_laserMaxDist:			{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 , 	prefKey: 'ttMinimap.rangeCircle.primaryWeapon.self',		optionName: 'shootChargeLaserRangeEnabled' },
-	impulse_laserMaxDist:			{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 , 	prefKey: 'ttMinimap.rangeCircle.primaryWeapon.self',		optionName: 'shootImpulseLaserRangeEnabled' },
-	axis_laserMaxDist:				{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 , 	prefKey: 'ttMinimap.rangeCircle.primaryWeapon.self',		optionName: 'shootAxisLaserRangeEnabled' },
-	wavesMaxDist:					{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 , 	prefKey: 'ttMinimap.rangeCircle.primaryWeapon.self',		optionName: 'shootWaveGunRangeEnabled' },
-	air_supportMaxDist: 			{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 , 	prefKey: 'ttMinimap.rangeCircle.airSupport.self',		optionName: 'shootAirSupportRangeEnabled' }
+	charge_laserMaxDist:			{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 , 	prefKey: 'ttaro.ttMinimap.rangeCircle.primaryWeapon.self',		optionName: 'shootChargeLaserRangeEnabled' },
+	impulse_laserMaxDist:			{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 , 	prefKey: 'ttaro.ttMinimap.rangeCircle.primaryWeapon.self',		optionName: 'shootImpulseLaserRangeEnabled' },
+	axis_laserMaxDist:				{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 , 	prefKey: 'ttaro.ttMinimap.rangeCircle.primaryWeapon.self',		optionName: 'shootAxisLaserRangeEnabled' },
+	wavesMaxDist:					{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 , 	prefKey: 'ttaro.ttMinimap.rangeCircle.primaryWeapon.self',		optionName: 'shootWaveGunRangeEnabled' },
+	air_supportMaxDist: 			{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 , 	prefKey: 'ttaro.ttMinimap.rangeCircle.airSupport.self',		optionName: 'shootAirSupportRangeEnabled' }
 }")
 
 (def constant TMap_CONCEALMENT_SKILL_ID {
@@ -283,7 +283,7 @@
 # Custom
 (def macro TMap_GET_SCALE_RATIO()
 	(var _isLoading:bool = false)
-	(macro TT_GET_PREF _varName="'isScaleExtendedPref'" _key="'ttMinimap.extendScale'")
+	(macro TT_GET_PREF _varName="'isScaleExtendedPref'" _key="'ttaro.ttMinimap.extendScale'")
 	(var isScaleExtended:bool = "null != isScaleExtendedPref && null != isScaleExtendedPref.value ? isScaleExtendedPref.value : false")
 	(var minimapSizeIndexComponent:gfx = "$datahub.getPrimaryEntity(CC.minimapOption, SC.Battle.MINIMAP_OPTION.minimapSizeIndex).minimapOption")
 	(var scaleIndex:number = "minimapSizeIndexComponent.value" (event "minimapSizeIndexComponent.evValueChanged"))
@@ -303,7 +303,7 @@
 # is that the key composition is now written once -- a wrong dotted key raises nothing anywhere, so
 # five copies meant five places to get it silently wrong.
 #
-# _prefKey is the schema key PREFIX ('ttMinimap.rangeCircle.radar.enemy'); '' means "this circle has no settings",
+# _prefKey is the schema key PREFIX ('ttaro.ttMinimap.rangeCircle.radar.enemy'); '' means "this circle has no settings",
 # which resolves no component and leaves every literal below standing.  Those literals are the old
 # TMap_PREFS.FAKE defaults, and for a real key they only cover the window before Python publishes --
 # the schema default differs per variant, so no single literal could stand in for it.
@@ -319,7 +319,7 @@
 # solid.  Composed from the component's 0-255 channels rather than masked off `value`: arithmetic on a
 # packed value above 2^31 overflows, while this tops out at 0xFFFFFF.
 (def macro TMap_RANGE_CIRCLE_PREFS (_prefKey:expression, _defaultColor:expression="0x6EE1F7", _defaultLineType:expression="0")
-	(macro TT_GET_PREF _varName="'__rcFix'" _key="'ttMinimap.rangeCircle.outlineFix'")
+	(macro TT_GET_PREF _varName="'__rcFix'" _key="'ttaro.ttMinimap.rangeCircle.outlineFix'")
 	(var isThicknessFixed:bool = "null != __rcFix && null != __rcFix.value ? __rcFix.value : false")
 
 	(macro TT_GET_PREF _varName="'__rcFill'" _key="_prefKey == '' ? '' : _prefKey + '.fillCircle'")
@@ -375,7 +375,7 @@
 	(var minimapEntity:gfx = "$datahub.getSingleEntity(CC.minimap)")
 
 	(var minimapSizeIndexComponent:gfx = "$datahub.getPrimaryEntity(CC.minimapOption, SC.Battle.MINIMAP_OPTION.minimapSizeIndex).minimapOption")
-	(macro TT_GET_PREF _varName="'isScaleExtendedPref'" _key="'ttMinimap.extendScale'")
+	(macro TT_GET_PREF _varName="'isScaleExtendedPref'" _key="'ttaro.ttMinimap.extendScale'")
 	(var isScaleExtended:bool = "null != isScaleExtendedPref && null != isScaleExtendedPref.value ? isScaleExtendedPref.value : false")
 	(var scaleIndex:number = "minimapSizeIndexComponent.value" (event "minimapSizeIndexComponent.evValueChanged"))
 	(var baseMapScale:number = "scaleIndex < LIST_MAP_SCALES.length ? LIST_MAP_SCALES[scaleIndex] : LIST_MAP_SCALES[LIST_MAP_SCALES.length - 1] + SCALE_STEP * (scaleIndex - LIST_MAP_SCALES.length + 1)")
@@ -443,7 +443,7 @@
 		(var isOnCoolDown:bool = "isAntiSpamEnabled ? coolDownCount + 1 > TMap_RPF_MESSAGE_COOLDOWN_MAX_COUNT : false")
 
 		# Key Bind
-		(macro TT_GET_PREF _varName="'rpfKeyIndexPref'" _key="'ttMinimap.rpfSelf.keybind'")
+		(macro TT_GET_PREF _varName="'rpfKeyIndexPref'" _key="'ttaro.ttMinimap.rpfSelf.keybind'")
 		(var rpfKeyIndex:number = "null != rpfKeyIndexPref && null != rpfKeyIndexPref.value ? rpfKeyIndexPref.value : 0")
 
 		(var keyDesc:str = "rpfKeyIndex < TMap_RPF_KEYS.ALL.length ? TMap_RPF_KEYS.ALL[rpfKeyIndex] : TMap_RPF_KEYS.ALL[0]")
@@ -530,7 +530,7 @@
         # Python owns the position value, its resKey bucket AND the first-placement default (the
         # schema's right/bottom anchor, which matches this element's 100%/100% pivot below), so there
         # is no view-side default or stage math left here.
-        (macro TT_DRAGGABLE_POSITION _fullKey="'ttMinimap.position'")
+        (macro TT_DRAGGABLE_POSITION _fullKey="'ttaro.ttMinimap.position'")
 
 		(macro TMap_GET_SCALE_RATIO)
 
@@ -540,13 +540,13 @@
 		# The radar warning is a 3-mode dropdown now, not a switch -- so this is an ADAPTIVE-aware read
 		# (see TMap_GET_DISPLAY_MODE), where it used to be a plain bool.
 		(macro TMap_GET_ALT_VISION)
-		(macro TT_GET_PREF _varName="'nearbyRadarModePref'" _key="'ttMinimap.radarWarning.displayMode'")
+		(macro TT_GET_PREF _varName="'nearbyRadarModePref'" _key="'ttaro.ttMinimap.radarWarning.displayMode'")
 		(var nearbyRadarMode:number = "null != nearbyRadarModePref && null != nearbyRadarModePref.value ? nearbyRadarModePref.value : 0")
 		(macro TMap_GET_DISPLAY_MODE _varName="'isNerbyRadarVisible'" _prefValue="nearbyRadarMode")
 
-		(macro TT_GET_PREF _varName="'isDragDropDisabledPref'" _key="'ttMinimap.disableDragDrop'")
+		(macro TT_GET_PREF _varName="'isDragDropDisabledPref'" _key="'ttaro.ttMinimap.disableDragDrop'")
 		(var isDragDropDisabled:bool = "null != isDragDropDisabledPref && null != isDragDropDisabledPref.value ? isDragDropDisabledPref.value : false")
-		(macro TT_GET_PREF _varName="'isBlurEnabledPref'" _key="'ttMinimap.background.useBlur'")
+		(macro TT_GET_PREF _varName="'isBlurEnabledPref'" _key="'ttaro.ttMinimap.background.useBlur'")
 		(var isBlurEnabled:bool = "null != isBlurEnabledPref && null != isBlurEnabledPref.value ? isBlurEnabledPref.value : false")
 	)
 
@@ -590,7 +590,7 @@
 				# when locked; the macro only gates the writes and the signifier.
 				(bind hitTest "!isDragDropDisabled")
 			)
-			(macro TT_DRAGGABLE _fullKey="'ttMinimap.position'" _isDragEnabled="!isDragDropDisabled")
+			(macro TT_DRAGGABLE _fullKey="'ttaro.ttMinimap.position'" _isDragEnabled="!isDragDropDisabled")
 		)
 
         (block
@@ -637,7 +637,7 @@
 			)
 
 			# Config
-			(element TT_ConfigButtonElement _modSlug = "'minimap'" _tooltipPosition="borderNoTrack"
+			(element TT_ConfigButtonElement _modSlug = "'ttaro.minimap'" _tooltipPosition="borderNoTrack"
 				(style
 					(bind left "isDragDropDisabled ? 0px : -30px")
 				)
@@ -696,14 +696,14 @@
 		# default position; the CMS default is static now, so it was a pref watcher plus a
 		# minimapOption watcher per instance for nothing.
 		(macro STAGE_SIZE)
-		(macro TT_GET_PREF _varName="'isDragDropDisabledPref'" _key="'ttMinimap.disableDragDrop'")
+		(macro TT_GET_PREF _varName="'isDragDropDisabledPref'" _key="'ttaro.ttMinimap.disableDragDrop'")
 		(var isDragDropDisabled:bool = "null != isDragDropDisabledPref && null != isDragDropDisabledPref.value ? isDragDropDisabledPref.value : false")
-        (macro TT_DRAGGABLE_POSITION _fullKey="'ttMinimap.radarWarning.position'")
+        (macro TT_DRAGGABLE_POSITION _fullKey="'ttaro.ttMinimap.radarWarning.position'")
 
 		# Config
-		(macro TT_GET_PREF _varName="'backgroundAlphaPref'" _key="'ttMinimap.radarWarning.alpha'")
+		(macro TT_GET_PREF _varName="'backgroundAlphaPref'" _key="'ttaro.ttMinimap.radarWarning.alpha'")
 		(var backgroundAlpha:number = "null != backgroundAlphaPref && null != backgroundAlphaPref.value ? backgroundAlphaPref.value : 0.6")
-		(macro TT_GET_PREF _varName="'scalePref'" _key="'ttMinimap.radarWarning.scale'")
+		(macro TT_GET_PREF _varName="'scalePref'" _key="'ttaro.ttMinimap.radarWarning.scale'")
 		(var scale:number = "null != scalePref && null != scalePref.value ? scalePref.value : 1")
 
 		(event evHideInfotip)
@@ -763,7 +763,7 @@
 					(backgroundColor = 0x00FFFFFF)
 					(bind hitTest "!isDragDropDisabled")
 				)
-				(macro TT_DRAGGABLE _fullKey="'ttMinimap.radarWarning.position'" _isDragEnabled="!isDragDropDisabled")
+				(macro TT_DRAGGABLE _fullKey="'ttaro.ttMinimap.radarWarning.position'" _isDragEnabled="!isDragDropDisabled")
 			)
 
 			(block
@@ -847,8 +847,8 @@
 			(controller $Tooltip
 				(renderer='TT_ConfigSubsetElement')
 				(args
-					_modSlug		= "'minimap'"
-					_keys			= "['ttMinimap.radarWarning.scale', 'ttMinimap.radarWarning.alpha', 'ttMinimap.disableDragDrop']"
+					_modSlug		= "'ttaro.minimap'"
+					_keys			= "['ttaro.ttMinimap.radarWarning.scale', 'ttaro.ttMinimap.radarWarning.alpha', 'ttaro.ttMinimap.disableDragDrop']"
 					_isEnabled		= true
 				)
 				(macro TMap_CONFIG_ANIMATION)
@@ -1283,12 +1283,12 @@
 		(var minimapComponent:gfx = "$datahub.getSingleComponent(CC.minimap)")
 
 		# Mod
-		(macro TT_GET_PREF _varName="'isBlurEnabledPref'" _key="'ttMinimap.background.useBlur'")
+		(macro TT_GET_PREF _varName="'isBlurEnabledPref'" _key="'ttaro.ttMinimap.background.useBlur'")
 		(var isBlurEnabled:bool = "null != isBlurEnabledPref && null != isBlurEnabledPref.value ? isBlurEnabledPref.value : false")
-		(macro TT_GET_PREF _varName="'blurIntensityPref'" _key="'ttMinimap.background.blurIntensity'")
+		(macro TT_GET_PREF _varName="'blurIntensityPref'" _key="'ttaro.ttMinimap.background.blurIntensity'")
 		(var blurIntensity:number = "null != blurIntensityPref && null != blurIntensityPref.value ? blurIntensityPref.value : 0.3")
 
-		(macro TT_GET_PREF _varName="'gradientTypePref'" _key="'ttMinimap.background.gradient'")
+		(macro TT_GET_PREF _varName="'gradientTypePref'" _key="'ttaro.ttMinimap.background.gradient'")
 		(var gradientType:number = "null != gradientTypePref && null != gradientTypePref.value ? gradientTypePref.value : 0")
 		(var gradientIndex:number = "gradientType < TMap_GRADIENT_MASKS.length ? gradientType : 0")
 		(var gradientMasks:dict = "TMap_GRADIENT_MASKS[gradientIndex]")
@@ -1900,28 +1900,28 @@
 		(var isEnemy:bool = "relationComponent && relationComponent.value == SC.Battle.PLAYER_RELATION.ENEMY" (event "relationComponent.evChanged"))
 
 		# Show Dead
-		(macro TT_GET_PREF _varName="'deadDisplayModePref'" _key="'ttMinimap.shipMarker.showDead'")
+		(macro TT_GET_PREF _varName="'deadDisplayModePref'" _key="'ttaro.ttMinimap.shipMarker.showDead'")
 		(var deadDisplayMode:number = "null != deadDisplayModePref && null != deadDisplayModePref.value ? deadDisplayModePref.value : 0")
 		(macro TMap_GET_DISPLAY_MODE _varName="'isDeadVisible'" _prefValue="deadDisplayMode")
 
 		# Player Name
-		(macro TT_GET_PREF _varName="'playerNameDisplayModePref'" _key="'ttMinimap.shipMarker.playerName'")
+		(macro TT_GET_PREF _varName="'playerNameDisplayModePref'" _key="'ttaro.ttMinimap.shipMarker.playerName'")
 		(var playerNameDisplayMode:number = "null != playerNameDisplayModePref && null != playerNameDisplayModePref.value ? playerNameDisplayModePref.value : 0")
 		(macro TMap_GET_DISPLAY_MODE _varName="'isPlayerNameVisible'" _prefValue="playerNameDisplayMode")
 
 		# Directional Line
-		(macro TT_GET_PREF _varName="'dirEnemyShipDisplayModePref'" _key="'ttMinimap.shipMarker.direction.displayMode'")
+		(macro TT_GET_PREF _varName="'dirEnemyShipDisplayModePref'" _key="'ttaro.ttMinimap.shipMarker.direction.displayMode'")
 		(var dirEnemyShipDisplayMode:number = "null != dirEnemyShipDisplayModePref && null != dirEnemyShipDisplayModePref.value ? dirEnemyShipDisplayModePref.value : 0")
 		(macro TMap_GET_DISPLAY_MODE _varName="'isDirEnemyShipVisible'" _prefValue="dirEnemyShipDisplayMode")
 		(var isEnemyDirVisible:bool = "isDirEnemyShipVisible && !(isAlly || isSelf) ")
 
 		# Detection Icon
-		(macro TT_GET_PREF _varName="'isDetectionVisiblePref'" _key="'ttMinimap.shipMarker.detection.show'")
+		(macro TT_GET_PREF _varName="'isDetectionVisiblePref'" _key="'ttaro.ttMinimap.shipMarker.detection.show'")
 		(var isDetectionVisible:bool = "null != isDetectionVisiblePref && null != isDetectionVisiblePref.value ? isDetectionVisiblePref.value : false")
 
 		# Nearby AA.  A DISPLAY_MODE dropdown now, not the old on/off switch: read as a bool,
 		# ADAPTIVE (2) is truthy and the circle draws always instead of on alt only.
-		(macro TT_GET_PREF _varName="'nearbyAADisplayModePref'" _key="'ttMinimap.rangeCircle.antiAir.enemy.displayMode'")
+		(macro TT_GET_PREF _varName="'nearbyAADisplayModePref'" _key="'ttaro.ttMinimap.rangeCircle.antiAir.enemy.displayMode'")
 		(var nearbyAADisplayMode:number = "null != nearbyAADisplayModePref && null != nearbyAADisplayModePref.value ? nearbyAADisplayModePref.value : 0")
 		(macro TMap_GET_DISPLAY_MODE _varName="'isNearbyAAVisible'" _prefValue="nearbyAADisplayMode")
 
@@ -2111,8 +2111,8 @@
 		# Local var names carry a `dirLine` prefix: lint_pref_keys merges (var name:str = ...) literals
 		# across the WHOLE namespace even though a var is element-scoped, so a bare `colorKey` here
 		# would collide with another element's and produce phantom failures.
-		(var dirLineColorKey:str = "_isShip ? 'ttMinimap.shipMarker.direction.color' : 'ttMinimap.squadronMarker.direction.color'")
-		(var dirLineScaleKey:str = "_isShip ? 'ttMinimap.shipMarker.direction.scale' : 'ttMinimap.squadronMarker.direction.scale'")
+		(var dirLineColorKey:str = "_isShip ? 'ttaro.ttMinimap.shipMarker.direction.color' : 'ttaro.ttMinimap.squadronMarker.direction.color'")
+		(var dirLineScaleKey:str = "_isShip ? 'ttaro.ttMinimap.shipMarker.direction.scale' : 'ttaro.ttMinimap.squadronMarker.direction.scale'")
 		(macro TT_GET_PREF _varName="'colorPref'" _key="dirLineColorKey")
 		(macro TT_GET_PREF _varName="'sizeScalePrefData'" _key="dirLineScaleKey")
 		(var sizeScalePref:number = "null != sizeScalePrefData && null != sizeScalePrefData.value ? sizeScalePrefData.value : 0.3")
@@ -2352,9 +2352,9 @@
 		(var rangesTextScale:number = "_mapScale > 1 ? 1 / _mapScale : 1")
 
 		(macro TMap_GET_ALT_VISION)
-		(macro TT_GET_PREF _varName="'isVisibleOnAltPref'" _key="'ttMinimap.rangeCircle.visibilitySmoke.self.showWhen.onAlt'")
+		(macro TT_GET_PREF _varName="'isVisibleOnAltPref'" _key="'ttaro.ttMinimap.rangeCircle.visibilitySmoke.self.showWhen.onAlt'")
 		(var isVisibleOnAlt:bool = "null != isVisibleOnAltPref && null != isVisibleOnAltPref.value ? isVisibleOnAltPref.value : false")
-		(macro TT_GET_PREF _varName="'isVisibleInSmokePref'" _key="'ttMinimap.rangeCircle.visibilitySmoke.self.showWhen.inSmoke'")
+		(macro TT_GET_PREF _varName="'isVisibleInSmokePref'" _key="'ttaro.ttMinimap.rangeCircle.visibilitySmoke.self.showWhen.inSmoke'")
 		(var isVisibleInSmoke:bool = "null != isVisibleInSmokePref && null != isVisibleInSmokePref.value ? isVisibleInSmokePref.value : false")
 		(var smokeIndication:gfx = "$datahub.getSingleComponent(CC.smokeIndication)")
 		(var isInSmoke:bool = "smokeIndication ? smokeIndication.smokeInsideLifeTime > 0 : false" (event "smokeIndication.evSmokeTimerChanged"))
@@ -2375,7 +2375,7 @@
 		(var mapSize:number = "cameraComponent ? cameraComponent.visibilityRange / cameraComponent.visibilityRangePerc : 42" watch=false)
 		(var rangeRadius:number = "smokePenaltyRange / mapSize")
 
-		(macro TMap_RANGE_CIRCLE_PREFS _prefKey="'ttMinimap.rangeCircle.visibilitySmoke.self'" _defaultLineType="2")
+		(macro TMap_RANGE_CIRCLE_PREFS _prefKey="'ttaro.ttMinimap.rangeCircle.visibilitySmoke.self'" _defaultLineType="2")
 
 		(var lineThickness:number = "isThicknessFixed ? lineThicknessPref * 0.1 / rangeRadius : lineThicknessPref")
 		# The only circle whose outline rides the vanilla ranges-alpha slider.
@@ -2488,7 +2488,7 @@
 		(var enableInClassLeaf:str = "myShipType in TMap_ENABLE_IN_CLASS_KEYS ? '.' + TMap_ENABLE_IN_CLASS_KEYS[myShipType] : ''")
 
 		# MG
-		(var mgKey:str = "'ttMinimap.rangeCircle.primaryWeapon' + prefPostfix")
+		(var mgKey:str = "'ttaro.ttMinimap.rangeCircle.primaryWeapon' + prefPostfix")
 		(macro TT_GET_PREF _varName="'mgDisplayModePref'" _key="mgKey + '.displayMode'")
 		(var mgDisplayMode:number = "null != mgDisplayModePref && null != mgDisplayModePref.value ? mgDisplayModePref.value : 0")
 		(macro TT_GET_PREF _varName="'mgClassPref'" _key="enableInClassLeaf == '' ? '' : mgKey + enableInClassLeaf")
@@ -2496,7 +2496,7 @@
 		(var isMGEnabled:bool = "mgDisplayMode != TMap_DISPLAY_MODES.DISABLE && isMGEnabledInClass")
 
 		# SG
-		(var sgKey:str = "'ttMinimap.rangeCircle.atba' + prefPostfix")
+		(var sgKey:str = "'ttaro.ttMinimap.rangeCircle.atba' + prefPostfix")
 		(var shipId:number = "_markerEntity.avatar ? _markerEntity.avatar.ship.ref.ship.id : null" (event "_markerEntity.avatar.evShipRefChanged"))
 		(var shipType:str = "_markerEntity.avatar ? _markerEntity.avatar.shipType : null" (event "_markerEntity.avatar.evShipTypeChanged"))
 		(var ownShipEntity:gfx = "$datahub.getPrimaryEntity(CC.ownShip, shipId)")
@@ -2515,7 +2515,7 @@
 		(var isSGEnabled:bool = "sgDisplayMode != TMap_DISPLAY_MODES.DISABLE && isSGEnabledInClass")
 
 		# Torp
-		(var torpKey:str = "'ttMinimap.rangeCircle.torpedo' + prefPostfix")
+		(var torpKey:str = "'ttaro.ttMinimap.rangeCircle.torpedo' + prefPostfix")
 		(var torps:gfx = "shipTTX && shipTTX.torpedoes ? shipTTX.torpedoes : null")
 		(var torp1:number = "torps && torps.torpedo ? torps.torpedo.maxDist.value : 0")
 		(var torp2:number = "torps && torps.torpedoDeepwater ? torps.torpedoDeepwater.maxDist.value : 0")
@@ -2529,7 +2529,7 @@
 		(var isTorpEnabled:bool = "torpDisplayMode != TMap_DISPLAY_MODES.DISABLE && isTorpEnabledInClass")
 
 		# AS
-		(var asKey:str = "'ttMinimap.rangeCircle.airSupport' + prefPostfix")
+		(var asKey:str = "'ttaro.ttMinimap.rangeCircle.airSupport' + prefPostfix")
 		(macro TT_GET_PREF _varName="'asDisplayModePref'" _key="asKey + '.displayMode'")
 		(var asDisplayMode:number = "null != asDisplayModePref && null != asDisplayModePref.value ? asDisplayModePref.value : 0")
 		(macro TT_GET_PREF _varName="'asClassPref'" _key="enableInClassLeaf == '' ? '' : asKey + enableInClassLeaf")
@@ -2537,7 +2537,7 @@
 		(var isASEnabled:bool = "asDisplayMode != TMap_DISPLAY_MODES.DISABLE && isASEnabledInClass")
 
 		# Visibility Sea
-		(var seaKey:str = "'ttMinimap.rangeCircle.visibilitySea' + prefPostfix")
+		(var seaKey:str = "'ttaro.ttMinimap.rangeCircle.visibilitySea' + prefPostfix")
 		(macro TT_GET_PREF _varName="'seaDisplayModePref'" _key="seaKey + '.displayMode'")
 		(var seaDisplayMode:number = "null != seaDisplayModePref && null != seaDisplayModePref.value ? seaDisplayModePref.value : 0")
 		(macro TT_GET_PREF _varName="'seaClassPref'" _key="enableInClassLeaf == '' ? '' : seaKey + enableInClassLeaf")
@@ -2551,7 +2551,7 @@
 		(var visibilityModifier:number = "isConcealCorrectionNeeded && concealModifiers ? (1 + concealModifiers.visibilityDistCoeff * 0.01) : 1.0") # value is negative and %
 
 		# Visibility Air
-		(var airKey:str = "'ttMinimap.rangeCircle.visibilityAir' + prefPostfix")
+		(var airKey:str = "'ttaro.ttMinimap.rangeCircle.visibilityAir' + prefPostfix")
 		(macro TT_GET_PREF _varName="'airDisplayModePref'" _key="airKey + '.displayMode'")
 		(var airDisplayMode:number = "null != airDisplayModePref && null != airDisplayModePref.value ? airDisplayModePref.value : 0")
 		(macro TT_GET_PREF _varName="'airClassPref'" _key="enableInClassLeaf == '' ? '' : airKey + enableInClassLeaf")
@@ -2560,7 +2560,7 @@
 
 		# Radar.  These three are enemy-only (an ally's consumable circles are drawn elsewhere), so the
 		# key is fixed rather than postfixed.
-		(var radarKey:str = "'ttMinimap.rangeCircle.radar.enemy'")
+		(var radarKey:str = "'ttaro.ttMinimap.rangeCircle.radar.enemy'")
 		(macro TT_GET_PREF _varName="'radarDisplayModePref'" _key="radarKey + '.displayMode'")
 		(var radarDisplayMode:number = "null != radarDisplayModePref && null != radarDisplayModePref.value ? radarDisplayModePref.value : 0")
 		(macro TT_GET_PREF _varName="'radarClassPref'" _key="enableInClassLeaf == '' ? '' : radarKey + enableInClassLeaf")
@@ -2569,7 +2569,7 @@
 		(var isRadarEnabled:bool = "(radarDisplayMode != TMap_DISPLAY_MODES.DISABLE) && isRadarEnabledInClass && (radarRange > 0)")
 
 		# Hydro
-		(var hydroKey:str = "'ttMinimap.rangeCircle.hydro.enemy'")
+		(var hydroKey:str = "'ttaro.ttMinimap.rangeCircle.hydro.enemy'")
 		(macro TT_GET_PREF _varName="'hydroDisplayModePref'" _key="hydroKey + '.displayMode'")
 		(var hydroDisplayMode:number = "null != hydroDisplayModePref && null != hydroDisplayModePref.value ? hydroDisplayModePref.value : 0")
 		(macro TT_GET_PREF _varName="'hydroClassPref'" _key="enableInClassLeaf == '' ? '' : hydroKey + enableInClassLeaf")
@@ -2578,7 +2578,7 @@
 		(var isHydroEnabled:bool = "(hydroDisplayMode != TMap_DISPLAY_MODES.DISABLE) && isHydroEnabledInClass && (hydroRange > 0)")
 
 		# Sub Radar
-		(var subRadarKey:str = "'ttMinimap.rangeCircle.subRadar.enemy'")
+		(var subRadarKey:str = "'ttaro.ttMinimap.rangeCircle.subRadar.enemy'")
 		(macro TT_GET_PREF _varName="'subRadarDisplayModePref'" _key="subRadarKey + '.displayMode'")
 		(var subRadarDisplayMode:number = "null != subRadarDisplayModePref && null != subRadarDisplayModePref.value ? subRadarDisplayModePref.value : 0")
 		(macro TT_GET_PREF _varName="'subRadarClassPref'" _key="enableInClassLeaf == '' ? '' : subRadarKey + enableInClassLeaf")
@@ -2721,7 +2721,7 @@
 )
 
 # Custom
-# _prefKey is the caller's key PREFIX ('ttMinimap.rangeCircle.visibilitySea.ally'), not a settings dict -- the
+# _prefKey is the caller's key PREFIX ('ttaro.ttMinimap.rangeCircle.visibilitySea.ally'), not a settings dict -- the
 # per-variant split is a key prefix now and each leaf is composed here.
 (def element TMap_MapMarkerItemNonPlayerRange (_range:number, _prefKey:str, _distanceSquared:number) layout = true
 	(scope
@@ -2851,7 +2851,7 @@
 		(var shipNamesDisplayModeComponent:gfx = "$datahub.getPrimaryEntity(CC.minimapOption, SC.Battle.MINIMAP_OPTION.shipNamesDisplayEnabled).minimapOption")
 		(var shipNamesDisplayMode:number = "shipNamesDisplayModeComponent.value" (event "shipNamesDisplayModeComponent.evValueChanged"))
 
-		(macro TT_GET_PREF _varName="'lastSpottedOnAltPref'" _key="'ttMinimap.shipMarker.showLastSpottedOnAlt'")
+		(macro TT_GET_PREF _varName="'lastSpottedOnAltPref'" _key="'ttaro.ttMinimap.shipMarker.showLastSpottedOnAlt'")
 		(var isLastSpottedTimerEnabled:bool = "null != lastSpottedOnAltPref && null != lastSpottedOnAltPref.value ? lastSpottedOnAltPref.value : true")
 
 		(var isShipNameVisible:bool = "isLastSpottedTimerEnabled && altVision && shipNamesDisplayMode == TMap_DISPLAY_MODES.ENABLE && !mapVisible
@@ -2860,7 +2860,7 @@
 		)
 		#
 		
-		(macro TT_GET_PREF _varName="'markerFontSizePref'" _key="'ttMinimap.font.size'")
+		(macro TT_GET_PREF _varName="'markerFontSizePref'" _key="'ttaro.ttMinimap.font.size'")
 		(var fontSizePref:number = "null != markerFontSizePref && null != markerFontSizePref.value ? markerFontSizePref.value : 9")
 
 		# Mod
@@ -2921,12 +2921,12 @@
 		(var currentPosX:number = "mapPos.x" init=false watch=false (event "timer.evInfrequent"))
 		(var currentPosY:number = "mapPos.y" init=false watch=false (event "timer.evInfrequent"))
 
-		(macro TT_GET_PREF _varName="'lastSpottedOnAltPref'" _key="'ttMinimap.shipMarker.showLastSpottedOnAlt'")
+		(macro TT_GET_PREF _varName="'lastSpottedOnAltPref'" _key="'ttaro.ttMinimap.shipMarker.showLastSpottedOnAlt'")
 		(var isLastSpottedTimerEnabled:bool = "null != lastSpottedOnAltPref && null != lastSpottedOnAltPref.value ? lastSpottedOnAltPref.value : true")
 
 		(var isTimerVisible:bool = "!mapVisible && altVision && isLastSpottedTimerEnabled")
 
-		(macro TT_GET_PREF _varName="'markerFontSizePref'" _key="'ttMinimap.font.size'")
+		(macro TT_GET_PREF _varName="'markerFontSizePref'" _key="'ttaro.ttMinimap.font.size'")
 		(var fontSizePref:number = "null != markerFontSizePref && null != markerFontSizePref.value ? markerFontSizePref.value : 9")
 		(var fontSize:number = "max(11, fontSizePref)")
 	)
@@ -2965,7 +2965,7 @@
 														:	tkStatus && isAlly	?	'teamkiller' 
 																				: toLower(SC.Battle.PLAYER_RELATION.VALUE_TO_NAME[relationComponent.value])")
 
-		(macro TT_GET_PREF _varName="'markerFontSizePref'" _key="'ttMinimap.font.size'")
+		(macro TT_GET_PREF _varName="'markerFontSizePref'" _key="'ttaro.ttMinimap.font.size'")
 		(var fontSizePref:number = "null != markerFontSizePref && null != markerFontSizePref.value ? markerFontSizePref.value : 9")
 
 		(var relationColor:number = "isMultyTeamEnabled && !isAlly	? MULTI_TEAMS_FONT_COLOR[teamId]
@@ -2999,7 +2999,7 @@
 														:	tkStatus && isAlly	?	'teamkiller' 
 																				: toLower(SC.Battle.PLAYER_RELATION.VALUE_TO_NAME[relationComponent.value])")
 
-		(macro TT_GET_PREF _varName="'markerFontSizePref'" _key="'ttMinimap.font.size'")
+		(macro TT_GET_PREF _varName="'markerFontSizePref'" _key="'ttaro.ttMinimap.font.size'")
 		(var fontSize:number = "null != markerFontSizePref && null != markerFontSizePref.value ? markerFontSizePref.value : 9")
 
 		(var relationColor:number = "isMultyTeamEnabled && !isAlly	? MULTI_TEAMS_FONT_COLOR[teamId]
@@ -3034,13 +3034,13 @@
 		# The sector is drawn white and TINTED by a colorTransform, so what it needs are the 0-1 channel
 		# multipliers the component already publishes -- not the packed value taken apart here.
 		# Schema default for both is 0x1AFFFFFF: white, a = 0.102.
-		(macro TT_GET_PREF _varName="'rpfColorPref'" _key="isSelf ? 'ttMinimap.rpfSelf.color' : 'ttMinimap.rpfAlly.color'")
+		(macro TT_GET_PREF _varName="'rpfColorPref'" _key="isSelf ? 'ttaro.ttMinimap.rpfSelf.color' : 'ttaro.ttMinimap.rpfAlly.color'")
 		(var alphaScale:number = "null != rpfColorPref && isNumber(rpfColorPref.a) ? rpfColorPref.a : 0.102")
 		(var redScale:number   = "null != rpfColorPref && isNumber(rpfColorPref.r) ? rpfColorPref.r : 1")
 		(var greenScale:number = "null != rpfColorPref && isNumber(rpfColorPref.g) ? rpfColorPref.g : 1")
 		(var blueScale:number  = "null != rpfColorPref && isNumber(rpfColorPref.b) ? rpfColorPref.b : 1")
 
-		(macro TT_GET_PREF _varName="'rpfAllyModePref'" _key="'ttMinimap.rpfAlly.displayMode'")
+		(macro TT_GET_PREF _varName="'rpfAllyModePref'" _key="'ttaro.ttMinimap.rpfAlly.displayMode'")
 		(var rpfAllyDisplayMode:number = "null != rpfAllyModePref && null != rpfAllyModePref.value ? rpfAllyModePref.value : 1")
 		(macro TMap_GET_DISPLAY_MODE _varName="'isAllyRPFEnabeld'" _prefValue="rpfAllyDisplayMode")
 
@@ -3076,14 +3076,14 @@
 		# `healthKey`, not `prefKey`: lint_pref_keys merges (var name:str = ...) literals across the
 		# WHOLE namespace even though a var is element-scoped, so a generically-named local here
 		# collides with another element's and produces phantom failures.
-		(var healthKey:str = "_isAlly ? 'ttMinimap.shipMarker.health.ally' : 'ttMinimap.shipMarker.health.enemy'")
+		(var healthKey:str = "_isAlly ? 'ttaro.ttMinimap.shipMarker.health.ally' : 'ttaro.ttMinimap.shipMarker.health.enemy'")
 		(macro TMap_GET_ALT_VISION)
 
 		(macro TT_GET_PREF _varName="'healthDisplayModePref'" _key="healthKey")
 		(var healthDisplayMode:number = "null != healthDisplayModePref && null != healthDisplayModePref.value ? healthDisplayModePref.value : 0")
 		(macro TMap_GET_DISPLAY_MODE _varName="'isHealthVisible'" _prefValue="healthDisplayMode")
 
-		(macro TT_GET_PREF _varName="'isMaxHealthHiddenPref'" _key="'ttMinimap.shipMarker.health.hideAtFull'")
+		(macro TT_GET_PREF _varName="'isMaxHealthHiddenPref'" _key="'ttaro.ttMinimap.shipMarker.health.hideAtFull'")
 		(var isMaxHealthHidden:bool = "null != isMaxHealthHiddenPref && null != isMaxHealthHiddenPref.value ? isMaxHealthHiddenPref.value : false")
 
 		(var healthComponent:gfx = "_markerEntity.health ? _markerEntity.health : null")
@@ -3103,7 +3103,7 @@
 		(var markerColorTransform:dict = "TWO_TEAMS_COLOR_TRANSFORMS[relationStr]")
 		(var regenBarColorTransform:dict = "{redMultiplier:0,greenMultiplier:0,blueMultiplier:0,alphaMultiplier:1.0,redOffset:230,greenOffset:230,blueOffset:230,alphaOffset:0 }")
 
-		(macro TT_GET_PREF _varName="'healthTypePref'" _key="'ttMinimap.shipMarker.health.format'")
+		(macro TT_GET_PREF _varName="'healthTypePref'" _key="'ttaro.ttMinimap.shipMarker.health.format'")
 		(var rendererType:number = "null != healthTypePref && null != healthTypePref.value ? healthTypePref.value : 0")
 		(var renderer:str = "rendererType == 0 ? 'TMap_MapMarkerHealthBar' : 'TMap_MapMarkerHealthValue' ")
 	)
@@ -3128,7 +3128,7 @@
 # Custom
 (def element TMap_MapMarkerHealthBar (_healthRatio:number, _markerColorTransform:dict)
 	(scope
-		(macro TT_GET_PREF _varName="'healthWidthPref'" _key="'ttMinimap.shipMarker.health.width'")
+		(macro TT_GET_PREF _varName="'healthWidthPref'" _key="'ttaro.ttMinimap.shipMarker.health.width'")
 		(var healthBarWidth:number = "healthWidthPref.value")
 	)
 
@@ -3183,7 +3183,7 @@
 # Custom
 (def element TMap_MapMarkerHealthValue (_healthValue:number, _markerColorTransform:dict)
 	(scope
-		(macro TT_GET_PREF _varName="'markerFontSizePref'" _key="'ttMinimap.font.size'")
+		(macro TT_GET_PREF _varName="'markerFontSizePref'" _key="'ttaro.ttMinimap.font.size'")
 		(var fontSizePref:number = "null != markerFontSizePref && null != markerFontSizePref.value ? markerFontSizePref.value : 9")
 	)
 	(style
@@ -3220,7 +3220,7 @@
 		(var shipTTX:gfx = "paramEntity ? paramEntity.mods_ShipParamsInBattle.shipTTX : null")
 		
 		# AA
-		(macro TT_GET_PREF _varName="'aaRangeOffsetPref'" _key="'ttMinimap.rangeCircle.antiAir.enemy.radiusOffset'")
+		(macro TT_GET_PREF _varName="'aaRangeOffsetPref'" _key="'ttaro.ttMinimap.rangeCircle.antiAir.enemy.radiusOffset'")
 		(var rangeOffset:number = "null != aaRangeOffsetPref && null != aaRangeOffsetPref.value ? aaRangeOffsetPref.value : 2.5")
 
 		(var airDefenseTTX:gfx = "shipTTX ? shipTTX.airDefense : null")
@@ -3247,7 +3247,7 @@
 
 		(var isNearby:bool = "isValidAA && isValidPos && (rangeOffset == TMap_RANGE_OFFSET_MAX || distanceToShipSquared < warnRangeSquared)")
 
-		(macro TMap_RANGE_CIRCLE_PREFS _prefKey="'ttMinimap.rangeCircle.antiAir.enemy'" _defaultColor="0xFF9400" _defaultLineType="2")
+		(macro TMap_RANGE_CIRCLE_PREFS _prefKey="'ttaro.ttMinimap.rangeCircle.antiAir.enemy'" _defaultColor="0xFF9400" _defaultLineType="2")
 
 		(var lineAlpha:number = "isOutlineDisabled ? 0 : 1")
 		(var spacing:number = "isSolid ? 0 : 13")
@@ -3303,7 +3303,7 @@
 		# alpha comes off the same component rather than a separate slider.  Default 0x40FF9400.
 		# Colour goes in as RGB and alpha stays on the style, exactly as before the sweep: passing the
 		# packed value into $Sector's colour AND keeping the style alpha would apply alpha twice.
-		(macro TT_GET_PREF _varName="'detectionColorPref'" _key="'ttMinimap.shipMarker.detection.color'")
+		(macro TT_GET_PREF _varName="'detectionColorPref'" _key="'ttaro.ttMinimap.shipMarker.detection.color'")
 		(var color:number = "null != detectionColorPref && isNumber(detectionColorPref.r255)
 								? detectionColorPref.r255 * 65536 + detectionColorPref.g255 * 256 + detectionColorPref.b255
 								: 0xFF9400")
@@ -3544,7 +3544,7 @@
 		(macro SCOPE_HIGHLIGHT_MARKER_ON_MAP_MOUSE_OVER "_markerEntity")
 
 		# Mod
-		(macro TT_GET_PREF _varName="'contestedCapsPref'" _key="'ttMinimap.showContestedCaps'")
+		(macro TT_GET_PREF _varName="'contestedCapsPref'" _key="'ttaro.ttMinimap.showContestedCaps'")
 		(var isContestedCapHighlighted:bool = "null != contestedCapsPref && null != contestedCapsPref.value ? contestedCapsPref.value : true")
 		(var isBothInside:bool = "_markerEntity.capturePoint.bothInside" (event "_markerEntity.capturePoint.evBothInsideChanged"))
 		(var capSettingKey:str = "toUpper(relation)")
@@ -4058,22 +4058,22 @@
 		(var rangesAlphaComponent:gfx = "$datahub.getPrimaryEntity(CC.minimapOption, SC.Battle.MINIMAP_OPTION.rangesAlpha).minimapOption")
 		(var rangesAlpha:number = "rangesAlphaComponent.value * 0.01" (event "rangesAlphaComponent.evValueChanged"))
 		(macro TMap_GET_ALT_VISION)
-		(macro TT_GET_PREF _varName="'dirSquadronsPref'" _key="'ttMinimap.squadronMarker.direction.displayMode'")
+		(macro TT_GET_PREF _varName="'dirSquadronsPref'" _key="'ttaro.ttMinimap.squadronMarker.direction.displayMode'")
 		(var isDirectionLineEnabled:number = "null != dirSquadronsPref && null != dirSquadronsPref.value ? dirSquadronsPref.value : 0")
 		(macro TMap_GET_DISPLAY_MODE _varName="'isDirectionLineVisible'" _prefValue="isDirectionLineEnabled")
 		(var isInVisionRange:bool = "_markerEntity && _markerEntity.hasComponent(CC.screenPosition)" (event "_markerEntity.evAdded")(event "_markerEntity.evRemoved"))
 
-		(macro TT_GET_PREF _varName="'planeOwnerNamePref'" _key="'ttMinimap.squadronMarker.owner.playerName'")
+		(macro TT_GET_PREF _varName="'planeOwnerNamePref'" _key="'ttaro.ttMinimap.squadronMarker.owner.playerName'")
 		(var playerNameDisplayMode:number = "null != planeOwnerNamePref && null != planeOwnerNamePref.value ? planeOwnerNamePref.value : 0")
 		(macro TMap_GET_DISPLAY_MODE _varName="'isPlayerNameVisible'"	_prefValue="playerNameDisplayMode")
 
-		(macro TT_GET_PREF _varName="'planeOwnerShipPref'" _key="'ttMinimap.squadronMarker.owner.shipName'")
+		(macro TT_GET_PREF _varName="'planeOwnerShipPref'" _key="'ttaro.ttMinimap.squadronMarker.owner.shipName'")
 		(var shipNameDisplayMode:number = "null != planeOwnerShipPref && null != planeOwnerShipPref.value ? planeOwnerShipPref.value : 0")
 		(macro TMap_GET_DISPLAY_MODE _varName="'isShipNameVisible'"		_prefValue="shipNameDisplayMode")
 
 		(var isAirSupport:bool = "_markerEntity.plane.isAirSupport")
 
-		(var planeOwnerKey:str = "isAirSupport ? 'ttMinimap.squadronMarker.owner.showAirSupport' : 'ttMinimap.squadronMarker.owner.showMain'")
+		(var planeOwnerKey:str = "isAirSupport ? 'ttaro.ttMinimap.squadronMarker.owner.showAirSupport' : 'ttaro.ttMinimap.squadronMarker.owner.showMain'")
 		(macro TT_GET_PREF _varName="'planeOwnerVisiblePref'" _key="planeOwnerKey")
 		# The two branches carry DIFFERENT schema defaults (airsupports off, main squadrons on), so
 		# the pre-publish literal has to be per-branch too.
@@ -4154,7 +4154,7 @@
 		# FIX
 		(var markerYaw:number = "radToGrad(_markerEntity.mapPosition.yaw) + 180.0" (event "evEnterFrame"))
 
-		(macro TT_GET_PREF _varName="'torpedoMarkerPref'" _key="'ttMinimap.showTorpedoes'")
+		(macro TT_GET_PREF _varName="'torpedoMarkerPref'" _key="'ttaro.ttMinimap.showTorpedoes'")
 		(var isVisible:bool = "null != torpedoMarkerPref && null != torpedoMarkerPref.value ? torpedoMarkerPref.value : true")
 		#
 
@@ -4302,12 +4302,12 @@
 		)
 
 		# Mod
-		(macro TT_GET_PREF _varName="'aimMarkerTypePref'" _key="'ttMinimap.aimMarker.shape'")
+		(macro TT_GET_PREF _varName="'aimMarkerTypePref'" _key="'ttaro.ttMinimap.aimMarker.shape'")
 		(var markerType:number = "null != aimMarkerTypePref && null != aimMarkerTypePref.value ? aimMarkerTypePref.value : 0")
 		(var elemIndex:number = "markerType < TMap_AIM_POSITION_ELEMENTS.length ? markerType: 0")
 		(var elem:str = "TMap_AIM_POSITION_ELEMENTS[elemIndex]")
 
-		(macro TT_GET_PREF _varName="'aimMarkerColorPref'" _key="'ttMinimap.aimMarker.color'")
+		(macro TT_GET_PREF _varName="'aimMarkerColorPref'" _key="'ttaro.ttMinimap.aimMarker.color'")
 		# Tint is a colorTransform OFFSET, so this is the one place that wants 0-255 channels rather
 		# than the packed value -- taken from the component, never unpacked here.  Default 0xFFCCCCCC.
 		(var red:number   = "null != aimMarkerColorPref && isNumber(aimMarkerColorPref.r255) ? aimMarkerColorPref.r255 : 204")
@@ -4315,7 +4315,7 @@
 		(var blue:number  = "null != aimMarkerColorPref && isNumber(aimMarkerColorPref.b255) ? aimMarkerColorPref.b255 : 204")
 		(var ct:dict = "{redMultiplier:0, greenMultiplier: 0, blueMultiplier: 0, redOffset: red, greenOffset: green, blueOffset: blue}")
 
-		(macro TT_GET_PREF _varName="'aimMarkerScalePref'" _key="'ttMinimap.aimMarker.scale'")
+		(macro TT_GET_PREF _varName="'aimMarkerScalePref'" _key="'ttaro.ttMinimap.aimMarker.scale'")
 		(var scale:number = "null != aimMarkerScalePref && null != aimMarkerScalePref.value ? aimMarkerScalePref.value : 1")
 		#
 	)
@@ -4757,12 +4757,12 @@
 		# Mod
 		(var altVision:bool = "cameraComponent.altVision" (event "cameraComponent.evAltVisionChanged"))
 
-		(macro TT_GET_PREF _varName="'attentionMarkerPref'" _key="'ttMinimap.attentionMarker.showInWorld'")
+		(macro TT_GET_PREF _varName="'attentionMarkerPref'" _key="'ttaro.ttMinimap.attentionMarker.showInWorld'")
 		(var isMarkerVisible:bool = "null != attentionMarkerPref && null != attentionMarkerPref.value ? attentionMarkerPref.value : true")
 		
-		(macro TT_GET_PREF _varName="'attentionNamePref'" _key="'ttMinimap.attentionMarker.playerName'")
+		(macro TT_GET_PREF _varName="'attentionNamePref'" _key="'ttaro.ttMinimap.attentionMarker.playerName'")
 		(var nameDisplaymode:number = "null != attentionNamePref && null != attentionNamePref.value ? attentionNamePref.value : 2")
-		(macro TT_GET_PREF _varName="'attentionDistancePref'" _key="'ttMinimap.attentionMarker.distance'")
+		(macro TT_GET_PREF _varName="'attentionDistancePref'" _key="'ttaro.ttMinimap.attentionMarker.distance'")
 		(var distanceDisplaymode:number = "null != attentionDistancePref && null != attentionDistancePref.value ? attentionDistancePref.value : 2")
 		(macro TMap_GET_DISPLAY_MODE _varName="'isNameVisible'" _prefValue="nameDisplaymode")
 		(macro TMap_GET_DISPLAY_MODE _varName="'isDistanceVisible'" _prefValue="distanceDisplaymode")
@@ -5042,103 +5042,103 @@
 	'visibilityRangeEnabled': {
 		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
 		controlStyle: 'visibilityRangeStyle',
-		prefKey: 'ttMinimap.rangeCircle.visibilitySea.self', defaultLineType: 2
+		prefKey: 'ttaro.ttMinimap.rangeCircle.visibilitySea.self', defaultLineType: 2
 	},
 	'visibilityPlaneRangeEnabled': {
 		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
 		controlStyle: 'visibilityPlaneRangeStyle',
-		prefKey: 'ttMinimap.rangeCircle.visibilityAir.self', defaultLineType: 2
+		prefKey: 'ttaro.ttMinimap.rangeCircle.visibilityAir.self', defaultLineType: 2
 	},
 	'visibilityByShipRangePingerEnabled': {
 		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
 		controlStyle: 'visibilityByShipRangePingerStyle',
-		prefKey: 'ttMinimap.rangeCircle.primaryWeapon.self', defaultLineType: 3
+		prefKey: 'ttaro.ttMinimap.rangeCircle.primaryWeapon.self', defaultLineType: 3
 	},
 	'atbaRangeEnabled': {
 		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
 		controlStyle: 'atbaRangeStyle',
-		prefKey: 'ttMinimap.rangeCircle.atba.self', defaultLineType: 3
+		prefKey: 'ttaro.ttMinimap.rangeCircle.atba.self', defaultLineType: 3
 	},
 	'aaRangeMaxEnabled': {
 		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
 		controlStyle: 'aaRangeMaxStyle',
-		prefKey: 'ttMinimap.rangeCircle.antiAir.self', defaultLineType: 3
+		prefKey: 'ttaro.ttMinimap.rangeCircle.antiAir.self', defaultLineType: 3
 	},
 	'sonarRangeEnabled': {
 		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
 		controlStyle: 'sonarRlsRangeStyle',
-		prefKey: 'ttMinimap.rangeCircle.hydro.self', defaultLineType: 1
+		prefKey: 'ttaro.ttMinimap.rangeCircle.hydro.self', defaultLineType: 1
 	},
 	'rlsRangeEnabled': {
 		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
 		controlStyle: 'sonarRlsRangeStyle',
-		prefKey: 'ttMinimap.rangeCircle.radar.self', defaultLineType: 1
+		prefKey: 'ttaro.ttMinimap.rangeCircle.radar.self', defaultLineType: 1
 	},
 	'hydrophoneRangeEnabled': {
 		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
 		controlStyle: 'sonarRlsRangeStyle',
-		prefKey: 'ttMinimap.rangeCircle.hydrophone.self', defaultLineType: 1
+		prefKey: 'ttaro.ttMinimap.rangeCircle.hydrophone.self', defaultLineType: 1
 	},
 	'submarineLocatorRangeEnabled':{
 		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
 		controlStyle: 'sonarRlsRangeStyle',
-		prefKey: 'ttMinimap.rangeCircle.subRadar.self', defaultLineType: 1
+		prefKey: 'ttaro.ttMinimap.rangeCircle.subRadar.self', defaultLineType: 1
 	},
 
 	'shootMGRangeEnabled': {
 		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
 		controlStyle: 'activeEquipmentStyle',
-		prefKey: 'ttMinimap.rangeCircle.primaryWeapon.self', defaultLineType: 3
+		prefKey: 'ttaro.ttMinimap.rangeCircle.primaryWeapon.self', defaultLineType: 3
 	},
 	'shootPhaserLaserRangeEnabled': {
 		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
 		controlStyle: 'activeEquipmentStyle',
-		prefKey: 'ttMinimap.rangeCircle.primaryWeapon.self', defaultLineType: 3
+		prefKey: 'ttaro.ttMinimap.rangeCircle.primaryWeapon.self', defaultLineType: 3
 	},
 	'shootTARangeEnabled': {
 		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
 		controlStyle: 'activeEquipmentStyle',
-		prefKey: 'ttMinimap.rangeCircle.torpedo.self', defaultLineType: 3
+		prefKey: 'ttaro.ttMinimap.rangeCircle.torpedo.self', defaultLineType: 3
 	},
 	'shootAntiMissileSystemRangeEnabled': {
 		controlType: "SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
 		controlStyle: 'activeEquipmentStyle',
-		prefKey: 'ttMinimap.rangeCircle.antiAir.self', defaultLineType: 3
+		prefKey: 'ttaro.ttMinimap.rangeCircle.antiAir.self', defaultLineType: 3
 	},
 	'shootMissilesRangeEnabled': {
 		controlType: "SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
 		controlStyle: 'activeEquipmentStyle',
-		prefKey: 'ttMinimap.rangeCircle.primaryWeapon.self', defaultLineType: 3
+		prefKey: 'ttaro.ttMinimap.rangeCircle.primaryWeapon.self', defaultLineType: 3
 	},
 	'shootPingerRangeEnabled': {
 		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
 		controlStyle: 'activeEquipmentStyle',
-		prefKey: 'ttMinimap.rangeCircle.pinger.self', defaultLineType: 3
+		prefKey: 'ttaro.ttMinimap.rangeCircle.pinger.self', defaultLineType: 3
 	},
 	'shootChargeLaserRangeEnabled': {
 		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
 		controlStyle: 'activeEquipmentStyle',
-		prefKey: 'ttMinimap.rangeCircle.primaryWeapon.self', defaultLineType: 3
+		prefKey: 'ttaro.ttMinimap.rangeCircle.primaryWeapon.self', defaultLineType: 3
 	},
 	'shootImpulseLaserRangeEnabled': {
 		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
 		controlStyle: 'activeEquipmentStyle',
-		prefKey: 'ttMinimap.rangeCircle.primaryWeapon.self', defaultLineType: 3
+		prefKey: 'ttaro.ttMinimap.rangeCircle.primaryWeapon.self', defaultLineType: 3
 	},
 	'shootAxisLaserRangeEnabled': {
 		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
 		controlStyle: 'activeEquipmentStyle',
-		prefKey: 'ttMinimap.rangeCircle.primaryWeapon.self', defaultLineType: 3
+		prefKey: 'ttaro.ttMinimap.rangeCircle.primaryWeapon.self', defaultLineType: 3
 	},
 	'shootWaveGunRangeEnabled': {
 		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
 		controlStyle: 'activeEquipmentStyle',
-		prefKey: 'ttMinimap.rangeCircle.primaryWeapon.self', defaultLineType: 3
+		prefKey: 'ttaro.ttMinimap.rangeCircle.primaryWeapon.self', defaultLineType: 3
 	},
 	'shootAirSupportRangeEnabled': {
 		controlType: "TMap_SETTINGS_CONTROL_TYPE.RANGE_CHECKBOX",
 		controlStyle: 'activeEquipmentStyle',
-		prefKey: 'ttMinimap.rangeCircle.airSupport.self', defaultLineType: 3
+		prefKey: 'ttaro.ttMinimap.rangeCircle.airSupport.self', defaultLineType: 3
 	},
 
 	'distanceDisplayEnabled': {
@@ -5620,7 +5620,7 @@
 			(renderer='TT_ConfigSubsetElement')
 			(bind enabled "hasPrefs && _enabled")
 			(args
-				_modSlug		= "'minimap'"
+				_modSlug		= "'ttaro.minimap'"
 				_keys			= "allPrefKeys"
 				_isEnabled		= "_enabled"
 			)
@@ -5647,7 +5647,7 @@
 			(renderer='TT_ConfigSubsetElement')
 			(bind enabled "hasPrefs && _enabled && !infotipVisible")
 			(args
-				_modSlug		= "'minimap'"
+				_modSlug		= "'ttaro.minimap'"
 				_keys			= "allPrefKeys"
 				_isEnabled		= "false"
 			)
@@ -5668,7 +5668,7 @@
 			(renderer='TT_ConfigSubsetElement')
 			(bind enabled "hasPrefs && _enabled")
 			(args
-				_modSlug		= "'minimap'"
+				_modSlug		= "'ttaro.minimap'"
 				_keys			= "displayModeKeyOnly"
 				_isEnabled		= "_enabled"
 			)
