@@ -1356,17 +1356,6 @@
 	)
 	#
 
-	(block
-		(style
-			(position = "absolute")
-		)
-		(controller $Instance renderer='DrawBoundRect' 
-			(args x = "-2" y = "-2" width = "scaleRatio + 2" height = "scaleRatio + 2" color = "0x525869" filled="false" line="2" alpha="1")
-			(bindcall recreate (bind trigger "scaleRatio"))
-			(bind enabled "!_showGrid")
-		)
-	)
-
 	# Mod
 	(block
 		(class $FullsizeAbsolute)
