@@ -458,9 +458,9 @@
 	)
 	(visible = false)
 
-	(dispatch evSendMessage args={} watch=false init=false (bind enabled "canSendChat") (event "commandComponent.evCall"))
-	(dispatch evStartCoolDown args="{}" watch=false init=false (bind enabled "isTeamChat") (event "evSendMessage"))
-	(dispatch evEndCoolDown	args="{}" delay="TMap_RPF_MESSAGE_COOLDOWN_DURATION" watch=false init=false (event "evStartCoolDown"))
+	(dispatch evSendMessage args={} (bind enabled "canSendChat") (event "commandComponent.evCall"))
+	(dispatch evStartCoolDown args="{}" (bind enabled "isTeamChat") (event "evSendMessage"))
+	(dispatch evEndCoolDown	args="{}" delay="TMap_RPF_MESSAGE_COOLDOWN_DURATION" (event "evStartCoolDown"))
 
 	(bindcall externalCall 'inputMapping.onAction' "['battleChat.outgoingMessage', {'message': rpfMessage}]" watch=false init=false (event "evSendMessage"))
 )
@@ -621,14 +621,12 @@
 						(bindcall play
 							to	="{alpha: 0.3}"
 							duration=0.15
-							killAll=true
 							(bind enabled "!isMouseActive")
 							(bind trigger "isMouseActive")
 						)
 						(bindcall play
 							to	="{alpha: 1.0}"
 							duration=0.15
-							killAll=true
 							(bind enabled "isMouseActive")
 							(bind trigger "isMouseActive")
 						)
@@ -985,10 +983,10 @@
 		)
 	)
 
-	(dispatch evUpdateDistance args="{}" watch=false init=false (bind enabled "isAlive && isValidPos") (event "timer.evInfrequent"))
+	(dispatch evUpdateDistance args="{}" (bind enabled "isAlive && isValidPos") (event "timer.evInfrequent"))
 
-	(dispatch evEnterRadarRange args="{}" dir="EventDirection.UP" watch=false init=false on='addedToStage' (bind enabled "isNearby")  (bind trigger "isNearby"))
-	(dispatch evLeaveRadarRange args="{}" dir="EventDirection.UP" watch=false init=false delay=0.4 (bind enabled "!isNearby") (bind trigger "isNearby"))
+	(dispatch evEnterRadarRange args="{}" dir="EventDirection.UP" on='addedToStage' (bind enabled "isNearby")  (bind trigger "isNearby"))
+	(dispatch evLeaveRadarRange args="{}" dir="EventDirection.UP" delay=0.4 (bind enabled "!isNearby") (bind trigger "isNearby"))
 
 	(style
 		(hitTest = false)
@@ -2613,7 +2611,7 @@
 	#
 	# Why am I doing this?
 	#
-	(dispatch evCalculatePosition args="{}" init=false (event "timer.evInfrequent"))
+	(dispatch evCalculatePosition args="{}" (event "timer.evInfrequent"))
 	(style
 		(position = "absolute")
 		(bind alpha "rangesAlpha")
@@ -4616,7 +4614,6 @@
 				from = "{ customRad: 0}"
 				to = "{ customRad: endRadius}"
 				easing = "Easing.line"
-				watch=false
 			)
 			(play
 				duration = "duration"
@@ -4624,7 +4621,6 @@
 				from = "{ customAlpha: 1}"
 				to = "{ customAlpha: 0}"
 				easing = "Easing.line"
-				watch=false
 			)
 		)
 		
@@ -4636,7 +4632,6 @@
 				from = "{ customRad_second: 0}"
 				to = "{ customRad_second: endRadius}"
 				easing = "Easing.line"
-				watch=false
 			)
 			(play
 				duration = "duration"
@@ -4645,7 +4640,6 @@
 				from = "{ customAlpha_second: 1}"
 				to = "{ customAlpha_second: 0}"
 				easing = "Easing.line"
-				watch=false
 			)
 		)
 	)
@@ -5581,9 +5575,9 @@
 		#
 	)
 
-	(dispatch evHideInfotip args="{}" watch=false init=false (bind trigger "isMouseActive"))
+	(dispatch evHideInfotip args="{}" (bind trigger "isMouseActive"))
 
-	(dispatch evOpenDisplayModeInfotip args="{}" watch=false init=false (bind enabled "isOverrideEnabled") (event "evClickOption"))
+	(dispatch evOpenDisplayModeInfotip args="{}" (bind enabled "isOverrideEnabled") (event "evClickOption"))
 	
 	(style (flow = "horizontal") (width = "100%") (align = "middle|center"))
 
@@ -5620,8 +5614,8 @@
 			(bind infotipVisible "true" init=false on='evShow')
 			(bind infotipVisible "false" init=false on='evHide')
 
-			(dispatch evPrefInfotiopOpened init=false dir="EventDirection.UP" args="{}" on='evShow')
-			(dispatch evPrefInfotiopClosed init=false dir="EventDirection.UP" args="{}" on='evHide')
+			(dispatch evPrefInfotiopOpened dir="EventDirection.UP" args="{}" on='evShow')
+			(dispatch evPrefInfotiopClosed dir="EventDirection.UP" args="{}" on='evHide')
 
 			(pinRight = 'TMap_CustomPinRight')
 
@@ -5668,8 +5662,8 @@
 			(bind infotipVisible "true" init=false on='evShow')
 			(bind infotipVisible "false" init=false on='evHide')
 
-			(dispatch evPrefInfotiopOpened init=false dir="EventDirection.UP" args="{}" on='evShow')
-			(dispatch evPrefInfotiopClosed init=false dir="EventDirection.UP" args="{}" on='evHide')
+			(dispatch evPrefInfotiopOpened dir="EventDirection.UP" args="{}" on='evShow')
+			(dispatch evPrefInfotiopClosed dir="EventDirection.UP" args="{}" on='evHide')
 
 			(pinRight = 'TMap_CustomPinRight')
 
