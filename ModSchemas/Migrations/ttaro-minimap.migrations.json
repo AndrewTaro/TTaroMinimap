@@ -1,0 +1,4209 @@
+{
+  "schemaVersion": 4,
+  "opVocabularyVersion": 1,
+  "slug": "minimap",
+  "migrations": [
+    {
+      "version": 1,
+      "description": "flat keys → dotted ancestry keys; slider step index → value; palette index → packed ARGB; per-channel sliders → packed ARGB",
+      "ops": [
+        {
+          "op": "rename",
+          "from": "ttMinimapAimMarkerColorIndex",
+          "to": "ttMinimap.aimMarker.color"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapAimMarkerScale",
+          "to": "ttMinimap.aimMarker.scale"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapAimMarkerType",
+          "to": "ttMinimap.aimMarker.shape"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapAirSupportAllyColorIndex",
+          "to": "ttMinimap.rangeCircle.airSupport.ally.color"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapAirSupportAllyDisplayMode",
+          "to": "ttMinimap.rangeCircle.airSupport.ally.displayMode"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapAirSupportAllyEnableInAirCarrier",
+          "to": "ttMinimap.rangeCircle.airSupport.ally.showIn.aircarrier"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapAirSupportAllyEnableInBattleship",
+          "to": "ttMinimap.rangeCircle.airSupport.ally.showIn.battleship"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapAirSupportAllyEnableInCruiser",
+          "to": "ttMinimap.rangeCircle.airSupport.ally.showIn.cruiser"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapAirSupportAllyEnableInDestroyer",
+          "to": "ttMinimap.rangeCircle.airSupport.ally.showIn.destroyer"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapAirSupportAllyEnableInSubmarine",
+          "to": "ttMinimap.rangeCircle.airSupport.ally.showIn.submarine"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapAirSupportAllyFillCircle",
+          "to": "ttMinimap.rangeCircle.airSupport.ally.fillCircle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapAirSupportAllyOutlineThickness",
+          "to": "ttMinimap.rangeCircle.airSupport.ally.lineThickness"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapAirSupportAllyOutlineType",
+          "to": "ttMinimap.rangeCircle.airSupport.ally.lineStyle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapAirSupportAllyRangeLimit",
+          "to": "ttMinimap.rangeCircle.airSupport.ally.maxDistance"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapAirSupportColorIndex",
+          "to": "ttMinimap.rangeCircle.airSupport.self.color"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapAirSupportDisplayMode",
+          "to": "ttMinimap.rangeCircle.airSupport.self.displayMode"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapAirSupportEnemyColorIndex",
+          "to": "ttMinimap.rangeCircle.airSupport.enemy.color"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapAirSupportEnemyDisplayMode",
+          "to": "ttMinimap.rangeCircle.airSupport.enemy.displayMode"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapAirSupportEnemyEnableInAirCarrier",
+          "to": "ttMinimap.rangeCircle.airSupport.enemy.showIn.aircarrier"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapAirSupportEnemyEnableInBattleship",
+          "to": "ttMinimap.rangeCircle.airSupport.enemy.showIn.battleship"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapAirSupportEnemyEnableInCruiser",
+          "to": "ttMinimap.rangeCircle.airSupport.enemy.showIn.cruiser"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapAirSupportEnemyEnableInDestroyer",
+          "to": "ttMinimap.rangeCircle.airSupport.enemy.showIn.destroyer"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapAirSupportEnemyEnableInSubmarine",
+          "to": "ttMinimap.rangeCircle.airSupport.enemy.showIn.submarine"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapAirSupportEnemyFillCircle",
+          "to": "ttMinimap.rangeCircle.airSupport.enemy.fillCircle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapAirSupportEnemyOutlineThickness",
+          "to": "ttMinimap.rangeCircle.airSupport.enemy.lineThickness"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapAirSupportEnemyOutlineType",
+          "to": "ttMinimap.rangeCircle.airSupport.enemy.lineStyle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapAirSupportEnemyRangeOffset",
+          "to": "ttMinimap.rangeCircle.airSupport.enemy.radiusOffset"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapAirSupportEnemySectorAngle",
+          "to": "ttMinimap.rangeCircle.airSupport.enemy.sectorAngle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapAirSupportFillCircle",
+          "to": "ttMinimap.rangeCircle.airSupport.self.fillCircle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapAirSupportOutlineThickness",
+          "to": "ttMinimap.rangeCircle.airSupport.self.lineThickness"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapAirSupportOutlineType",
+          "to": "ttMinimap.rangeCircle.airSupport.self.lineStyle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapAllyDetectionColorIndex",
+          "to": "ttMinimap.shipMarker.detection.color"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapAllyDetectionVisible",
+          "to": "ttMinimap.shipMarker.detection.show"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapAntiAirColorIndex",
+          "to": "ttMinimap.rangeCircle.antiAir.self.color"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapAntiAirDisplayMode",
+          "to": "ttMinimap.rangeCircle.antiAir.self.displayMode"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapAntiAirFillCircle",
+          "to": "ttMinimap.rangeCircle.antiAir.self.fillCircle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapAntiAirOutlineThickness",
+          "to": "ttMinimap.rangeCircle.antiAir.self.lineThickness"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapAntiAirOutlineType",
+          "to": "ttMinimap.rangeCircle.antiAir.self.lineStyle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapAttentionMarkerDistanceDisplayMode",
+          "to": "ttMinimap.attentionMarker.distance"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapAttentionMarkerNameDisplayMode",
+          "to": "ttMinimap.attentionMarker.playerName"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapAttentionMarkerWorldVisible",
+          "to": "ttMinimap.attentionMarker.showInWorld"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapBlurIntensity",
+          "to": "ttMinimap.background.blurIntensity"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapContestedCapsVisible",
+          "to": "ttMinimap.showContestedCaps"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapDirEnemyShipColorIndex",
+          "to": "ttMinimap.shipMarker.direction.color"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapDirEnemyShipDisplayMode",
+          "to": "ttMinimap.shipMarker.direction.displayMode"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapDirEnemyShipScale",
+          "to": "ttMinimap.shipMarker.direction.scale"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapDirEnemySquadronColorIndex",
+          "to": "ttMinimap.squadronMarker.direction.color"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapDirEnemySquadronDisplayMode",
+          "to": "ttMinimap.squadronMarker.direction.displayMode"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapDirEnemySquadronScale",
+          "to": "ttMinimap.squadronMarker.direction.scale"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapDisableDragDrop",
+          "to": "ttMinimap.disableDragDrop"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapExtendScale",
+          "to": "ttMinimap.extendScale"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapGradientBackgroundMode",
+          "to": "ttMinimap.background.gradient"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapHealthAllyDisplayMode",
+          "to": "ttMinimap.shipMarker.health.ally"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapHealthEnemyDisplayMode",
+          "to": "ttMinimap.shipMarker.health.enemy"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapHealthMaxHide",
+          "to": "ttMinimap.shipMarker.health.hideAtFull"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapHealthType",
+          "to": "ttMinimap.shipMarker.health.format"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapHealthWidth",
+          "to": "ttMinimap.shipMarker.health.width"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapHydroAllyColorIndex",
+          "to": "ttMinimap.rangeCircle.hydro.ally.color"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapHydroAllyEnableInAirCarrier",
+          "to": "ttMinimap.rangeCircle.hydro.ally.showIn.aircarrier"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapHydroAllyEnableInBattleship",
+          "to": "ttMinimap.rangeCircle.hydro.ally.showIn.battleship"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapHydroAllyEnableInCruiser",
+          "to": "ttMinimap.rangeCircle.hydro.ally.showIn.cruiser"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapHydroAllyEnableInDestroyer",
+          "to": "ttMinimap.rangeCircle.hydro.ally.showIn.destroyer"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapHydroAllyEnableInSubmarine",
+          "to": "ttMinimap.rangeCircle.hydro.ally.showIn.submarine"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapHydroAllyFillCircle",
+          "to": "ttMinimap.rangeCircle.hydro.ally.fillCircle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapHydroAllyOutlineThickness",
+          "to": "ttMinimap.rangeCircle.hydro.ally.lineThickness"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapHydroAllyOutlineType",
+          "to": "ttMinimap.rangeCircle.hydro.ally.lineStyle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapHydroAllyVisibleOnActivation",
+          "to": "ttMinimap.rangeCircle.hydro.ally.showWhen.onActivation"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapHydroAllyVisibleOnAlt",
+          "to": "ttMinimap.rangeCircle.hydro.ally.showWhen.onAlt"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapHydroEnemyColorIndex",
+          "to": "ttMinimap.rangeCircle.hydro.enemy.color"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapHydroEnemyDisplayMode",
+          "to": "ttMinimap.rangeCircle.hydro.enemy.displayMode"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapHydroEnemyEnableInAirCarrier",
+          "to": "ttMinimap.rangeCircle.hydro.enemy.showIn.aircarrier"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapHydroEnemyEnableInBattleship",
+          "to": "ttMinimap.rangeCircle.hydro.enemy.showIn.battleship"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapHydroEnemyEnableInCruiser",
+          "to": "ttMinimap.rangeCircle.hydro.enemy.showIn.cruiser"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapHydroEnemyEnableInDestroyer",
+          "to": "ttMinimap.rangeCircle.hydro.enemy.showIn.destroyer"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapHydroEnemyEnableInSubmarine",
+          "to": "ttMinimap.rangeCircle.hydro.enemy.showIn.submarine"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapHydroEnemyFillCircle",
+          "to": "ttMinimap.rangeCircle.hydro.enemy.fillCircle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapHydroEnemyOutlineThickness",
+          "to": "ttMinimap.rangeCircle.hydro.enemy.lineThickness"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapHydroEnemyOutlineType",
+          "to": "ttMinimap.rangeCircle.hydro.enemy.lineStyle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapHydroEnemyRangeOffset",
+          "to": "ttMinimap.rangeCircle.hydro.enemy.radiusOffset"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapHydroEnemySectorAngle",
+          "to": "ttMinimap.rangeCircle.hydro.enemy.sectorAngle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapHydrophoneSelfColorIndex",
+          "to": "ttMinimap.rangeCircle.hydrophone.self.color"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapHydrophoneSelfDisplayMode",
+          "to": "ttMinimap.rangeCircle.hydrophone.self.displayMode"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapHydrophoneSelfFillCircle",
+          "to": "ttMinimap.rangeCircle.hydrophone.self.fillCircle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapHydrophoneSelfOutlineThickness",
+          "to": "ttMinimap.rangeCircle.hydrophone.self.lineThickness"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapHydrophoneSelfOutlineType",
+          "to": "ttMinimap.rangeCircle.hydrophone.self.lineStyle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapHydroSelfColorIndex",
+          "to": "ttMinimap.rangeCircle.hydro.self.color"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapHydroSelfDisplayMode",
+          "to": "ttMinimap.rangeCircle.hydro.self.displayMode"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapHydroSelfFillCircle",
+          "to": "ttMinimap.rangeCircle.hydro.self.fillCircle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapHydroSelfOutlineThickness",
+          "to": "ttMinimap.rangeCircle.hydro.self.lineThickness"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapHydroSelfOutlineType",
+          "to": "ttMinimap.rangeCircle.hydro.self.lineStyle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapLastSpottedTimerVisibleOnAlt",
+          "to": "ttMinimap.shipMarker.showLastSpottedOnAlt"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapMainArmamentAllyColorIndex",
+          "to": "ttMinimap.rangeCircle.primaryWeapon.ally.color"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapMainArmamentAllyDisplayMode",
+          "to": "ttMinimap.rangeCircle.primaryWeapon.ally.displayMode"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapMainArmamentAllyEnableInAirCarrier",
+          "to": "ttMinimap.rangeCircle.primaryWeapon.ally.showIn.aircarrier"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapMainArmamentAllyEnableInBattleship",
+          "to": "ttMinimap.rangeCircle.primaryWeapon.ally.showIn.battleship"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapMainArmamentAllyEnableInCruiser",
+          "to": "ttMinimap.rangeCircle.primaryWeapon.ally.showIn.cruiser"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapMainArmamentAllyEnableInDestroyer",
+          "to": "ttMinimap.rangeCircle.primaryWeapon.ally.showIn.destroyer"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapMainArmamentAllyEnableInSubmarine",
+          "to": "ttMinimap.rangeCircle.primaryWeapon.ally.showIn.submarine"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapMainArmamentAllyFillCircle",
+          "to": "ttMinimap.rangeCircle.primaryWeapon.ally.fillCircle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapMainArmamentAllyOutlineThickness",
+          "to": "ttMinimap.rangeCircle.primaryWeapon.ally.lineThickness"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapMainArmamentAllyOutlineType",
+          "to": "ttMinimap.rangeCircle.primaryWeapon.ally.lineStyle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapMainArmamentAllyRangeLimit",
+          "to": "ttMinimap.rangeCircle.primaryWeapon.ally.maxDistance"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapMainArmamentColorIndex",
+          "to": "ttMinimap.rangeCircle.primaryWeapon.self.color"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapMainArmamentDisplayMode",
+          "to": "ttMinimap.rangeCircle.primaryWeapon.self.displayMode"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapMainArmamentEnemyColorIndex",
+          "to": "ttMinimap.rangeCircle.primaryWeapon.enemy.color"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapMainArmamentEnemyDisplayMode",
+          "to": "ttMinimap.rangeCircle.primaryWeapon.enemy.displayMode"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapMainArmamentEnemyEnableInAirCarrier",
+          "to": "ttMinimap.rangeCircle.primaryWeapon.enemy.showIn.aircarrier"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapMainArmamentEnemyEnableInBattleship",
+          "to": "ttMinimap.rangeCircle.primaryWeapon.enemy.showIn.battleship"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapMainArmamentEnemyEnableInCruiser",
+          "to": "ttMinimap.rangeCircle.primaryWeapon.enemy.showIn.cruiser"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapMainArmamentEnemyEnableInDestroyer",
+          "to": "ttMinimap.rangeCircle.primaryWeapon.enemy.showIn.destroyer"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapMainArmamentEnemyEnableInSubmarine",
+          "to": "ttMinimap.rangeCircle.primaryWeapon.enemy.showIn.submarine"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapMainArmamentEnemyFillCircle",
+          "to": "ttMinimap.rangeCircle.primaryWeapon.enemy.fillCircle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapMainArmamentEnemyOutlineThickness",
+          "to": "ttMinimap.rangeCircle.primaryWeapon.enemy.lineThickness"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapMainArmamentEnemyOutlineType",
+          "to": "ttMinimap.rangeCircle.primaryWeapon.enemy.lineStyle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapMainArmamentEnemyRangeOffset",
+          "to": "ttMinimap.rangeCircle.primaryWeapon.enemy.radiusOffset"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapMainArmamentEnemySectorAngle",
+          "to": "ttMinimap.rangeCircle.primaryWeapon.enemy.sectorAngle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapMainArmamentFillCircle",
+          "to": "ttMinimap.rangeCircle.primaryWeapon.self.fillCircle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapMainArmamentOutlineThickness",
+          "to": "ttMinimap.rangeCircle.primaryWeapon.self.lineThickness"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapMainArmamentOutlineType",
+          "to": "ttMinimap.rangeCircle.primaryWeapon.self.lineStyle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapMarkerFontSize",
+          "to": "ttMinimap.font.size"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapNearbyAARangeColorIndex",
+          "to": "ttMinimap.rangeCircle.antiAir.enemy.color"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapNearbyAARangeFillCircle",
+          "to": "ttMinimap.rangeCircle.antiAir.enemy.fillCircle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapNearbyAARangeOffset",
+          "to": "ttMinimap.rangeCircle.antiAir.enemy.radiusOffset"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapNearbyAARangeOutlineThickness",
+          "to": "ttMinimap.rangeCircle.antiAir.enemy.lineThickness"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapNearbyAARangeOutlineType",
+          "to": "ttMinimap.rangeCircle.antiAir.enemy.lineStyle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapNearbyAARangeVisible",
+          "to": "ttMinimap.rangeCircle.antiAir.enemy.displayMode"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapNearbyRadarRangeOpacity",
+          "to": "ttMinimap.radarWarning.alpha"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapNearbyRadarRangeScale",
+          "to": "ttMinimap.radarWarning.scale"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapNearbyRadarRangeVisible",
+          "to": "ttMinimap.radarWarning.displayMode"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapPingerColorIndex",
+          "to": "ttMinimap.rangeCircle.pinger.self.color"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapPingerDisplayMode",
+          "to": "ttMinimap.rangeCircle.pinger.self.displayMode"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapPingerFillCircle",
+          "to": "ttMinimap.rangeCircle.pinger.self.fillCircle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapPingerOutlineThickness",
+          "to": "ttMinimap.rangeCircle.pinger.self.lineThickness"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapPingerOutlineType",
+          "to": "ttMinimap.rangeCircle.pinger.self.lineStyle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapPlayerNameDisplayMode",
+          "to": "ttMinimap.shipMarker.playerName"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapRadarAllyColorIndex",
+          "to": "ttMinimap.rangeCircle.radar.ally.color"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapRadarAllyEnableInAirCarrier",
+          "to": "ttMinimap.rangeCircle.radar.ally.showIn.aircarrier"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapRadarAllyEnableInBattleship",
+          "to": "ttMinimap.rangeCircle.radar.ally.showIn.battleship"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapRadarAllyEnableInCruiser",
+          "to": "ttMinimap.rangeCircle.radar.ally.showIn.cruiser"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapRadarAllyEnableInDestroyer",
+          "to": "ttMinimap.rangeCircle.radar.ally.showIn.destroyer"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapRadarAllyEnableInSubmarine",
+          "to": "ttMinimap.rangeCircle.radar.ally.showIn.submarine"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapRadarAllyFillCircle",
+          "to": "ttMinimap.rangeCircle.radar.ally.fillCircle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapRadarAllyOutlineThickness",
+          "to": "ttMinimap.rangeCircle.radar.ally.lineThickness"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapRadarAllyOutlineType",
+          "to": "ttMinimap.rangeCircle.radar.ally.lineStyle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapRadarAllyVisibleOnActivation",
+          "to": "ttMinimap.rangeCircle.radar.ally.showWhen.onActivation"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapRadarAllyVisibleOnAlt",
+          "to": "ttMinimap.rangeCircle.radar.ally.showWhen.onAlt"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapRadarEnemyColorIndex",
+          "to": "ttMinimap.rangeCircle.radar.enemy.color"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapRadarEnemyDisplayMode",
+          "to": "ttMinimap.rangeCircle.radar.enemy.displayMode"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapRadarEnemyEnableInAirCarrier",
+          "to": "ttMinimap.rangeCircle.radar.enemy.showIn.aircarrier"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapRadarEnemyEnableInBattleship",
+          "to": "ttMinimap.rangeCircle.radar.enemy.showIn.battleship"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapRadarEnemyEnableInCruiser",
+          "to": "ttMinimap.rangeCircle.radar.enemy.showIn.cruiser"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapRadarEnemyEnableInDestroyer",
+          "to": "ttMinimap.rangeCircle.radar.enemy.showIn.destroyer"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapRadarEnemyEnableInSubmarine",
+          "to": "ttMinimap.rangeCircle.radar.enemy.showIn.submarine"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapRadarEnemyFillCircle",
+          "to": "ttMinimap.rangeCircle.radar.enemy.fillCircle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapRadarEnemyOutlineThickness",
+          "to": "ttMinimap.rangeCircle.radar.enemy.lineThickness"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapRadarEnemyOutlineType",
+          "to": "ttMinimap.rangeCircle.radar.enemy.lineStyle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapRadarEnemyRangeOffset",
+          "to": "ttMinimap.rangeCircle.radar.enemy.radiusOffset"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapRadarEnemySectorAngle",
+          "to": "ttMinimap.rangeCircle.radar.enemy.sectorAngle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapRadarSelfColorIndex",
+          "to": "ttMinimap.rangeCircle.radar.self.color"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapRadarSelfDisplayMode",
+          "to": "ttMinimap.rangeCircle.radar.self.displayMode"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapRadarSelfFillCircle",
+          "to": "ttMinimap.rangeCircle.radar.self.fillCircle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapRadarSelfOutlineThickness",
+          "to": "ttMinimap.rangeCircle.radar.self.lineThickness"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapRadarSelfOutlineType",
+          "to": "ttMinimap.rangeCircle.radar.self.lineStyle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapRangeOutlineFix",
+          "to": "ttMinimap.rangeCircle.outlineFix"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapRPFAllyDisplayMode",
+          "to": "ttMinimap.rpfAlly.displayMode"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapRPFKeybind",
+          "to": "ttMinimap.rpfSelf.keybind"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSecondaryAllyColorIndex",
+          "to": "ttMinimap.rangeCircle.atba.ally.color"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSecondaryAllyDisplayMode",
+          "to": "ttMinimap.rangeCircle.atba.ally.displayMode"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSecondaryAllyEnableInAirCarrier",
+          "to": "ttMinimap.rangeCircle.atba.ally.showIn.aircarrier"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSecondaryAllyEnableInBattleship",
+          "to": "ttMinimap.rangeCircle.atba.ally.showIn.battleship"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSecondaryAllyEnableInCruiser",
+          "to": "ttMinimap.rangeCircle.atba.ally.showIn.cruiser"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSecondaryAllyEnableInDestroyer",
+          "to": "ttMinimap.rangeCircle.atba.ally.showIn.destroyer"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSecondaryAllyEnableInSubmarine",
+          "to": "ttMinimap.rangeCircle.atba.ally.showIn.submarine"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSecondaryAllyFillCircle",
+          "to": "ttMinimap.rangeCircle.atba.ally.fillCircle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSecondaryAllyOutlineThickness",
+          "to": "ttMinimap.rangeCircle.atba.ally.lineThickness"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSecondaryAllyOutlineType",
+          "to": "ttMinimap.rangeCircle.atba.ally.lineStyle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSecondaryAllyRangeLimit",
+          "to": "ttMinimap.rangeCircle.atba.ally.maxDistance"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSecondaryColorIndex",
+          "to": "ttMinimap.rangeCircle.atba.self.color"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSecondaryDisplayMode",
+          "to": "ttMinimap.rangeCircle.atba.self.displayMode"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSecondaryEnemyColorIndex",
+          "to": "ttMinimap.rangeCircle.atba.enemy.color"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSecondaryEnemyDisplayMode",
+          "to": "ttMinimap.rangeCircle.atba.enemy.displayMode"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSecondaryEnemyEnableInAirCarrier",
+          "to": "ttMinimap.rangeCircle.atba.enemy.showIn.aircarrier"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSecondaryEnemyEnableInBattleship",
+          "to": "ttMinimap.rangeCircle.atba.enemy.showIn.battleship"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSecondaryEnemyEnableInCruiser",
+          "to": "ttMinimap.rangeCircle.atba.enemy.showIn.cruiser"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSecondaryEnemyEnableInDestroyer",
+          "to": "ttMinimap.rangeCircle.atba.enemy.showIn.destroyer"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSecondaryEnemyEnableInSubmarine",
+          "to": "ttMinimap.rangeCircle.atba.enemy.showIn.submarine"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSecondaryEnemyFillCircle",
+          "to": "ttMinimap.rangeCircle.atba.enemy.fillCircle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSecondaryEnemyOutlineThickness",
+          "to": "ttMinimap.rangeCircle.atba.enemy.lineThickness"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSecondaryEnemyOutlineType",
+          "to": "ttMinimap.rangeCircle.atba.enemy.lineStyle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSecondaryEnemyRangeOffset",
+          "to": "ttMinimap.rangeCircle.atba.enemy.radiusOffset"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSecondaryEnemySectorAngle",
+          "to": "ttMinimap.rangeCircle.atba.enemy.sectorAngle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSecondaryFillCircle",
+          "to": "ttMinimap.rangeCircle.atba.self.fillCircle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSecondaryOutlineThickness",
+          "to": "ttMinimap.rangeCircle.atba.self.lineThickness"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSecondaryOutlineType",
+          "to": "ttMinimap.rangeCircle.atba.self.lineStyle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapShowDeadPlayer",
+          "to": "ttMinimap.shipMarker.showDead"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSquadronOwnerAirSupports",
+          "to": "ttMinimap.squadronMarker.owner.showAirSupport"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSquadronOwnerMainSquadrons",
+          "to": "ttMinimap.squadronMarker.owner.showMain"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSquadronOwnerNameDisplayMode",
+          "to": "ttMinimap.squadronMarker.owner.playerName"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSquadronOwnerShipDisplayMode",
+          "to": "ttMinimap.squadronMarker.owner.shipName"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSubRadarAllyColorIndex",
+          "to": "ttMinimap.rangeCircle.subRadar.ally.color"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSubRadarAllyEnableInAirCarrier",
+          "to": "ttMinimap.rangeCircle.subRadar.ally.showIn.aircarrier"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSubRadarAllyEnableInBattleship",
+          "to": "ttMinimap.rangeCircle.subRadar.ally.showIn.battleship"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSubRadarAllyEnableInCruiser",
+          "to": "ttMinimap.rangeCircle.subRadar.ally.showIn.cruiser"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSubRadarAllyEnableInDestroyer",
+          "to": "ttMinimap.rangeCircle.subRadar.ally.showIn.destroyer"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSubRadarAllyEnableInSubmarine",
+          "to": "ttMinimap.rangeCircle.subRadar.ally.showIn.submarine"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSubRadarAllyFillCircle",
+          "to": "ttMinimap.rangeCircle.subRadar.ally.fillCircle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSubRadarAllyOutlineThickness",
+          "to": "ttMinimap.rangeCircle.subRadar.ally.lineThickness"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSubRadarAllyOutlineType",
+          "to": "ttMinimap.rangeCircle.subRadar.ally.lineStyle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSubRadarAllyVisibleOnActivation",
+          "to": "ttMinimap.rangeCircle.subRadar.ally.showWhen.onActivation"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSubRadarAllyVisibleOnAlt",
+          "to": "ttMinimap.rangeCircle.subRadar.ally.showWhen.onAlt"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSubRadarEnemyColorIndex",
+          "to": "ttMinimap.rangeCircle.subRadar.enemy.color"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSubRadarEnemyDisplayMode",
+          "to": "ttMinimap.rangeCircle.subRadar.enemy.displayMode"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSubRadarEnemyEnableInAirCarrier",
+          "to": "ttMinimap.rangeCircle.subRadar.enemy.showIn.aircarrier"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSubRadarEnemyEnableInBattleship",
+          "to": "ttMinimap.rangeCircle.subRadar.enemy.showIn.battleship"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSubRadarEnemyEnableInCruiser",
+          "to": "ttMinimap.rangeCircle.subRadar.enemy.showIn.cruiser"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSubRadarEnemyEnableInDestroyer",
+          "to": "ttMinimap.rangeCircle.subRadar.enemy.showIn.destroyer"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSubRadarEnemyEnableInSubmarine",
+          "to": "ttMinimap.rangeCircle.subRadar.enemy.showIn.submarine"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSubRadarEnemyFillCircle",
+          "to": "ttMinimap.rangeCircle.subRadar.enemy.fillCircle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSubRadarEnemyOutlineThickness",
+          "to": "ttMinimap.rangeCircle.subRadar.enemy.lineThickness"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSubRadarEnemyOutlineType",
+          "to": "ttMinimap.rangeCircle.subRadar.enemy.lineStyle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSubRadarEnemyRangeOffset",
+          "to": "ttMinimap.rangeCircle.subRadar.enemy.radiusOffset"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSubRadarEnemySectorAngle",
+          "to": "ttMinimap.rangeCircle.subRadar.enemy.sectorAngle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSubRadarSelfColorIndex",
+          "to": "ttMinimap.rangeCircle.subRadar.self.color"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSubRadarSelfDisplayMode",
+          "to": "ttMinimap.rangeCircle.subRadar.self.displayMode"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSubRadarSelfFillCircle",
+          "to": "ttMinimap.rangeCircle.subRadar.self.fillCircle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSubRadarSelfOutlineThickness",
+          "to": "ttMinimap.rangeCircle.subRadar.self.lineThickness"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapSubRadarSelfOutlineType",
+          "to": "ttMinimap.rangeCircle.subRadar.self.lineStyle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapTorpedoAllyColorIndex",
+          "to": "ttMinimap.rangeCircle.torpedo.ally.color"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapTorpedoAllyDisplayMode",
+          "to": "ttMinimap.rangeCircle.torpedo.ally.displayMode"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapTorpedoAllyEnableInAirCarrier",
+          "to": "ttMinimap.rangeCircle.torpedo.ally.showIn.aircarrier"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapTorpedoAllyEnableInBattleship",
+          "to": "ttMinimap.rangeCircle.torpedo.ally.showIn.battleship"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapTorpedoAllyEnableInCruiser",
+          "to": "ttMinimap.rangeCircle.torpedo.ally.showIn.cruiser"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapTorpedoAllyEnableInDestroyer",
+          "to": "ttMinimap.rangeCircle.torpedo.ally.showIn.destroyer"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapTorpedoAllyEnableInSubmarine",
+          "to": "ttMinimap.rangeCircle.torpedo.ally.showIn.submarine"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapTorpedoAllyFillCircle",
+          "to": "ttMinimap.rangeCircle.torpedo.ally.fillCircle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapTorpedoAllyOutlineThickness",
+          "to": "ttMinimap.rangeCircle.torpedo.ally.lineThickness"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapTorpedoAllyOutlineType",
+          "to": "ttMinimap.rangeCircle.torpedo.ally.lineStyle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapTorpedoAllyRangeLimit",
+          "to": "ttMinimap.rangeCircle.torpedo.ally.maxDistance"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapTorpedoColorIndex",
+          "to": "ttMinimap.rangeCircle.torpedo.self.color"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapTorpedoDisplayMode",
+          "to": "ttMinimap.rangeCircle.torpedo.self.displayMode"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapTorpedoEnemyColorIndex",
+          "to": "ttMinimap.rangeCircle.torpedo.enemy.color"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapTorpedoEnemyDisplayMode",
+          "to": "ttMinimap.rangeCircle.torpedo.enemy.displayMode"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapTorpedoEnemyEnableInAirCarrier",
+          "to": "ttMinimap.rangeCircle.torpedo.enemy.showIn.aircarrier"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapTorpedoEnemyEnableInBattleship",
+          "to": "ttMinimap.rangeCircle.torpedo.enemy.showIn.battleship"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapTorpedoEnemyEnableInCruiser",
+          "to": "ttMinimap.rangeCircle.torpedo.enemy.showIn.cruiser"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapTorpedoEnemyEnableInDestroyer",
+          "to": "ttMinimap.rangeCircle.torpedo.enemy.showIn.destroyer"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapTorpedoEnemyEnableInSubmarine",
+          "to": "ttMinimap.rangeCircle.torpedo.enemy.showIn.submarine"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapTorpedoEnemyFillCircle",
+          "to": "ttMinimap.rangeCircle.torpedo.enemy.fillCircle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapTorpedoEnemyOutlineThickness",
+          "to": "ttMinimap.rangeCircle.torpedo.enemy.lineThickness"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapTorpedoEnemyOutlineType",
+          "to": "ttMinimap.rangeCircle.torpedo.enemy.lineStyle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapTorpedoEnemyRangeOffset",
+          "to": "ttMinimap.rangeCircle.torpedo.enemy.radiusOffset"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapTorpedoEnemySectorAngle",
+          "to": "ttMinimap.rangeCircle.torpedo.enemy.sectorAngle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapTorpedoFillCircle",
+          "to": "ttMinimap.rangeCircle.torpedo.self.fillCircle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapTorpedoOutlineThickness",
+          "to": "ttMinimap.rangeCircle.torpedo.self.lineThickness"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapTorpedoOutlineType",
+          "to": "ttMinimap.rangeCircle.torpedo.self.lineStyle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapTorpMarkerVisible",
+          "to": "ttMinimap.showTorpedoes"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapUseBlur",
+          "to": "ttMinimap.background.useBlur"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilityAirAllyColorIndex",
+          "to": "ttMinimap.rangeCircle.visibilityAir.ally.color"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilityAirAllyDisplayMode",
+          "to": "ttMinimap.rangeCircle.visibilityAir.ally.displayMode"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilityAirAllyEnableInAirCarrier",
+          "to": "ttMinimap.rangeCircle.visibilityAir.ally.showIn.aircarrier"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilityAirAllyEnableInBattleship",
+          "to": "ttMinimap.rangeCircle.visibilityAir.ally.showIn.battleship"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilityAirAllyEnableInCruiser",
+          "to": "ttMinimap.rangeCircle.visibilityAir.ally.showIn.cruiser"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilityAirAllyEnableInDestroyer",
+          "to": "ttMinimap.rangeCircle.visibilityAir.ally.showIn.destroyer"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilityAirAllyEnableInSubmarine",
+          "to": "ttMinimap.rangeCircle.visibilityAir.ally.showIn.submarine"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilityAirAllyFillCircle",
+          "to": "ttMinimap.rangeCircle.visibilityAir.ally.fillCircle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilityAirAllyOutlineThickness",
+          "to": "ttMinimap.rangeCircle.visibilityAir.ally.lineThickness"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilityAirAllyOutlineType",
+          "to": "ttMinimap.rangeCircle.visibilityAir.ally.lineStyle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilityAirAllyRangeLimit",
+          "to": "ttMinimap.rangeCircle.visibilityAir.ally.maxDistance"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilityAirColorIndex",
+          "to": "ttMinimap.rangeCircle.visibilityAir.self.color"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilityAirDisplayMode",
+          "to": "ttMinimap.rangeCircle.visibilityAir.self.displayMode"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilityAirEnemyColorIndex",
+          "to": "ttMinimap.rangeCircle.visibilityAir.enemy.color"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilityAirEnemyDisplayMode",
+          "to": "ttMinimap.rangeCircle.visibilityAir.enemy.displayMode"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilityAirEnemyEnableInAirCarrier",
+          "to": "ttMinimap.rangeCircle.visibilityAir.enemy.showIn.aircarrier"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilityAirEnemyEnableInBattleship",
+          "to": "ttMinimap.rangeCircle.visibilityAir.enemy.showIn.battleship"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilityAirEnemyEnableInCruiser",
+          "to": "ttMinimap.rangeCircle.visibilityAir.enemy.showIn.cruiser"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilityAirEnemyEnableInDestroyer",
+          "to": "ttMinimap.rangeCircle.visibilityAir.enemy.showIn.destroyer"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilityAirEnemyEnableInSubmarine",
+          "to": "ttMinimap.rangeCircle.visibilityAir.enemy.showIn.submarine"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilityAirEnemyFillCircle",
+          "to": "ttMinimap.rangeCircle.visibilityAir.enemy.fillCircle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilityAirEnemyOutlineThickness",
+          "to": "ttMinimap.rangeCircle.visibilityAir.enemy.lineThickness"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilityAirEnemyOutlineType",
+          "to": "ttMinimap.rangeCircle.visibilityAir.enemy.lineStyle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilityAirEnemyRangeOffset",
+          "to": "ttMinimap.rangeCircle.visibilityAir.enemy.radiusOffset"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilityAirEnemySectorAngle",
+          "to": "ttMinimap.rangeCircle.visibilityAir.enemy.sectorAngle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilityAirFillCircle",
+          "to": "ttMinimap.rangeCircle.visibilityAir.self.fillCircle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilityAirOutlineThickness",
+          "to": "ttMinimap.rangeCircle.visibilityAir.self.lineThickness"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilityAirOutlineType",
+          "to": "ttMinimap.rangeCircle.visibilityAir.self.lineStyle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilitySeaAllyColorIndex",
+          "to": "ttMinimap.rangeCircle.visibilitySea.ally.color"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilitySeaAllyDisplayMode",
+          "to": "ttMinimap.rangeCircle.visibilitySea.ally.displayMode"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilitySeaAllyEnableInAirCarrier",
+          "to": "ttMinimap.rangeCircle.visibilitySea.ally.showIn.aircarrier"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilitySeaAllyEnableInBattleship",
+          "to": "ttMinimap.rangeCircle.visibilitySea.ally.showIn.battleship"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilitySeaAllyEnableInCruiser",
+          "to": "ttMinimap.rangeCircle.visibilitySea.ally.showIn.cruiser"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilitySeaAllyEnableInDestroyer",
+          "to": "ttMinimap.rangeCircle.visibilitySea.ally.showIn.destroyer"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilitySeaAllyEnableInSubmarine",
+          "to": "ttMinimap.rangeCircle.visibilitySea.ally.showIn.submarine"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilitySeaAllyFillCircle",
+          "to": "ttMinimap.rangeCircle.visibilitySea.ally.fillCircle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilitySeaAllyOutlineThickness",
+          "to": "ttMinimap.rangeCircle.visibilitySea.ally.lineThickness"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilitySeaAllyOutlineType",
+          "to": "ttMinimap.rangeCircle.visibilitySea.ally.lineStyle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilitySeaAllyRangeLimit",
+          "to": "ttMinimap.rangeCircle.visibilitySea.ally.maxDistance"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilitySeaColorIndex",
+          "to": "ttMinimap.rangeCircle.visibilitySea.self.color"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilitySeaDisplayMode",
+          "to": "ttMinimap.rangeCircle.visibilitySea.self.displayMode"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilitySeaEnemyColorIndex",
+          "to": "ttMinimap.rangeCircle.visibilitySea.enemy.color"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilitySeaEnemyDisplayMode",
+          "to": "ttMinimap.rangeCircle.visibilitySea.enemy.displayMode"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilitySeaEnemyEnableInAirCarrier",
+          "to": "ttMinimap.rangeCircle.visibilitySea.enemy.showIn.aircarrier"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilitySeaEnemyEnableInBattleship",
+          "to": "ttMinimap.rangeCircle.visibilitySea.enemy.showIn.battleship"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilitySeaEnemyEnableInCruiser",
+          "to": "ttMinimap.rangeCircle.visibilitySea.enemy.showIn.cruiser"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilitySeaEnemyEnableInDestroyer",
+          "to": "ttMinimap.rangeCircle.visibilitySea.enemy.showIn.destroyer"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilitySeaEnemyEnableInSubmarine",
+          "to": "ttMinimap.rangeCircle.visibilitySea.enemy.showIn.submarine"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilitySeaEnemyFillCircle",
+          "to": "ttMinimap.rangeCircle.visibilitySea.enemy.fillCircle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilitySeaEnemyOutlineThickness",
+          "to": "ttMinimap.rangeCircle.visibilitySea.enemy.lineThickness"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilitySeaEnemyOutlineType",
+          "to": "ttMinimap.rangeCircle.visibilitySea.enemy.lineStyle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilitySeaEnemyRangeOffset",
+          "to": "ttMinimap.rangeCircle.visibilitySea.enemy.radiusOffset"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilitySeaEnemySectorAngle",
+          "to": "ttMinimap.rangeCircle.visibilitySea.enemy.sectorAngle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilitySeaFillCircle",
+          "to": "ttMinimap.rangeCircle.visibilitySea.self.fillCircle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilitySeaOutlineThickness",
+          "to": "ttMinimap.rangeCircle.visibilitySea.self.lineThickness"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilitySeaOutlineType",
+          "to": "ttMinimap.rangeCircle.visibilitySea.self.lineStyle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilitySmokeColorIndex",
+          "to": "ttMinimap.rangeCircle.visibilitySmoke.self.color"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilitySmokeFillCircle",
+          "to": "ttMinimap.rangeCircle.visibilitySmoke.self.fillCircle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilitySmokeOutlineThickness",
+          "to": "ttMinimap.rangeCircle.visibilitySmoke.self.lineThickness"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilitySmokeOutlineType",
+          "to": "ttMinimap.rangeCircle.visibilitySmoke.self.lineStyle"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilitySmokeVisibleInSmoke",
+          "to": "ttMinimap.rangeCircle.visibilitySmoke.self.showWhen.inSmoke"
+        },
+        {
+          "op": "rename",
+          "from": "ttMinimapVisibilitySmokeVisibleOnAlt",
+          "to": "ttMinimap.rangeCircle.visibilitySmoke.self.showWhen.onAlt"
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.aimMarker.scale",
+          "to": "ttMinimap.aimMarker.scale",
+          "transform": "stepIndex",
+          "args": {
+            "min": 0.5,
+            "step": 0.1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.background.blurIntensity",
+          "to": "ttMinimap.background.blurIntensity",
+          "transform": "stepIndex",
+          "args": {
+            "min": 0.2,
+            "step": 0.1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.font.size",
+          "to": "ttMinimap.font.size",
+          "transform": "stepIndex",
+          "args": {
+            "min": 9,
+            "step": 1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.radarWarning.alpha",
+          "to": "ttMinimap.radarWarning.alpha",
+          "transform": "stepIndex",
+          "args": {
+            "min": 0,
+            "step": 0.1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.radarWarning.scale",
+          "to": "ttMinimap.radarWarning.scale",
+          "transform": "stepIndex",
+          "args": {
+            "min": 0.5,
+            "step": 0.1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.airSupport.ally.lineThickness",
+          "to": "ttMinimap.rangeCircle.airSupport.ally.lineThickness",
+          "transform": "stepIndex",
+          "args": {
+            "min": 1,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.airSupport.ally.maxDistance",
+          "to": "ttMinimap.rangeCircle.airSupport.ally.maxDistance",
+          "transform": "stepIndex",
+          "args": {
+            "min": 5,
+            "step": 1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.airSupport.enemy.lineThickness",
+          "to": "ttMinimap.rangeCircle.airSupport.enemy.lineThickness",
+          "transform": "stepIndex",
+          "args": {
+            "min": 1,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.airSupport.enemy.radiusOffset",
+          "to": "ttMinimap.rangeCircle.airSupport.enemy.radiusOffset",
+          "transform": "stepIndex",
+          "args": {
+            "min": 0,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.airSupport.enemy.sectorAngle",
+          "to": "ttMinimap.rangeCircle.airSupport.enemy.sectorAngle",
+          "transform": "stepIndex",
+          "args": {
+            "min": 10,
+            "step": 5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.airSupport.self.lineThickness",
+          "to": "ttMinimap.rangeCircle.airSupport.self.lineThickness",
+          "transform": "stepIndex",
+          "args": {
+            "min": 1,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.antiAir.enemy.lineThickness",
+          "to": "ttMinimap.rangeCircle.antiAir.enemy.lineThickness",
+          "transform": "stepIndex",
+          "args": {
+            "min": 1,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.antiAir.enemy.radiusOffset",
+          "to": "ttMinimap.rangeCircle.antiAir.enemy.radiusOffset",
+          "transform": "stepIndex",
+          "args": {
+            "min": 0,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.antiAir.self.lineThickness",
+          "to": "ttMinimap.rangeCircle.antiAir.self.lineThickness",
+          "transform": "stepIndex",
+          "args": {
+            "min": 1,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.atba.ally.lineThickness",
+          "to": "ttMinimap.rangeCircle.atba.ally.lineThickness",
+          "transform": "stepIndex",
+          "args": {
+            "min": 1,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.atba.ally.maxDistance",
+          "to": "ttMinimap.rangeCircle.atba.ally.maxDistance",
+          "transform": "stepIndex",
+          "args": {
+            "min": 5,
+            "step": 1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.atba.enemy.lineThickness",
+          "to": "ttMinimap.rangeCircle.atba.enemy.lineThickness",
+          "transform": "stepIndex",
+          "args": {
+            "min": 1,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.atba.enemy.radiusOffset",
+          "to": "ttMinimap.rangeCircle.atba.enemy.radiusOffset",
+          "transform": "stepIndex",
+          "args": {
+            "min": 0,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.atba.enemy.sectorAngle",
+          "to": "ttMinimap.rangeCircle.atba.enemy.sectorAngle",
+          "transform": "stepIndex",
+          "args": {
+            "min": 10,
+            "step": 5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.atba.self.lineThickness",
+          "to": "ttMinimap.rangeCircle.atba.self.lineThickness",
+          "transform": "stepIndex",
+          "args": {
+            "min": 1,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.hydro.ally.lineThickness",
+          "to": "ttMinimap.rangeCircle.hydro.ally.lineThickness",
+          "transform": "stepIndex",
+          "args": {
+            "min": 1,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.hydro.enemy.lineThickness",
+          "to": "ttMinimap.rangeCircle.hydro.enemy.lineThickness",
+          "transform": "stepIndex",
+          "args": {
+            "min": 1,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.hydro.enemy.radiusOffset",
+          "to": "ttMinimap.rangeCircle.hydro.enemy.radiusOffset",
+          "transform": "stepIndex",
+          "args": {
+            "min": 0,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.hydro.enemy.sectorAngle",
+          "to": "ttMinimap.rangeCircle.hydro.enemy.sectorAngle",
+          "transform": "stepIndex",
+          "args": {
+            "min": 10,
+            "step": 5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.hydro.self.lineThickness",
+          "to": "ttMinimap.rangeCircle.hydro.self.lineThickness",
+          "transform": "stepIndex",
+          "args": {
+            "min": 1,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.hydrophone.self.lineThickness",
+          "to": "ttMinimap.rangeCircle.hydrophone.self.lineThickness",
+          "transform": "stepIndex",
+          "args": {
+            "min": 1,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.pinger.self.lineThickness",
+          "to": "ttMinimap.rangeCircle.pinger.self.lineThickness",
+          "transform": "stepIndex",
+          "args": {
+            "min": 1,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.primaryWeapon.ally.lineThickness",
+          "to": "ttMinimap.rangeCircle.primaryWeapon.ally.lineThickness",
+          "transform": "stepIndex",
+          "args": {
+            "min": 1,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.primaryWeapon.ally.maxDistance",
+          "to": "ttMinimap.rangeCircle.primaryWeapon.ally.maxDistance",
+          "transform": "stepIndex",
+          "args": {
+            "min": 5,
+            "step": 1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.primaryWeapon.enemy.lineThickness",
+          "to": "ttMinimap.rangeCircle.primaryWeapon.enemy.lineThickness",
+          "transform": "stepIndex",
+          "args": {
+            "min": 1,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.primaryWeapon.enemy.radiusOffset",
+          "to": "ttMinimap.rangeCircle.primaryWeapon.enemy.radiusOffset",
+          "transform": "stepIndex",
+          "args": {
+            "min": 0,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.primaryWeapon.enemy.sectorAngle",
+          "to": "ttMinimap.rangeCircle.primaryWeapon.enemy.sectorAngle",
+          "transform": "stepIndex",
+          "args": {
+            "min": 10,
+            "step": 5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.primaryWeapon.self.lineThickness",
+          "to": "ttMinimap.rangeCircle.primaryWeapon.self.lineThickness",
+          "transform": "stepIndex",
+          "args": {
+            "min": 1,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.radar.ally.lineThickness",
+          "to": "ttMinimap.rangeCircle.radar.ally.lineThickness",
+          "transform": "stepIndex",
+          "args": {
+            "min": 1,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.radar.enemy.lineThickness",
+          "to": "ttMinimap.rangeCircle.radar.enemy.lineThickness",
+          "transform": "stepIndex",
+          "args": {
+            "min": 1,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.radar.enemy.radiusOffset",
+          "to": "ttMinimap.rangeCircle.radar.enemy.radiusOffset",
+          "transform": "stepIndex",
+          "args": {
+            "min": 0,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.radar.enemy.sectorAngle",
+          "to": "ttMinimap.rangeCircle.radar.enemy.sectorAngle",
+          "transform": "stepIndex",
+          "args": {
+            "min": 10,
+            "step": 5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.radar.self.lineThickness",
+          "to": "ttMinimap.rangeCircle.radar.self.lineThickness",
+          "transform": "stepIndex",
+          "args": {
+            "min": 1,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.subRadar.ally.lineThickness",
+          "to": "ttMinimap.rangeCircle.subRadar.ally.lineThickness",
+          "transform": "stepIndex",
+          "args": {
+            "min": 1,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.subRadar.enemy.lineThickness",
+          "to": "ttMinimap.rangeCircle.subRadar.enemy.lineThickness",
+          "transform": "stepIndex",
+          "args": {
+            "min": 1,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.subRadar.enemy.radiusOffset",
+          "to": "ttMinimap.rangeCircle.subRadar.enemy.radiusOffset",
+          "transform": "stepIndex",
+          "args": {
+            "min": 0,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.subRadar.enemy.sectorAngle",
+          "to": "ttMinimap.rangeCircle.subRadar.enemy.sectorAngle",
+          "transform": "stepIndex",
+          "args": {
+            "min": 10,
+            "step": 5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.subRadar.self.lineThickness",
+          "to": "ttMinimap.rangeCircle.subRadar.self.lineThickness",
+          "transform": "stepIndex",
+          "args": {
+            "min": 1,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.torpedo.ally.lineThickness",
+          "to": "ttMinimap.rangeCircle.torpedo.ally.lineThickness",
+          "transform": "stepIndex",
+          "args": {
+            "min": 1,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.torpedo.ally.maxDistance",
+          "to": "ttMinimap.rangeCircle.torpedo.ally.maxDistance",
+          "transform": "stepIndex",
+          "args": {
+            "min": 5,
+            "step": 1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.torpedo.enemy.lineThickness",
+          "to": "ttMinimap.rangeCircle.torpedo.enemy.lineThickness",
+          "transform": "stepIndex",
+          "args": {
+            "min": 1,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.torpedo.enemy.radiusOffset",
+          "to": "ttMinimap.rangeCircle.torpedo.enemy.radiusOffset",
+          "transform": "stepIndex",
+          "args": {
+            "min": 0,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.torpedo.enemy.sectorAngle",
+          "to": "ttMinimap.rangeCircle.torpedo.enemy.sectorAngle",
+          "transform": "stepIndex",
+          "args": {
+            "min": 10,
+            "step": 5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.torpedo.self.lineThickness",
+          "to": "ttMinimap.rangeCircle.torpedo.self.lineThickness",
+          "transform": "stepIndex",
+          "args": {
+            "min": 1,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.visibilityAir.ally.lineThickness",
+          "to": "ttMinimap.rangeCircle.visibilityAir.ally.lineThickness",
+          "transform": "stepIndex",
+          "args": {
+            "min": 1,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.visibilityAir.ally.maxDistance",
+          "to": "ttMinimap.rangeCircle.visibilityAir.ally.maxDistance",
+          "transform": "stepIndex",
+          "args": {
+            "min": 5,
+            "step": 1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.visibilityAir.enemy.lineThickness",
+          "to": "ttMinimap.rangeCircle.visibilityAir.enemy.lineThickness",
+          "transform": "stepIndex",
+          "args": {
+            "min": 1,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.visibilityAir.enemy.radiusOffset",
+          "to": "ttMinimap.rangeCircle.visibilityAir.enemy.radiusOffset",
+          "transform": "stepIndex",
+          "args": {
+            "min": 0,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.visibilityAir.enemy.sectorAngle",
+          "to": "ttMinimap.rangeCircle.visibilityAir.enemy.sectorAngle",
+          "transform": "stepIndex",
+          "args": {
+            "min": 10,
+            "step": 5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.visibilityAir.self.lineThickness",
+          "to": "ttMinimap.rangeCircle.visibilityAir.self.lineThickness",
+          "transform": "stepIndex",
+          "args": {
+            "min": 1,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.visibilitySea.ally.lineThickness",
+          "to": "ttMinimap.rangeCircle.visibilitySea.ally.lineThickness",
+          "transform": "stepIndex",
+          "args": {
+            "min": 1,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.visibilitySea.ally.maxDistance",
+          "to": "ttMinimap.rangeCircle.visibilitySea.ally.maxDistance",
+          "transform": "stepIndex",
+          "args": {
+            "min": 5,
+            "step": 1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.visibilitySea.enemy.lineThickness",
+          "to": "ttMinimap.rangeCircle.visibilitySea.enemy.lineThickness",
+          "transform": "stepIndex",
+          "args": {
+            "min": 1,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.visibilitySea.enemy.radiusOffset",
+          "to": "ttMinimap.rangeCircle.visibilitySea.enemy.radiusOffset",
+          "transform": "stepIndex",
+          "args": {
+            "min": 0,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.visibilitySea.enemy.sectorAngle",
+          "to": "ttMinimap.rangeCircle.visibilitySea.enemy.sectorAngle",
+          "transform": "stepIndex",
+          "args": {
+            "min": 10,
+            "step": 5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.visibilitySea.self.lineThickness",
+          "to": "ttMinimap.rangeCircle.visibilitySea.self.lineThickness",
+          "transform": "stepIndex",
+          "args": {
+            "min": 1,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.visibilitySmoke.self.lineThickness",
+          "to": "ttMinimap.rangeCircle.visibilitySmoke.self.lineThickness",
+          "transform": "stepIndex",
+          "args": {
+            "min": 1,
+            "step": 0.5
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.shipMarker.direction.scale",
+          "to": "ttMinimap.shipMarker.direction.scale",
+          "transform": "stepIndex",
+          "args": {
+            "min": 0.1,
+            "step": 0.1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.shipMarker.health.width",
+          "to": "ttMinimap.shipMarker.health.width",
+          "transform": "stepIndex",
+          "args": {
+            "min": 20,
+            "step": 2
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.squadronMarker.direction.scale",
+          "to": "ttMinimap.squadronMarker.direction.scale",
+          "transform": "stepIndex",
+          "args": {
+            "min": 0.1,
+            "step": 0.1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.aimMarker.color",
+          "to": "ttMinimap.aimMarker.color",
+          "transform": "paletteIndex",
+          "args": {
+            "palette": [
+              12303291,
+              7266807,
+              7266776,
+              15770914,
+              11125362,
+              52479,
+              13421772,
+              0,
+              16711680,
+              16724224,
+              16736768,
+              16749568,
+              16762112,
+              16774656,
+              14024448,
+              10813184,
+              7601920,
+              4325120,
+              1113856,
+              65312,
+              65362,
+              65411,
+              65460,
+              65510,
+              59135,
+              46335,
+              33791,
+              21247,
+              8447,
+              1048831,
+              4260095,
+              7536895,
+              10748159,
+              13959423,
+              16711926,
+              16711877,
+              16711828,
+              16711778,
+              16711729,
+              16711680
+            ]
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.airSupport.ally.color",
+          "to": "ttMinimap.rangeCircle.airSupport.ally.color",
+          "transform": "paletteIndex",
+          "args": {
+            "palette": [
+              12303291,
+              7266807,
+              7266776,
+              15770914,
+              11125362,
+              52479,
+              13421772,
+              0,
+              16711680,
+              16724224,
+              16736768,
+              16749568,
+              16762112,
+              16774656,
+              14024448,
+              10813184,
+              7601920,
+              4325120,
+              1113856,
+              65312,
+              65362,
+              65411,
+              65460,
+              65510,
+              59135,
+              46335,
+              33791,
+              21247,
+              8447,
+              1048831,
+              4260095,
+              7536895,
+              10748159,
+              13959423,
+              16711926,
+              16711877,
+              16711828,
+              16711778,
+              16711729,
+              16711680
+            ],
+            "alphaFrom": "ttMinimapAirSupportAllyOpacity",
+            "alphaMin": 0,
+            "alphaStep": 0.1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.airSupport.enemy.color",
+          "to": "ttMinimap.rangeCircle.airSupport.enemy.color",
+          "transform": "paletteIndex",
+          "args": {
+            "palette": [
+              12303291,
+              7266807,
+              7266776,
+              15770914,
+              11125362,
+              52479,
+              13421772,
+              0,
+              16711680,
+              16724224,
+              16736768,
+              16749568,
+              16762112,
+              16774656,
+              14024448,
+              10813184,
+              7601920,
+              4325120,
+              1113856,
+              65312,
+              65362,
+              65411,
+              65460,
+              65510,
+              59135,
+              46335,
+              33791,
+              21247,
+              8447,
+              1048831,
+              4260095,
+              7536895,
+              10748159,
+              13959423,
+              16711926,
+              16711877,
+              16711828,
+              16711778,
+              16711729,
+              16711680
+            ],
+            "alphaFrom": "ttMinimapAirSupportEnemyOpacity",
+            "alphaMin": 0,
+            "alphaStep": 0.1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.airSupport.self.color",
+          "to": "ttMinimap.rangeCircle.airSupport.self.color",
+          "transform": "paletteIndex",
+          "args": {
+            "palette": [
+              12303291,
+              7266807,
+              7266776,
+              15770914,
+              11125362,
+              52479,
+              13421772,
+              0,
+              16711680,
+              16724224,
+              16736768,
+              16749568,
+              16762112,
+              16774656,
+              14024448,
+              10813184,
+              7601920,
+              4325120,
+              1113856,
+              65312,
+              65362,
+              65411,
+              65460,
+              65510,
+              59135,
+              46335,
+              33791,
+              21247,
+              8447,
+              1048831,
+              4260095,
+              7536895,
+              10748159,
+              13959423,
+              16711926,
+              16711877,
+              16711828,
+              16711778,
+              16711729,
+              16711680
+            ],
+            "alphaFrom": "ttMinimapAirSupportOpacity",
+            "alphaMin": 0,
+            "alphaStep": 0.1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.antiAir.enemy.color",
+          "to": "ttMinimap.rangeCircle.antiAir.enemy.color",
+          "transform": "paletteIndex",
+          "args": {
+            "palette": [
+              12303291,
+              7266807,
+              7266776,
+              15770914,
+              11125362,
+              52479,
+              13421772,
+              0,
+              16711680,
+              16724224,
+              16736768,
+              16749568,
+              16762112,
+              16774656,
+              14024448,
+              10813184,
+              7601920,
+              4325120,
+              1113856,
+              65312,
+              65362,
+              65411,
+              65460,
+              65510,
+              59135,
+              46335,
+              33791,
+              21247,
+              8447,
+              1048831,
+              4260095,
+              7536895,
+              10748159,
+              13959423,
+              16711926,
+              16711877,
+              16711828,
+              16711778,
+              16711729,
+              16711680
+            ],
+            "alphaFrom": "ttMinimapNearbyAARangeOpacity",
+            "alphaMin": 0,
+            "alphaStep": 0.1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.antiAir.self.color",
+          "to": "ttMinimap.rangeCircle.antiAir.self.color",
+          "transform": "paletteIndex",
+          "args": {
+            "palette": [
+              12303291,
+              7266807,
+              7266776,
+              15770914,
+              11125362,
+              52479,
+              13421772,
+              0,
+              16711680,
+              16724224,
+              16736768,
+              16749568,
+              16762112,
+              16774656,
+              14024448,
+              10813184,
+              7601920,
+              4325120,
+              1113856,
+              65312,
+              65362,
+              65411,
+              65460,
+              65510,
+              59135,
+              46335,
+              33791,
+              21247,
+              8447,
+              1048831,
+              4260095,
+              7536895,
+              10748159,
+              13959423,
+              16711926,
+              16711877,
+              16711828,
+              16711778,
+              16711729,
+              16711680
+            ],
+            "alphaFrom": "ttMinimapAntiAirOpacity",
+            "alphaMin": 0,
+            "alphaStep": 0.1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.atba.ally.color",
+          "to": "ttMinimap.rangeCircle.atba.ally.color",
+          "transform": "paletteIndex",
+          "args": {
+            "palette": [
+              12303291,
+              7266807,
+              7266776,
+              15770914,
+              11125362,
+              52479,
+              13421772,
+              0,
+              16711680,
+              16724224,
+              16736768,
+              16749568,
+              16762112,
+              16774656,
+              14024448,
+              10813184,
+              7601920,
+              4325120,
+              1113856,
+              65312,
+              65362,
+              65411,
+              65460,
+              65510,
+              59135,
+              46335,
+              33791,
+              21247,
+              8447,
+              1048831,
+              4260095,
+              7536895,
+              10748159,
+              13959423,
+              16711926,
+              16711877,
+              16711828,
+              16711778,
+              16711729,
+              16711680
+            ],
+            "alphaFrom": "ttMinimapSecondaryAllyOpacity",
+            "alphaMin": 0,
+            "alphaStep": 0.1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.atba.enemy.color",
+          "to": "ttMinimap.rangeCircle.atba.enemy.color",
+          "transform": "paletteIndex",
+          "args": {
+            "palette": [
+              12303291,
+              7266807,
+              7266776,
+              15770914,
+              11125362,
+              52479,
+              13421772,
+              0,
+              16711680,
+              16724224,
+              16736768,
+              16749568,
+              16762112,
+              16774656,
+              14024448,
+              10813184,
+              7601920,
+              4325120,
+              1113856,
+              65312,
+              65362,
+              65411,
+              65460,
+              65510,
+              59135,
+              46335,
+              33791,
+              21247,
+              8447,
+              1048831,
+              4260095,
+              7536895,
+              10748159,
+              13959423,
+              16711926,
+              16711877,
+              16711828,
+              16711778,
+              16711729,
+              16711680
+            ],
+            "alphaFrom": "ttMinimapSecondaryEnemyOpacity",
+            "alphaMin": 0,
+            "alphaStep": 0.1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.atba.self.color",
+          "to": "ttMinimap.rangeCircle.atba.self.color",
+          "transform": "paletteIndex",
+          "args": {
+            "palette": [
+              12303291,
+              7266807,
+              7266776,
+              15770914,
+              11125362,
+              52479,
+              13421772,
+              0,
+              16711680,
+              16724224,
+              16736768,
+              16749568,
+              16762112,
+              16774656,
+              14024448,
+              10813184,
+              7601920,
+              4325120,
+              1113856,
+              65312,
+              65362,
+              65411,
+              65460,
+              65510,
+              59135,
+              46335,
+              33791,
+              21247,
+              8447,
+              1048831,
+              4260095,
+              7536895,
+              10748159,
+              13959423,
+              16711926,
+              16711877,
+              16711828,
+              16711778,
+              16711729,
+              16711680
+            ],
+            "alphaFrom": "ttMinimapSecondaryOpacity",
+            "alphaMin": 0,
+            "alphaStep": 0.1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.hydro.ally.color",
+          "to": "ttMinimap.rangeCircle.hydro.ally.color",
+          "transform": "paletteIndex",
+          "args": {
+            "palette": [
+              12303291,
+              7266807,
+              7266776,
+              15770914,
+              11125362,
+              52479,
+              13421772,
+              0,
+              16711680,
+              16724224,
+              16736768,
+              16749568,
+              16762112,
+              16774656,
+              14024448,
+              10813184,
+              7601920,
+              4325120,
+              1113856,
+              65312,
+              65362,
+              65411,
+              65460,
+              65510,
+              59135,
+              46335,
+              33791,
+              21247,
+              8447,
+              1048831,
+              4260095,
+              7536895,
+              10748159,
+              13959423,
+              16711926,
+              16711877,
+              16711828,
+              16711778,
+              16711729,
+              16711680
+            ],
+            "alphaFrom": "ttMinimapHydroAllyOpacity",
+            "alphaMin": 0,
+            "alphaStep": 0.1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.hydro.enemy.color",
+          "to": "ttMinimap.rangeCircle.hydro.enemy.color",
+          "transform": "paletteIndex",
+          "args": {
+            "palette": [
+              12303291,
+              7266807,
+              7266776,
+              15770914,
+              11125362,
+              52479,
+              13421772,
+              0,
+              16711680,
+              16724224,
+              16736768,
+              16749568,
+              16762112,
+              16774656,
+              14024448,
+              10813184,
+              7601920,
+              4325120,
+              1113856,
+              65312,
+              65362,
+              65411,
+              65460,
+              65510,
+              59135,
+              46335,
+              33791,
+              21247,
+              8447,
+              1048831,
+              4260095,
+              7536895,
+              10748159,
+              13959423,
+              16711926,
+              16711877,
+              16711828,
+              16711778,
+              16711729,
+              16711680
+            ],
+            "alphaFrom": "ttMinimapHydroEnemyOpacity",
+            "alphaMin": 0,
+            "alphaStep": 0.1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.hydro.self.color",
+          "to": "ttMinimap.rangeCircle.hydro.self.color",
+          "transform": "paletteIndex",
+          "args": {
+            "palette": [
+              12303291,
+              7266807,
+              7266776,
+              15770914,
+              11125362,
+              52479,
+              13421772,
+              0,
+              16711680,
+              16724224,
+              16736768,
+              16749568,
+              16762112,
+              16774656,
+              14024448,
+              10813184,
+              7601920,
+              4325120,
+              1113856,
+              65312,
+              65362,
+              65411,
+              65460,
+              65510,
+              59135,
+              46335,
+              33791,
+              21247,
+              8447,
+              1048831,
+              4260095,
+              7536895,
+              10748159,
+              13959423,
+              16711926,
+              16711877,
+              16711828,
+              16711778,
+              16711729,
+              16711680
+            ],
+            "alphaFrom": "ttMinimapHydroSelfOpacity",
+            "alphaMin": 0,
+            "alphaStep": 0.1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.hydrophone.self.color",
+          "to": "ttMinimap.rangeCircle.hydrophone.self.color",
+          "transform": "paletteIndex",
+          "args": {
+            "palette": [
+              12303291,
+              7266807,
+              7266776,
+              15770914,
+              11125362,
+              52479,
+              13421772,
+              0,
+              16711680,
+              16724224,
+              16736768,
+              16749568,
+              16762112,
+              16774656,
+              14024448,
+              10813184,
+              7601920,
+              4325120,
+              1113856,
+              65312,
+              65362,
+              65411,
+              65460,
+              65510,
+              59135,
+              46335,
+              33791,
+              21247,
+              8447,
+              1048831,
+              4260095,
+              7536895,
+              10748159,
+              13959423,
+              16711926,
+              16711877,
+              16711828,
+              16711778,
+              16711729,
+              16711680
+            ],
+            "alphaFrom": "ttMinimapHydrophoneSelfOpacity",
+            "alphaMin": 0,
+            "alphaStep": 0.1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.pinger.self.color",
+          "to": "ttMinimap.rangeCircle.pinger.self.color",
+          "transform": "paletteIndex",
+          "args": {
+            "palette": [
+              12303291,
+              7266807,
+              7266776,
+              15770914,
+              11125362,
+              52479,
+              13421772,
+              0,
+              16711680,
+              16724224,
+              16736768,
+              16749568,
+              16762112,
+              16774656,
+              14024448,
+              10813184,
+              7601920,
+              4325120,
+              1113856,
+              65312,
+              65362,
+              65411,
+              65460,
+              65510,
+              59135,
+              46335,
+              33791,
+              21247,
+              8447,
+              1048831,
+              4260095,
+              7536895,
+              10748159,
+              13959423,
+              16711926,
+              16711877,
+              16711828,
+              16711778,
+              16711729,
+              16711680
+            ],
+            "alphaFrom": "ttMinimapPingerOpacity",
+            "alphaMin": 0,
+            "alphaStep": 0.1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.primaryWeapon.ally.color",
+          "to": "ttMinimap.rangeCircle.primaryWeapon.ally.color",
+          "transform": "paletteIndex",
+          "args": {
+            "palette": [
+              12303291,
+              7266807,
+              7266776,
+              15770914,
+              11125362,
+              52479,
+              13421772,
+              0,
+              16711680,
+              16724224,
+              16736768,
+              16749568,
+              16762112,
+              16774656,
+              14024448,
+              10813184,
+              7601920,
+              4325120,
+              1113856,
+              65312,
+              65362,
+              65411,
+              65460,
+              65510,
+              59135,
+              46335,
+              33791,
+              21247,
+              8447,
+              1048831,
+              4260095,
+              7536895,
+              10748159,
+              13959423,
+              16711926,
+              16711877,
+              16711828,
+              16711778,
+              16711729,
+              16711680
+            ],
+            "alphaFrom": "ttMinimapMainArmamentAllyOpacity",
+            "alphaMin": 0,
+            "alphaStep": 0.1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.primaryWeapon.enemy.color",
+          "to": "ttMinimap.rangeCircle.primaryWeapon.enemy.color",
+          "transform": "paletteIndex",
+          "args": {
+            "palette": [
+              12303291,
+              7266807,
+              7266776,
+              15770914,
+              11125362,
+              52479,
+              13421772,
+              0,
+              16711680,
+              16724224,
+              16736768,
+              16749568,
+              16762112,
+              16774656,
+              14024448,
+              10813184,
+              7601920,
+              4325120,
+              1113856,
+              65312,
+              65362,
+              65411,
+              65460,
+              65510,
+              59135,
+              46335,
+              33791,
+              21247,
+              8447,
+              1048831,
+              4260095,
+              7536895,
+              10748159,
+              13959423,
+              16711926,
+              16711877,
+              16711828,
+              16711778,
+              16711729,
+              16711680
+            ],
+            "alphaFrom": "ttMinimapMainArmamentEnemyOpacity",
+            "alphaMin": 0,
+            "alphaStep": 0.1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.primaryWeapon.self.color",
+          "to": "ttMinimap.rangeCircle.primaryWeapon.self.color",
+          "transform": "paletteIndex",
+          "args": {
+            "palette": [
+              12303291,
+              7266807,
+              7266776,
+              15770914,
+              11125362,
+              52479,
+              13421772,
+              0,
+              16711680,
+              16724224,
+              16736768,
+              16749568,
+              16762112,
+              16774656,
+              14024448,
+              10813184,
+              7601920,
+              4325120,
+              1113856,
+              65312,
+              65362,
+              65411,
+              65460,
+              65510,
+              59135,
+              46335,
+              33791,
+              21247,
+              8447,
+              1048831,
+              4260095,
+              7536895,
+              10748159,
+              13959423,
+              16711926,
+              16711877,
+              16711828,
+              16711778,
+              16711729,
+              16711680
+            ],
+            "alphaFrom": "ttMinimapMainArmamentOpacity",
+            "alphaMin": 0,
+            "alphaStep": 0.1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.radar.ally.color",
+          "to": "ttMinimap.rangeCircle.radar.ally.color",
+          "transform": "paletteIndex",
+          "args": {
+            "palette": [
+              12303291,
+              7266807,
+              7266776,
+              15770914,
+              11125362,
+              52479,
+              13421772,
+              0,
+              16711680,
+              16724224,
+              16736768,
+              16749568,
+              16762112,
+              16774656,
+              14024448,
+              10813184,
+              7601920,
+              4325120,
+              1113856,
+              65312,
+              65362,
+              65411,
+              65460,
+              65510,
+              59135,
+              46335,
+              33791,
+              21247,
+              8447,
+              1048831,
+              4260095,
+              7536895,
+              10748159,
+              13959423,
+              16711926,
+              16711877,
+              16711828,
+              16711778,
+              16711729,
+              16711680
+            ],
+            "alphaFrom": "ttMinimapRadarAllyOpacity",
+            "alphaMin": 0,
+            "alphaStep": 0.1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.radar.enemy.color",
+          "to": "ttMinimap.rangeCircle.radar.enemy.color",
+          "transform": "paletteIndex",
+          "args": {
+            "palette": [
+              12303291,
+              7266807,
+              7266776,
+              15770914,
+              11125362,
+              52479,
+              13421772,
+              0,
+              16711680,
+              16724224,
+              16736768,
+              16749568,
+              16762112,
+              16774656,
+              14024448,
+              10813184,
+              7601920,
+              4325120,
+              1113856,
+              65312,
+              65362,
+              65411,
+              65460,
+              65510,
+              59135,
+              46335,
+              33791,
+              21247,
+              8447,
+              1048831,
+              4260095,
+              7536895,
+              10748159,
+              13959423,
+              16711926,
+              16711877,
+              16711828,
+              16711778,
+              16711729,
+              16711680
+            ],
+            "alphaFrom": "ttMinimapRadarEnemyOpacity",
+            "alphaMin": 0,
+            "alphaStep": 0.1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.radar.self.color",
+          "to": "ttMinimap.rangeCircle.radar.self.color",
+          "transform": "paletteIndex",
+          "args": {
+            "palette": [
+              12303291,
+              7266807,
+              7266776,
+              15770914,
+              11125362,
+              52479,
+              13421772,
+              0,
+              16711680,
+              16724224,
+              16736768,
+              16749568,
+              16762112,
+              16774656,
+              14024448,
+              10813184,
+              7601920,
+              4325120,
+              1113856,
+              65312,
+              65362,
+              65411,
+              65460,
+              65510,
+              59135,
+              46335,
+              33791,
+              21247,
+              8447,
+              1048831,
+              4260095,
+              7536895,
+              10748159,
+              13959423,
+              16711926,
+              16711877,
+              16711828,
+              16711778,
+              16711729,
+              16711680
+            ],
+            "alphaFrom": "ttMinimapRadarSelfOpacity",
+            "alphaMin": 0,
+            "alphaStep": 0.1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.subRadar.ally.color",
+          "to": "ttMinimap.rangeCircle.subRadar.ally.color",
+          "transform": "paletteIndex",
+          "args": {
+            "palette": [
+              12303291,
+              7266807,
+              7266776,
+              15770914,
+              11125362,
+              52479,
+              13421772,
+              0,
+              16711680,
+              16724224,
+              16736768,
+              16749568,
+              16762112,
+              16774656,
+              14024448,
+              10813184,
+              7601920,
+              4325120,
+              1113856,
+              65312,
+              65362,
+              65411,
+              65460,
+              65510,
+              59135,
+              46335,
+              33791,
+              21247,
+              8447,
+              1048831,
+              4260095,
+              7536895,
+              10748159,
+              13959423,
+              16711926,
+              16711877,
+              16711828,
+              16711778,
+              16711729,
+              16711680
+            ],
+            "alphaFrom": "ttMinimapSubRadarAllyOpacity",
+            "alphaMin": 0,
+            "alphaStep": 0.1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.subRadar.enemy.color",
+          "to": "ttMinimap.rangeCircle.subRadar.enemy.color",
+          "transform": "paletteIndex",
+          "args": {
+            "palette": [
+              12303291,
+              7266807,
+              7266776,
+              15770914,
+              11125362,
+              52479,
+              13421772,
+              0,
+              16711680,
+              16724224,
+              16736768,
+              16749568,
+              16762112,
+              16774656,
+              14024448,
+              10813184,
+              7601920,
+              4325120,
+              1113856,
+              65312,
+              65362,
+              65411,
+              65460,
+              65510,
+              59135,
+              46335,
+              33791,
+              21247,
+              8447,
+              1048831,
+              4260095,
+              7536895,
+              10748159,
+              13959423,
+              16711926,
+              16711877,
+              16711828,
+              16711778,
+              16711729,
+              16711680
+            ],
+            "alphaFrom": "ttMinimapSubRadarEnemyOpacity",
+            "alphaMin": 0,
+            "alphaStep": 0.1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.subRadar.self.color",
+          "to": "ttMinimap.rangeCircle.subRadar.self.color",
+          "transform": "paletteIndex",
+          "args": {
+            "palette": [
+              12303291,
+              7266807,
+              7266776,
+              15770914,
+              11125362,
+              52479,
+              13421772,
+              0,
+              16711680,
+              16724224,
+              16736768,
+              16749568,
+              16762112,
+              16774656,
+              14024448,
+              10813184,
+              7601920,
+              4325120,
+              1113856,
+              65312,
+              65362,
+              65411,
+              65460,
+              65510,
+              59135,
+              46335,
+              33791,
+              21247,
+              8447,
+              1048831,
+              4260095,
+              7536895,
+              10748159,
+              13959423,
+              16711926,
+              16711877,
+              16711828,
+              16711778,
+              16711729,
+              16711680
+            ],
+            "alphaFrom": "ttMinimapSubRadarSelfOpacity",
+            "alphaMin": 0,
+            "alphaStep": 0.1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.torpedo.ally.color",
+          "to": "ttMinimap.rangeCircle.torpedo.ally.color",
+          "transform": "paletteIndex",
+          "args": {
+            "palette": [
+              12303291,
+              7266807,
+              7266776,
+              15770914,
+              11125362,
+              52479,
+              13421772,
+              0,
+              16711680,
+              16724224,
+              16736768,
+              16749568,
+              16762112,
+              16774656,
+              14024448,
+              10813184,
+              7601920,
+              4325120,
+              1113856,
+              65312,
+              65362,
+              65411,
+              65460,
+              65510,
+              59135,
+              46335,
+              33791,
+              21247,
+              8447,
+              1048831,
+              4260095,
+              7536895,
+              10748159,
+              13959423,
+              16711926,
+              16711877,
+              16711828,
+              16711778,
+              16711729,
+              16711680
+            ],
+            "alphaFrom": "ttMinimapTorpedoAllyOpacity",
+            "alphaMin": 0,
+            "alphaStep": 0.1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.torpedo.enemy.color",
+          "to": "ttMinimap.rangeCircle.torpedo.enemy.color",
+          "transform": "paletteIndex",
+          "args": {
+            "palette": [
+              12303291,
+              7266807,
+              7266776,
+              15770914,
+              11125362,
+              52479,
+              13421772,
+              0,
+              16711680,
+              16724224,
+              16736768,
+              16749568,
+              16762112,
+              16774656,
+              14024448,
+              10813184,
+              7601920,
+              4325120,
+              1113856,
+              65312,
+              65362,
+              65411,
+              65460,
+              65510,
+              59135,
+              46335,
+              33791,
+              21247,
+              8447,
+              1048831,
+              4260095,
+              7536895,
+              10748159,
+              13959423,
+              16711926,
+              16711877,
+              16711828,
+              16711778,
+              16711729,
+              16711680
+            ],
+            "alphaFrom": "ttMinimapTorpedoEnemyOpacity",
+            "alphaMin": 0,
+            "alphaStep": 0.1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.torpedo.self.color",
+          "to": "ttMinimap.rangeCircle.torpedo.self.color",
+          "transform": "paletteIndex",
+          "args": {
+            "palette": [
+              12303291,
+              7266807,
+              7266776,
+              15770914,
+              11125362,
+              52479,
+              13421772,
+              0,
+              16711680,
+              16724224,
+              16736768,
+              16749568,
+              16762112,
+              16774656,
+              14024448,
+              10813184,
+              7601920,
+              4325120,
+              1113856,
+              65312,
+              65362,
+              65411,
+              65460,
+              65510,
+              59135,
+              46335,
+              33791,
+              21247,
+              8447,
+              1048831,
+              4260095,
+              7536895,
+              10748159,
+              13959423,
+              16711926,
+              16711877,
+              16711828,
+              16711778,
+              16711729,
+              16711680
+            ],
+            "alphaFrom": "ttMinimapTorpedoOpacity",
+            "alphaMin": 0,
+            "alphaStep": 0.1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.visibilityAir.ally.color",
+          "to": "ttMinimap.rangeCircle.visibilityAir.ally.color",
+          "transform": "paletteIndex",
+          "args": {
+            "palette": [
+              12303291,
+              7266807,
+              7266776,
+              15770914,
+              11125362,
+              52479,
+              13421772,
+              0,
+              16711680,
+              16724224,
+              16736768,
+              16749568,
+              16762112,
+              16774656,
+              14024448,
+              10813184,
+              7601920,
+              4325120,
+              1113856,
+              65312,
+              65362,
+              65411,
+              65460,
+              65510,
+              59135,
+              46335,
+              33791,
+              21247,
+              8447,
+              1048831,
+              4260095,
+              7536895,
+              10748159,
+              13959423,
+              16711926,
+              16711877,
+              16711828,
+              16711778,
+              16711729,
+              16711680
+            ],
+            "alphaFrom": "ttMinimapVisibilityAirAllyOpacity",
+            "alphaMin": 0,
+            "alphaStep": 0.1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.visibilityAir.enemy.color",
+          "to": "ttMinimap.rangeCircle.visibilityAir.enemy.color",
+          "transform": "paletteIndex",
+          "args": {
+            "palette": [
+              12303291,
+              7266807,
+              7266776,
+              15770914,
+              11125362,
+              52479,
+              13421772,
+              0,
+              16711680,
+              16724224,
+              16736768,
+              16749568,
+              16762112,
+              16774656,
+              14024448,
+              10813184,
+              7601920,
+              4325120,
+              1113856,
+              65312,
+              65362,
+              65411,
+              65460,
+              65510,
+              59135,
+              46335,
+              33791,
+              21247,
+              8447,
+              1048831,
+              4260095,
+              7536895,
+              10748159,
+              13959423,
+              16711926,
+              16711877,
+              16711828,
+              16711778,
+              16711729,
+              16711680
+            ],
+            "alphaFrom": "ttMinimapVisibilityAirEnemyOpacity",
+            "alphaMin": 0,
+            "alphaStep": 0.1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.visibilityAir.self.color",
+          "to": "ttMinimap.rangeCircle.visibilityAir.self.color",
+          "transform": "paletteIndex",
+          "args": {
+            "palette": [
+              12303291,
+              7266807,
+              7266776,
+              15770914,
+              11125362,
+              52479,
+              13421772,
+              0,
+              16711680,
+              16724224,
+              16736768,
+              16749568,
+              16762112,
+              16774656,
+              14024448,
+              10813184,
+              7601920,
+              4325120,
+              1113856,
+              65312,
+              65362,
+              65411,
+              65460,
+              65510,
+              59135,
+              46335,
+              33791,
+              21247,
+              8447,
+              1048831,
+              4260095,
+              7536895,
+              10748159,
+              13959423,
+              16711926,
+              16711877,
+              16711828,
+              16711778,
+              16711729,
+              16711680
+            ],
+            "alphaFrom": "ttMinimapVisibilityAirOpacity",
+            "alphaMin": 0,
+            "alphaStep": 0.1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.visibilitySea.ally.color",
+          "to": "ttMinimap.rangeCircle.visibilitySea.ally.color",
+          "transform": "paletteIndex",
+          "args": {
+            "palette": [
+              12303291,
+              7266807,
+              7266776,
+              15770914,
+              11125362,
+              52479,
+              13421772,
+              0,
+              16711680,
+              16724224,
+              16736768,
+              16749568,
+              16762112,
+              16774656,
+              14024448,
+              10813184,
+              7601920,
+              4325120,
+              1113856,
+              65312,
+              65362,
+              65411,
+              65460,
+              65510,
+              59135,
+              46335,
+              33791,
+              21247,
+              8447,
+              1048831,
+              4260095,
+              7536895,
+              10748159,
+              13959423,
+              16711926,
+              16711877,
+              16711828,
+              16711778,
+              16711729,
+              16711680
+            ],
+            "alphaFrom": "ttMinimapVisibilitySeaAllyOpacity",
+            "alphaMin": 0,
+            "alphaStep": 0.1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.visibilitySea.enemy.color",
+          "to": "ttMinimap.rangeCircle.visibilitySea.enemy.color",
+          "transform": "paletteIndex",
+          "args": {
+            "palette": [
+              12303291,
+              7266807,
+              7266776,
+              15770914,
+              11125362,
+              52479,
+              13421772,
+              0,
+              16711680,
+              16724224,
+              16736768,
+              16749568,
+              16762112,
+              16774656,
+              14024448,
+              10813184,
+              7601920,
+              4325120,
+              1113856,
+              65312,
+              65362,
+              65411,
+              65460,
+              65510,
+              59135,
+              46335,
+              33791,
+              21247,
+              8447,
+              1048831,
+              4260095,
+              7536895,
+              10748159,
+              13959423,
+              16711926,
+              16711877,
+              16711828,
+              16711778,
+              16711729,
+              16711680
+            ],
+            "alphaFrom": "ttMinimapVisibilitySeaEnemyOpacity",
+            "alphaMin": 0,
+            "alphaStep": 0.1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.visibilitySea.self.color",
+          "to": "ttMinimap.rangeCircle.visibilitySea.self.color",
+          "transform": "paletteIndex",
+          "args": {
+            "palette": [
+              12303291,
+              7266807,
+              7266776,
+              15770914,
+              11125362,
+              52479,
+              13421772,
+              0,
+              16711680,
+              16724224,
+              16736768,
+              16749568,
+              16762112,
+              16774656,
+              14024448,
+              10813184,
+              7601920,
+              4325120,
+              1113856,
+              65312,
+              65362,
+              65411,
+              65460,
+              65510,
+              59135,
+              46335,
+              33791,
+              21247,
+              8447,
+              1048831,
+              4260095,
+              7536895,
+              10748159,
+              13959423,
+              16711926,
+              16711877,
+              16711828,
+              16711778,
+              16711729,
+              16711680
+            ],
+            "alphaFrom": "ttMinimapVisibilitySeaOpacity",
+            "alphaMin": 0,
+            "alphaStep": 0.1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rangeCircle.visibilitySmoke.self.color",
+          "to": "ttMinimap.rangeCircle.visibilitySmoke.self.color",
+          "transform": "paletteIndex",
+          "args": {
+            "palette": [
+              12303291,
+              7266807,
+              7266776,
+              15770914,
+              11125362,
+              52479,
+              13421772,
+              0,
+              16711680,
+              16724224,
+              16736768,
+              16749568,
+              16762112,
+              16774656,
+              14024448,
+              10813184,
+              7601920,
+              4325120,
+              1113856,
+              65312,
+              65362,
+              65411,
+              65460,
+              65510,
+              59135,
+              46335,
+              33791,
+              21247,
+              8447,
+              1048831,
+              4260095,
+              7536895,
+              10748159,
+              13959423,
+              16711926,
+              16711877,
+              16711828,
+              16711778,
+              16711729,
+              16711680
+            ],
+            "alphaFrom": "ttMinimapVisibilitySmokeOpacity",
+            "alphaMin": 0,
+            "alphaStep": 0.1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.shipMarker.detection.color",
+          "to": "ttMinimap.shipMarker.detection.color",
+          "transform": "paletteIndex",
+          "args": {
+            "palette": [
+              12303291,
+              7266807,
+              7266776,
+              15770914,
+              11125362,
+              52479,
+              13421772,
+              0,
+              16711680,
+              16724224,
+              16736768,
+              16749568,
+              16762112,
+              16774656,
+              14024448,
+              10813184,
+              7601920,
+              4325120,
+              1113856,
+              65312,
+              65362,
+              65411,
+              65460,
+              65510,
+              59135,
+              46335,
+              33791,
+              21247,
+              8447,
+              1048831,
+              4260095,
+              7536895,
+              10748159,
+              13959423,
+              16711926,
+              16711877,
+              16711828,
+              16711778,
+              16711729,
+              16711680
+            ],
+            "alphaFrom": "ttMinimapAllyDetectionOpacity",
+            "alphaMin": 0.1,
+            "alphaStep": 0.05
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.shipMarker.direction.color",
+          "to": "ttMinimap.shipMarker.direction.color",
+          "transform": "paletteIndex",
+          "args": {
+            "palette": [
+              12303291,
+              7266807,
+              7266776,
+              15770914,
+              11125362,
+              52479,
+              13421772,
+              0,
+              16711680,
+              16724224,
+              16736768,
+              16749568,
+              16762112,
+              16774656,
+              14024448,
+              10813184,
+              7601920,
+              4325120,
+              1113856,
+              65312,
+              65362,
+              65411,
+              65460,
+              65510,
+              59135,
+              46335,
+              33791,
+              21247,
+              8447,
+              1048831,
+              4260095,
+              7536895,
+              10748159,
+              13959423,
+              16711926,
+              16711877,
+              16711828,
+              16711778,
+              16711729,
+              16711680
+            ]
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.squadronMarker.direction.color",
+          "to": "ttMinimap.squadronMarker.direction.color",
+          "transform": "paletteIndex",
+          "args": {
+            "palette": [
+              12303291,
+              7266807,
+              7266776,
+              15770914,
+              11125362,
+              52479,
+              13421772,
+              0,
+              16711680,
+              16724224,
+              16736768,
+              16749568,
+              16762112,
+              16774656,
+              14024448,
+              10813184,
+              7601920,
+              4325120,
+              1113856,
+              65312,
+              65362,
+              65411,
+              65460,
+              65510,
+              59135,
+              46335,
+              33791,
+              21247,
+              8447,
+              1048831,
+              4260095,
+              7536895,
+              10748159,
+              13959423,
+              16711926,
+              16711877,
+              16711828,
+              16711778,
+              16711729,
+              16711680
+            ]
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rpfAlly.color",
+          "to": "ttMinimap.rpfAlly.color",
+          "transform": "packChannels",
+          "args": {
+            "default": 452984831,
+            "alphaFrom": "ttMinimapRPFAllyOpacity",
+            "alphaMin": 0,
+            "alphaStep": 0.1,
+            "redFrom": "ttMinimapRPFAllyRed",
+            "redMin": 0,
+            "redStep": 0.1,
+            "greenFrom": "ttMinimapRPFAllyGreen",
+            "greenMin": 0,
+            "greenStep": 0.1,
+            "blueFrom": "ttMinimapRPFAllyBlue",
+            "blueMin": 0,
+            "blueStep": 0.1
+          }
+        },
+        {
+          "op": "transform",
+          "from": "ttMinimap.rpfSelf.color",
+          "to": "ttMinimap.rpfSelf.color",
+          "transform": "packChannels",
+          "args": {
+            "default": 452984831,
+            "alphaFrom": "ttMinimapRPFSelfOpacity",
+            "alphaMin": 0,
+            "alphaStep": 0.1,
+            "redFrom": "ttMinimapRPFSelfRed",
+            "redMin": 0,
+            "redStep": 0.1,
+            "greenFrom": "ttMinimapRPFSelfGreen",
+            "greenMin": 0,
+            "greenStep": 0.1,
+            "blueFrom": "ttMinimapRPFSelfBlue",
+            "blueMin": 0,
+            "blueStep": 0.1
+          }
+        }
+      ]
+    }
+  ],
+  "legacyPositions": [
+    {
+      "key": "ttMinimap.position",
+      "element": "TTaroMinimap"
+    },
+    {
+      "key": "ttMinimap.radarWarning.position",
+      "element": "TTaroMinimapRadarWarning"
+    }
+  ]
+}
