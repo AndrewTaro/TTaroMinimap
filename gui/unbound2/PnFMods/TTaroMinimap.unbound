@@ -945,7 +945,9 @@
 		(var shipName:gfx = "shipEntity ? shipEntity.nameUpper : ''")
 		(var subType:str = "shipEntity ? shipEntity.subtype : ''")
 		(var shipType:str = "toLower(subType)")
-		(var iconPath:str = "'icon_white_' + shipType")
+		# '' , not a composed path: an empty shipType would ask the engine for the
+		# directory and it logs a Scaleform "Unknown file format" for it.
+		(var iconPath:str = "shipType ? 'url:../battle_hud/markers/ship/icon_white_' + shipType + '.png' : ''")
 
 		# Warning Color
 		(var textRed:number = "isInRange ? 1 : 1" watch=false)
@@ -1019,7 +1021,7 @@
 			)
 			(block
 				(style
-					(bind backgroundImage "'url:../battle_hud/markers/ship/' + iconPath + '.png'")
+					(bind backgroundImage "iconPath")
 					(width = "SHIP_ICON_SIZE.WIDTH")
 					(height = "SHIP_ICON_SIZE.HEIGHT")
 					(marginTop = "-S")
@@ -1689,6 +1691,11 @@
 
 		(var scenarioTag:gfx = "_markerEntity.scenarioTag" (event "_markerEntity.evAdded") (event "_markerEntity.evRemoved"))
 
+		(var stateCollection:gfx = "$datahub.getCollection(CC.state)")
+		(var flagshipStateCollection:gfx = "stateCollection.getChildByPath('flagships.byMarkerEntity.' + _markerEntity.id)" (event "stateCollection.evChildAdded") (event "stateCollection.evChildRemoved"))
+		(var flagshipStateEntity:gfx = "flagshipStateCollection.length > 0 ? flagshipStateCollection.items[0] : null" (event "flagshipStateCollection.evAdded") (event "flagshipStateCollection.evRemoved") (event "flagshipStateCollection.evUpdated"))
+		(var isAllyFlagship:bool = "flagshipStateEntity && flagshipStateEntity.state.type == SC.Battle.ENTITY_STATES.FLAGSHIP && flagshipStateEntity.flagshipSpeciality.name == SC.Battle.FLAGSHIP_SPECIALIZATIONS.ALLY")
+
 		(var avatarEntity:gfx = "$datahub.getSingleEntity(CC.playerAvatar)")
 		(var isAlive:bool = "avatarEntity.health && avatarEntity.health.isAlive" (event "avatarEntity.health.evIsAliveChanged"))
 		(var hideOnDeath:bool = "markerSettings.hideOnDeath")
@@ -1711,6 +1718,17 @@
 		(controller $Instance (renderer = 'TMap_MapMarkerScenarioTag')
 			(bind enabled "scenarioTag != null")
 			(args _markerEntity="_markerEntity")
+			(exprs
+				(macro BIND_FAIR_SCALE "markerScale")
+			)
+		)
+	)
+
+	# Vanilla renderer -- the mod changes nothing in it, so there is no TMap_ copy
+	(block
+		(controller $Instance (renderer = 'MapMarkerStateTag')
+			(bind enabled "isAllyFlagship && scenarioTag == null")
+			(args _markerEntity="_markerEntity" _type="SC.Battle.SCENARIO_TAG_VALUE.ALLY_FLAGSHIP")
 			(exprs
 				(macro BIND_FAIR_SCALE "markerScale")
 			)
