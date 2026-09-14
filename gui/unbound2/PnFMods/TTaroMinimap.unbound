@@ -293,9 +293,11 @@
 	(var scaleRatio:number = "MINIMAP_ASSETS_SIZE * (_isLoading ? loadingMinimapScale : mapScale)")
 )
 
-# TMap_GET_RGB is gone with the palette.  Its two callers needed 0-255 channels for a colorTransform
+# TMap_GET_RGB is gone with the palette.  Its callers needed 0-255 channels for a colorTransform
 # offset and now read the colour component's own r255/g255/b255 -- the bitwise unpack it did would
 # OVERFLOW anyway, since a packed 0xAARRGGBB sits above 2^31.
+# Each channel must land in its OWN :number var before any arithmetic -- composing straight off gfx
+# attributes yields 0.
 
 # Custom
 # The five settings every range circle shares, read off ONE key prefix, plus the draw values derived
@@ -308,32 +310,27 @@
 # TMap_PREFS.FAKE defaults, and for a real key they only cover the window before Python publishes --
 # the schema default differs per variant, so no single literal could stand in for it.
 #
-# Lands: isThicknessFixed, isCircleFill, color (24-bit RGB -- see below), alphaMultiplier (0-1),
+# Lands: isThicknessFixed, isCircleFill, color (packed 0xAARRGGBB), alphaMultiplier (0-1),
 # outlineType, lineThicknessPref, isOutlineDisabled, isSolid, innerRadius, drawDotted.  Each caller
 # keeps its own lineAlpha / spacing / dashLength / lineThickness -- those are where the five differ.
 #
-# `color` is RGB, NOT the packed value.  $Sector has two different colour binds: the scalar `color`
-# takes 0xAARRGGBB, but `colors`/`lineColor` -- the pair TMap_RANGE_CIRCLE uses -- take RGB with alpha
-# supplied on the sibling `alphas`/`lineAlpha` channel.  Vanilla base_marker/capture_point_marker pass
-# 6-digit colours there (implicit 0x00 high byte) alongside explicit alphas, and those circles render
-# solid.  Composed from the component's 0-255 channels rather than masked off `value`: arithmetic on a
-# packed value above 2^31 overflows, while this tops out at 0xFFFFFF.
-(def macro TMap_RANGE_CIRCLE_PREFS (_prefKey:expression, _defaultColor:expression="0x6EE1F7", _defaultLineType:expression="0")
+# `color` is the packed value, bound straight through.  All three of its targets take packed:
+# `textColor` (minimap_options:144), and `lineColor`/`colors`, whose high byte is not applied as
+# alpha -- that stays on `lineAlpha`/`alphas`.
+# NEVER recompose it from r255/g255/b255: arithmetic on a gfx attribute yields 0.
+(def macro TMap_RANGE_CIRCLE_PREFS (_prefKey:expression, _defaultColor:expression="0xFF6EE1F7", _defaultLineType:expression="0")
 	(macro TT_GET_PREF _varName="'__rcFix'" _key="'ttaro.ttMinimap.rangeCircle.outlineFix'")
 	(var isThicknessFixed:bool = "null != __rcFix && null != __rcFix.value ? __rcFix.value : false")
 
 	(macro TT_GET_PREF _varName="'__rcFill'" _key="_prefKey == '' ? '' : _prefKey + '.fillCircle'")
 	(var isCircleFill:bool = "null != __rcFill && null != __rcFill.value ? __rcFill.value : false")
 
-	# One packed colour setting replaces the palette ORDINAL plus its separate opacity slider.  The two
-	# still leave the component separately because the sector wants them on separate channels, and its
-	# alpha is never the stored one anyway: the fill gets alphaMultiplier * 0.35 and the outline gets
-	# 0 or 1 from the line type, neither of which is expressible from the packed int.
+	# Alpha rides its own var -- the sector wants it on a separate channel, and what lands there is
+	# never the stored value anyway (fill takes * 0.35, outline 0/1 from the line type).
+	# `null !=`, not isNumber(): the derived channels are absent on derive()'s exception fallback.
 	(macro TT_GET_PREF _varName="'__rcColor'" _key="_prefKey == '' ? '' : _prefKey + '.color'")
-	(var color:number = "null != __rcColor && isNumber(__rcColor.r255)
-							? __rcColor.r255 * 65536 + __rcColor.g255 * 256 + __rcColor.b255
-							: _defaultColor")
-	(var alphaMultiplier:number = "null != __rcColor && isNumber(__rcColor.a) ? __rcColor.a : 1")
+	(var color:number = "null != __rcColor && null != __rcColor.value ? __rcColor.value : _defaultColor")
+	(var alphaMultiplier:number = "null != __rcColor && null != __rcColor.a ? __rcColor.a : 1")
 
 	(macro TT_GET_PREF _varName="'__rcType'" _key="_prefKey == '' ? '' : _prefKey + '.lineStyle'")
 	(var outlineType:number = "null != __rcType && null != __rcType.value ? __rcType.value : _defaultLineType")
@@ -2125,9 +2122,9 @@
 		# The colour is the component's packed 0xAARRGGBB, bound as-is; the 0-255 channels below feed a
 		# colorTransform OFFSET, which is what needs them split out.
 		(var color:number = "null != colorPref && null != colorPref.value ? colorPref.value : TMap_DIRECTION_DEFAULT_COLOR")
-		(var red:number   = "null != colorPref && isNumber(colorPref.r255) ? colorPref.r255 : 204")
-		(var green:number = "null != colorPref && isNumber(colorPref.g255) ? colorPref.g255 : 204")
-		(var blue:number  = "null != colorPref && isNumber(colorPref.b255) ? colorPref.b255 : 204")
+		(var red:number   = "null != colorPref && null != colorPref.r255 ? colorPref.r255 : 204")
+		(var green:number = "null != colorPref && null != colorPref.g255 ? colorPref.g255 : 204")
+		(var blue:number  = "null != colorPref && null != colorPref.b255 ? colorPref.b255 : 204")
 		# Untinted while the colour is still the stock one -- compared against the packed default
 		# explicitly (packed values sit above 2^31, so never by sign and no longer by palette index).
 		(var isDefaultColor:bool = "_isSelf || (color == TMap_DIRECTION_DEFAULT_COLOR)")
@@ -3040,10 +3037,10 @@
 		# multipliers the component already publishes -- not the packed value taken apart here.
 		# Schema default for both is 0x1AFFFFFF: white, a = 0.102.
 		(macro TT_GET_PREF _varName="'rpfColorPref'" _key="isSelf ? 'ttaro.ttMinimap.rpfSelf.color' : 'ttaro.ttMinimap.rpfAlly.color'")
-		(var alphaScale:number = "null != rpfColorPref && isNumber(rpfColorPref.a) ? rpfColorPref.a : 0.102")
-		(var redScale:number   = "null != rpfColorPref && isNumber(rpfColorPref.r) ? rpfColorPref.r : 1")
-		(var greenScale:number = "null != rpfColorPref && isNumber(rpfColorPref.g) ? rpfColorPref.g : 1")
-		(var blueScale:number  = "null != rpfColorPref && isNumber(rpfColorPref.b) ? rpfColorPref.b : 1")
+		(var alphaScale:number = "null != rpfColorPref && null != rpfColorPref.a ? rpfColorPref.a : 0.102")
+		(var redScale:number   = "null != rpfColorPref && null != rpfColorPref.r ? rpfColorPref.r : 1")
+		(var greenScale:number = "null != rpfColorPref && null != rpfColorPref.g ? rpfColorPref.g : 1")
+		(var blueScale:number  = "null != rpfColorPref && null != rpfColorPref.b ? rpfColorPref.b : 1")
 
 		(macro TT_GET_PREF _varName="'rpfAllyModePref'" _key="'ttaro.ttMinimap.rpfAlly.displayMode'")
 		(var rpfAllyDisplayMode:number = "null != rpfAllyModePref && null != rpfAllyModePref.value ? rpfAllyModePref.value : 1")
@@ -3252,7 +3249,7 @@
 
 		(var isNearby:bool = "isValidAA && isValidPos && (rangeOffset == TMap_RANGE_OFFSET_MAX || distanceToShipSquared < warnRangeSquared)")
 
-		(macro TMap_RANGE_CIRCLE_PREFS _prefKey="'ttaro.ttMinimap.rangeCircle.antiAir.enemy'" _defaultColor="0xFF9400" _defaultLineType="2")
+		(macro TMap_RANGE_CIRCLE_PREFS _prefKey="'ttaro.ttMinimap.rangeCircle.antiAir.enemy'" _defaultColor="0xFFFF9400" _defaultLineType="2")
 
 		(var lineAlpha:number = "isOutlineDisabled ? 0 : 1")
 		(var spacing:number = "isSolid ? 0 : 13")
@@ -3306,13 +3303,16 @@
 
 		# The icon's colour and its opacity were two settings; they are one packed colour now, so the
 		# alpha comes off the same component rather than a separate slider.  Default 0x40FF9400.
-		# Colour goes in as RGB and alpha stays on the style, exactly as before the sweep: passing the
-		# packed value into $Sector's colour AND keeping the style alpha would apply alpha twice.
+		# RGB, not packed: this is $Sector's SCALAR `color`, and whether THAT one applies the high byte
+		# as alpha is unestablished (submarine_battery:174 reads the same either way), so packing it
+		# while the style still carries alpha risks doubling it.  The lineColor/colors pair does not.
+		# Channels laundered through :number vars first -- arithmetic on gfx attributes yields 0.
 		(macro TT_GET_PREF _varName="'detectionColorPref'" _key="'ttaro.ttMinimap.shipMarker.detection.color'")
-		(var color:number = "null != detectionColorPref && isNumber(detectionColorPref.r255)
-								? detectionColorPref.r255 * 65536 + detectionColorPref.g255 * 256 + detectionColorPref.b255
-								: 0xFF9400")
-		(var alpha:number = "null != detectionColorPref && isNumber(detectionColorPref.a) ? detectionColorPref.a : 0.251")
+		(var detR:number = "null != detectionColorPref && null != detectionColorPref.r255 ? detectionColorPref.r255 : 255")
+		(var detG:number = "null != detectionColorPref && null != detectionColorPref.g255 ? detectionColorPref.g255 : 148")
+		(var detB:number = "null != detectionColorPref && null != detectionColorPref.b255 ? detectionColorPref.b255 : 0")
+		(var color:number = "detR * 65536 + detG * 256 + detB")
+		(var alpha:number = "null != detectionColorPref && null != detectionColorPref.a ? detectionColorPref.a : 0.251")
 	)
 
 	(bind visible "isSpotted")
@@ -3423,7 +3423,7 @@
 		(macro TT_GET_PREF _varName="'onActivationPref'" _key="_prefKey == '' ? '' : _prefKey + '.showWhen.onActivation'")
 		(var isVisibleOnActivation:bool = "null != onActivationPref && null != onActivationPref.value ? onActivationPref.value : false")
 
-		(macro TMap_RANGE_CIRCLE_PREFS _prefKey="_prefKey" _defaultColor="0x7300FF" _defaultLineType="3")
+		(macro TMap_RANGE_CIRCLE_PREFS _prefKey="_prefKey" _defaultColor="0xFF7300FF" _defaultLineType="3")
 
 		(var lineAlpha:number = "isOutlineDisabled ? 0 : 1")
 		(var spacing:number = "isSolid ? 0 : 13")
@@ -4315,9 +4315,9 @@
 		(macro TT_GET_PREF _varName="'aimMarkerColorPref'" _key="'ttaro.ttMinimap.aimMarker.color'")
 		# Tint is a colorTransform OFFSET, so this is the one place that wants 0-255 channels rather
 		# than the packed value -- taken from the component, never unpacked here.  Default 0xFFCCCCCC.
-		(var red:number   = "null != aimMarkerColorPref && isNumber(aimMarkerColorPref.r255) ? aimMarkerColorPref.r255 : 204")
-		(var green:number = "null != aimMarkerColorPref && isNumber(aimMarkerColorPref.g255) ? aimMarkerColorPref.g255 : 204")
-		(var blue:number  = "null != aimMarkerColorPref && isNumber(aimMarkerColorPref.b255) ? aimMarkerColorPref.b255 : 204")
+		(var red:number   = "null != aimMarkerColorPref && null != aimMarkerColorPref.r255 ? aimMarkerColorPref.r255 : 204")
+		(var green:number = "null != aimMarkerColorPref && null != aimMarkerColorPref.g255 ? aimMarkerColorPref.g255 : 204")
+		(var blue:number  = "null != aimMarkerColorPref && null != aimMarkerColorPref.b255 ? aimMarkerColorPref.b255 : 204")
 		(var ct:dict = "{redMultiplier:0, greenMultiplier: 0, blueMultiplier: 0, redOffset: red, greenOffset: green, blueOffset: blue}")
 
 		(macro TT_GET_PREF _varName="'aimMarkerScalePref'" _key="'ttaro.ttMinimap.aimMarker.scale'")
@@ -5548,9 +5548,9 @@
 		# Tint is a colorTransform OFFSET, so this is the other place wanting 0-255 channels rather
 		# than the packed value.  Fallback is the old palette's sea-detection blue, 0xFF6EE1F7.
 		(macro TT_GET_PREF _varName="'optColorPref'" _key="optPrefKey == '' ? '' : optPrefKey + '.color'")
-		(var red:number   = "null != optColorPref && isNumber(optColorPref.r255) ? optColorPref.r255 : 110")
-		(var green:number = "null != optColorPref && isNumber(optColorPref.g255) ? optColorPref.g255 : 225")
-		(var blue:number  = "null != optColorPref && isNumber(optColorPref.b255) ? optColorPref.b255 : 247")
+		(var red:number   = "null != optColorPref && null != optColorPref.r255 ? optColorPref.r255 : 110")
+		(var green:number = "null != optColorPref && null != optColorPref.g255 ? optColorPref.g255 : 225")
+		(var blue:number  = "null != optColorPref && null != optColorPref.b255 ? optColorPref.b255 : 247")
 		(var color:number = "null != optColorPref && null != optColorPref.value ? optColorPref.value : 0xFF6EE1F7")
 		(var ct:dict = "{redMultiplier:0,greenMultiplier:0,blueMultiplier:0,redOffset:red,greenOffset:green,blueOffset:blue}")
 
