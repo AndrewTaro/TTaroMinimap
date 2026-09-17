@@ -17,8 +17,7 @@
 # Index 16: None means no RPF is visible.
 # It could happen when the submarine is at maximum depth and he is the only remaining enemy
 
-# Install gating comes from modPrefs.installedMods (Python-scanned), so this mod no longer advertises
-# itself with a TT_MINIMAP_INSTALLED constant.
+# Install gating comes from modPrefs.installedMods (Python-scanned).
 
 (def constant TMap_RPF_INVALID_DIRECTION "-1")
 (def constant TMap_RPF_DIRECTION_MESSAGES [
@@ -58,10 +57,7 @@
 (def constant TMap_RANGE_INVALID -1)
 (def constant TMap_RANGE_SECTOR_MAX "90 + 5") # max angle + step
 
-# The 40-entry TMap_RANGE_COLORS palette is GONE.  Every colour pref is a packed 0xAARRGGBB `color`
-# setting now (the CMS `paletteIndex` migration decoded each stored index through exactly this palette),
-# so a colour is read straight off its component instead of being looked up by ordinal, and the picker
-# is no longer confined to 40 swatches.
+# Every colour pref is a packed 0xAARRGGBB `color` setting, read straight off its component.
 
 # The default a `color` setting is compared against to decide whether a directional line needs
 # recolouring at all -- 0xFFCCCCCC, the packed form of the old palette's 'MARKERS' entry.  Compared
@@ -295,9 +291,8 @@
 
 # Custom
 # The five settings every range circle shares, read off ONE key prefix, plus the draw values derived
-# from them.  Five elements used to carry a byte-identical copy of this block; the point of folding it
-# is that the key composition is now written once -- a wrong dotted key raises nothing anywhere, so
-# five copies meant five places to get it silently wrong.
+# from them.  The key composition is written once here: a wrong dotted key raises nothing anywhere,
+# so never copy this block into an element.
 #
 # _prefKey is the schema key PREFIX ('ttaro.ttMinimap.rangeCircle.radar.enemy'); '' means "this circle has no settings",
 # which resolves no component and leaves every literal below standing.  Those literals are the old
@@ -308,23 +303,12 @@
 # outlineType, lineThicknessPref, isOutlineDisabled, isSolid, drawDotted.  Each caller
 # keeps its own lineAlpha / spacing / dashLength / lineThickness -- those are where the five differ.
 #
-# TWO OPACITIES, ONE PER HALF.  `fillAlpha` is the final fill alpha, stored; nothing multiplies it
-# (the view's old hardcoded * 0.35 moved into the stored value, which keeps a migrated minimap
-# looking the same).  It is also the fill on/off: 0 means no fill, which is what the retired
-# `.fillCircle` toggle said.  `outlineAlpha` is `color`'s own alpha channel, and drives the stroke.
+# TWO OPACITIES, ONE PER HALF.  `fillAlpha` is the final fill alpha, stored; nothing multiplies it.
+# 0 means no fill.  `outlineAlpha` is `color`'s own alpha channel and drives the stroke, as a style
+# `alpha` on the outline's block; `lineAlpha` is the var name that style reads.
 #
-# ⚠️ THE STROKE'S OPACITY DOES NOT COME FROM `lineAlpha`, WHICH IS INERT HERE.  Measured on
-# 13187581, three ways, all null: the pref path, a var hardcoded to 0, and a literal
-# `(bind lineAlpha "0.2")` straight on the controller all leave the ring fully opaque -- as does the
-# packed alpha on `lineColor` (0x40FF0000 renders identically to 0xFFFF0000).  What DOES work is a
-# style `alpha` on the enclosing block, which is how vanilla dims a minimap line
-# (minimap_bezier_path_marker:136).  TMap_RANGE_CIRCLE therefore draws the fill and the outline as
-# SEPARATE sectors: a style alpha dims its whole block, so one sector cannot carry two opacities.
-# `lineAlpha` survives as the var name that style reads.
-#
-# `color` is the packed value, bound straight through.  All three of its targets take packed:
-# `textColor` (minimap_options:144), and `lineColor`/`colors`, whose high byte is not applied as
-# alpha -- that stays on the style alpha / `alphas`.
+# `color` is the packed value, bound straight through.  `lineColor`/`colors` do not apply its high
+# byte as alpha -- that stays on the style alpha / `alphas`.
 # NEVER recompose it from r255/g255/b255: arithmetic on a gfx attribute yields 0.
 (def macro TMap_RANGE_CIRCLE_PREFS (_prefKey:expression, _defaultColor:expression="0xFF6EE1F7", _defaultLineType:expression="0")
 	(macro TT_GET_PREF _varName="'__rcFix'" _key="'ttaro.ttMinimap.rangeCircle.outlineFix'")
@@ -353,17 +337,9 @@
 (def macro TMap_RANGE_CIRCLE (_sector:expression="360")
 	(block
 		(macro BIND_FAIR_SCALE "rangeRadius")
-		# TWO sectors, not one.  `lineAlpha` DOES work -- but only on the stroked branch.  Per the
-		# decompiled SectorController (ub2lint `sector-line-stroke`, and confirmed here in-game):
-		# `drawDotted` draws its dots with beginFill(lineColor) and NEVER reads lineAlpha, so a dotted
-		# outline is always opaque.  Measured on 13187581 at colour alpha 255 vs 64, single sector:
-		#   lineStyle SOLID -> 8431 red px vs 35     (lineAlpha bites)
-		#   lineStyle DOT   -> 13854 vs 13850        (ignored)
-		# Eight of the 39 circles default to DOT -- every radar, hydro, subRadar and hydrophone one --
-		# so binding lineAlpha alone would ship an opacity slider that silently does nothing on them.
-		# A style `alpha` on the block dims BOTH branches, which is what the lint rule recommends for
-		# the dotted case; it also dims everything inside the block, so the fill needs its own sector.
-		# Fill first, outline over it.
+		# TWO sectors, not one.  `drawDotted` ignores `lineAlpha` (ub2lint `sector-line-stroke`), so
+		# the outline's opacity is a style `alpha` on its block, which dims both line styles -- and
+		# everything else in the block, so the fill needs its own sector.  Fill first, outline over it.
 		(block
 			(controller $Sector
 				(bind enabled "fillAlpha")
@@ -375,15 +351,8 @@
 				(bind colors "[color]")
 				(bind alphas "[fillAlpha]")
 				(ratios = [1.0])
-				# 31 of the 39 circles ship fillAlpha 0, so without this the DEFAULT path
-				# builds a full-radius disc at alpha 0 on every one of them.  `enabled`, not a
-				# style `visible`: it stops the controller rather than hiding its output.  The
-				# TRANSITION is the thing to check -- a disabled controller could have left its
-				# last frame on screen, and does not: 0.5 -> 0 takes the interior from 67.1 to
-				# -45.0 (background).  Measured gain at this scale: NONE.  13 circles mounted
-				# solo, all-on vs all-off is 196/206/187 vs 185/183/207 fps -- pure noise.  A
-				# 12v12 mounts ally+enemy circles per ship and is the case that could matter;
-				# it is untested.  These guards are for honesty about what draws, not a win.
+				# Most circles ship fillAlpha 0; without this each builds an invisible disc.
+				# `enabled`, not a style `visible`: it stops the controller rather than hiding it.
 			)
 		)
 		(block
@@ -394,13 +363,8 @@
 				(radius = "MINIMAP_ASSETS_SIZE")
 				(innerRadius = "MINIMAP_ASSETS_SIZE")
 				(bind lineThickness "lineThickness")
-				# Pinned at 1, with the opacity carried by the style alpha below.  Two reasons,
-				# both measured on 13187581 in this exact arrangement:
-				#  - lineAlpha DEFAULTS TO 0 on $Sector, so omitting it draws no stroke at all.
-				#  - binding it to the real opacity instead of the style does NOT dim a dotted
-				#    outline: alpha 255 vs 64 measured 13844 vs 13846 red px (no change), where
-				#    the style alpha gives 13864 vs 40.  drawDotted uses beginFill and never
-				#    reads lineAlpha, so the style is the only lever BOTH branches obey.
+				# Pinned at 1: lineAlpha defaults to 0 on $Sector, so omitting it draws no stroke.
+				# The opacity is the style alpha below, the only lever both line styles obey.
 				(lineAlpha = 1)
 				(bind lineColor "color")
 				(bind dashLength "dashLength")
@@ -581,8 +545,8 @@
 		(var mouseComponent:gfx = "$datahub.getSingleComponent(CC.mouse)")
 		(var isMouseActive:bool = "mouseComponent.active" (event "mouseComponent.evActiveChanged"))
 
-		# The radar warning is a 3-mode dropdown now, not a switch -- so this is an ADAPTIVE-aware read
-		# (see TMap_GET_DISPLAY_MODE), where it used to be a plain bool.
+		# The radar warning is a 3-mode dropdown, so this is an ADAPTIVE-aware read
+		# (see TMap_GET_DISPLAY_MODE).
 		(macro TMap_GET_ALT_VISION)
 		(macro TT_GET_PREF _varName="'nearbyRadarModePref'" _key="'ttaro.ttMinimap.radarWarning.displayMode'")
 		(var nearbyRadarMode:number = "null != nearbyRadarModePref && null != nearbyRadarModePref.value ? nearbyRadarModePref.value : 0")
@@ -734,9 +698,7 @@
 		(bind elementsCount "elementsCount + 1" watch=false init=false (event "evEnterRadarRange"))
 		(bind elementsCount "elementsCount - 1" watch=false init=false (event "evLeaveRadarRange"))
 
-		# DD.  TMap_GET_SCALE_RATIO used to be pulled in here purely to size the old minimap-relative
-		# default position; the CMS default is static now, so it was a pref watcher plus a
-		# minimapOption watcher per instance for nothing.
+		# DD.  The CMS default position is static, so no scale-ratio watcher is needed here.
 		(macro STAGE_SIZE)
 		(macro TT_GET_PREF _varName="'isDragDropDisabledPref'" _key="'ttaro.ttMinimap.disableDragDrop'")
 		(var isDragDropDisabled:bool = "null != isDragDropDisabledPref && null != isDragDropDisabledPref.value ? isDragDropDisabledPref.value : false")
@@ -782,9 +744,8 @@
 			# moves every migrated panel by its own width/height.
 			# The schema's right/bottom anchors do NOT need a matching pivot: Python resolves defaults
 			# size-aware and the pivot cancels (boxLeft = P - f*size, via the reported pox/poy).
-			# The CMS default here is deliberately static -- this panel no longer tracks the minimap.
-			# NB the map element above keeps its 100%/100% pivot: that one is UNCHANGED from legacy,
-			# so its folded values still mean the same thing.
+			# The CMS default here is deliberately static.  NB the map element above keeps its
+			# 100%/100% pivot, so its migrated positions keep their meaning.
 		)
 
 		(block
@@ -2173,7 +2134,7 @@
 		(var green:number = "null != colorPref && null != colorPref.g255 ? colorPref.g255 : 204")
 		(var blue:number  = "null != colorPref && null != colorPref.b255 ? colorPref.b255 : 204")
 		# Untinted while the colour is still the stock one -- compared against the packed default
-		# explicitly (packed values sit above 2^31, so never by sign and no longer by palette index).
+		# explicitly (packed values sit above 2^31, so never by sign).
 		(var isDefaultColor:bool = "_isSelf || (color == TMap_DIRECTION_DEFAULT_COLOR)")
 
 		(var ct:dict = "isDefaultColor	? {}
@@ -3384,8 +3345,7 @@
 (def element TMap_MapMarkerAllyConsumableRanges (_markerEntity:gfx, _consumableRanges:dict) layout=true
 	(scope
 		# ConsumablesMonitor2 publishes an entity per CONSUMABLE plus a per-ship list of their
-		# ids, keyed by this marker entity's id.  It used to be one CC.data blob on the ship,
-		# which re-marshalled in full whenever any one consumable ticked.
+		# ids, keyed by this marker entity's id.
 		(var consListWatcher:gfx = "$datahub.getPrimWatcher(CC.mods_DataComponent, TMap_CM2_COMPONENT_KEY_LIST_PREFIX + toString(_markerEntity ? _markerEntity.id : 0))")
 		(var consListEntity:gfx = "consListWatcher.entity" (event "consListWatcher.event"))
 		(var consListComponent:gfx = "consListEntity ? consListEntity.mods_DataComponent : null")
