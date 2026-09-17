@@ -135,12 +135,6 @@
 	ADAPTIVE: 2,
 })
 
-(def constant TMap_OUTLINE_TYPES {
-	DISABLE		: 0,
-	DOT			: 1,
-	DASH		: 2,
-	SOLID		: 3,
-})
 
 (def constant TMap_GRADIENT_MASKS [
 	{water: 'static_background.png',			island: 'static_background.png'},				# None
@@ -310,27 +304,39 @@
 # TMap_PREFS.FAKE defaults, and for a real key they only cover the window before Python publishes --
 # the schema default differs per variant, so no single literal could stand in for it.
 #
-# Lands: isThicknessFixed, isCircleFill, color (packed 0xAARRGGBB), alphaMultiplier (0-1),
-# outlineType, lineThicknessPref, isOutlineDisabled, isSolid, innerRadius, drawDotted.  Each caller
+# Lands: isThicknessFixed, fillAlpha (0-1), color (packed 0xAARRGGBB), outlineAlpha (0-1),
+# outlineType, lineThicknessPref, isOutlineDisabled, isSolid, drawDotted.  Each caller
 # keeps its own lineAlpha / spacing / dashLength / lineThickness -- those are where the five differ.
+#
+# TWO OPACITIES, ONE PER HALF.  `fillAlpha` is the final fill alpha, stored; nothing multiplies it
+# (the view's old hardcoded * 0.35 moved into the stored value, which keeps a migrated minimap
+# looking the same).  It is also the fill on/off: 0 means no fill, which is what the retired
+# `.fillCircle` toggle said.  `outlineAlpha` is `color`'s own alpha channel, and drives the stroke.
+#
+# ⚠️ THE STROKE'S OPACITY DOES NOT COME FROM `lineAlpha`, WHICH IS INERT HERE.  Measured on
+# 13187581, three ways, all null: the pref path, a var hardcoded to 0, and a literal
+# `(bind lineAlpha "0.2")` straight on the controller all leave the ring fully opaque -- as does the
+# packed alpha on `lineColor` (0x40FF0000 renders identically to 0xFFFF0000).  What DOES work is a
+# style `alpha` on the enclosing block, which is how vanilla dims a minimap line
+# (minimap_bezier_path_marker:136).  TMap_RANGE_CIRCLE therefore draws the fill and the outline as
+# SEPARATE sectors: a style alpha dims its whole block, so one sector cannot carry two opacities.
+# `lineAlpha` survives as the var name that style reads.
 #
 # `color` is the packed value, bound straight through.  All three of its targets take packed:
 # `textColor` (minimap_options:144), and `lineColor`/`colors`, whose high byte is not applied as
-# alpha -- that stays on `lineAlpha`/`alphas`.
+# alpha -- that stays on the style alpha / `alphas`.
 # NEVER recompose it from r255/g255/b255: arithmetic on a gfx attribute yields 0.
 (def macro TMap_RANGE_CIRCLE_PREFS (_prefKey:expression, _defaultColor:expression="0xFF6EE1F7", _defaultLineType:expression="0")
 	(macro TT_GET_PREF _varName="'__rcFix'" _key="'ttaro.ttMinimap.rangeCircle.outlineFix'")
 	(var isThicknessFixed:bool = "null != __rcFix && null != __rcFix.value ? __rcFix.value : false")
 
-	(macro TT_GET_PREF _varName="'__rcFill'" _key="_prefKey == '' ? '' : _prefKey + '.fillCircle'")
-	(var isCircleFill:bool = "null != __rcFill && null != __rcFill.value ? __rcFill.value : false")
+	(macro TT_GET_PREF _varName="'__rcFill'" _key="_prefKey == '' ? '' : _prefKey + '.fillAlpha'")
+	(var fillAlpha:number = "null != __rcFill && null != __rcFill.value ? __rcFill.value : 0")
 
-	# Alpha rides its own var -- the sector wants it on a separate channel, and what lands there is
-	# never the stored value anyway (fill takes * 0.35, outline 0/1 from the line type).
 	# `null !=`, not isNumber(): the derived channels are absent on derive()'s exception fallback.
 	(macro TT_GET_PREF _varName="'__rcColor'" _key="_prefKey == '' ? '' : _prefKey + '.color'")
 	(var color:number = "null != __rcColor && null != __rcColor.value ? __rcColor.value : _defaultColor")
-	(var alphaMultiplier:number = "null != __rcColor && null != __rcColor.a ? __rcColor.a : 1")
+	(var outlineAlpha:number = "null != __rcColor && null != __rcColor.a ? __rcColor.a : 1")
 
 	(macro TT_GET_PREF _varName="'__rcType'" _key="_prefKey == '' ? '' : _prefKey + '.lineStyle'")
 	(var outlineType:number = "null != __rcType && null != __rcType.value ? __rcType.value : _defaultLineType")
@@ -338,30 +344,71 @@
 	(macro TT_GET_PREF _varName="'__rcThick'" _key="_prefKey == '' ? '' : _prefKey + '.lineThickness'")
 	(var lineThicknessPref:number = "null != __rcThick && null != __rcThick.value ? __rcThick.value : 1")
 
-	(var isOutlineDisabled:bool = "outlineType == TMap_OUTLINE_TYPES.DISABLE")
-	(var isSolid:bool = "outlineType == TMap_OUTLINE_TYPES.SOLID")
-	(var drawDotted:bool = "outlineType == TMap_OUTLINE_TYPES.DOT")
-	(var innerRadius:number = "isCircleFill ? 0 : MINIMAP_ASSETS_SIZE")
+	(var isOutlineDisabled:bool = "outlineType == TT_CONST.MINIMAP.OUTLINE_STYLE.DISABLED")
+	(var isSolid:bool = "outlineType == TT_CONST.MINIMAP.OUTLINE_STYLE.SOLID")
+	(var drawDotted:bool = "outlineType == TT_CONST.MINIMAP.OUTLINE_STYLE.DOTTED")
 )
 
 # battle\minimap\markers\base_marker.unbound
 (def macro TMap_RANGE_CIRCLE (_sector:expression="360")
 	(block
 		(macro BIND_FAIR_SCALE "rangeRadius")
+		# TWO sectors, not one.  `lineAlpha` DOES work -- but only on the stroked branch.  Per the
+		# decompiled SectorController (ub2lint `sector-line-stroke`, and confirmed here in-game):
+		# `drawDotted` draws its dots with beginFill(lineColor) and NEVER reads lineAlpha, so a dotted
+		# outline is always opaque.  Measured on 13187581 at colour alpha 255 vs 64, single sector:
+		#   lineStyle SOLID -> 8431 red px vs 35     (lineAlpha bites)
+		#   lineStyle DOT   -> 13854 vs 13850        (ignored)
+		# Eight of the 39 circles default to DOT -- every radar, hydro, subRadar and hydrophone one --
+		# so binding lineAlpha alone would ship an opacity slider that silently does nothing on them.
+		# A style `alpha` on the block dims BOTH branches, which is what the lint rule recommends for
+		# the dotted case; it also dims everything inside the block, so the fill needs its own sector.
+		# Fill first, outline over it.
 		(block
 			(controller $Sector
+				(bind enabled "fillAlpha")
+				
 				(bind arc "_sector")
-				(bind radius "MINIMAP_ASSETS_SIZE")
-				(bind innerRadius "innerRadius")
-				(bind lineThickness "lineThickness")
-				(bind lineAlpha "lineAlpha")
-				(bind lineColor "color")
+				(radius = "MINIMAP_ASSETS_SIZE")
+				(innerRadius = 0)
+				(lineThickness = 0)
 				(bind colors "[color]")
-				(bind alphas "[alphaMultiplier * 0.35]")
-				(bind ratios "[1.0]")
+				(bind alphas "[fillAlpha]")
+				(ratios = [1.0])
+				# 31 of the 39 circles ship fillAlpha 0, so without this the DEFAULT path
+				# builds a full-radius disc at alpha 0 on every one of them.  `enabled`, not a
+				# style `visible`: it stops the controller rather than hiding its output.  The
+				# TRANSITION is the thing to check -- a disabled controller could have left its
+				# last frame on screen, and does not: 0.5 -> 0 takes the interior from 67.1 to
+				# -45.0 (background).  Measured gain at this scale: NONE.  13 circles mounted
+				# solo, all-on vs all-off is 196/206/187 vs 185/183/207 fps -- pure noise.  A
+				# 12v12 mounts ally+enemy circles per ship and is the case that could matter;
+				# it is untested.  These guards are for honesty about what draws, not a win.
+			)
+		)
+		(block
+			(controller $Sector
+				(bind enabled "lineAlpha && lineThickness")
+
+				(bind arc "_sector")
+				(radius = "MINIMAP_ASSETS_SIZE")
+				(innerRadius = "MINIMAP_ASSETS_SIZE")
+				(bind lineThickness "lineThickness")
+				# Pinned at 1, with the opacity carried by the style alpha below.  Two reasons,
+				# both measured on 13187581 in this exact arrangement:
+				#  - lineAlpha DEFAULTS TO 0 on $Sector, so omitting it draws no stroke at all.
+				#  - binding it to the real opacity instead of the style does NOT dim a dotted
+				#    outline: alpha 255 vs 64 measured 13844 vs 13846 red px (no change), where
+				#    the style alpha gives 13864 vs 40.  drawDotted uses beginFill and never
+				#    reads lineAlpha, so the style is the only lever BOTH branches obey.
+				(lineAlpha = 1)
+				(bind lineColor "color")
 				(bind dashLength "dashLength")
 				(bind spacing "spacing")
 				(bind drawDotted "drawDotted")
+			)
+			(style
+				(bind alpha "lineAlpha")
 			)
 		)
 	)
@@ -2238,7 +2285,7 @@
 		(macro TMap_RANGE_CIRCLE_PREFS _prefKey="rangePrefKey")
 
 		(var lineThickness:number = "isThicknessFixed ? lineThicknessPref * 0.1 / rangeRadius : lineThicknessPref")
-		(var lineAlpha:number = "isOutlineDisabled ? 0 : 1")
+		(var lineAlpha:number = "isOutlineDisabled ? 0 : outlineAlpha")
 		(var spacing:number = "isSolid	? 0
 										: rangeSettings.spacing == 0	? 13
 																		: rangeSettings.spacing"
@@ -2381,7 +2428,7 @@
 
 		(var lineThickness:number = "isThicknessFixed ? lineThicknessPref * 0.1 / rangeRadius : lineThicknessPref")
 		# The only circle whose outline rides the vanilla ranges-alpha slider.
-		(var lineAlpha:number = "isOutlineDisabled ? 0 : rangesAlpha")
+		(var lineAlpha:number = "isOutlineDisabled ? 0 : rangesAlpha * outlineAlpha")
 		(var spacing:number = "isSolid ? 0 : 13")
 		(var dashLength:number = "isSolid ? 0 : 13")
 		#
@@ -2759,7 +2806,7 @@
 		(macro TMap_RANGE_CIRCLE_PREFS _prefKey="_prefKey")
 
 		(var lineThickness:number = "isThicknessFixed ? lineThicknessPref * 0.1 / rangeRadius : lineThicknessPref")
-		(var lineAlpha:number = "isOutlineDisabled ? 0 : 1")
+		(var lineAlpha:number = "isOutlineDisabled ? 0 : outlineAlpha")
 		(var spacing:number = "isSolid ? 0 : 13")
 		(var dashLength:number = "isSolid ? 0 : 13")
 
@@ -3251,7 +3298,7 @@
 
 		(macro TMap_RANGE_CIRCLE_PREFS _prefKey="'ttaro.ttMinimap.rangeCircle.antiAir.enemy'" _defaultColor="0xFFFF9400" _defaultLineType="2")
 
-		(var lineAlpha:number = "isOutlineDisabled ? 0 : 1")
+		(var lineAlpha:number = "isOutlineDisabled ? 0 : outlineAlpha")
 		(var spacing:number = "isSolid ? 0 : 13")
 		(var dashLength:number = "isSolid ? 0 : 13")
 
@@ -3425,7 +3472,7 @@
 
 		(macro TMap_RANGE_CIRCLE_PREFS _prefKey="_prefKey" _defaultColor="0xFF7300FF" _defaultLineType="3")
 
-		(var lineAlpha:number = "isOutlineDisabled ? 0 : 1")
+		(var lineAlpha:number = "isOutlineDisabled ? 0 : outlineAlpha")
 		(var spacing:number = "isSolid ? 0 : 13")
 		(var dashLength:number = "isSolid ? 0 : 13")
 
@@ -5542,8 +5589,8 @@
 		# Which stroke artwork previews this row.  Keyed off the range's SCHEMA-default line type, not
 		# its stored one -- a component publishes a value, never its default, so the table carries it.
 		(var defaultLine:number = "_itemSetting.defaultLineType")
-		(var dashStrokeClip:str = "TMap_OUTLINE_TYPES.DASH == defaultLine ? itemVisual.strokeClip : 'VisibilityRangeStroke'")
-		(var dotStrokeClip:str = "TMap_OUTLINE_TYPES.DOT == defaultLine ? itemVisual.strokeClip : 'SonarRangeStroke'")
+		(var dashStrokeClip:str = "TT_CONST.MINIMAP.OUTLINE_STYLE.DASHED == defaultLine ? itemVisual.strokeClip : 'VisibilityRangeStroke'")
+		(var dotStrokeClip:str = "TT_CONST.MINIMAP.OUTLINE_STYLE.DOTTED == defaultLine ? itemVisual.strokeClip : 'SonarRangeStroke'")
 
 		# Tint is a colorTransform OFFSET, so this is the other place wanting 0-255 channels rather
 		# than the packed value.  Fallback is the old palette's sea-detection blue, 0xFF6EE1F7.
@@ -5581,7 +5628,7 @@
 		(var allPrefKeys:array = "hasPrefs ? [optPrefKey + '.displayMode',
 											  optPrefKey + '.lineStyle',
 											  optPrefKey + '.lineThickness',
-											  optPrefKey + '.fillCircle',
+											  optPrefKey + '.fillAlpha',
 											  optPrefKey + '.color'] : []")
 		(var displayModeKeyOnly:array = "hasPrefs ? [optPrefKey + '.displayMode'] : []")
 
@@ -5717,17 +5764,17 @@
 					(bind text "textProp + ' ' + tr('IDS_KILOMETER')")
 				)
 				(mc "dashStrokeClip"
-					(bind visible "outlineType == TMap_OUTLINE_TYPES.DASH")
+					(bind visible "outlineType == TT_CONST.MINIMAP.OUTLINE_STYLE.DASHED")
 					(style (position = "absolute") (bottom = "-6px") (width = "100%") (alpha = "TC"))
 					(bind colorTransform "ct")
 				)
 				(mc "dotStrokeClip"
-					(bind visible "outlineType == TMap_OUTLINE_TYPES.DOT")
+					(bind visible "outlineType == TT_CONST.MINIMAP.OUTLINE_STYLE.DOTTED")
 					(style (position = "absolute") (bottom = "-6px") (width = "100%") (alpha = "TC"))
 					(bind colorTransform "ct")
 				)
 				(mc MGRangeStroke
-					(bind visible "outlineType == TMap_OUTLINE_TYPES.SOLID")
+					(bind visible "outlineType == TT_CONST.MINIMAP.OUTLINE_STYLE.SOLID")
 					(style (position = "absolute") (bottom = "-6px") (width = "100%") (alpha = "TC"))
 					(bind colorTransform "ct")
 				)

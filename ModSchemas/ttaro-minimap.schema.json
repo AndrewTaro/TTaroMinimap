@@ -1174,13 +1174,17 @@
                 },
                 {
                   "kind": "setting",
-                  "control": "toggle",
-                  "key": "ttMinimap.rangeCircle.visibilitySmoke.self.fillCircle",
-                  "label": "IDS_TT_CIRCLE_FILL",
+                  "control": "slider",
+                  "key": "ttMinimap.rangeCircle.visibilitySmoke.self.fillAlpha",
+                  "label": "IDS_TT_FILL_OPACITY",
                   "hint": {
-                    "text": "IDS_TT_HINT_CIRCLE_FILL"
+                    "text": "IDS_TT_HINT_CIRCLE_FILL_OPACITY"
                   },
-                  "default": false,
+                  "default": 0,
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01,
+                  "decimals": 2,
                   "enabledWhen": {
                     "kind": "group",
                     "join": "any",
@@ -1350,13 +1354,17 @@
                 },
                 {
                   "kind": "setting",
-                  "control": "toggle",
-                  "key": "ttMinimap.rangeCircle.visibilitySmoke.ally.fillCircle",
-                  "label": "IDS_TT_CIRCLE_FILL",
+                  "control": "slider",
+                  "key": "ttMinimap.rangeCircle.visibilitySmoke.ally.fillAlpha",
+                  "label": "IDS_TT_FILL_OPACITY",
                   "hint": {
-                    "text": "IDS_TT_HINT_CIRCLE_FILL"
+                    "text": "IDS_TT_HINT_CIRCLE_FILL_OPACITY"
                   },
-                  "default": false,
+                  "default": 0,
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01,
+                  "decimals": 2,
                   "hidden": true,
                   "enabledWhen": {
                     "kind": "group",
@@ -1528,13 +1536,17 @@
                 },
                 {
                   "kind": "setting",
-                  "control": "toggle",
-                  "key": "ttMinimap.rangeCircle.visibilitySmoke.enemy.fillCircle",
-                  "label": "IDS_TT_CIRCLE_FILL",
+                  "control": "slider",
+                  "key": "ttMinimap.rangeCircle.visibilitySmoke.enemy.fillAlpha",
+                  "label": "IDS_TT_FILL_OPACITY",
                   "hint": {
-                    "text": "IDS_TT_HINT_CIRCLE_FILL"
+                    "text": "IDS_TT_HINT_CIRCLE_FILL_OPACITY"
                   },
-                  "default": false,
+                  "default": 0,
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01,
+                  "decimals": 2,
                   "hidden": true,
                   "enabledWhen": {
                     "kind": "group",
@@ -1697,13 +1709,17 @@
                 },
                 {
                   "kind": "setting",
-                  "control": "toggle",
-                  "key": "ttMinimap.rangeCircle.visibilitySea.self.fillCircle",
-                  "label": "IDS_TT_CIRCLE_FILL",
+                  "control": "slider",
+                  "key": "ttMinimap.rangeCircle.visibilitySea.self.fillAlpha",
+                  "label": "IDS_TT_FILL_OPACITY",
                   "hint": {
-                    "text": "IDS_TT_HINT_CIRCLE_FILL"
+                    "text": "IDS_TT_HINT_CIRCLE_FILL_OPACITY"
                   },
-                  "default": false
+                  "default": 0,
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01,
+                  "decimals": 2
                 },
                 {
                   "kind": "setting",
@@ -2002,13 +2018,17 @@
                 },
                 {
                   "kind": "setting",
-                  "control": "toggle",
-                  "key": "ttMinimap.rangeCircle.visibilitySea.ally.fillCircle",
-                  "label": "IDS_TT_CIRCLE_FILL",
+                  "control": "slider",
+                  "key": "ttMinimap.rangeCircle.visibilitySea.ally.fillAlpha",
+                  "label": "IDS_TT_FILL_OPACITY",
                   "hint": {
-                    "text": "IDS_TT_HINT_CIRCLE_FILL"
+                    "text": "IDS_TT_HINT_CIRCLE_FILL_OPACITY"
                   },
-                  "default": false,
+                  "default": 0,
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01,
+                  "decimals": 2,
                   "enabledWhen": {
                     "kind": "group",
                     "join": "all",
@@ -2366,13 +2386,17 @@
                 },
                 {
                   "kind": "setting",
-                  "control": "toggle",
-                  "key": "ttMinimap.rangeCircle.visibilitySea.enemy.fillCircle",
-                  "label": "IDS_TT_CIRCLE_FILL",
+                  "control": "slider",
+                  "key": "ttMinimap.rangeCircle.visibilitySea.enemy.fillAlpha",
+                  "label": "IDS_TT_FILL_OPACITY",
                   "hint": {
-                    "text": "IDS_TT_HINT_CIRCLE_FILL"
+                    "text": "IDS_TT_HINT_CIRCLE_FILL_OPACITY"
                   },
-                  "default": false,
+                  "default": 0,
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01,
+                  "decimals": 2,
                   "enabledWhen": {
                     "kind": "group",
                     "join": "all",
@@ -2508,13 +2532,17 @@
                 },
                 {
                   "kind": "setting",
-                  "control": "toggle",
-                  "key": "ttMinimap.rangeCircle.visibilityAir.self.fillCircle",
-                  "label": "IDS_TT_CIRCLE_FILL",
+                  "control": "slider",
+                  "key": "ttMinimap.rangeCircle.visibilityAir.self.fillAlpha",
+                  "label": "IDS_TT_FILL_OPACITY",
                   "hint": {
-                    "text": "IDS_TT_HINT_CIRCLE_FILL"
+                    "text": "IDS_TT_HINT_CIRCLE_FILL_OPACITY"
                   },
-                  "default": false
+                  "default": 0,
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01,
+                  "decimals": 2
                 },
                 {
                   "kind": "setting",
@@ -2813,13 +2841,17 @@
                 },
                 {
                   "kind": "setting",
-                  "control": "toggle",
-                  "key": "ttMinimap.rangeCircle.visibilityAir.ally.fillCircle",
-                  "label": "IDS_TT_CIRCLE_FILL",
+                  "control": "slider",
+                  "key": "ttMinimap.rangeCircle.visibilityAir.ally.fillAlpha",
+                  "label": "IDS_TT_FILL_OPACITY",
                   "hint": {
-                    "text": "IDS_TT_HINT_CIRCLE_FILL"
+                    "text": "IDS_TT_HINT_CIRCLE_FILL_OPACITY"
                   },
-                  "default": false,
+                  "default": 0,
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01,
+                  "decimals": 2,
                   "enabledWhen": {
                     "kind": "group",
                     "join": "all",
@@ -3177,13 +3209,17 @@
                 },
                 {
                   "kind": "setting",
-                  "control": "toggle",
-                  "key": "ttMinimap.rangeCircle.visibilityAir.enemy.fillCircle",
-                  "label": "IDS_TT_CIRCLE_FILL",
+                  "control": "slider",
+                  "key": "ttMinimap.rangeCircle.visibilityAir.enemy.fillAlpha",
+                  "label": "IDS_TT_FILL_OPACITY",
                   "hint": {
-                    "text": "IDS_TT_HINT_CIRCLE_FILL"
+                    "text": "IDS_TT_HINT_CIRCLE_FILL_OPACITY"
                   },
-                  "default": false,
+                  "default": 0,
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01,
+                  "decimals": 2,
                   "enabledWhen": {
                     "kind": "group",
                     "join": "all",
@@ -3319,13 +3355,17 @@
                 },
                 {
                   "kind": "setting",
-                  "control": "toggle",
-                  "key": "ttMinimap.rangeCircle.primaryWeapon.self.fillCircle",
-                  "label": "IDS_TT_CIRCLE_FILL",
+                  "control": "slider",
+                  "key": "ttMinimap.rangeCircle.primaryWeapon.self.fillAlpha",
+                  "label": "IDS_TT_FILL_OPACITY",
                   "hint": {
-                    "text": "IDS_TT_HINT_CIRCLE_FILL"
+                    "text": "IDS_TT_HINT_CIRCLE_FILL_OPACITY"
                   },
-                  "default": false
+                  "default": 0,
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01,
+                  "decimals": 2
                 },
                 {
                   "kind": "setting",
@@ -3624,13 +3664,17 @@
                 },
                 {
                   "kind": "setting",
-                  "control": "toggle",
-                  "key": "ttMinimap.rangeCircle.primaryWeapon.ally.fillCircle",
-                  "label": "IDS_TT_CIRCLE_FILL",
+                  "control": "slider",
+                  "key": "ttMinimap.rangeCircle.primaryWeapon.ally.fillAlpha",
+                  "label": "IDS_TT_FILL_OPACITY",
                   "hint": {
-                    "text": "IDS_TT_HINT_CIRCLE_FILL"
+                    "text": "IDS_TT_HINT_CIRCLE_FILL_OPACITY"
                   },
-                  "default": false,
+                  "default": 0,
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01,
+                  "decimals": 2,
                   "enabledWhen": {
                     "kind": "group",
                     "join": "all",
@@ -3988,13 +4032,17 @@
                 },
                 {
                   "kind": "setting",
-                  "control": "toggle",
-                  "key": "ttMinimap.rangeCircle.primaryWeapon.enemy.fillCircle",
-                  "label": "IDS_TT_CIRCLE_FILL",
+                  "control": "slider",
+                  "key": "ttMinimap.rangeCircle.primaryWeapon.enemy.fillAlpha",
+                  "label": "IDS_TT_FILL_OPACITY",
                   "hint": {
-                    "text": "IDS_TT_HINT_CIRCLE_FILL"
+                    "text": "IDS_TT_HINT_CIRCLE_FILL_OPACITY"
                   },
-                  "default": false,
+                  "default": 0,
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01,
+                  "decimals": 2,
                   "enabledWhen": {
                     "kind": "group",
                     "join": "all",
@@ -4130,13 +4178,17 @@
                 },
                 {
                   "kind": "setting",
-                  "control": "toggle",
-                  "key": "ttMinimap.rangeCircle.atba.self.fillCircle",
-                  "label": "IDS_TT_CIRCLE_FILL",
+                  "control": "slider",
+                  "key": "ttMinimap.rangeCircle.atba.self.fillAlpha",
+                  "label": "IDS_TT_FILL_OPACITY",
                   "hint": {
-                    "text": "IDS_TT_HINT_CIRCLE_FILL"
+                    "text": "IDS_TT_HINT_CIRCLE_FILL_OPACITY"
                   },
-                  "default": false
+                  "default": 0,
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01,
+                  "decimals": 2
                 },
                 {
                   "kind": "setting",
@@ -4435,13 +4487,17 @@
                 },
                 {
                   "kind": "setting",
-                  "control": "toggle",
-                  "key": "ttMinimap.rangeCircle.atba.ally.fillCircle",
-                  "label": "IDS_TT_CIRCLE_FILL",
+                  "control": "slider",
+                  "key": "ttMinimap.rangeCircle.atba.ally.fillAlpha",
+                  "label": "IDS_TT_FILL_OPACITY",
                   "hint": {
-                    "text": "IDS_TT_HINT_CIRCLE_FILL"
+                    "text": "IDS_TT_HINT_CIRCLE_FILL_OPACITY"
                   },
-                  "default": false,
+                  "default": 0,
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01,
+                  "decimals": 2,
                   "enabledWhen": {
                     "kind": "group",
                     "join": "all",
@@ -4799,13 +4855,17 @@
                 },
                 {
                   "kind": "setting",
-                  "control": "toggle",
-                  "key": "ttMinimap.rangeCircle.atba.enemy.fillCircle",
-                  "label": "IDS_TT_CIRCLE_FILL",
+                  "control": "slider",
+                  "key": "ttMinimap.rangeCircle.atba.enemy.fillAlpha",
+                  "label": "IDS_TT_FILL_OPACITY",
                   "hint": {
-                    "text": "IDS_TT_HINT_CIRCLE_FILL"
+                    "text": "IDS_TT_HINT_CIRCLE_FILL_OPACITY"
                   },
-                  "default": false,
+                  "default": 0,
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01,
+                  "decimals": 2,
                   "enabledWhen": {
                     "kind": "group",
                     "join": "all",
@@ -4941,13 +5001,17 @@
                 },
                 {
                   "kind": "setting",
-                  "control": "toggle",
-                  "key": "ttMinimap.rangeCircle.torpedo.self.fillCircle",
-                  "label": "IDS_TT_CIRCLE_FILL",
+                  "control": "slider",
+                  "key": "ttMinimap.rangeCircle.torpedo.self.fillAlpha",
+                  "label": "IDS_TT_FILL_OPACITY",
                   "hint": {
-                    "text": "IDS_TT_HINT_CIRCLE_FILL"
+                    "text": "IDS_TT_HINT_CIRCLE_FILL_OPACITY"
                   },
-                  "default": false
+                  "default": 0,
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01,
+                  "decimals": 2
                 },
                 {
                   "kind": "setting",
@@ -5246,13 +5310,17 @@
                 },
                 {
                   "kind": "setting",
-                  "control": "toggle",
-                  "key": "ttMinimap.rangeCircle.torpedo.ally.fillCircle",
-                  "label": "IDS_TT_CIRCLE_FILL",
+                  "control": "slider",
+                  "key": "ttMinimap.rangeCircle.torpedo.ally.fillAlpha",
+                  "label": "IDS_TT_FILL_OPACITY",
                   "hint": {
-                    "text": "IDS_TT_HINT_CIRCLE_FILL"
+                    "text": "IDS_TT_HINT_CIRCLE_FILL_OPACITY"
                   },
-                  "default": false,
+                  "default": 0,
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01,
+                  "decimals": 2,
                   "enabledWhen": {
                     "kind": "group",
                     "join": "all",
@@ -5610,13 +5678,17 @@
                 },
                 {
                   "kind": "setting",
-                  "control": "toggle",
-                  "key": "ttMinimap.rangeCircle.torpedo.enemy.fillCircle",
-                  "label": "IDS_TT_CIRCLE_FILL",
+                  "control": "slider",
+                  "key": "ttMinimap.rangeCircle.torpedo.enemy.fillAlpha",
+                  "label": "IDS_TT_FILL_OPACITY",
                   "hint": {
-                    "text": "IDS_TT_HINT_CIRCLE_FILL"
+                    "text": "IDS_TT_HINT_CIRCLE_FILL_OPACITY"
                   },
-                  "default": false,
+                  "default": 0,
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01,
+                  "decimals": 2,
                   "enabledWhen": {
                     "kind": "group",
                     "join": "all",
@@ -5752,13 +5824,17 @@
                 },
                 {
                   "kind": "setting",
-                  "control": "toggle",
-                  "key": "ttMinimap.rangeCircle.airSupport.self.fillCircle",
-                  "label": "IDS_TT_CIRCLE_FILL",
+                  "control": "slider",
+                  "key": "ttMinimap.rangeCircle.airSupport.self.fillAlpha",
+                  "label": "IDS_TT_FILL_OPACITY",
                   "hint": {
-                    "text": "IDS_TT_HINT_CIRCLE_FILL"
+                    "text": "IDS_TT_HINT_CIRCLE_FILL_OPACITY"
                   },
-                  "default": false
+                  "default": 0,
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01,
+                  "decimals": 2
                 },
                 {
                   "kind": "setting",
@@ -6057,13 +6133,17 @@
                 },
                 {
                   "kind": "setting",
-                  "control": "toggle",
-                  "key": "ttMinimap.rangeCircle.airSupport.ally.fillCircle",
-                  "label": "IDS_TT_CIRCLE_FILL",
+                  "control": "slider",
+                  "key": "ttMinimap.rangeCircle.airSupport.ally.fillAlpha",
+                  "label": "IDS_TT_FILL_OPACITY",
                   "hint": {
-                    "text": "IDS_TT_HINT_CIRCLE_FILL"
+                    "text": "IDS_TT_HINT_CIRCLE_FILL_OPACITY"
                   },
-                  "default": false,
+                  "default": 0,
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01,
+                  "decimals": 2,
                   "enabledWhen": {
                     "kind": "group",
                     "join": "all",
@@ -6421,13 +6501,17 @@
                 },
                 {
                   "kind": "setting",
-                  "control": "toggle",
-                  "key": "ttMinimap.rangeCircle.airSupport.enemy.fillCircle",
-                  "label": "IDS_TT_CIRCLE_FILL",
+                  "control": "slider",
+                  "key": "ttMinimap.rangeCircle.airSupport.enemy.fillAlpha",
+                  "label": "IDS_TT_FILL_OPACITY",
                   "hint": {
-                    "text": "IDS_TT_HINT_CIRCLE_FILL"
+                    "text": "IDS_TT_HINT_CIRCLE_FILL_OPACITY"
                   },
-                  "default": false,
+                  "default": 0,
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01,
+                  "decimals": 2,
                   "enabledWhen": {
                     "kind": "group",
                     "join": "all",
@@ -6563,13 +6647,17 @@
                 },
                 {
                   "kind": "setting",
-                  "control": "toggle",
-                  "key": "ttMinimap.rangeCircle.antiAir.self.fillCircle",
-                  "label": "IDS_TT_CIRCLE_FILL",
+                  "control": "slider",
+                  "key": "ttMinimap.rangeCircle.antiAir.self.fillAlpha",
+                  "label": "IDS_TT_FILL_OPACITY",
                   "hint": {
-                    "text": "IDS_TT_HINT_CIRCLE_FILL"
+                    "text": "IDS_TT_HINT_CIRCLE_FILL_OPACITY"
                   },
-                  "default": false
+                  "default": 0,
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01,
+                  "decimals": 2
                 },
                 {
                   "kind": "setting",
@@ -6877,13 +6965,17 @@
                 },
                 {
                   "kind": "setting",
-                  "control": "toggle",
-                  "key": "ttMinimap.rangeCircle.antiAir.ally.fillCircle",
-                  "label": "IDS_TT_CIRCLE_FILL",
+                  "control": "slider",
+                  "key": "ttMinimap.rangeCircle.antiAir.ally.fillAlpha",
+                  "label": "IDS_TT_FILL_OPACITY",
                   "hint": {
-                    "text": "IDS_TT_HINT_CIRCLE_FILL"
+                    "text": "IDS_TT_HINT_CIRCLE_FILL_OPACITY"
                   },
-                  "default": false,
+                  "default": 0,
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01,
+                  "decimals": 2,
                   "hidden": true,
                   "enabledWhen": {
                     "kind": "group",
@@ -7054,13 +7146,17 @@
                 },
                 {
                   "kind": "setting",
-                  "control": "toggle",
-                  "key": "ttMinimap.rangeCircle.antiAir.enemy.fillCircle",
-                  "label": "IDS_TT_CIRCLE_FILL",
+                  "control": "slider",
+                  "key": "ttMinimap.rangeCircle.antiAir.enemy.fillAlpha",
+                  "label": "IDS_TT_FILL_OPACITY",
                   "hint": {
-                    "text": "IDS_TT_HINT_CIRCLE_FILL"
+                    "text": "IDS_TT_HINT_CIRCLE_FILL_OPACITY"
                   },
-                  "default": false,
+                  "default": 0,
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01,
+                  "decimals": 2,
                   "enabledWhen": {
                     "kind": "group",
                     "join": "all",
@@ -7194,13 +7290,17 @@
                 },
                 {
                   "kind": "setting",
-                  "control": "toggle",
-                  "key": "ttMinimap.rangeCircle.radar.self.fillCircle",
-                  "label": "IDS_TT_CIRCLE_FILL",
+                  "control": "slider",
+                  "key": "ttMinimap.rangeCircle.radar.self.fillAlpha",
+                  "label": "IDS_TT_FILL_OPACITY",
                   "hint": {
-                    "text": "IDS_TT_HINT_CIRCLE_FILL"
+                    "text": "IDS_TT_HINT_CIRCLE_FILL_OPACITY"
                   },
-                  "default": false
+                  "default": 0,
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01,
+                  "decimals": 2
                 },
                 {
                   "kind": "setting",
@@ -7538,13 +7638,17 @@
                 },
                 {
                   "kind": "setting",
-                  "control": "toggle",
-                  "key": "ttMinimap.rangeCircle.radar.ally.fillCircle",
-                  "label": "IDS_TT_CIRCLE_FILL",
+                  "control": "slider",
+                  "key": "ttMinimap.rangeCircle.radar.ally.fillAlpha",
+                  "label": "IDS_TT_FILL_OPACITY",
                   "hint": {
-                    "text": "IDS_TT_HINT_CIRCLE_FILL"
+                    "text": "IDS_TT_HINT_CIRCLE_FILL_OPACITY"
                   },
-                  "default": true,
+                  "default": 0.04,
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01,
+                  "decimals": 2,
                   "enabledWhen": {
                     "kind": "group",
                     "join": "any",
@@ -7573,7 +7677,7 @@
                   "control": "color",
                   "key": "ttMinimap.rangeCircle.radar.ally.color",
                   "label": "IDS_TT_COLOR",
-                  "default": 443744511,
+                  "default": 4285726975,
                   "min": 0,
                   "max": 4294967295,
                   "enabledWhen": {
@@ -7916,13 +8020,17 @@
                 },
                 {
                   "kind": "setting",
-                  "control": "toggle",
-                  "key": "ttMinimap.rangeCircle.radar.enemy.fillCircle",
-                  "label": "IDS_TT_CIRCLE_FILL",
+                  "control": "slider",
+                  "key": "ttMinimap.rangeCircle.radar.enemy.fillAlpha",
+                  "label": "IDS_TT_FILL_OPACITY",
                   "hint": {
-                    "text": "IDS_TT_HINT_CIRCLE_FILL"
+                    "text": "IDS_TT_HINT_CIRCLE_FILL_OPACITY"
                   },
-                  "default": false,
+                  "default": 0,
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01,
+                  "decimals": 2,
                   "enabledWhen": {
                     "kind": "group",
                     "join": "all",
@@ -8058,13 +8166,17 @@
                 },
                 {
                   "kind": "setting",
-                  "control": "toggle",
-                  "key": "ttMinimap.rangeCircle.hydro.self.fillCircle",
-                  "label": "IDS_TT_CIRCLE_FILL",
+                  "control": "slider",
+                  "key": "ttMinimap.rangeCircle.hydro.self.fillAlpha",
+                  "label": "IDS_TT_FILL_OPACITY",
                   "hint": {
-                    "text": "IDS_TT_HINT_CIRCLE_FILL"
+                    "text": "IDS_TT_HINT_CIRCLE_FILL_OPACITY"
                   },
-                  "default": false
+                  "default": 0,
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01,
+                  "decimals": 2
                 },
                 {
                   "kind": "setting",
@@ -8403,13 +8515,17 @@
                 },
                 {
                   "kind": "setting",
-                  "control": "toggle",
-                  "key": "ttMinimap.rangeCircle.hydro.ally.fillCircle",
-                  "label": "IDS_TT_CIRCLE_FILL",
+                  "control": "slider",
+                  "key": "ttMinimap.rangeCircle.hydro.ally.fillAlpha",
+                  "label": "IDS_TT_FILL_OPACITY",
                   "hint": {
-                    "text": "IDS_TT_HINT_CIRCLE_FILL"
+                    "text": "IDS_TT_HINT_CIRCLE_FILL_OPACITY"
                   },
-                  "default": true,
+                  "default": 0.04,
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01,
+                  "decimals": 2,
                   "enabledWhen": {
                     "kind": "group",
                     "join": "any",
@@ -8438,7 +8554,7 @@
                   "control": "color",
                   "key": "ttMinimap.rangeCircle.hydro.ally.color",
                   "label": "IDS_TT_COLOR",
-                  "default": 443744511,
+                  "default": 4285726975,
                   "min": 0,
                   "max": 4294967295,
                   "enabledWhen": {
@@ -8781,13 +8897,17 @@
                 },
                 {
                   "kind": "setting",
-                  "control": "toggle",
-                  "key": "ttMinimap.rangeCircle.hydro.enemy.fillCircle",
-                  "label": "IDS_TT_CIRCLE_FILL",
+                  "control": "slider",
+                  "key": "ttMinimap.rangeCircle.hydro.enemy.fillAlpha",
+                  "label": "IDS_TT_FILL_OPACITY",
                   "hint": {
-                    "text": "IDS_TT_HINT_CIRCLE_FILL"
+                    "text": "IDS_TT_HINT_CIRCLE_FILL_OPACITY"
                   },
-                  "default": false,
+                  "default": 0,
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01,
+                  "decimals": 2,
                   "enabledWhen": {
                     "kind": "group",
                     "join": "all",
@@ -8923,13 +9043,17 @@
                 },
                 {
                   "kind": "setting",
-                  "control": "toggle",
-                  "key": "ttMinimap.rangeCircle.subRadar.self.fillCircle",
-                  "label": "IDS_TT_CIRCLE_FILL",
+                  "control": "slider",
+                  "key": "ttMinimap.rangeCircle.subRadar.self.fillAlpha",
+                  "label": "IDS_TT_FILL_OPACITY",
                   "hint": {
-                    "text": "IDS_TT_HINT_CIRCLE_FILL"
+                    "text": "IDS_TT_HINT_CIRCLE_FILL_OPACITY"
                   },
-                  "default": false
+                  "default": 0,
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01,
+                  "decimals": 2
                 },
                 {
                   "kind": "setting",
@@ -9268,13 +9392,17 @@
                 },
                 {
                   "kind": "setting",
-                  "control": "toggle",
-                  "key": "ttMinimap.rangeCircle.subRadar.ally.fillCircle",
-                  "label": "IDS_TT_CIRCLE_FILL",
+                  "control": "slider",
+                  "key": "ttMinimap.rangeCircle.subRadar.ally.fillAlpha",
+                  "label": "IDS_TT_FILL_OPACITY",
                   "hint": {
-                    "text": "IDS_TT_HINT_CIRCLE_FILL"
+                    "text": "IDS_TT_HINT_CIRCLE_FILL_OPACITY"
                   },
-                  "default": true,
+                  "default": 0.04,
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01,
+                  "decimals": 2,
                   "enabledWhen": {
                     "kind": "group",
                     "join": "any",
@@ -9303,7 +9431,7 @@
                   "control": "color",
                   "key": "ttMinimap.rangeCircle.subRadar.ally.color",
                   "label": "IDS_TT_COLOR",
-                  "default": 452919542,
+                  "default": 4294902006,
                   "min": 0,
                   "max": 4294967295,
                   "enabledWhen": {
@@ -9646,13 +9774,17 @@
                 },
                 {
                   "kind": "setting",
-                  "control": "toggle",
-                  "key": "ttMinimap.rangeCircle.subRadar.enemy.fillCircle",
-                  "label": "IDS_TT_CIRCLE_FILL",
+                  "control": "slider",
+                  "key": "ttMinimap.rangeCircle.subRadar.enemy.fillAlpha",
+                  "label": "IDS_TT_FILL_OPACITY",
                   "hint": {
-                    "text": "IDS_TT_HINT_CIRCLE_FILL"
+                    "text": "IDS_TT_HINT_CIRCLE_FILL_OPACITY"
                   },
-                  "default": false,
+                  "default": 0,
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01,
+                  "decimals": 2,
                   "enabledWhen": {
                     "kind": "group",
                     "join": "all",
@@ -9788,13 +9920,17 @@
                 },
                 {
                   "kind": "setting",
-                  "control": "toggle",
-                  "key": "ttMinimap.rangeCircle.hydrophone.self.fillCircle",
-                  "label": "IDS_TT_CIRCLE_FILL",
+                  "control": "slider",
+                  "key": "ttMinimap.rangeCircle.hydrophone.self.fillAlpha",
+                  "label": "IDS_TT_FILL_OPACITY",
                   "hint": {
-                    "text": "IDS_TT_HINT_CIRCLE_FILL"
+                    "text": "IDS_TT_HINT_CIRCLE_FILL_OPACITY"
                   },
-                  "default": false
+                  "default": 0,
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01,
+                  "decimals": 2
                 },
                 {
                   "kind": "setting",
@@ -10142,13 +10278,17 @@
                 },
                 {
                   "kind": "setting",
-                  "control": "toggle",
-                  "key": "ttMinimap.rangeCircle.hydrophone.ally.fillCircle",
-                  "label": "IDS_TT_CIRCLE_FILL",
+                  "control": "slider",
+                  "key": "ttMinimap.rangeCircle.hydrophone.ally.fillAlpha",
+                  "label": "IDS_TT_FILL_OPACITY",
                   "hint": {
-                    "text": "IDS_TT_HINT_CIRCLE_FILL"
+                    "text": "IDS_TT_HINT_CIRCLE_FILL_OPACITY"
                   },
-                  "default": true,
+                  "default": 0.04,
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01,
+                  "decimals": 2,
                   "hidden": true,
                   "enabledWhen": {
                     "kind": "group",
@@ -10178,7 +10318,7 @@
                   "control": "color",
                   "key": "ttMinimap.rangeCircle.hydrophone.ally.color",
                   "label": "IDS_TT_COLOR",
-                  "default": 443744511,
+                  "default": 4285726975,
                   "min": 0,
                   "max": 4294967295,
                   "hidden": true,
@@ -10532,13 +10672,17 @@
                 },
                 {
                   "kind": "setting",
-                  "control": "toggle",
-                  "key": "ttMinimap.rangeCircle.hydrophone.enemy.fillCircle",
-                  "label": "IDS_TT_CIRCLE_FILL",
+                  "control": "slider",
+                  "key": "ttMinimap.rangeCircle.hydrophone.enemy.fillAlpha",
+                  "label": "IDS_TT_FILL_OPACITY",
                   "hint": {
-                    "text": "IDS_TT_HINT_CIRCLE_FILL"
+                    "text": "IDS_TT_HINT_CIRCLE_FILL_OPACITY"
                   },
-                  "default": false,
+                  "default": 0,
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01,
+                  "decimals": 2,
                   "hidden": true,
                   "enabledWhen": {
                     "kind": "group",
@@ -10676,13 +10820,17 @@
                 },
                 {
                   "kind": "setting",
-                  "control": "toggle",
-                  "key": "ttMinimap.rangeCircle.pinger.self.fillCircle",
-                  "label": "IDS_TT_CIRCLE_FILL",
+                  "control": "slider",
+                  "key": "ttMinimap.rangeCircle.pinger.self.fillAlpha",
+                  "label": "IDS_TT_FILL_OPACITY",
                   "hint": {
-                    "text": "IDS_TT_HINT_CIRCLE_FILL"
+                    "text": "IDS_TT_HINT_CIRCLE_FILL_OPACITY"
                   },
-                  "default": false
+                  "default": 0,
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01,
+                  "decimals": 2
                 },
                 {
                   "kind": "setting",
@@ -10990,13 +11138,17 @@
                 },
                 {
                   "kind": "setting",
-                  "control": "toggle",
-                  "key": "ttMinimap.rangeCircle.pinger.ally.fillCircle",
-                  "label": "IDS_TT_CIRCLE_FILL",
+                  "control": "slider",
+                  "key": "ttMinimap.rangeCircle.pinger.ally.fillAlpha",
+                  "label": "IDS_TT_FILL_OPACITY",
                   "hint": {
-                    "text": "IDS_TT_HINT_CIRCLE_FILL"
+                    "text": "IDS_TT_HINT_CIRCLE_FILL_OPACITY"
                   },
-                  "default": false,
+                  "default": 0,
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01,
+                  "decimals": 2,
                   "hidden": true,
                   "enabledWhen": {
                     "kind": "group",
@@ -11366,13 +11518,17 @@
                 },
                 {
                   "kind": "setting",
-                  "control": "toggle",
-                  "key": "ttMinimap.rangeCircle.pinger.enemy.fillCircle",
-                  "label": "IDS_TT_CIRCLE_FILL",
+                  "control": "slider",
+                  "key": "ttMinimap.rangeCircle.pinger.enemy.fillAlpha",
+                  "label": "IDS_TT_FILL_OPACITY",
                   "hint": {
-                    "text": "IDS_TT_HINT_CIRCLE_FILL"
+                    "text": "IDS_TT_HINT_CIRCLE_FILL_OPACITY"
                   },
-                  "default": false,
+                  "default": 0,
+                  "min": 0,
+                  "max": 1,
+                  "step": 0.01,
+                  "decimals": 2,
                   "hidden": true,
                   "enabledWhen": {
                     "kind": "group",
