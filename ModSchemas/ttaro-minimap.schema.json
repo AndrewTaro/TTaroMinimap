@@ -105,7 +105,7 @@
           "label": "IDS_TT_DISPLAY_MODE",
           "hint": {
             "text": "IDS_TT_HINT_NEARBY_RADAR_RANGE",
-            "image": "ttaro_minimap/nearby_radar.png"
+            "image": "hints/nearby_radar.png"
           },
           "default": 0,
           "options": [
@@ -233,7 +233,7 @@
           "label": "IDS_TT_LAST_SPOTTED_TIMER_ON_ALT",
           "hint": {
             "text": "IDS_TT_HINT_LAST_SPOTTED_TIMER_ON_ALT",
-            "image": "ttaro_minimap/last_spotted_timer.png"
+            "image": "hints/last_spotted_timer.png"
           },
           "default": true
         },
@@ -485,7 +485,7 @@
               "label": "IDS_TT_ENEMY_DIRECTIONAL_LINE",
               "hint": {
                 "text": "IDS_TT_HINT_DIRECTIONAL_LINE",
-                "image": "ttaro_minimap/enemy_direction_line.png"
+                "image": "hints/enemy_direction_line.png"
               },
               "default": 0,
               "options": [
@@ -842,7 +842,7 @@
           "label": "IDS_TT_DISPLAY_IN_WORLD",
           "hint": {
             "text": "IDS_TT_HINT_DISPLAY_IN_WORLD",
-            "image": "ttaro_minimap/ping_in_world.png"
+            "image": "hints/ping_in_world.png"
           },
           "default": true
         },
@@ -935,7 +935,7 @@
           "label": "IDS_TT_KEYBIND",
           "hint": {
             "text": "IDS_TT_HINT_RPF_KEYBIND",
-            "image": "ttaro_minimap/rpf.png"
+            "image": "hints/rpf.png"
           },
           "default": 0,
           "options": [
@@ -982,7 +982,7 @@
           "label": "IDS_TT_DISPLAY_MODE",
           "hint": {
             "text": "IDS_TT_HINT_DISPLAY_MODE",
-            "image": "ttaro_minimap/rpf.png"
+            "image": "hints/rpf.png"
           },
           "default": 1,
           "options": [
@@ -1614,7 +1614,7 @@
           "label": "IDS_TT_OUTLINE_THICKNESS_FIX",
           "hint": {
             "text": "IDS_TT_HINT_OUTLINE_THICKNESS_FIX",
-            "image": "ttaro_minimap/range_bugfix.webm"
+            "image": "hints/range_bugfix.webm"
           },
           "default": false
         },
@@ -7033,7 +7033,7 @@
                   "label": "IDS_TT_NEARBY_AA_RANGE",
                   "hint": {
                     "text": "IDS_TT_HINT_NEARBY_AA_RANGE",
-                    "image": "ttaro_minimap/nearby_aa.png"
+                    "image": "hints/nearby_aa.png"
                   },
                   "default": 0,
                   "options": [
@@ -8239,8 +8239,7 @@
                   "key": "cmtktamg000fhv0d4l7jsuuyz",
                   "label": "IDS_TT_ENABLE_CIRCLE_CLASSES",
                   "hint": {
-                    "text": "IDS_TT_HINT_ENABLE_CIRCLE_CLASSES",
-                    "image": "\"[TMap_PREFS.HYDRO_ALLY.ENABLE_IN_AIRCARRIER, TMap_PREFS.HYDRO_ALLY.ENABLE_IN_BATTLESHIP, TMap_PREFS.HYDRO_ALLY.ENABLE_IN_CRUISER, TMap_PREFS.HYDRO_ALLY.ENABLE_IN_DESTROYER, TMap_PREFS.HYDRO_ALLY.ENABLE_IN_SUBMARINE]\""
+                    "text": "IDS_TT_HINT_ENABLE_CIRCLE_CLASSES"
                   },
                   "collapse": "collapsed",
                   "enabledWhen": {
@@ -9116,8 +9115,7 @@
                   "key": "cmtktam0w0034v0d471yttlsz",
                   "label": "IDS_TT_ENABLE_CIRCLE_CLASSES",
                   "hint": {
-                    "text": "IDS_TT_HINT_ENABLE_CIRCLE_CLASSES",
-                    "image": "\"[TMap_PREFS.SUBRADAR_ALLY.ENABLE_IN_AIRCARRIER, TMap_PREFS.SUBRADAR_ALLY.ENABLE_IN_BATTLESHIP, TMap_PREFS.SUBRADAR_ALLY.ENABLE_IN_CRUISER, TMap_PREFS.SUBRADAR_ALLY.ENABLE_IN_DESTROYER, TMap_PREFS.SUBRADAR_ALLY.ENABLE_IN_SUBMARINE]\""
+                    "text": "IDS_TT_HINT_ENABLE_CIRCLE_CLASSES"
                   },
                   "collapse": "collapsed",
                   "enabledWhen": {
@@ -9995,8 +9993,7 @@
                   "key": "cmt4vvq5d002iv0xo83i4rxze",
                   "label": "IDS_TT_ENABLE_CIRCLE_CLASSES",
                   "hint": {
-                    "text": "IDS_TT_HINT_ENABLE_CIRCLE_CLASSES",
-                    "image": "\"[TMap_PREFS.HYDRO_ALLY.ENABLE_IN_AIRCARRIER, TMap_PREFS.HYDRO_ALLY.ENABLE_IN_BATTLESHIP, TMap_PREFS.HYDRO_ALLY.ENABLE_IN_CRUISER, TMap_PREFS.HYDRO_ALLY.ENABLE_IN_DESTROYER, TMap_PREFS.HYDRO_ALLY.ENABLE_IN_SUBMARINE]\""
+                    "text": "IDS_TT_HINT_ENABLE_CIRCLE_CLASSES"
                   },
                   "collapse": "collapsed",
                   "enabledWhen": {
