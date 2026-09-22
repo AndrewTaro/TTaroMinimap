@@ -1060,6 +1060,17 @@
           "default": true
         },
         {
+          "kind": "setting",
+          "control": "toggle",
+          "key": "ttMinimap.rangeCircle.outlineFix",
+          "label": "IDS_TT_OUTLINE_THICKNESS_FIX",
+          "hint": {
+            "text": "IDS_TT_HINT_OUTLINE_THICKNESS_FIX",
+            "image": "hints/range_bugfix.webm"
+          },
+          "default": false
+        },
+        {
           "kind": "group",
           "key": "cmt4us0e40002v0rwg2u8j9uy",
           "label": "IDS_TT_RANGE_VISIBILITY_SMOKE",
@@ -1606,17 +1617,6 @@
               ]
             }
           ]
-        },
-        {
-          "kind": "setting",
-          "control": "toggle",
-          "key": "ttMinimap.rangeCircle.outlineFix",
-          "label": "IDS_TT_OUTLINE_THICKNESS_FIX",
-          "hint": {
-            "text": "IDS_TT_HINT_OUTLINE_THICKNESS_FIX",
-            "image": "hints/range_bugfix.webm"
-          },
-          "default": false
         },
         {
           "kind": "group",
