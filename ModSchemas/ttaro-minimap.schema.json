@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 4,
+  "schemaVersion": 5,
   "id": "cmtkswuwx000fv014fi7uyzw3",
   "author": "ttaro",
   "modName": "Minimap",
@@ -9,6 +9,7 @@
     {
       "kind": "group",
       "key": "cmtktam7k008iv0d4f73dlewf",
+      "display": "section",
       "label": "IDS_TT_TITLE_GENERAL",
       "collapse": "expanded",
       "children": [
@@ -25,7 +26,7 @@
         {
           "kind": "group",
           "key": "cmt4us0gt0012v0rwc2ecus9v",
-          "aggregate": "inline",
+          "display": "transparent",
           "children": [
             {
               "kind": "setting",
@@ -96,6 +97,7 @@
     {
       "kind": "group",
       "key": "cmtktamcc00cev0d4tbni7tfg",
+      "display": "section",
       "label": "IDS_TT_NEARBY_RADAR_RANGE",
       "children": [
         {
@@ -169,6 +171,7 @@
     {
       "kind": "group",
       "key": "cmtktalxa000kv0d4y5x58zts",
+      "display": "section",
       "label": "IDS_TT_TITLE_SHIP_MARKERS",
       "collapse": "expanded",
       "children": [
@@ -266,7 +269,7 @@
         {
           "kind": "group",
           "key": "cmt4us0h6001ev0rwnzybqt8s",
-          "aggregate": "inline",
+          "display": "transparent",
           "children": [
             {
               "kind": "setting",
@@ -306,7 +309,7 @@
         {
           "kind": "group",
           "key": "cmt4us0h9001gv0rw6t5rowd1",
-          "aggregate": "inline",
+          "display": "transparent",
           "children": [
             {
               "kind": "setting",
@@ -476,7 +479,7 @@
         {
           "kind": "group",
           "key": "cmt4us0hf001iv0rw4cekryk9",
-          "aggregate": "inline",
+          "display": "transparent",
           "children": [
             {
               "kind": "setting",
@@ -546,6 +549,7 @@
     {
       "kind": "group",
       "key": "cmtktam9q00aav0d49juy5x8q",
+      "display": "section",
       "label": "IDS_TT_TITLE_AIM_MARKERS",
       "collapse": "collapsed",
       "children": [
@@ -594,13 +598,14 @@
     {
       "kind": "group",
       "key": "cmtktalx8000iv0d42e4xncbb",
+      "display": "section",
       "label": "IDS_TT_TITLE_SQUADRON_MARKERS",
       "collapse": "expanded",
       "children": [
         {
           "kind": "group",
           "key": "cmt4us0hn001mv0rwvybesjge",
-          "aggregate": "inline",
+          "display": "transparent",
           "children": [
             {
               "kind": "setting",
@@ -721,7 +726,7 @@
         {
           "kind": "group",
           "key": "cmt4us0hj001kv0rwdm453ygg",
-          "aggregate": "inline",
+          "display": "transparent",
           "children": [
             {
               "kind": "setting",
@@ -805,6 +810,7 @@
     {
       "kind": "group",
       "key": "cmtktam5l006yv0d4log8blsy",
+      "display": "section",
       "label": "IDS_TT_TITLE_TORPEDO_MARKERS",
       "collapse": "expanded",
       "enabledWhen": {
@@ -832,6 +838,7 @@
     {
       "kind": "group",
       "key": "cmtktamlb00jqv0d499jk0val",
+      "display": "section",
       "label": "IDS_TT_TITLE_ATTENTION_MARKERS",
       "collapse": "expanded",
       "children": [
@@ -925,6 +932,7 @@
     {
       "kind": "group",
       "key": "cmtktam6y0083v0d4dsxfibhc",
+      "display": "section",
       "label": "IDS_TT_TITLE_RPF_SELF",
       "collapse": "expanded",
       "children": [
@@ -972,6 +980,7 @@
     {
       "kind": "group",
       "key": "cmtktam0y0036v0d4kwgzl13b",
+      "display": "section",
       "label": "IDS_TT_TITLE_RPF_ALLY",
       "collapse": "collapsed",
       "children": [
@@ -1031,6 +1040,7 @@
     {
       "kind": "group",
       "key": "cmtktammd00k2v0d455cvcesd",
+      "display": "section",
       "label": "IDS_TT_TITLE_RANGE_CIRCLES",
       "collapse": "expanded",
       "children": [
@@ -1073,19 +1083,21 @@
         {
           "kind": "group",
           "key": "cmt4us0e40002v0rwg2u8j9uy",
+          "display": "section",
           "label": "IDS_TT_RANGE_VISIBILITY_SMOKE",
           "collapse": "expanded",
           "children": [
             {
               "kind": "group",
               "key": "cmtktalwv0008v0d49qil4mbi",
+              "display": "section",
               "label": "IDS_TT_OWNER_SELF",
               "collapse": "collapsed",
               "children": [
                 {
                   "kind": "group",
                   "key": "cmt4us0hv001qv0rwq1nirrgn",
-                  "aggregate": "inline",
+                  "display": "transparent",
                   "children": [
                     {
                       "kind": "setting",
@@ -1255,13 +1267,14 @@
             {
               "kind": "group",
               "key": "cmt4vvq72003uv0xo2grb6ofe",
+              "display": "section",
               "label": "IDS_TT_OWNER_ALLY",
               "collapse": "collapsed",
               "children": [
                 {
                   "kind": "group",
                   "key": "cmt4vvq73003wv0xoxyvk427j",
-                  "aggregate": "inline",
+                  "display": "transparent",
                   "children": [
                     {
                       "kind": "setting",
@@ -1437,13 +1450,14 @@
             {
               "kind": "group",
               "key": "cmt4vvq7j004av0xo92oh040u",
+              "display": "section",
               "label": "IDS_TT_OWNER_ENEMY",
               "collapse": "collapsed",
               "children": [
                 {
                   "kind": "group",
                   "key": "cmt4vvq7j004cv0xodwje12ct",
-                  "aggregate": "inline",
+                  "display": "transparent",
                   "children": [
                     {
                       "kind": "setting",
@@ -1621,12 +1635,14 @@
         {
           "kind": "group",
           "key": "cmt4us0e70004v0rwj3gfd4ly",
+          "display": "section",
           "label": "IDS_TT_RANGE_VISIBILITY_SEA",
           "collapse": "expanded",
           "children": [
             {
               "kind": "group",
               "key": "cmtktalx4000fv0d48dczrjyb",
+              "display": "section",
               "label": "IDS_TT_OWNER_SELF",
               "collapse": "collapsed",
               "children": [
@@ -1735,6 +1751,7 @@
             {
               "kind": "group",
               "key": "cmtktammt00kav0d4p2x3p8bk",
+              "display": "section",
               "label": "IDS_TT_OWNER_ALLY",
               "collapse": "collapsed",
               "children": [
@@ -1797,6 +1814,7 @@
                 {
                   "kind": "group",
                   "key": "cmtktam9m00a7v0d4phu96lbs",
+                  "display": "section",
                   "label": "IDS_TT_ENABLE_CIRCLE_CLASSES",
                   "hint": {
                     "text": "IDS_TT_HINT_ENABLE_CIRCLE_CLASSES"
@@ -2074,6 +2092,7 @@
             {
               "kind": "group",
               "key": "cmtktami600h9v0d4frlzqczm",
+              "display": "section",
               "label": "IDS_TT_OWNER_ENEMY",
               "collapse": "collapsed",
               "children": [
@@ -2135,6 +2154,7 @@
                 {
                   "kind": "group",
                   "key": "cmtktameg00e5v0d4adubezl4",
+                  "display": "section",
                   "label": "IDS_TT_ENABLE_CIRCLE_CLASSES",
                   "hint": {
                     "text": "IDS_TT_HINT_ENABLE_CIRCLE_CLASSES"
@@ -2444,12 +2464,14 @@
         {
           "kind": "group",
           "key": "cmt4us0ee0006v0rwa411ky70",
+          "display": "section",
           "label": "IDS_TT_RANGE_VISIBILITY_AIR",
           "collapse": "expanded",
           "children": [
             {
               "kind": "group",
               "key": "cmtktalxq000xv0d4q8aozmas",
+              "display": "section",
               "label": "IDS_TT_OWNER_SELF",
               "collapse": "collapsed",
               "children": [
@@ -2558,6 +2580,7 @@
             {
               "kind": "group",
               "key": "cmtktam5t0074v0d4udgix0s9",
+              "display": "section",
               "label": "IDS_TT_OWNER_ALLY",
               "collapse": "collapsed",
               "children": [
@@ -2620,6 +2643,7 @@
                 {
                   "kind": "group",
                   "key": "cmtktame500dxv0d4lfjlmce7",
+                  "display": "section",
                   "label": "IDS_TT_ENABLE_CIRCLE_CLASSES",
                   "hint": {
                     "text": "IDS_TT_HINT_ENABLE_CIRCLE_CLASSES"
@@ -2897,6 +2921,7 @@
             {
               "kind": "group",
               "key": "cmtktami000h4v0d4ks97mii3",
+              "display": "section",
               "label": "IDS_TT_OWNER_ENEMY",
               "collapse": "collapsed",
               "children": [
@@ -2958,6 +2983,7 @@
                 {
                   "kind": "group",
                   "key": "cmtktalx5000gv0d4loxy6ner",
+                  "display": "section",
                   "label": "IDS_TT_ENABLE_CIRCLE_CLASSES",
                   "hint": {
                     "text": "IDS_TT_HINT_ENABLE_CIRCLE_CLASSES"
@@ -3267,12 +3293,14 @@
         {
           "kind": "group",
           "key": "cmt4us0el0008v0rwn181gfg3",
+          "display": "section",
           "label": "IDS_TT_RANGE_PRIMARY_WEAPON",
           "collapse": "expanded",
           "children": [
             {
               "kind": "group",
               "key": "cmtktamgb00fpv0d4amo5by35",
+              "display": "section",
               "label": "IDS_TT_OWNER_SELF",
               "collapse": "collapsed",
               "children": [
@@ -3381,6 +3409,7 @@
             {
               "kind": "group",
               "key": "cmtktam710085v0d4hiq79g20",
+              "display": "section",
               "label": "IDS_TT_OWNER_ALLY",
               "collapse": "collapsed",
               "children": [
@@ -3443,6 +3472,7 @@
                 {
                   "kind": "group",
                   "key": "cmtktamiy00huv0d4o846yvqt",
+                  "display": "section",
                   "label": "IDS_TT_ENABLE_CIRCLE_CLASSES",
                   "hint": {
                     "text": "IDS_TT_HINT_ENABLE_CIRCLE_CLASSES"
@@ -3720,6 +3750,7 @@
             {
               "kind": "group",
               "key": "cmtktam3s005ev0d4d3n3qdez",
+              "display": "section",
               "label": "IDS_TT_OWNER_ENEMY",
               "collapse": "collapsed",
               "children": [
@@ -3781,6 +3812,7 @@
                 {
                   "kind": "group",
                   "key": "cmtktam7t008pv0d4ptbgos3h",
+                  "display": "section",
                   "label": "IDS_TT_ENABLE_CIRCLE_CLASSES",
                   "hint": {
                     "text": "IDS_TT_HINT_ENABLE_CIRCLE_CLASSES"
@@ -4090,12 +4122,14 @@
         {
           "kind": "group",
           "key": "cmt4us0er000av0rwgx7ibg1t",
+          "display": "section",
           "label": "IDS_TT_RANGE_ATBA",
           "collapse": "expanded",
           "children": [
             {
               "kind": "group",
               "key": "cmtktam57006mv0d42fxlmmlj",
+              "display": "section",
               "label": "IDS_TT_OWNER_SELF",
               "collapse": "collapsed",
               "children": [
@@ -4204,6 +4238,7 @@
             {
               "kind": "group",
               "key": "cmtktam4r0068v0d4iixncdlv",
+              "display": "section",
               "label": "IDS_TT_OWNER_ALLY",
               "collapse": "collapsed",
               "children": [
@@ -4266,6 +4301,7 @@
                 {
                   "kind": "group",
                   "key": "cmtktamh600gfv0d4tqekozqa",
+                  "display": "section",
                   "label": "IDS_TT_ENABLE_CIRCLE_CLASSES",
                   "hint": {
                     "text": "IDS_TT_HINT_ENABLE_CIRCLE_CLASSES"
@@ -4543,6 +4579,7 @@
             {
               "kind": "group",
               "key": "cmtktam6h007pv0d4recx2j9r",
+              "display": "section",
               "label": "IDS_TT_OWNER_ENEMY",
               "collapse": "collapsed",
               "children": [
@@ -4604,6 +4641,7 @@
                 {
                   "kind": "group",
                   "key": "cmtktamo800ldv0d4k4p1jr83",
+                  "display": "section",
                   "label": "IDS_TT_ENABLE_CIRCLE_CLASSES",
                   "hint": {
                     "text": "IDS_TT_HINT_ENABLE_CIRCLE_CLASSES"
@@ -4913,12 +4951,14 @@
         {
           "kind": "group",
           "key": "cmt4us0ey000cv0rw998rlmj5",
+          "display": "section",
           "label": "IDS_TT_RANGE_TORPEDO",
           "collapse": "expanded",
           "children": [
             {
               "kind": "group",
               "key": "cmtktamo400lav0d4ea40zx36",
+              "display": "section",
               "label": "IDS_TT_OWNER_SELF",
               "collapse": "collapsed",
               "children": [
@@ -5027,6 +5067,7 @@
             {
               "kind": "group",
               "key": "cmtktami200h5v0d4q87gwt08",
+              "display": "section",
               "label": "IDS_TT_OWNER_ALLY",
               "collapse": "collapsed",
               "children": [
@@ -5089,6 +5130,7 @@
                 {
                   "kind": "group",
                   "key": "cmtktamcb00cdv0d471t33yb8",
+                  "display": "section",
                   "label": "IDS_TT_ENABLE_CIRCLE_CLASSES",
                   "hint": {
                     "text": "IDS_TT_HINT_ENABLE_CIRCLE_CLASSES"
@@ -5366,6 +5408,7 @@
             {
               "kind": "group",
               "key": "cmtktame700dyv0d4axkmmqvv",
+              "display": "section",
               "label": "IDS_TT_OWNER_ENEMY",
               "collapse": "collapsed",
               "children": [
@@ -5427,6 +5470,7 @@
                 {
                   "kind": "group",
                   "key": "cmtktaly30017v0d4006950fs",
+                  "display": "section",
                   "label": "IDS_TT_ENABLE_CIRCLE_CLASSES",
                   "hint": {
                     "text": "IDS_TT_HINT_ENABLE_CIRCLE_CLASSES"
@@ -5736,12 +5780,14 @@
         {
           "kind": "group",
           "key": "cmt4us0f4000ev0rwvfqo0zyw",
+          "display": "section",
           "label": "IDS_TT_RANGE_AIR_SUPPORT",
           "collapse": "expanded",
           "children": [
             {
               "kind": "group",
               "key": "cmtktalyw001uv0d4penp1a5w",
+              "display": "section",
               "label": "IDS_TT_OWNER_SELF",
               "collapse": "collapsed",
               "children": [
@@ -5850,6 +5896,7 @@
             {
               "kind": "group",
               "key": "cmtktamm300jzv0d4vb03zt5f",
+              "display": "section",
               "label": "IDS_TT_OWNER_ALLY",
               "collapse": "collapsed",
               "children": [
@@ -5912,6 +5959,7 @@
                 {
                   "kind": "group",
                   "key": "cmtktamns00l1v0d46p7k66z8",
+                  "display": "section",
                   "label": "IDS_TT_ENABLE_CIRCLE_CLASSES",
                   "hint": {
                     "text": "IDS_TT_HINT_ENABLE_CIRCLE_CLASSES"
@@ -6189,6 +6237,7 @@
             {
               "kind": "group",
               "key": "cmtktam5f006tv0d4kppr3wm9",
+              "display": "section",
               "label": "IDS_TT_OWNER_ENEMY",
               "collapse": "collapsed",
               "children": [
@@ -6250,6 +6299,7 @@
                 {
                   "kind": "group",
                   "key": "cmtktameb00e1v0d4nq5v37wd",
+                  "display": "section",
                   "label": "IDS_TT_ENABLE_CIRCLE_CLASSES",
                   "hint": {
                     "text": "IDS_TT_HINT_ENABLE_CIRCLE_CLASSES"
@@ -6559,12 +6609,14 @@
         {
           "kind": "group",
           "key": "cmt4us0fa000gv0rwnvi1q2rx",
+          "display": "section",
           "label": "IDS_TT_RANGE_ANTI_AIR",
           "collapse": "expanded",
           "children": [
             {
               "kind": "group",
               "key": "cmtktamee00e3v0d4wb9cy6ra",
+              "display": "section",
               "label": "IDS_TT_OWNER_SELF",
               "collapse": "collapsed",
               "children": [
@@ -6673,6 +6725,7 @@
             {
               "kind": "group",
               "key": "cmt4vvq2h0002v0xoty2be5s5",
+              "display": "section",
               "label": "IDS_TT_OWNER_ALLY",
               "collapse": "collapsed",
               "children": [
@@ -6737,6 +6790,7 @@
                 {
                   "kind": "group",
                   "key": "cmt4vvq2n0008v0xolwdffe9t",
+                  "display": "section",
                   "label": "IDS_TT_ENABLE_CIRCLE_CLASSES",
                   "hint": {
                     "text": "IDS_TT_HINT_ENABLE_CIRCLE_CLASSES"
@@ -7023,6 +7077,7 @@
             {
               "kind": "group",
               "key": "cmtktam2d004av0d4qg7qgpk2",
+              "display": "section",
               "label": "IDS_TT_OWNER_ENEMY",
               "collapse": "expanded",
               "children": [
@@ -7202,12 +7257,14 @@
         {
           "kind": "group",
           "key": "cmt4us0fh000kv0rwc36yefn6",
+          "display": "section",
           "label": "IDS_DOCK_CONSUME_TITLE_PCY020_RLSSEARCHPREMIUM",
           "collapse": "expanded",
           "children": [
             {
               "kind": "group",
               "key": "cmtktam90009ov0d44kzgmsfw",
+              "display": "section",
               "label": "IDS_TT_OWNER_SELF",
               "collapse": "collapsed",
               "children": [
@@ -7316,6 +7373,7 @@
             {
               "kind": "group",
               "key": "cmtktam8z009nv0d4biwrwa4v",
+              "display": "section",
               "label": "IDS_TT_OWNER_ALLY",
               "collapse": "collapsed",
               "enabledWhen": {
@@ -7334,7 +7392,7 @@
                 {
                   "kind": "group",
                   "key": "cmt4us0hx001sv0rw1mr3igi3",
-                  "aggregate": "inline",
+                  "display": "transparent",
                   "children": [
                     {
                       "kind": "setting",
@@ -7361,6 +7419,7 @@
                 {
                   "kind": "group",
                   "key": "cmtktam0a002lv0d43ama2xx1",
+                  "display": "section",
                   "label": "IDS_TT_ENABLE_CIRCLE_CLASSES",
                   "hint": {
                     "text": "IDS_TT_HINT_ENABLE_CIRCLE_CLASSES"
@@ -7708,6 +7767,7 @@
             {
               "kind": "group",
               "key": "cmtktama900aqv0d4zqgdituh",
+              "display": "section",
               "label": "IDS_TT_OWNER_ENEMY",
               "collapse": "collapsed",
               "children": [
@@ -7769,6 +7829,7 @@
                 {
                   "kind": "group",
                   "key": "cmtktalzh0029v0d4rmtp663h",
+                  "display": "section",
                   "label": "IDS_TT_ENABLE_CIRCLE_CLASSES",
                   "hint": {
                     "text": "IDS_TT_HINT_ENABLE_CIRCLE_CLASSES"
@@ -8078,12 +8139,14 @@
         {
           "kind": "group",
           "key": "cmt4us0fn000mv0rwih30jf8h",
+          "display": "section",
           "label": "IDS_DOCK_CONSUME_TITLE_PCY016_SONARSEARCHPREMIUM",
           "collapse": "expanded",
           "children": [
             {
               "kind": "group",
               "key": "cmtktam3a004yv0d4bvtcgl6f",
+              "display": "section",
               "label": "IDS_TT_OWNER_SELF",
               "collapse": "collapsed",
               "children": [
@@ -8192,6 +8255,7 @@
             {
               "kind": "group",
               "key": "cmtktalxr000yv0d4nzgh6mo2",
+              "display": "section",
               "label": "IDS_TT_OWNER_ALLY",
               "collapse": "collapsed",
               "enabledWhen": {
@@ -8210,7 +8274,7 @@
                 {
                   "kind": "group",
                   "key": "cmt4us0i0001uv0rwnq7uvxec",
-                  "aggregate": "inline",
+                  "display": "transparent",
                   "children": [
                     {
                       "kind": "setting",
@@ -8237,6 +8301,7 @@
                 {
                   "kind": "group",
                   "key": "cmtktamg000fhv0d4l7jsuuyz",
+                  "display": "section",
                   "label": "IDS_TT_ENABLE_CIRCLE_CLASSES",
                   "hint": {
                     "text": "IDS_TT_HINT_ENABLE_CIRCLE_CLASSES"
@@ -8584,6 +8649,7 @@
             {
               "kind": "group",
               "key": "cmtktamij00hjv0d4nt2r8h5o",
+              "display": "section",
               "label": "IDS_TT_OWNER_ENEMY",
               "collapse": "collapsed",
               "children": [
@@ -8645,6 +8711,7 @@
                 {
                   "kind": "group",
                   "key": "cmtktamja00i5v0d4qdmwkhfy",
+                  "display": "section",
                   "label": "IDS_TT_ENABLE_CIRCLE_CLASSES",
                   "hint": {
                     "text": "IDS_TT_HINT_ENABLE_CIRCLE_CLASSES"
@@ -8954,12 +9021,14 @@
         {
           "kind": "group",
           "key": "cmt4us0fx000ov0rwn2vygyr8",
+          "display": "section",
           "label": "IDS_DOCK_CONSUME_TITLE_PCY048_SUBMARINELOCATOR",
           "collapse": "expanded",
           "children": [
             {
               "kind": "group",
               "key": "cmtktalyp001ov0d47i4d6wq9",
+              "display": "section",
               "label": "IDS_TT_OWNER_SELF",
               "collapse": "collapsed",
               "children": [
@@ -9068,6 +9137,7 @@
             {
               "kind": "group",
               "key": "cmtktam8l009cv0d4h1bbjs4l",
+              "display": "section",
               "label": "IDS_TT_OWNER_ALLY",
               "collapse": "collapsed",
               "enabledWhen": {
@@ -9086,7 +9156,7 @@
                 {
                   "kind": "group",
                   "key": "cmt4us0i3001wv0rwds1ghtxa",
-                  "aggregate": "inline",
+                  "display": "transparent",
                   "children": [
                     {
                       "kind": "setting",
@@ -9113,6 +9183,7 @@
                 {
                   "kind": "group",
                   "key": "cmtktam0w0034v0d471yttlsz",
+                  "display": "section",
                   "label": "IDS_TT_ENABLE_CIRCLE_CLASSES",
                   "hint": {
                     "text": "IDS_TT_HINT_ENABLE_CIRCLE_CLASSES"
@@ -9460,6 +9531,7 @@
             {
               "kind": "group",
               "key": "cmtktam47005qv0d4d1sgq3ek",
+              "display": "section",
               "label": "IDS_TT_OWNER_ENEMY",
               "collapse": "collapsed",
               "children": [
@@ -9521,6 +9593,7 @@
                 {
                   "kind": "group",
                   "key": "cmtktamiw00htv0d4rt43th1v",
+                  "display": "section",
                   "label": "IDS_TT_ENABLE_CIRCLE_CLASSES",
                   "hint": {
                     "text": "IDS_TT_HINT_ENABLE_CIRCLE_CLASSES"
@@ -9830,12 +9903,14 @@
         {
           "kind": "group",
           "key": "cmt4us0g7000qv0rw599ll6jo",
+          "display": "section",
           "label": "IDS_TT_RANGE_HYDROPHONE",
           "collapse": "expanded",
           "children": [
             {
               "kind": "group",
               "key": "cmtktamgu00g5v0d46ggg56ee",
+              "display": "section",
               "label": "IDS_TT_OWNER_SELF",
               "collapse": "collapsed",
               "children": [
@@ -9944,6 +10019,7 @@
             {
               "kind": "group",
               "key": "cmt4vvq59002av0xo5boc7vv5",
+              "display": "section",
               "label": "IDS_TT_OWNER_ALLY",
               "collapse": "collapsed",
               "enabledWhen": {
@@ -9962,7 +10038,7 @@
                 {
                   "kind": "group",
                   "key": "cmt4vvq5a002cv0xo7qbkeodp",
-                  "aggregate": "inline",
+                  "display": "transparent",
                   "children": [
                     {
                       "kind": "setting",
@@ -9991,6 +10067,7 @@
                 {
                   "kind": "group",
                   "key": "cmt4vvq5d002iv0xo83i4rxze",
+                  "display": "section",
                   "label": "IDS_TT_ENABLE_CIRCLE_CLASSES",
                   "hint": {
                     "text": "IDS_TT_HINT_ENABLE_CIRCLE_CLASSES"
@@ -10347,6 +10424,7 @@
             {
               "kind": "group",
               "key": "cmt4vvq640032v0xo5ir8yvmw",
+              "display": "section",
               "label": "IDS_TT_OWNER_ENEMY",
               "collapse": "collapsed",
               "children": [
@@ -10410,6 +10488,7 @@
                 {
                   "kind": "group",
                   "key": "cmt4vvq670038v0xopjkcir1a",
+                  "display": "section",
                   "label": "IDS_TT_ENABLE_CIRCLE_CLASSES",
                   "hint": {
                     "text": "IDS_TT_HINT_ENABLE_CIRCLE_CLASSES"
@@ -10729,12 +10808,14 @@
         {
           "kind": "group",
           "key": "cmt4us0ff000iv0rwbajqmz0m",
+          "display": "section",
           "label": "IDS_TT_RANGE_PINGER",
           "collapse": "expanded",
           "children": [
             {
               "kind": "group",
               "key": "cmtktamd800d5v0d4vysr32gx",
+              "display": "section",
               "label": "IDS_TT_OWNER_SELF",
               "collapse": "collapsed",
               "children": [
@@ -10843,6 +10924,7 @@
             {
               "kind": "group",
               "key": "cmt4vvq3j000sv0xogom09x75",
+              "display": "section",
               "label": "IDS_TT_OWNER_ALLY",
               "collapse": "collapsed",
               "children": [
@@ -10907,6 +10989,7 @@
                 {
                   "kind": "group",
                   "key": "cmt4vvq3m000yv0xo7zny8b45",
+                  "display": "section",
                   "label": "IDS_TT_ENABLE_CIRCLE_CLASSES",
                   "hint": {
                     "text": "IDS_TT_HINT_ENABLE_CIRCLE_CLASSES"
@@ -11193,6 +11276,7 @@
             {
               "kind": "group",
               "key": "cmt4vvq4d001iv0xo51nlw779",
+              "display": "section",
               "label": "IDS_TT_OWNER_ENEMY",
               "collapse": "collapsed",
               "children": [
@@ -11256,6 +11340,7 @@
                 {
                   "kind": "group",
                   "key": "cmt4vvq4g001ov0xoy6sgjg5m",
+                  "display": "section",
                   "label": "IDS_TT_ENABLE_CIRCLE_CLASSES",
                   "hint": {
                     "text": "IDS_TT_HINT_ENABLE_CIRCLE_CLASSES"
@@ -11577,6 +11662,7 @@
     {
       "kind": "group",
       "key": "cmtktambi00bov0d4gf7ltoaz",
+      "display": "section",
       "label": "IDS_OPTIONS_QUICKCOMMANDS_SOUND",
       "collapse": "collapsed",
       "children": [
@@ -11603,6 +11689,7 @@
     {
       "kind": "group",
       "key": "cmtktambm00brv0d4iubgyyaj",
+      "display": "section",
       "label": "IDS_TT_TITLE_BACKGROUND",
       "collapse": "expanded",
       "children": [
