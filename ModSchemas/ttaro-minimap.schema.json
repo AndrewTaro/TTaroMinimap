@@ -64,14 +64,82 @@
           "default": false
         },
         {
-          "kind": "setting",
-          "control": "toggle",
-          "key": "ttMinimap.extendScale",
-          "label": "IDS_TT_EXTEND_SCALE",
+          "kind": "group",
+          "key": "cmug9yja20005v0zgplob2f47",
+          "display": "section",
+          "label": "IDS_TT_UI_SCALE",
           "hint": {
-            "text": "IDS_TT_HINT_EXTEND_SCALE"
+            "text": "IDS_TT_HINT_MINIMAP_SIZE_SCALES"
           },
-          "default": false
+          "collapse": "collapsed",
+          "children": [
+            {
+              "kind": "setting",
+              "control": "slider",
+              "key": "ttMinimap.mapScale.size0",
+              "label": "IDS_TT_MINIMAP_SIZE_0",
+              "default": 1,
+              "min": 1,
+              "max": 5,
+              "step": 0.01,
+              "decimals": 2
+            },
+            {
+              "kind": "setting",
+              "control": "slider",
+              "key": "ttMinimap.mapScale.size1",
+              "label": "IDS_TT_MINIMAP_SIZE_1",
+              "default": 1.25,
+              "min": 1,
+              "max": 5,
+              "step": 0.01,
+              "decimals": 2
+            },
+            {
+              "kind": "setting",
+              "control": "slider",
+              "key": "ttMinimap.mapScale.size2",
+              "label": "IDS_TT_MINIMAP_SIZE_2",
+              "default": 1.5,
+              "min": 1,
+              "max": 5,
+              "step": 0.01,
+              "decimals": 2
+            },
+            {
+              "kind": "setting",
+              "control": "slider",
+              "key": "ttMinimap.mapScale.size3",
+              "label": "IDS_TT_MINIMAP_SIZE_3",
+              "default": 1.75,
+              "min": 1,
+              "max": 5,
+              "step": 0.01,
+              "decimals": 2
+            },
+            {
+              "kind": "setting",
+              "control": "slider",
+              "key": "ttMinimap.mapScale.size4",
+              "label": "IDS_TT_MINIMAP_SIZE_4",
+              "default": 2,
+              "min": 1,
+              "max": 5,
+              "step": 0.01,
+              "decimals": 2
+            },
+            {
+              "kind": "setting",
+              "control": "slider",
+              "key": "ttMinimap.mapScale.size5",
+              "label": "IDS_TT_MINIMAP_SIZE_5",
+              "default": 2.25,
+              "min": 1,
+              "max": 5,
+              "step": 0.01,
+              "decimals": 2
+            }
+          ]
         },
         {
           "kind": "setting",

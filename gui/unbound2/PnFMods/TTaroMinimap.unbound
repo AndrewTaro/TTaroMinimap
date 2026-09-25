@@ -270,16 +270,22 @@
 	(var altVision:bool = "cameraComponent ? cameraComponent.altVision : false" (event "cameraComponent.evAltVisionChanged"))
 )
 
+# Needs `scaleIndex` in scope. The schema has size0..size5, so a larger index reads size5.
+# Not TT_GET_PREF: through it the watcher never re-resolved when scaleIndex changed (seen in-client); plain vars do.
+(def macro TMap_GET_MAP_SCALE ()
+	(var mapScalePrefW:gfx = "$datahub.getPrimWatcher(CC.mods_DataComponent, 'modPrefs.' + 'ttaro.ttMinimap.mapScale.' + 'size' + (scaleIndex < 5 ? scaleIndex : 5))")
+	(var mapScalePrefE:gfx = "mapScalePrefW.entity" (event "mapScalePrefW.event"))
+	(var mapScalePrefC:gfx = "mapScalePrefE.mods_DataComponent")
+	(var mapScale:number = "mapScalePrefC.data.value" (event "mapScalePrefC.evDataChanged"))
+)
+
 # Custom
 (def macro TMap_GET_SCALE_RATIO()
 	(var _isLoading:bool = false)
-	(macro TT_GET_PREF _varName="'isScaleExtendedPref'" _key="'ttaro.ttMinimap.extendScale'")
-	(var isScaleExtended:bool = "null != isScaleExtendedPref && null != isScaleExtendedPref.value ? isScaleExtendedPref.value : false")
 	(var minimapSizeIndexComponent:gfx = "$datahub.getPrimaryEntity(CC.minimapOption, SC.Battle.MINIMAP_OPTION.minimapSizeIndex).minimapOption")
 	(var scaleIndex:number = "minimapSizeIndexComponent.value" (event "minimapSizeIndexComponent.evValueChanged"))
-	(var baseMapScale:number = "scaleIndex < LIST_MAP_SCALES.length ? LIST_MAP_SCALES[scaleIndex] : LIST_MAP_SCALES[LIST_MAP_SCALES.length - 1] + SCALE_STEP * (scaleIndex - LIST_MAP_SCALES.length + 1)")
-	(var mapScale:number = "baseMapScale * (1 + isScaleExtended)")
-	(var loadingMinimapScale:number = "1.84") 
+	(macro TMap_GET_MAP_SCALE)
+	(var loadingMinimapScale:number = "1.84")
 	(var scaleRatio:number = "MINIMAP_ASSETS_SIZE * (_isLoading ? loadingMinimapScale : mapScale)")
 )
 
@@ -383,11 +389,8 @@
 	(var minimapEntity:gfx = "$datahub.getSingleEntity(CC.minimap)")
 
 	(var minimapSizeIndexComponent:gfx = "$datahub.getPrimaryEntity(CC.minimapOption, SC.Battle.MINIMAP_OPTION.minimapSizeIndex).minimapOption")
-	(macro TT_GET_PREF _varName="'isScaleExtendedPref'" _key="'ttaro.ttMinimap.extendScale'")
-	(var isScaleExtended:bool = "null != isScaleExtendedPref && null != isScaleExtendedPref.value ? isScaleExtendedPref.value : false")
 	(var scaleIndex:number = "minimapSizeIndexComponent.value" (event "minimapSizeIndexComponent.evValueChanged"))
-	(var baseMapScale:number = "scaleIndex < LIST_MAP_SCALES.length ? LIST_MAP_SCALES[scaleIndex] : LIST_MAP_SCALES[LIST_MAP_SCALES.length - 1] + SCALE_STEP * (scaleIndex - LIST_MAP_SCALES.length + 1)")
-	(var mapScale:number = "baseMapScale * (1 + isScaleExtended)")
+	(macro TMap_GET_MAP_SCALE)
 	(var itemScale:number = "scaleIndex < LIST_ICON_SCALES.length ? LIST_ICON_SCALES[scaleIndex] : LIST_ICON_SCALES[LIST_MAP_SCALES.length - 1]")
 	(var loadingMinimapScale:number = "1.84") 
 	(var scaleRatio:number = "MINIMAP_ASSETS_SIZE * (_isLoading ? loadingMinimapScale : mapScale)")
@@ -1095,7 +1098,7 @@
 
 		(var minimapSizeIndexComponent:gfx = "$datahub.getPrimaryEntity(CC.minimapOption, SC.Battle.MINIMAP_OPTION.minimapSizeIndex).minimapOption")
 		(var scaleIndex:number = "minimapSizeIndexComponent.value" (event "minimapSizeIndexComponent.evValueChanged"))
-		(var mapScale:number = "scaleIndex < LIST_MAP_SCALES.length ? LIST_MAP_SCALES[scaleIndex] : LIST_MAP_SCALES[LIST_MAP_SCALES.length - 1] + SCALE_STEP * (scaleIndex - LIST_MAP_SCALES.length + 1)")
+		(macro TMap_GET_MAP_SCALE)
 
 		(event evMouseOverMap)
 		(event evMouseOutMap)
