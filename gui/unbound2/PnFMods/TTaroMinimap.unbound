@@ -125,12 +125,6 @@
 	ALL					: ['IDS_QUICK_COMMANDS', 'IDS_HELP', 'IDS_FOGHORN', 'IDS_IS_TURNED_OFF'],
 })
 
-(def constant TMap_DISPLAY_MODES {
-	DISABLE: 0,
-	ENABLE: 1,
-	ADAPTIVE: 2,
-})
-
 
 (def constant TMap_GRADIENT_MASKS [
 	{water: 'static_background.png',			island: 'static_background.png'},				# None
@@ -261,7 +255,7 @@
 # `altVision:bool` must exist!
 # Loads `_varName:bool` into scope
 (def macro TMap_GET_DISPLAY_MODE (_varName:expression, _prefValue:expression)
-	(var name="_varName" type=bool value="_prefValue == TMap_DISPLAY_MODES.ADAPTIVE ? altVision : _prefValue")
+	(var name="_varName" type=bool value="_prefValue == TT_CONST.DISPLAY_MODE.ADAPTIVE ? altVision : _prefValue")
 )
 
 # Custom
@@ -2171,8 +2165,8 @@
 
 		(macro TT_GET_PREF _varName="'globalDisplayModePref'" _key="rangePrefKey == '' ? '' : rangePrefKey + '.displayMode'")
 		(var globalDisplayMode:number = "null != globalDisplayModePref && null != globalDisplayModePref.value ? globalDisplayModePref.value : 0")
-		(var useIndividualShipPref:bool = "globalDisplayMode == TMap_DISPLAY_MODES.ADAPTIVE")
-		(var globalVisiblity:bool = "globalDisplayMode == TMap_DISPLAY_MODES.ENABLE ? true : false")
+		(var useIndividualShipPref:bool = "globalDisplayMode == TT_CONST.MINIMAP.OVERRIDE_DISPLAY_MODE.INDIVIDUAL")
+		(var globalVisiblity:bool = "globalDisplayMode == TT_CONST.MINIMAP.OVERRIDE_DISPLAY_MODE.ALWAYS_ON ? true : false")
 		(var isRangeVisible:bool = "useIndividualShipPref ? rangeOptionsEnabled : globalVisiblity")
 
 		(var rangeEnabled:bool = "isRangeVisible || rangeSettings.forceEnabled")
@@ -2467,7 +2461,7 @@
 		(var mgDisplayMode:number = "null != mgDisplayModePref && null != mgDisplayModePref.value ? mgDisplayModePref.value : 0")
 		(macro TT_GET_PREF _varName="'mgClassPref'" _key="enableInClassLeaf == '' ? '' : mgKey + enableInClassLeaf")
 		(var isMGEnabledInClass:bool = "null != mgClassPref && null != mgClassPref.value ? mgClassPref.value : true")
-		(var isMGEnabled:bool = "mgDisplayMode != TMap_DISPLAY_MODES.DISABLE && isMGEnabledInClass")
+		(var isMGEnabled:bool = "mgDisplayMode != TT_CONST.DISPLAY_MODE.DISABLED && isMGEnabledInClass")
 
 		# SG
 		(var sgKey:str = "'ttaro.minimap.rangeCircle.atba' + prefPostfix")
@@ -2486,7 +2480,7 @@
 		(var sgDisplayMode:number = "null != sgDisplayModePref && null != sgDisplayModePref.value ? sgDisplayModePref.value : 0")
 		(macro TT_GET_PREF _varName="'sgClassPref'" _key="enableInClassLeaf == '' ? '' : sgKey + enableInClassLeaf")
 		(var isSGEnabledInClass:bool = "null != sgClassPref && null != sgClassPref.value ? sgClassPref.value : true")
-		(var isSGEnabled:bool = "sgDisplayMode != TMap_DISPLAY_MODES.DISABLE && isSGEnabledInClass")
+		(var isSGEnabled:bool = "sgDisplayMode != TT_CONST.DISPLAY_MODE.DISABLED && isSGEnabledInClass")
 
 		# Torp
 		(var torpKey:str = "'ttaro.minimap.rangeCircle.torpedo' + prefPostfix")
@@ -2500,7 +2494,7 @@
 		(var torpDisplayMode:number = "null != torpDisplayModePref && null != torpDisplayModePref.value ? torpDisplayModePref.value : 0")
 		(macro TT_GET_PREF _varName="'torpClassPref'" _key="enableInClassLeaf == '' ? '' : torpKey + enableInClassLeaf")
 		(var isTorpEnabledInClass:bool = "null != torpClassPref && null != torpClassPref.value ? torpClassPref.value : true")
-		(var isTorpEnabled:bool = "torpDisplayMode != TMap_DISPLAY_MODES.DISABLE && isTorpEnabledInClass")
+		(var isTorpEnabled:bool = "torpDisplayMode != TT_CONST.DISPLAY_MODE.DISABLED && isTorpEnabledInClass")
 
 		# AS
 		(var asKey:str = "'ttaro.minimap.rangeCircle.airSupport' + prefPostfix")
@@ -2508,7 +2502,7 @@
 		(var asDisplayMode:number = "null != asDisplayModePref && null != asDisplayModePref.value ? asDisplayModePref.value : 0")
 		(macro TT_GET_PREF _varName="'asClassPref'" _key="enableInClassLeaf == '' ? '' : asKey + enableInClassLeaf")
 		(var isASEnabledInClass:bool = "null != asClassPref && null != asClassPref.value ? asClassPref.value : true")
-		(var isASEnabled:bool = "asDisplayMode != TMap_DISPLAY_MODES.DISABLE && isASEnabledInClass")
+		(var isASEnabled:bool = "asDisplayMode != TT_CONST.DISPLAY_MODE.DISABLED && isASEnabledInClass")
 
 		# Visibility Sea
 		(var seaKey:str = "'ttaro.minimap.rangeCircle.visibilitySea' + prefPostfix")
@@ -2516,7 +2510,7 @@
 		(var seaDisplayMode:number = "null != seaDisplayModePref && null != seaDisplayModePref.value ? seaDisplayModePref.value : 0")
 		(macro TT_GET_PREF _varName="'seaClassPref'" _key="enableInClassLeaf == '' ? '' : seaKey + enableInClassLeaf")
 		(var isSeaEnabledInClass:bool = "null != seaClassPref && null != seaClassPref.value ? seaClassPref.value : true")
-		(var isSeaVisEnabled:bool = "seaDisplayMode != TMap_DISPLAY_MODES.DISABLE && isSeaEnabledInClass")
+		(var isSeaVisEnabled:bool = "seaDisplayMode != TT_CONST.DISPLAY_MODE.DISABLED && isSeaEnabledInClass")
 		(var concealSkillId:number = "shipType in TMap_CONCEALMENT_SKILL_ID ? TMap_CONCEALMENT_SKILL_ID[shipType] : null")
 		(var concealSkillEntity:gfx = "$datahub.getPrimaryCompositeEntity(CC.skill, concealSkillId, shipType, -1)")
 		(var concealCrewSkillEntity:gfx = "$datahub.getPrimaryCompositeEntity(CC.crewSkill, crewId, concealSkillEntity.id)")
@@ -2530,7 +2524,7 @@
 		(var airDisplayMode:number = "null != airDisplayModePref && null != airDisplayModePref.value ? airDisplayModePref.value : 0")
 		(macro TT_GET_PREF _varName="'airClassPref'" _key="enableInClassLeaf == '' ? '' : airKey + enableInClassLeaf")
 		(var isAirEnabledInClass:bool = "null != airClassPref && null != airClassPref.value ? airClassPref.value : true")
-		(var isAirVisEnabled:bool = "airDisplayMode != TMap_DISPLAY_MODES.DISABLE && isAirEnabledInClass")
+		(var isAirVisEnabled:bool = "airDisplayMode != TT_CONST.DISPLAY_MODE.DISABLED && isAirEnabledInClass")
 
 		# Radar.  These three are enemy-only (an ally's consumable circles are drawn elsewhere), so the
 		# key is fixed rather than postfixed.
@@ -2540,7 +2534,7 @@
 		(macro TT_GET_PREF _varName="'radarClassPref'" _key="enableInClassLeaf == '' ? '' : radarKey + enableInClassLeaf")
 		(var isRadarEnabledInClass:bool = "null != radarClassPref && null != radarClassPref.value ? radarClassPref.value : true")
 		(var radarRange:number = "'radar' in _consumableRanges ? _consumableRanges.radar.world : 0")
-		(var isRadarEnabled:bool = "(radarDisplayMode != TMap_DISPLAY_MODES.DISABLE) && isRadarEnabledInClass && (radarRange > 0)")
+		(var isRadarEnabled:bool = "(radarDisplayMode != TT_CONST.DISPLAY_MODE.DISABLED) && isRadarEnabledInClass && (radarRange > 0)")
 
 		# Hydro
 		(var hydroKey:str = "'ttaro.minimap.rangeCircle.hydro.enemy'")
@@ -2549,7 +2543,7 @@
 		(macro TT_GET_PREF _varName="'hydroClassPref'" _key="enableInClassLeaf == '' ? '' : hydroKey + enableInClassLeaf")
 		(var isHydroEnabledInClass:bool = "null != hydroClassPref && null != hydroClassPref.value ? hydroClassPref.value : true")
 		(var hydroRange:number = "'hydro' in _consumableRanges ? _consumableRanges.hydro.world : 0")
-		(var isHydroEnabled:bool = "(hydroDisplayMode != TMap_DISPLAY_MODES.DISABLE) && isHydroEnabledInClass && (hydroRange > 0)")
+		(var isHydroEnabled:bool = "(hydroDisplayMode != TT_CONST.DISPLAY_MODE.DISABLED) && isHydroEnabledInClass && (hydroRange > 0)")
 
 		# Sub Radar
 		(var subRadarKey:str = "'ttaro.minimap.rangeCircle.subRadar.enemy'")
@@ -2558,7 +2552,7 @@
 		(macro TT_GET_PREF _varName="'subRadarClassPref'" _key="enableInClassLeaf == '' ? '' : subRadarKey + enableInClassLeaf")
 		(var isSubRadarEnabledInClass:bool = "null != subRadarClassPref && null != subRadarClassPref.value ? subRadarClassPref.value : true")
 		(var subRadarRange:number = "'subRadar' in _consumableRanges ? _consumableRanges.subRadar.world : 0")
-		(var isSubRadarEnabled:bool = "(subRadarDisplayMode	!= TMap_DISPLAY_MODES.DISABLE) && isSubRadarEnabledInClass && (subRadarRange > 0)")
+		(var isSubRadarEnabled:bool = "(subRadarDisplayMode	!= TT_CONST.DISPLAY_MODE.DISABLED) && isSubRadarEnabledInClass && (subRadarRange > 0)")
 
 
 		# Distance
@@ -2828,7 +2822,7 @@
 		(macro TT_GET_PREF _varName="'lastSpottedOnAltPref'" _key="'ttaro.minimap.shipMarker.showLastSpottedOnAlt'")
 		(var isLastSpottedTimerEnabled:bool = "null != lastSpottedOnAltPref && null != lastSpottedOnAltPref.value ? lastSpottedOnAltPref.value : true")
 
-		(var isShipNameVisible:bool = "isLastSpottedTimerEnabled && altVision && shipNamesDisplayMode == TMap_DISPLAY_MODES.ENABLE && !mapVisible
+		(var isShipNameVisible:bool = "isLastSpottedTimerEnabled && altVision && shipNamesDisplayMode == TT_CONST.DISPLAY_MODE.ENABLED && !mapVisible
 										? false
 										: true"
 		)
@@ -5539,9 +5533,9 @@
 
 		(var infotipVisible:bool = false)
 
-		(var isOverrideEnabled:bool = "hasPrefs && displayMode != TMap_DISPLAY_MODES.ADAPTIVE")
+		(var isOverrideEnabled:bool = "hasPrefs && displayMode != TT_CONST.MINIMAP.OVERRIDE_DISPLAY_MODE.INDIVIDUAL")
 
-		(var prefValue:bool = "isOverrideEnabled ? TMap_DISPLAY_MODES.ENABLE == displayMode
+		(var prefValue:bool = "isOverrideEnabled ? TT_CONST.MINIMAP.OVERRIDE_DISPLAY_MODE.ALWAYS_ON == displayMode
 												 : propValue")
 
 		(var clickMethods:array = "isOverrideEnabled ? []
