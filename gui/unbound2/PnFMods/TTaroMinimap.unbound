@@ -543,11 +543,6 @@
         # is no view-side default or stage math left here.
         (macro TT_DRAGGABLE_POSITION _fullKey="'ttaro.ttMinimap.position'")
 
-		(macro TMap_GET_SCALE_RATIO)
-
-		(var mouseComponent:gfx = "$datahub.getSingleComponent(CC.mouse)")
-		(var isMouseActive:bool = "mouseComponent.active" (event "mouseComponent.evActiveChanged"))
-
 		# The radar warning is a 3-mode dropdown, so this is an ADAPTIVE-aware read
 		# (see TMap_GET_DISPLAY_MODE).
 		(macro TMap_GET_ALT_VISION)
@@ -583,11 +578,9 @@
 	)
     
     (block
-		# Full-size drag surface over the whole container -- the plain use of TT_DRAGGABLE, and the
-		# reason it has to be this and not the move-hand icon: reportGeometry describes the block the
-		# macro sits in, and Python places THAT box against the schema's right/bottom anchor.  With the
-		# 29x29 icon it placed the icon bottom-right, which put the container's origin at [2946,1466]
-		# on a 2560x1080 stage and left the minimap almost entirely off-screen.
+		# Full-size drag surface over the whole container: reportGeometry describes the block the
+		# macro sits in, and Python places THAT box against the schema's right/bottom anchor, so it
+		# must span the whole minimap -- a smaller block would push the map off-screen.
 		#
 		# Declared FIRST so the injected signifier stays behind the map (zindex does not cross a block
 		# boundary), and so the map content above keeps its own hit-testing -- the vanilla click-to-ping
@@ -604,54 +597,6 @@
 			(macro TT_DRAGGABLE _fullKey="'ttaro.ttMinimap.position'" _isDragEnabled="!isDragDropDisabled")
 		)
 
-        (block
-			(style
-				(position = "absolute")
-				(bind bottom "scaleRatio - 2") # Offset to make it look natural
-				(bind right "scaleRatio - 2")
-				(flow = "Flow.HORIZONTAL")
-			)
-
-			# The move-hand affordance.  Purely visual now: the drag surface is the full-size block
-			# declared at the top of the container, so what Python is told about is the MINIMAP, not
-			# this 29x29 icon.
-			(block
-				(style
-					(bind alpha "isDragDropDisabled ? 0 : 1")
-				)
-				(block
-					(style
-						(hitTest = false)
-						(height = "32px - 5px") # There is 5px margin in the image
-						(width = "32px - 5px")
-						(alpha = 0.3)
-						(margin = 1px)
-						(backgroundImage = 'url:../cursors/move_hand.dds')
-					)
-					(controller $Animation
-						(bindcall play
-							to	="{alpha: 0.3}"
-							duration=0.15
-							(bind enabled "!isMouseActive")
-							(bind trigger "isMouseActive")
-						)
-						(bindcall play
-							to	="{alpha: 1.0}"
-							duration=0.15
-							(bind enabled "isMouseActive")
-							(bind trigger "isMouseActive")
-						)
-					)
-				)
-			)
-
-			# Config
-			(element TT_ConfigButtonElement _modSlug = "'ttaro.minimap'" _tooltipPosition="borderNoTrack"
-				(style
-					(bind left "isDragDropDisabled ? 0px : -30px")
-				)
-			)
-		)
         (style
             (position = "absolute")
             (bind top "dragY")
@@ -663,11 +608,22 @@
 			(align = "right")
         )
 
-        # Map / Kill Logs / RPF Chat Controller
-		(element TMap_DeathLogContainer)
-		(element TMap_BattleMinimap)
-		
-		(element TMap_RadioLocationChat)
+		# The screen-edge margin lives here, not in the schema's default offset, so the drag
+		# signifier wraps the map instead of ending flush with its edges.  A margin, not padding on
+		# the box: $FullsizeAbsolute spans the content box only, so padding would sit outside the
+		# reported geometry and be clamped off-screen.
+		(block
+			(style
+				(margin = "XS")
+				(align = "right")
+			)
+
+			# Map / Kill Logs / RPF Chat Controller
+			(element TMap_DeathLogContainer)
+			(element TMap_BattleMinimap)
+
+			(element TMap_RadioLocationChat)
+		)
     )
 )
 
@@ -1133,6 +1089,11 @@
 	(element TMap_MinimapOptionsButton
 		(bind visible "!_isLoading")
 		(style (position = "absolute") (right = "20px") (top = "-22px"))
+	)
+
+	# Anchored to the map, not the dragged box: the edge-margin wrapper would shift a box-relative offset.
+	(element TT_ConfigButtonElement _modSlug = "'ttaro.minimap'" _tooltipPosition="borderNoTrack"
+		(style (left = "-27px") (top = "-27px"))
 	)
 )
 
