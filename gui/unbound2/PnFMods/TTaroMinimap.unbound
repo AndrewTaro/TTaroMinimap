@@ -1894,6 +1894,8 @@
 		(macro TMap_GET_DISPLAY_MODE _varName="'isNearbyAAVisible'" _prefValue="nearbyAADisplayMode")
 
 		(macro IS_ON_PLANE)
+		# TargetMarker publishes only to an observer.
+		(macro IS_SPECTATOR_MODE)
 		#
 	)
 
@@ -1978,13 +1980,25 @@
 	)
 	#
 
+	# TargetMarker
+	(block
+		(style
+			(position = "absolute")
+		)
+		(controller $Instance (renderer = 'TMap_MapTargetingDirection')
+			(bind enabled "isSpectator && isAlive && mapVisible")
+			(args _markerEntity="_markerEntity")
+		)
+	)
+	#
+
 	(block
 		(style
 			(position = "absolute")
 		)
 		(controller $Instance (renderer = 'TMap_MapMarkerDirectionalLine')
 			# Mod
-			(bind enabled "(isPlayerAvatar || isTargetLocked || isEnemyDirVisible) && isAlive && mapVisible && isBattleInProgress")
+			(bind enabled "(isPlayerAvatar || isTargetLocked || isEnemyDirVisible) && isAlive && mapVisible && isBattleInProgress && !isSpectator")
 			(args _isFullSize="isTargetLocked || isPlayerAvatar" _isSelf="isSelf" _isShip="true")
 			#
 			(exprs
@@ -2110,6 +2124,51 @@
 			(bind scaleX "isDefaultColor ? 1.0 : 2.0")
 		)
 		(bind colorTransform "ct")
+	)
+)
+
+# TargetMarker: the ship's main-battery aim bearing, published per ship
+# under 'modTargetMarker_' + avatar id as {isTargeting, targetingDir, focus}.
+(def element TMap_MapTargetingDirection (_markerEntity:gfx) layout=true
+	(scope
+		(var targetingAvatarId:str = "_markerEntity.hasComponent(CC.avatar) ? toString(_markerEntity.avatar.id) : ''")
+		(var targetingWatcher:gfx = "$datahub.getPrimWatcher(CC.mods_DataComponent, 'modTargetMarker_' + targetingAvatarId)")
+		(var targetingEntity:gfx = "targetingWatcher.entity" (event "targetingWatcher.event"))
+		(var targetingComponent:gfx = "targetingEntity ? targetingEntity.mods_DataComponent : null")
+		(var targetingData:dict = "targetingComponent ? targetingComponent.data : {}" (event "targetingComponent.evDataChanged"))
+		(var isTargeting:bool = "'isTargeting' in targetingData ? targetingData.isTargeting : false")
+		(var targetingDir:number = "'targetingDir' in targetingData ? targetingData.targetingDir : 0")
+
+		# The source steps at most every 0.43 s; the line glides from step to step.
+		# targetingDir does not wrap, so the glide never goes the long way round.
+		(var shownDir:number = "targetingDir" watch=false)
+		# Snap, not glide, when the aim appears.
+		(bind shownDir "targetingDir" watch=false init=false (bind trigger "isTargeting"))
+		(controller $Animation
+			(bindcall play	duration=0.45
+							easing="Easing.line"
+							to="{ shownDir: targetingDir }"
+							watch=false
+							(bind trigger "targetingDir")
+							(bind enabled "isTargeting")
+			)
+		)
+	)
+
+	(bind visible "isTargeting")
+	(style
+		(position = "absolute")
+		(bind rotation "shownDir")
+	)
+	(block
+		(style
+			(position = "absolute")
+			(backgroundImage = "'symbol:minimap_direction_line'")
+			(scaleX = 3.0)
+			(scaleY = 0.2)
+		)
+		# Grey: every ship has one, so it must not compete with the heading line.
+		(bind colorTransform "{redMultiplier:0,greenMultiplier:0,blueMultiplier:0,alphaMultiplier:1.0,redOffset:200,greenOffset:200,blueOffset:200,alphaOffset:0}")
 	)
 )
 
