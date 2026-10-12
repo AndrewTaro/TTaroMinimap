@@ -1980,7 +1980,7 @@
 	)
 	#
 
-	# TargetMarker
+	# TargetMarker (prototype)
 	(block
 		(style
 			(position = "absolute")
@@ -2127,7 +2127,7 @@
 	)
 )
 
-# TargetMarker: the ship's main-battery aim bearing, published per ship
+# TargetMarker (prototype): the ship's main-battery aim bearing, published per ship
 # under 'modTargetMarker_' + avatar id as {isTargeting, targetingDir, focus}.
 (def element TMap_MapTargetingDirection (_markerEntity:gfx) layout=true
 	(scope
@@ -2164,7 +2164,7 @@
 		(style
 			(position = "absolute")
 			(backgroundImage = "'symbol:minimap_direction_line'")
-			(scaleX = 3.0)
+			(scaleX = 2.0)
 			(scaleY = 0.2)
 		)
 		# Grey: every ship has one, so it must not compete with the heading line.
