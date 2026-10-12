@@ -1980,7 +1980,7 @@
 	)
 	#
 
-	# TargetMarker (prototype)
+	# TargetMarker
 	(block
 		(style
 			(position = "absolute")
@@ -2127,7 +2127,7 @@
 	)
 )
 
-# TargetMarker (prototype): the ship's main-battery aim bearing, published per ship
+# TargetMarker: the ship's main-battery aim bearing, published per ship
 # under 'modTargetMarker_' + avatar id as {isTargeting, targetingDir, focus}.
 (def element TMap_MapTargetingDirection (_markerEntity:gfx) layout=true
 	(scope
