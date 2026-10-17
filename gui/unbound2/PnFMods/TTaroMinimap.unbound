@@ -1255,7 +1255,7 @@
 		(var gradientType:number = "null != gradientTypePref && null != gradientTypePref.value ? gradientTypePref.value : 0")
 		(var gradientIndex:number = "gradientType < TMap_GRADIENT_MASKS.length ? gradientType : 0")
 		(var gradientMasks:dict = "TMap_GRADIENT_MASKS[gradientIndex]")
-		(var gradientPathBase:str = 'url:../ttaro_minimap/map_background/')
+		(var gradientPathBase:str = 'url:../ttaro/minimap/map_background/')
 		(var gradientIslandMask:str = "gradientPathBase + gradientMasks.island")
 		(var gradientWaterMask:str = "gradientPathBase + gradientMasks.water")
 		#
