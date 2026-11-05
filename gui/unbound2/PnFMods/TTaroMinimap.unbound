@@ -195,6 +195,7 @@
 	charge_laserMaxDist:			{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 , 	prefKey: 'ttaro.minimap.rangeCircle.primaryWeapon.self',		optionName: 'shootChargeLaserRangeEnabled' },
 	impulse_laserMaxDist:			{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 , 	prefKey: 'ttaro.minimap.rangeCircle.primaryWeapon.self',		optionName: 'shootImpulseLaserRangeEnabled' },
 	axis_laserMaxDist:				{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 , 	prefKey: 'ttaro.minimap.rangeCircle.primaryWeapon.self',		optionName: 'shootAxisLaserRangeEnabled' },
+	phaser_laserMaxDist:			{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 , 	prefKey: 'ttaro.minimap.rangeCircle.primaryWeapon.self',		optionName: 'shootPhaserLaserRangeEnabled' },
 	wavesMaxDist:					{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 , 	prefKey: 'ttaro.minimap.rangeCircle.primaryWeapon.self',		optionName: 'shootWaveGunRangeEnabled' },
 	air_supportMaxDist: 			{ color: 0xBBBBBB, boldText: true , dashLength: 0 , drawDotted: false, forceEnabled: false, lineThickness: 1  , spacing: 0 , 	prefKey: 'ttaro.minimap.rangeCircle.airSupport.self',		optionName: 'shootAirSupportRangeEnabled' }
 }")
@@ -1818,7 +1819,7 @@
 )
 
 # battle\minimap\markers\ship_marker.unbound
-(def element TMap_MapShipMarker (_markerEntity:gfx, _mapScale:number, _itemScale:number, _scaleRatio:number) layout=true
+(def element TMap_MapShipMarker (_markerEntity:gfx, _mapScale:number, _itemScale:number, _scaleRatio:number, _isLoading:bool = false) layout=true
 	(scope
 		(var isPlayerAvatar:bool = "_markerEntity.hasComponent(CC.playerAvatar)")
 		(var isAlive:bool = "_markerEntity.health ? _markerEntity.health.isAlive : false" (event "_markerEntity.health.evIsAliveChanged"))
@@ -2814,6 +2815,8 @@
 
 		(var visibilityPostfix:str = "mapVisible && !(worldVisible) && isBattleInProgress ? '_invisible' : ''")
 
+		(var mapIconPrefix:str = "!isAlive && (tagPrefix == 'op_bermuda_character_boss_hidden' || tagPrefix == 'op_bermuda_character_boss_revealed') ? 'op_bermuda_character_boss_dead' : tagPrefix")
+
 		(var markerColorTransform:dict =
 			"	!isAlive						? TWO_TEAMS_COLOR_TRANSFORMS['white'] :
 				!mapVisible && !worldVisible	? TWO_TEAMS_COLOR_TRANSFORMS['white'] :
@@ -2852,7 +2855,7 @@
 			(marginTop = "-(SHIP_ICON_SIZE.HEIGHT*0.5)")
 		)
 		(bind visible "tagPrefix")
-		(style (bind backgroundImage " tagPrefix ? 'url:../battle_hud/markers/ship/map/icon_' + tagPrefix + '.png' : ''"))
+		(style (bind backgroundImage "mapIconPrefix ? 'url:../battle_hud/markers/ship/map/icon_' + mapIconPrefix + '.png' : ''"))
 		
 	)
 )
@@ -3526,7 +3529,7 @@
 )
 
 # battle\minimap\markers\building_marker.unbound
-(def element TMap_MapBuildingMarker (_markerEntity:gfx, _mapScale:number, _itemScale:number, _scaleRatio:number) layout=true
+(def element TMap_MapBuildingMarker (_markerEntity:gfx, _mapScale:number, _itemScale:number, _scaleRatio:number, _isLoading:bool = false) layout=true
 	(scope
 		(var markerScale:number = "_itemScale / _mapScale")
 
@@ -3540,32 +3543,38 @@
 
 		(macro VAR_RELATION "_markerEntity")
 
-		(var symbolName:str = "BUILDING_TYPE_SYMBOL_NAME[buildingComponent.type]")
+		(var iconName:str = "BUILDING_TYPE_TO_MAP_ICON[buildingComponent.type]")
 		(var suppressedStr:str = "isSuppressed ? '_suppressed' : ''")
 		(var relationStr:str = "'_' + (relation == RELATION_NAMES.OWN ? RELATION_NAMES.NEUTRAL : relation)")
-		(var markerIcon:str =
-			"!(mapVisible) 
-				? 'symbol:minimap_' + symbolName + '_last_visible'
+		(var iconState:str =
+			"!(mapVisible)
+				? '_last_visible'
 				: isAlive
-					? 'symbol:minimap_' + symbolName + suppressedStr + relationStr
-					: 'symbol:minimap_' + symbolName + '_dead'")
+					? suppressedStr + relationStr
+					: '_dead'")
+		(var markerIcon:str = "'url:../battle_hud/markers_minimap/building_icons/' + iconName + iconState + '.png'")
 
-		
 		(macro SCOPE_HIGHLIGHT_MARKER_ON_MAP_MOUSE_OVER "_markerEntity")
 	)
 
+	(style
+		(width = 0) (height = 0)
+		(align = "center|middle")
+	)
+
 	(macro BIND_FAIR_SCALE "markerScale")
-	
+
 	(block
 		(macro EFFECT_HIGHLIGHT_MARKER_ON_MOUSE_OVER)
 		(style
 			(bind backgroundImage "markerIcon")
+			(backgroundSize = "autosize")
 		)
 	)
 )
 
 # battle\minimap\markers\capture_point_marker.unbound
-(def element TMap_MapCapturePointMarker (_markerEntity:gfx, _mapScale:number, _itemScale:number, _scaleRatio:number) layout=true
+(def element TMap_MapCapturePointMarker (_markerEntity:gfx, _mapScale:number, _itemScale:number, _scaleRatio:number, _isLoading:bool = false) layout=true
 	(scope
 		(var circleRadius:number = "_markerEntity.circle.radius" (event "_markerEntity.circle.evRadiusChanged"))
 		(var circleInnerRadius:number = "_markerEntity.circle.innerRadius" (event "_markerEntity.circle.evInnerRadiusChanged"))
@@ -3961,7 +3970,7 @@
 )
 
 # battle\minimap\markers\plane_marker.unbound
-(def element TMap_MapSquadronMarker (_markerEntity:gfx, _mapScale:number, _itemScale:number, _scaleRatio:number) layout=true
+(def element TMap_MapSquadronMarker (_markerEntity:gfx, _mapScale:number, _itemScale:number, _scaleRatio:number, _isLoading:bool = false) layout=true
 	(scope
 		(var markerYaw:number = "radToGrad(_markerEntity.mapPosition.yaw)" (event "evEnterFrame"))
 		(var markerScale:number = "_itemScale / _mapScale")
@@ -4407,7 +4416,7 @@
 )
 
 # battle\minimap\markers\interactive_zone_marker.unbound
-(def element TMap_MapInteractiveZoneMarker (_markerEntity:gfx, _mapScale:number, _itemScale:number, _scaleRatio:number) layout=true
+(def element TMap_MapInteractiveZoneMarker (_markerEntity:gfx, _mapScale:number, _itemScale:number, _scaleRatio:number, _isLoading:bool = false) layout=true
 	(scope
 		(event evForceHide)
 
