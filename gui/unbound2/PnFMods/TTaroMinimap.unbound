@@ -1894,6 +1894,11 @@
 		(var nearbyAADisplayMode:number = "null != nearbyAADisplayModePref && null != nearbyAADisplayModePref.value ? nearbyAADisplayModePref.value : 0")
 		(macro TMap_GET_DISPLAY_MODE _varName="'isNearbyAAVisible'" _prefValue="nearbyAADisplayMode")
 
+		# TargetMarker aim line. Fallback 1 (On): a store without the key draws as before.
+		(macro TT_GET_PREF _varName="'targetingDisplayModePref'" _key="'ttaro.minimap.shipMarker.targeting.displayMode'")
+		(var targetingDisplayMode:number = "null != targetingDisplayModePref && null != targetingDisplayModePref.value ? targetingDisplayModePref.value : 1")
+		(macro TMap_GET_DISPLAY_MODE _varName="'isTargetingDirVisible'" _prefValue="targetingDisplayMode")
+
 		(macro IS_ON_PLANE)
 		# TargetMarker publishes only to an observer.
 		(macro IS_SPECTATOR_MODE)
@@ -1987,7 +1992,7 @@
 			(position = "absolute")
 		)
 		(controller $Instance (renderer = 'TMap_MapTargetingDirection')
-			(bind enabled "isSpectator && isAlive && mapVisible")
+			(bind enabled "isSpectator && isAlive && mapVisible && isTargetingDirVisible")
 			(args _markerEntity="_markerEntity")
 		)
 	)
@@ -2154,6 +2159,9 @@
 							(bind enabled "isTargeting")
 			)
 		)
+
+		(macro TT_GET_PREF _varName="'targetingScalePref'" _key="'ttaro.minimap.shipMarker.targeting.scale'")
+		(var targetingScale:number = "null != targetingScalePref && null != targetingScalePref.value ? targetingScalePref.value : 0.2")
 	)
 
 	(bind visible "isTargeting")
@@ -2166,7 +2174,7 @@
 			(position = "absolute")
 			(backgroundImage = "'symbol:minimap_direction_line'")
 			(scaleX = 2.0)
-			(scaleY = 0.2)
+			(bind scaleY "targetingScale")
 		)
 		# Grey: every ship has one, so it must not compete with the heading line.
 		(bind colorTransform "{redMultiplier:0,greenMultiplier:0,blueMultiplier:0,alphaMultiplier:1.0,redOffset:200,greenOffset:200,blueOffset:200,alphaOffset:0}")
